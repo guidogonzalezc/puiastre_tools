@@ -16,7 +16,7 @@ def puiastre_ui():
     cmds.menuItem( optionBox=True , command="print('HOLA')")
 
     cmds.menuItem(label="Auto Rig UI", command="print('WIP')", image="puiastreLogo.ico")
-    cmds.menuItem(label="Corrective Joints Tool", command="import puiastreTools.tools.push_joint", image="puiastreJoint.png")
+    cmds.menuItem(label="Corrective Joints Tool", command="import puiastreTools.tools.corrective_tools", image="puiastreJoint.png")
 
 
     cmds.setParent("..", menu=True)
