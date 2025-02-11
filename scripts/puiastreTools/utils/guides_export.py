@@ -42,14 +42,11 @@ class GuidesExport():
                                 return
                         
                         self.guides_positions = []
-                        self.guides_rotations = []
                         self.guides_parents = []
                         self.guides_joint_orient = []
                         for position in self.guides_descendents: #Get the position of each guide
                                 self.guides_positions.append(cmds.xform(position, t=True, ws=True, query=True))
 
-                        for rotation in self.guides_descendents: #Get the rotation of each guide
-                                self.guides_rotations.append(cmds.xform(rotation, ro=True, ws=True, query=True))
                         for parent in self.guides_descendents: #Get the parent of each guide
                                 self.guides_parents.append(cmds.listRelatives(parent, parent=True)[0])
                         for joint_orient in self.guides_descendents: #Get the joint orient of each guide
@@ -75,12 +72,11 @@ class GuidesExport():
                 self.guides_data = {self.guides_name: {}}
 
                 for i, guide in enumerate(self.guides_descendents):
-                                self.guides_data[self.guides_name][guide] = {
-                                                "position": self.guides_positions[i],
-                                                "rotation": self.guides_rotations[i],
-                                                "parent": self.guides_parents[i],
-                                                "joint_orient": self.guides_joint_orient[i]
-                                }
+                        self.guides_data[self.guides_name][guide] = {
+                                "position": self.guides_positions[i],
+                                "parent": self.guides_parents[i],
+                                "joint_orient": self.guides_joint_orient[i]
+                        }
 
                 if not os.path.exists(final_path):
                         os.makedirs(final_path)
@@ -101,15 +97,20 @@ class GuidesExport():
 
                 with open(os.path.join(final_path, f'{name}.json'), "r") as infile:
                         self.guides_data = json.load(infile)
+
+                guides_node = cmds.createNode("transform", name="C_guides_GRP")
                 
                 for joint, data in self.guides_data[name].items():
                         cmds.select(clear=True)
-                        self.imported_joint = cmds.joint(name=joint, position=data["position"], rotationOrder=data["rotation"])
-                        cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0], data["joint_orient"][1], data["joint_orient"][2])
+                        self.imported_joint = cmds.joint(name=joint, position=data["position"])
+                        if data["joint_orient"] != [0.0, 0.0, 0.0]:
+                                cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0][0], data["joint_orient"][0][1], data["joint_orient"][0][2])
                         
                 for joint, data in self.guides_data[name].items():
                         if data["parent"] != None:
                                 cmds.parent(joint, data["parent"])
+                cmds.select(clear=True)
+                
 
 
 """ EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR DEVELOPING
