@@ -13,7 +13,7 @@ class GuidesExport():
                         if not self.guides_descendents:
                                 om.MGlobal.displayError("No guides found in the scene.")
                                 return
-                        
+
                         left_guides = []
                         right_guides = []
                         for guide in self.guides_descendents:
@@ -34,11 +34,7 @@ class GuidesExport():
                                                 if left_world_position != right_world_position:
                                                         om.MGlobal.displayWarning(f"Guides are not symmetrical. {right_guide} is not in the same position as {left_guide}.")
                                                         return
-                                                
-
-
-
-                                
+                                                      
 
                         
                         if len(left_guides) != len(right_guides):
@@ -59,10 +55,6 @@ class GuidesExport():
                         for joint_orient in self.guides_descendents: #Get the joint orient of each guide
                                 self.guides_joint_orient.append(cmds.getAttr(f"{joint_orient}.jointOrient"))
 
-                        print(self.guides_positions)
-                        print(self.guides_rotations)
-                        print(self.guides_parents)
-                        print(self.guides_joint_orient)
 
                 elif len(self.guides_folder) > 1:
                         om.MGlobal.displayError(f"More than one {guides} found in the scene.")
@@ -80,10 +72,10 @@ class GuidesExport():
                 relative_path = script_path.split("/scripts/puiastreTools/utils/guides_export.py")[0]
                 relative_path = relative_path.replace("/", "\\")
                 final_path = os.path.join(relative_path, "guides")
-                guides_data = {self.guides_name: {}}
+                self.guides_data = {self.guides_name: {}}
 
                 for i, guide in enumerate(self.guides_descendents):
-                                guides_data[self.guides_name][guide] = {
+                                self.guides_data[self.guides_name][guide] = {
                                                 "position": self.guides_positions[i],
                                                 "rotation": self.guides_rotations[i],
                                                 "parent": self.guides_parents[i],
@@ -94,9 +86,17 @@ class GuidesExport():
                         os.makedirs(final_path)
 
                 with open(os.path.join(final_path, f'{self.guides_name}.json'), "w") as outfile:
-                        json.dump(guides_data, outfile, indent=4)
+                        json.dump(self.guides_data, outfile, indent=4)
 
                 om.MGlobal.displayInfo(f"Guides data exported to {os.path.join(final_path, f'{self.guides_name}.json')}")
+
+
+        def guide_import(self):
+
+                for joint, data in self.guides_data[self.guides_name].items():
+                        self.imported_joint = cmds.joint(name=joint, position=data["position"], rotation=data["rotation"], parent=data["parent"])
+                        cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0], data["joint_orient"][1], data["joint_orient"][2])
+                        cmds.select(clear=True)
 
 
 """ EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR DEVELOPING
