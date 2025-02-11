@@ -91,12 +91,25 @@ class GuidesExport():
                 om.MGlobal.displayInfo(f"Guides data exported to {os.path.join(final_path, f'{self.guides_name}.json')}")
 
 
-        def guide_import(self):
+        def guide_import(self, name):
 
-                for joint, data in self.guides_data[self.guides_name].items():
-                        self.imported_joint = cmds.joint(name=joint, position=data["position"], rotation=data["rotation"], parent=data["parent"])
-                        cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0], data["joint_orient"][1], data["joint_orient"][2])
+                complete_path = os.path.realpath(__file__)
+                script_path = complete_path.replace("\\", "/")
+                relative_path = script_path.split("/scripts/puiastreTools/utils/guides_export.py")[0]
+                relative_path = relative_path.replace("/", "\\")
+                final_path = os.path.join(relative_path, "guides")
+
+                with open(os.path.join(final_path, f'{name}.json'), "r") as infile:
+                        self.guides_data = json.load(infile)
+                
+                for joint, data in self.guides_data[name].items():
                         cmds.select(clear=True)
+                        self.imported_joint = cmds.joint(name=joint, position=data["position"], rotationOrder=data["rotation"])
+                        cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0], data["joint_orient"][1], data["joint_orient"][2])
+                        
+                for joint, data in self.guides_data[name].items():
+                        if data["parent"] != None:
+                                cmds.parent(joint, data["parent"])
 
 
 """ EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR DEVELOPING
