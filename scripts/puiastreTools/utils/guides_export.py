@@ -52,4 +52,4 @@ class GuidesExport():
                 om.MGlobal.displayError("No guides found in the scene.")
                 return
 
-GuidesExport().get_transform_modules("C_guides_GRP")
+GuidesExport().guides_export("C_guides_GRP")
