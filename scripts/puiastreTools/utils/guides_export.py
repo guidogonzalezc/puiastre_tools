@@ -5,7 +5,7 @@ import json
 
 class GuidesExport():
 
-    def get_transform_modules(self, guides):
+    def guides_export(self, guides):
         self.guides_folder = cmds.ls(guides)
         if self.guides_folder:
             guides_descendents = cmds.listRelatives(self.guides_folder[0], allDescendents=True, type="joint")
@@ -26,8 +26,6 @@ class GuidesExport():
             else:
                 om.MGlobal.displayWarning("Guides are not symmetrical.")
                 return
-            print(left_guides)
-            print(right_guides)
 
             self.guides_positions = {}
             self.guides_rotations = {}
@@ -53,20 +51,5 @@ class GuidesExport():
         else:
                 om.MGlobal.displayError("No guides found in the scene.")
                 return
-        
-        print(self.guides_positions)
-        print(self.guides_rotations)
-        print(self.guides_parents)
-        print(self.guides_joint_orient)
 
-    # def leg_export(self):
-    #     if ("*leg*") in cmds.listRelatives(self.guides_folder):
-    #             self.leg_guides = cmds.ls("*leg*")
-    #             children_leg = cmds.listRelatives(self.leg_guides, children=True)
-    #             # for child in children_leg:
-                            
-    #     else:
-    #             om.MGlobal.displayError("No leg guides found in the scene.")
-
-    # def arm_export(self):
 GuidesExport().get_transform_modules("C_guides_GRP")
