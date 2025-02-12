@@ -3,7 +3,7 @@ import maya.OpenMaya as om
 import json
 import os
 
-def create_curve_from_data(degree, form, knots, cvs, lineWidth, colour, shape_name):
+def create_curve_from_data(degree, form, knots, cvs, lineWidth, colourShape, colourTransform, shape_name):
     """
     Creates a NURBS curve in Maya.
 
@@ -18,24 +18,27 @@ def create_curve_from_data(degree, form, knots, cvs, lineWidth, colour, shape_na
     """
     # Create curve
     curve = cmds.curve(d=degree, p=cvs, k=knots)
+    shape = cmds.listRelatives(curve, shapes=True)[0]
 
     # Close curve if necessary
-    if form == 1 or form == 3:
+    if form == 2 or form == 3:
         cmds.closeCurve(curve, preserveShape=False, replaceOriginal=True)
     # Add the thickness and colour
     cmds.setAttr(f"{curve}.lineWidth", lineWidth)
+    cmds.setAttr(f"{shape}.overrideEnabled", 1)
+    cmds.setAttr(f"{shape}.overrideColor", colourShape)
     cmds.setAttr(f"{curve}.overrideEnabled", 1)
-    cmds.setAttr(f"{curve}.overrideColor", colour)
+    cmds.setAttr(f"{curve}.overrideColor", colourTransform)
 
     # Rename curve
-    renamed_curve = cmds.rename(curve, shape_name)
+    renamed_curve = cmds.rename(curve, shape_name)  
 
     # Delete construction history
     cmds.delete(renamed_curve, constructionHistory=True)
 
     return renamed_curve
 
-def controller_creator(name, json):
+def controller_creator(name):
     """
     Creates a controller with a specific name and offset transformsand returns the controller and the groups.
 
@@ -44,15 +47,26 @@ def controller_creator(name, json):
     """
     created_grps = []
     for suffix in ["GRP", "SPC", "OFF", "SDK", "ANM"]:
+        if cmds.ls(f"{name}_{suffix}"):
+            om.MGlobal.displayWarning(f"{name}_{suffix} already exists.")
+            if created_grps:
+                cmds.delete(created_grps[0])
+            return
         tra = cmds.createNode("transform", name=f"{name}_{suffix}")
         if created_grps:
             cmds.parent(tra, created_grps[-1])
         created_grps.append(tra)
 
-    ctl = import_nurbs_curves_from_json(f"{name}_CTL", json)
-    cmds.parent(ctl, created_grps[-1])
+    if cmds.ls(f"{name}_CTL"):
+        om.MGlobal.displayWarning(f"{name}_CTL already exists.")
+        if created_grps:
+            cmds.delete(created_grps[0])
+        return
+    else:
+        ctl = import_nurbs_curves_from_json(f"{name}_CTL")
+        cmds.parent(ctl, created_grps[-1])
 
-    return ctl, created_grps # Return the controller and the groups
+        return ctl, created_grps # Return the controller and the groups
 
 def export_nurbs_curve():
     """
@@ -106,7 +120,8 @@ def export_nurbs_curve():
                 "form": form,
                 "points": points,
                 "lineWidth": cmds.getAttr(f"{shape}.lineWidth"),
-                "colour": cmds.getAttr(f"{transforms}.overrideColor"),
+                "colourShape": cmds.getAttr(f"{shape}.overrideColor"),
+                "colourTransform": cmds.getAttr(f"{transforms}.overrideColor"),
             }
 
             curve_dict[transforms] = shapes_dict
@@ -132,7 +147,6 @@ def import_nurbs_curves_from_json(shape_name):
         json_path (str): Path to the JSON file.
     """
     json_path = get_script_file_path()
-    print(json_path)
     with open(json_path, 'r') as file:
         curve_data = json.load(file)
     # Extract the data for the specific group
@@ -148,10 +162,11 @@ def import_nurbs_curves_from_json(shape_name):
             knots = shapes['knots']
             cvs = shapes['points']
             lineWidth = shapes['lineWidth']
-            colour = shapes['colour']
+            colourShape = shapes['colourShape']
+            colourTransform = shapes['colourTransform']
 
             # Create curve in Maya
-            curve = create_curve_from_data(degree, form, knots, cvs, lineWidth, colour, shape_name)
+            curve = create_curve_from_data(degree, form, knots, cvs, lineWidth, colourShape, colourTransform, shape_name)
 
             # Parent shapes to main curve
             if main_curve:
@@ -173,5 +188,6 @@ def get_script_file_path():
     script_path = complete_path.replace("\\", "/")
     relative_path = script_path.split("/scripts/puiastreTools/tools/curve_tool.py")[0]
     relative_path = relative_path.replace("/", "\\")
-    final_path = os.path.join(relative_path, "curves")
+    final_path = os.path.join(relative_path, "curves", "curve_test.json")
     return final_path
+
