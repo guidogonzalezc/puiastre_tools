@@ -101,7 +101,6 @@ class GuidesExport():
                 guides_node = cmds.createNode("transform", name="C_guides_GRP")
                 
                 for joint, data in reversed(list(self.guides_data[name].items())):
-                        print(joint, data)
                         cmds.select(clear=True)
                         self.imported_joint = cmds.joint(name=joint, position=data["position"])
                         if data["parent"]:
