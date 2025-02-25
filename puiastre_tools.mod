@@ -1,2 +1,2 @@
-+ puiastre_tools 1.0 D:\git\maya\puiastre_tools
++ puiastre_tools 1.0 S:\temp\.Easter\puiastre_tools
 

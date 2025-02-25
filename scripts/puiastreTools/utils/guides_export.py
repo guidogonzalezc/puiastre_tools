@@ -114,7 +114,7 @@ class GuidesExport():
                 
 
 
-""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR EXPORT GUIDES
+""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR EXPORTING
 
 from puiastreTools.utils import guides_export
 from importlib import reload
@@ -122,11 +122,12 @@ reload(guides_export)
 guides_export.GuidesExport().guides_export("C_guides_GRP", "azhurean_guides")
 
 """
-""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR IMPORT GUIDES
-from puiastreTools.utils import guides_export
-from importlib import reload
-reload(guides_export)
-guides_export.GuidesExport().guide_import("azhurean_guides")
 
+""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR IMPORTING
+
+from puiastreTools.utils import guide_import
+from importlib import reload
+reload(guides_import)
+guides_import.GuidesExport().guide_import("azhurean_guides")
 
 """
