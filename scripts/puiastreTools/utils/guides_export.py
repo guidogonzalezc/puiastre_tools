@@ -100,24 +100,33 @@ class GuidesExport():
 
                 guides_node = cmds.createNode("transform", name="C_guides_GRP")
                 
-                for joint, data in self.guides_data[name].items():
+                for joint, data in reversed(list(self.guides_data[name].items())):
                         cmds.select(clear=True)
                         self.imported_joint = cmds.joint(name=joint, position=data["position"])
-                        if data["joint_orient"] != [0.0, 0.0, 0.0]:
+                        if data["parent"]:
+                                cmds.parent(joint, data["parent"])
                                 cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0][0], data["joint_orient"][0][1], data["joint_orient"][0][2])
                         
-                for joint, data in self.guides_data[name].items():
-                        if data["parent"] != None:
-                                cmds.parent(joint, data["parent"])
+
+                                
                 cmds.select(clear=True)
                 
 
 
-""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR DEVELOPING
+""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR EXPORTING
 
 from puiastreTools.utils import guides_export
 from importlib import reload
 reload(guides_export)
 guides_export.GuidesExport().guides_export("C_guides_GRP", "azhurean_guides")
+
+"""
+
+""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR IMPORTING
+
+from puiastreTools.utils import guide_import
+from importlib import reload
+reload(guides_import)
+guides_import.GuidesExport().guide_import("azhurean_guides")
 
 """
