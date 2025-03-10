@@ -39,7 +39,7 @@ class FingerModule(object):
 
         
 
-        ik_chain = []
+        self.ik_chain = []
         self.fk_chain = []
         for i, name in enumerate(["Fk", "Ik"]):
             dupe = cmds.duplicate(self.finger_chain, n=name)
@@ -49,11 +49,11 @@ class FingerModule(object):
                 end_joint = cmds.rename(joint, self.side + "_" + self.name + name + "_JNT")
 
                 if name == "Ik":
-                    ik_chain.append(end_joint)
+                    self.ik_chain.append(end_joint)
                 elif name == "Fk":
                     self.fk_chain.append(end_joint)
 
-        for i, joint in enumerate(ik_chain):
+        for i, joint in enumerate(self.ik_chain):
             pairblend = cmds.createNode("pairBlend", n=joint.replace("Ik_JNT", "_PBL"))
             cmds.connectAttr(joint + ".translate", pairblend + ".inTranslate1")
             cmds.connectAttr(joint + ".rotate", pairblend + ".inRotate1")
@@ -62,6 +62,8 @@ class FingerModule(object):
             cmds.connectAttr(pairblend + ".outTranslate", self.finger_chain[i] + ".translate")
             cmds.connectAttr(pairblend + ".outRotate", self.finger_chain[i] + ".rotate")
             cmds.connectAttr(self.settings_ctl + ".switchIkFk", pairblend + ".weight")
+
+        self.ik_handle = cmds.ikHandle(sj=self.ik_chain[0], ee=self.ik_chain[-1], n=f"{self.side}_{self.name}_HDL", solver="ikRPsolver")
         
 
 
@@ -74,9 +76,20 @@ class FingerModule(object):
             cmds.matchTransform(grp[0], fk_joint)
 
             if self.fk_ctls:
-                cmds.parent(grp[0], self.fk_ctls_grp[-1])
+                cmds.parent(grp[0], self.fk_ctls[-1])
             self.fk_ctls.append(ctl)
             self.fk_ctls_grp.append(grp)
+
+            cmds.parentConstraint(ctl, fk_joint) ##### CANVIAR QUAN LA LAIA ACABI MATRIUS
+
+
+        self.ik_ctls = []
+        self.ik_ctls_grp = []
+
+        for i, names in enumerate([self.name, f"{self.name}Pv", f"{self.name}Ik"]):
+            ctl, grp = ctls_cre.controller_creator(f"{self.side}_{names}")
+            cmds.matchTransform(grp[0], self.ik_chain[])
+
             
 
 
