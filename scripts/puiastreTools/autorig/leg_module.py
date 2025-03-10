@@ -436,4 +436,3 @@ class legModule():
         cmds.parentConstraint(self.ik_toe_ctl, self.ikHandleManager, maintainOffset=True)
 
 
-legModule().leg_import("L_footModuleGuides_GRP", "L_toeModuleGuides_GRP")
