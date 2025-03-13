@@ -147,6 +147,7 @@ def import_nurbs_curves_from_json(shape_name):
         json_path (str): Path to the JSON file.
     """
     json_path = get_script_file_path()
+    print(json_path)
     with open(json_path, 'r') as file:
         curve_data = json.load(file)
     # Extract the data for the specific group
