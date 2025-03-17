@@ -3,18 +3,18 @@ import maya.cmds as cmds
 def duplicate_chain(joint):
 
     chain = cmds.listRelatives(joint, allDescendents=True)
-    ik_chain = cmds.duplicate(chain)
-    fk_chain = cmds.duplicate(chain)
-    
-    ik_joints = []
-    for jnt in enumerate(ik_chain):
-        ik = jnt.replace("_JNT*", "Ik_JNT")
-        ik_joints.append(ik)
-        
-    fk_joints = []
-    for jnt in enumerate(fk_chain):
-        fk = jnt.replace("_JNT*", "Fk_JNT")
-        fk_joints.append(fk)
+    ik_chain = []
+    fk_chain = []
+    for i, jnt in range(len(chain)*2):
+        cmds.select(clear=True)
+        if i < len(chain):
+            jnt_ik = cmds.joint(n=jnt.replace("_JNT", "Ik_JNT"))
+            cmds.matchTransform(jnt_ik, jnt)
+            ik_chain.append(jnt_ik)
+        else:
+            jnt_fk = cmds.joint(n=jnt.replace("_JNT", "Fk_JNT"))
+            cmds.matchTransform(jnt_fk, jnt)
+            fk_chain.append(jnt_fk)
 
 
     return ik_chain, fk_chain, chain
@@ -28,8 +28,6 @@ def blend_matrix(joint, blender):
     if not blender_shape:
         cmds.error("Blender object has no shape node")
         return
-
-   
 
     for i, jnt_ik, jnt_fk in enumerate(zip(ik_chain, fk_chain)):
 
