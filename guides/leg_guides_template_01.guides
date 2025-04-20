@@ -1,0 +1,220 @@
+{
+    "leg_guides_template_01": {
+        "L_tip_JNT": {
+            "worldPosition": [
+                134.71502877536486,
+                25.53609101419878,
+                36.74594116210933
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_ball_JNT"
+        },
+        "L_ball_JNT": {
+            "worldPosition": [
+                134.71502877536486,
+                25.53609101419879,
+                -70.07972861287786
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_ankle_JNT"
+        },
+        "L_ankle_JNT": {
+            "worldPosition": [
+                134.7150287753649,
+                57.115793706563096,
+                -113.50181981487881
+            ],
+            "worldRotation": [
+                90.0,
+                -24.128402930267853,
+                -90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_backKnee_JNT"
+        },
+        "L_backKnee_JNT": {
+            "worldPosition": [
+                134.7150287753648,
+                208.69836662991187,
+                -181.39818060346212
+            ],
+            "worldRotation": [
+                90.0,
+                -24.128402930267853,
+                -90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_frontKnee_JNT"
+        },
+        "L_frontKnee_JNT": {
+            "worldPosition": [
+                134.71502877536474,
+                300.2795044377683,
+                -17.183726603167656
+            ],
+            "worldRotation": [
+                90.00000000000006,
+                60.851928154286945,
+                -89.99999999999996
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_hip_JNT"
+        },
+        "L_hip_JNT": {
+            "worldPosition": [
+                134.71502877536477,
+                531.600826659337,
+                -56.65835496862296
+            ],
+            "worldRotation": [
+                90.00000000000001,
+                -9.684152104378093,
+                -89.99999999999999
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_tip_JNT": {
+            "worldPosition": [
+                -134.715,
+                25.536099999999998,
+                36.745900000000006
+            ],
+            "worldRotation": [
+                180.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_ball_JNT"
+        },
+        "R_ball_JNT": {
+            "worldPosition": [
+                -134.715,
+                25.536100000000005,
+                -70.0797
+            ],
+            "worldRotation": [
+                180.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_ankle_JNT"
+        },
+        "R_ankle_JNT": {
+            "worldPosition": [
+                -134.71499999999997,
+                57.11579999999998,
+                -113.50199999999998
+            ],
+            "worldRotation": [
+                -90.00000000000006,
+                24.128402930267857,
+                90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_backKnee_JNT"
+        },
+        "R_backKnee_JNT": {
+            "worldPosition": [
+                -134.71499999999997,
+                208.69799999999998,
+                -181.39799999999997
+            ],
+            "worldRotation": [
+                -90.00000000000006,
+                24.128402930267857,
+                90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_frontKnee_JNT"
+        },
+        "R_frontKnee_JNT": {
+            "worldPosition": [
+                -134.71499999999997,
+                300.2799999999999,
+                -17.183699999999995
+            ],
+            "worldRotation": [
+                -90.00000000000007,
+                -60.851928154286924,
+                90.00000000000007
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_hip_JNT"
+        },
+        "R_hip_JNT": {
+            "worldPosition": [
+                -134.715,
+                531.601,
+                -56.6584
+            ],
+            "worldRotation": [
+                -90.00000000000003,
+                9.684152104378107,
+                90.00000000000001
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "C_guides_GRP"
+        }
+    }
+}
