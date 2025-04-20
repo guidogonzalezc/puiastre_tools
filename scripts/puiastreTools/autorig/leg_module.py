@@ -2,52 +2,74 @@
 Leg module for dragon rigging system
 """
 import maya.cmds as cmds
-import puiastreTools.tools.curve_tool as ctls_cre
+import puiastreTools.tools.curve_tool as curve_tool
+from puiastreTools.utils import guides_manager
 import maya.mel as mel
 import math
+import os
+from importlib import reload
+reload(guides_manager)
+reload(curve_tool)    
 
-class legModule():
-    def leg_import(self, foot_root_transform, toe_root_transform):
-        self.foot_joints = cmds.listRelatives(foot_root_transform, ad=True, type='joint')[::-1]
-        self.toe_joints = cmds.listRelatives(toe_root_transform, ad=False, type='joint')
-        self.side = foot_root_transform.split("_")[0]
+class LegModule():
+    def __init__(self):
+        complete_path = os.path.realpath(__file__)
+        self.relative_path = complete_path.split("\scripts")[0]
+        self.guides_path = os.path.join(self.relative_path, "guides", "leg_guides_template_01.guides")
+        self.curves_path = os.path.join(self.relative_path, "curves", "foot_ctl.json") 
 
-        self.leg_module = cmds.createNode("transform", name=f"{self.side}_legModule_GRP")
-        cmds.parent(foot_root_transform, self.leg_module)
-        cmds.parent(toe_root_transform, self.leg_module)
+    def make(self, side):
 
-        self.file_path = r"S:\temp\.Easter\puiastre_tools\curves\curve_test.json"
+        self.side = side    
+
+        self.module_trn = cmds.createNode("transform", name=f"{self.side}_legModule_GRP")
+        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP")
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_legSkinning_GRP")
+
         self.duplicate_leg()
         self.set_controllers()
-        self.pairBlends()
+        # self.pairBlends()
         # self.reverse_foot()
         # self.soft_stretch()
 
-    def duplicate_leg(self):
-        foot_ik = cmds.duplicate(self.foot_joints[0], renameChildren=True)
-        foot_fk = cmds.duplicate(self.foot_joints[0], renameChildren=True)
-        names = ["Ik", "Fk"]
-        self.ik_chain = []
-        self.fk_chain = []
-        for i, chain in enumerate([foot_ik, foot_fk]):
-            for j, joint in enumerate(chain):
-                name = cmds.rename(joint, joint.replace(f"_JNT{i+1}", f"{names[i]}_JNT"))
-                if i == 0:
-                    self.ik_chain.append(name)
-                else:
-                    self.fk_chain.append(name)
-    
-    def lock_attr(self, ctl, attrs):
+    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
 
+    def duplicate_leg(self):
+
+        self.fk_chain = []
+        self.ik_chain = []
+        self.blend_chain = []
+        chains = {
+            "Fk": self.fk_chain,
+            "Ik": self.ik_chain,
+            "Blend": self.blend_chain
+        }
+
+        for name, chain in chains.items():
+            guides = guides_manager.guide_import(
+                joint_name=f"{self.side}_hip_JNT",
+                all_descendents=True,
+                filePath=self.guides_path
+            )
+            cmds.parent(guides[0], self.module_trn)
+
+            for joint in guides:
+                chain.append(cmds.rename(joint, joint.replace("_JNT", f"{name}_JNT")))
+
+
+
+
+
     def set_controllers(self):
 
-        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP")
+        # -- IK/FK SWITCHCONTROLLER -- # 
+
         self.ik_trn = cmds.createNode("transform", name=f"{self.side}_legIk_GRP", parent=self.controllers_trn)
         self.fk_trn = cmds.createNode("transform", name=f"{self.side}_legFk_GRP", parent=self.controllers_trn)
 
-        self.settings_curve_ctl, self.settings_curve_grp = ctls_cre.controller_creator(f"{self.side}_LegSettings")
+        self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_LegSettings")
         cmds.matchTransform(self.settings_curve_grp[0], self.ik_chain[0], pos=True)
         cmds.move(100, 0, 0, self.settings_curve_grp[0], r=True, os=True)
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
@@ -58,132 +80,123 @@ class legModule():
         cmds.connectAttr(f"{rev}.outputX", f"{self.ik_trn}.visibility")
         cmds.parent(self.settings_curve_grp[0], self.controllers_trn)
 
+        # -- FK CONTROLLER -- #
+
         self.fk_ctl_list = []
         self.fk_grp_list = []
-        for i, joint in enumerate(self.fk_chain):
-            if i < len(self.fk_chain)-1:
-                self.fk_ctl, self.fk_grp = ctls_cre.controller_creator(joint.replace('_JNT', ''))
-                if "foot" in joint:
-                    cmds.delete(cmds.pointConstraint(joint, self.fk_grp[0]))
-                else:
-                    cmds.matchTransform(self.fk_grp[0], joint)
-                cmds.parentConstraint(self.fk_grp[0], joint, mo=True)
-                if self.fk_grp_list:
-                    cmds.parent(self.fk_grp[0], self.fk_ctl_list[-1])
-                   
 
-                self.lock_attr(self.fk_ctl, ["scaleX", "scaleY", "scaleZ","visibility"])
+        for i, joint in enumerate(self.fk_chain[:-1]):
+            fk_ctl, fk_grp = curve_tool.controller_creator(joint.replace('_JNT', ''))
+            self.fk_ctl_list.append(fk_ctl)
+            self.fk_grp_list.append(fk_grp)
 
-                self.fk_ctl_list.append(self.fk_ctl)
-                self.fk_grp_list.append(self.fk_grp)
+            if "foot" in joint:
+                cmds.matchTransform(fk_grp[0], joint, pos=True)
+            else:
+                cmds.matchTransform(fk_grp[0], joint)
 
-        cmds.parent(self.fk_grp_list[0][0], self.fk_trn)
+            cmds.parentConstraint(fk_grp[0], joint, mo=True)
+
+            if i > 0:
+                cmds.parent(fk_grp[0], self.fk_ctl_list[i - 1])
+            else:
+                cmds.parent(fk_grp[0], self.fk_trn)
+            
+            self.lock_attr(fk_ctl)
+
+
+        #-- IK CONTROLLER -- #
 
         if not cmds.pluginInfo("ikSpringSolver", query=True, loaded=True):
             cmds.loadPlugin("ikSpringSolver")
 
-        self.ik_handle_spring = cmds.ikHandle(n=f"{self.side}_legIkSpring_HDL", sj=self.ik_chain[0], ee=self.ik_chain[3], solver='ikSpringSolver')
-        cmds.parent(self.ik_handle_spring[0], self.leg_module)
-        self.ik_ankle_ctl, self.ik_ankle_grp = ctls_cre.controller_creator(self.ik_chain[3].replace('_JNT', ''))
-        cmds.matchTransform(self.ik_ankle_grp[0], self.ik_chain[3], pos=True)
-        cmds.parentConstraint(self.ik_ankle_ctl, self.ik_handle_spring[0], mo=True)
-        
-        
-        self.root_ctl, self.root_grp = ctls_cre.controller_creator(f"{self.side}_legRoot")
-        cmds.parent(self.root_grp[0], self.ik_trn)
-        cmds.matchTransform(self.root_grp[0], self.ik_chain[0], pos=True)
-        cmds.parentConstraint(self.root_ctl, self.ik_chain[0], mo=True)
-        self.offset_node=cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", parent=self.leg_module)
-        self.trn_node=cmds.createNode("transform", name=f"{self.side}_legSoft_TRN", parent=self.offset_node)
-        cmds.pointConstraint(self.root_ctl, self.offset_node, maintainOffset=False)
+        self.ikHandleManager = cmds.createNode("transform", name=f"{self.side}_legIkHandleManager_GRP", p=self.module_trn)
+
+        self.springIkHandle = cmds.ikHandle(
+            name=f"{self.side}_legIkHandle",
+            startJoint=self.ik_chain[0],
+            endEffector=self.ik_chain[3],
+            solver="ikSpringSolver",
+        )[0]
+
+        cmds.setAttr(f"{self.springIkHandle}.poleVectorX", 0)
+        cmds.setAttr(f"{self.springIkHandle}.poleVectorY", 0)
+        cmds.setAttr(f"{self.springIkHandle}.poleVectorZ", 1)
+
+        self.ballIkHandle = cmds.ikHandle( 
+            name=f"{self.side}_legBallIkHandle",
+            startJoint=self.ik_chain[3],
+            endEffector=self.ik_chain[4],
+            solver="ikSCsolver",
+        )[0]
+
+        self.tipIkHandle = cmds.ikHandle(
+            name=f"{self.side}_legTipIkHandle",
+            startJoint=self.ik_chain[4],
+            endEffector=self.ik_chain[5],
+            solver="ikSCsolver",
+        )[0]
 
 
-        self.ik_pv_ctl, self.ik_pv_grp = ctls_cre.controller_creator(f"{self.side}_legIkPV")
-        self.lock_attr(self.ik_pv_ctl, ["rx", "rz", "ry","scaleX", "scaleY", "scaleZ","visibility"])
-        cmds.matchTransform(self.ik_pv_grp[0], self.ik_chain[1], pos=True)
-        cmds.move(0, -100, 300, self.ik_pv_grp[0], r=True, ws=True, wd=True)
-        cmds.poleVectorConstraint(self.ik_pv_ctl, self.ik_handle_spring[0])
-        cmds.parent(self.ik_pv_grp[0], self.ik_trn)
+        ik_controllers = {
+            self.ik_chain[0]: ["rootIk",True, self.ik_chain[0]],
+            self.ik_chain[1]: ["legPv", False, self.springIkHandle],
+            self.ik_chain[2]: [None, False, False],
+            self.ik_chain[3]: ["legIk", False, False],
+            self.ik_chain[4]: ["ballIk", True, self.ballIkHandle],
+            self.ik_chain[5]: ["toeIk", True, self.tipIkHandle],  
 
-        cmds.addAttr(self.ik_pv_ctl, shortName="kneePinningSep", niceName="KNEE PINNING____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_pv_ctl+".kneePinningSep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_pv_ctl, shortName="pin", niceName="Pin",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        }
 
+        self.ik_ctl_grps = []
+        self.ik_ctls = []
 
-        pv_position = cmds.xform(self.ik_pv_ctl, q=True, ws=True, t=True)
-        joint_position = cmds.xform(self.ik_chain[1], q=True, ws=True, t=True)
+        for name, data in ik_controllers.items():
+            print (name, data)
+            if data[0]:
+                ik_ctl, ik_grp = curve_tool.controller_creator(data[0])
+                cmds.parent(ik_grp[0], self.ik_trn)
+                
+            else:
+                continue
+            if data[0]:
+                match_pos = not data[1]
+                cmds.matchTransform(ik_grp[0], name, pos=match_pos)
 
-        linear_curve = cmds.curve(p=[pv_position, joint_position], d=1, name=f"{self.side}_legIkPVLine_CRV")
-        cmds.parent(linear_curve, self.ik_trn)
-
-        for i, loc in enumerate([self.ik_pv_ctl, self.ik_chain[1]]):
-            dcm = cmds.createNode('decomposeMatrix', name=f"{self.side}_pvLine0{i}_DCM")
-            cmds.connectAttr(f"{loc}.worldMatrix[0]", f"{dcm}.inputMatrix")
-            cmds.connectAttr(f"{dcm}.outputTranslate", f"{linear_curve}.controlPoints[{i}]")
-
-        cmds.setAttr(f"{linear_curve}.overrideEnabled", 1)
-        cmds.setAttr(f"{linear_curve}.overrideDisplayType", 2)
-
-        ik_handle_toe = cmds.ikHandle(n=f"{self.side}_legIkToe_HDL", sj=self.ik_chain[3], ee=self.ik_chain[4], solver='ikSCsolver')
-        cmds.parent(ik_handle_toe[0], self.leg_module)
-        self.ik_toe_ctl, self.ik_toe_grp = ctls_cre.controller_creator(self.ik_chain[4].replace('_JNT', ''))
-        cmds.matchTransform(self.ik_toe_grp[0], self.ik_chain[4], pos=True)
-        cmds.parentConstraint(self.ik_toe_ctl, ik_handle_toe[0], mo=True)
-        self.ikHandleManager = cmds.createNode("transform", name=f"{self.side}_ikHandleManager", parent=self.leg_module)
-        cmds.matchTransform(self.ikHandleManager, self.ik_chain[3], pos=True)
-        cmds.aimConstraint(self.ikHandleManager, self.offset_node, aimVector=(1,0,0), upVector= (0,0,1), worldUpType ="none", maintainOffset=False)
+            if data[2]:
+                if name == self.ik_chain[1]:
+                    cmds.move(0, 0, 150, ik_grp[0], r=True, ws=True)
+                    cmds.poleVectorConstraint(ik_ctl, data[2])    
+                else:
+                   cmds.parentConstraint(ik_ctl, data[2], mo=True)
 
 
-        ik_handle_tip = cmds.ikHandle(n=f"{self.side}_legIkTip_HDL", sj=self.ik_chain[4], ee=self.ik_chain[-1], solver='ikSCsolver')
-        cmds.parent(ik_handle_tip[0], self.leg_module)
-        self.ik_tip_ctl, self.ik_tip_grp = ctls_cre.controller_creator(self.ik_chain[-1].replace('_JNT', ''))
-        cmds.matchTransform(self.ik_tip_grp, self.ik_chain[-1], pos=True)
-        cmds.parentConstraint(self.ik_tip_ctl, ik_handle_tip[0], mo=True)
-
-        self.ik_bankIn_ctl, self.ik_bankIn_grp = ctls_cre.controller_creator(f"{self.side}_bankIn")
-        cmds.matchTransform(self.ik_bankIn_grp[0], self.foot_joints[4], pos=True)
-        cmds.move(-72, 0, 0, self.ik_bankIn_grp[0], r=True, os=True)
-
-        self.ik_bankOut_ctl, self.bankOut_grp = ctls_cre.controller_creator(f"{self.side}_bankOut")
-        cmds.matchTransform(self.bankOut_grp[0], self.foot_joints[4], pos=True)
-        cmds.move(45, 0, 0, self.bankOut_grp[0], r=True, os=True)
-
-        self.ik_heel_ctl, self.ik_heel_grp = ctls_cre.controller_creator(f"{self.side}_heel")
-        cmds.matchTransform(self.ik_heel_grp[0], self.foot_joints[3], pos=True)
-        cmds.setAttr(f"{self.ik_heel_grp[0]}.translateY", 0)
-        cmds.move(0, 0, -20, self.ik_heel_grp[0], r=True, os=True)
-
-        for ctl in [self.ik_heel_ctl, self.ik_bankIn_ctl, self.ik_bankOut_ctl, self.ik_tip_ctl, self.ik_toe_ctl, self.ik_ankle_ctl]:
-            self.lock_attr(ctl, ["scaleX", "scaleY", "scaleZ","visibility"])
+            self.ik_ctl_grps.append(ik_grp[0])
+            self.ik_ctls.append(ik_ctl)
 
 
-        cmds.parent(self.ik_ankle_grp[0], self.ik_trn)
-        cmds.parent(self.ik_bankIn_grp[0], self.ik_ankle_ctl)
-        cmds.parent(self.bankOut_grp[0], self.ik_bankIn_ctl)
-        cmds.parent(self.ik_heel_grp[0], self.ik_bankOut_ctl)
-        cmds.parent(self.ik_tip_grp[0], self.ik_heel_ctl)
-        cmds.parent(self.ik_toe_grp[0], self.ik_tip_ctl)
 
-        cmds.addAttr(self.ik_ankle_ctl, shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_ankle_ctl+".strechySep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_ankle_ctl+".softSep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_ankle_ctl+".extraSep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ankle_ctl, shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
 
+
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.ik_ankle_ctl+".strechySep", channelBox=True, lock=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.ik_ankle_ctl+".softSep", channelBox=True, lock=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.ik_ankle_ctl+".extraSep", channelBox=True, lock=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ankle_ctl, shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
 
     def pairBlends(self):
         for i, joint in enumerate(self.foot_joints):
@@ -195,7 +208,6 @@ class legModule():
             cmds.connectAttr(f"{self.fk_chain[i]}.rotate", f"{pairblend_node}.inRotate2")
             cmds.connectAttr(f"{pairblend_node}.outRotate", f"{joint}.rotate")
             cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{pairblend_node}.weight")
-
 
     def soft_stretch(self):
 
@@ -364,10 +376,6 @@ class legModule():
         # elbowFkCtl = self.created_ctls[1]
         # elbowFkGrp = self.fk_ctl_transforms[1]
         # wristFkGrp = self.fk_ctl_transforms[2]
-
-
-
-
 
     def reverse_foot(self):
         #----ADDING THE ROLL----#

@@ -10,16 +10,30 @@ def reload_ui(*args):
     option_menu.puiastre_ui()
 
 def export_guides(*args):   
-    from puiastreTools.utils import guides_export
+    from puiastreTools.utils import guides_manager
     from importlib import reload
-    reload(guides_export)
-    guides_export.GuidesExport().guides_export()
+    reload(guides_manager)
+    guides_manager.guides_export()
 
-def import_guides(*args):    
-    from puiastreTools.utils import guides_export
+def import_guides(*args, value=None): 
+    if value == True:   
+        from puiastreTools.utils import guides_manager
+        from importlib import reload
+        reload(guides_manager)
+        guides_manager.guide_import(joint_name = "all")
+
+def leg_module(*args):
+    from puiastreTools.autorig import leg_module
     from importlib import reload
-    reload(guides_export)
-    guides_export.GuidesExport().guide_import(joint_name = "all")
+    reload(leg_module)
+    module = leg_module.LegModule()
+    module.make(side = "L")
+
+def export_curves(*args):   
+    from puiastreTools.tools import curve_tool
+    from importlib import reload
+    reload(curve_tool)
+    curve_tool.export_nurbs_curve()
 
 def puiastre_ui():
 
@@ -36,15 +50,18 @@ def puiastre_ui():
 
     cmds.menuItem(label="   Guides", subMenu=True, tearOff=True, boldFont=True, image="puiastreJoint.png")
     cmds.menuItem(label="   Export selected Guides", command=export_guides)
-    cmds.menuItem(label="   Import Guides", command=import_guides)
+    cmds.menuItem(label="   Import Guides", command=partial(import_guides, value = True))
+    cmds.menuItem(label="   Import selected Guides", optionBox=True, command=partial(import_guides, value = None))
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Controls", subMenu=True, tearOff=True, boldFont=True, image="controllers.png")
+    cmds.menuItem(label="   Export all controllers", command=export_curves)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
+    cmds.menuItem(label="   Build L leg (dev only)", command=leg_module)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

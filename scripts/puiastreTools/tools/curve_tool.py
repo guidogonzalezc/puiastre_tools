@@ -72,12 +72,14 @@ def export_nurbs_curve():
     """
     Exports selected NURBS curves in Maya to a JSON file.
     """
-    selection = cmds.ls(selection=True)
+    # selection = cmds.ls(selection=True)
     
-    # Check if a NURBS curve is selected
-    if not selection:
-        om.MGlobal.displayError("Please select a NURBS curve to export.")
-        return
+    # # Check if a NURBS curve is selected
+    # if not selection:
+    #     om.MGlobal.displayError("Please select a NURBS curve to export.")
+    #     return
+
+    selection = [obj for obj in cmds.ls(type="transform") if "_CTL" in obj]
     
     curve_dict = {}
 
@@ -147,7 +149,6 @@ def import_nurbs_curves_from_json(shape_name):
         json_path (str): Path to the JSON file.
     """
     json_path = get_script_file_path()
-    print(json_path)
     with open(json_path, 'r') as file:
         curve_data = json.load(file)
     # Extract the data for the specific group
