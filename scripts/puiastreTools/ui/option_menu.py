@@ -9,6 +9,18 @@ def reload_ui(*args):
     reload(option_menu)
     option_menu.puiastre_ui()
 
+def export_guides(*args):   
+    from puiastreTools.utils import guides_export
+    from importlib import reload
+    reload(guides_export)
+    guides_export.GuidesExport().guides_export()
+
+def import_guides(*args):    
+    from puiastreTools.utils import guides_export
+    from importlib import reload
+    reload(guides_export)
+    guides_export.GuidesExport().guide_import(joint_name = "all")
+
 def puiastre_ui():
 
     if cmds.menu("PuiastreMenu", exists=True):
@@ -23,6 +35,8 @@ def puiastre_ui():
 
 
     cmds.menuItem(label="   Guides", subMenu=True, tearOff=True, boldFont=True, image="puiastreJoint.png")
+    cmds.menuItem(label="   Export selected Guides", command=export_guides)
+    cmds.menuItem(label="   Import Guides", command=import_guides)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
