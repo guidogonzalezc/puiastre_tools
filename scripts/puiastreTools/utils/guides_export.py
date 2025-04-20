@@ -5,9 +5,19 @@ import json
 
 class GuidesExport():
 
-        def guides_export(self, guides, name):
-                self.guides_folder = cmds.ls(guides)
-                self.guides_name = name
+        def guides_export(self):
+                self.guides_folder = cmds.ls(sl=True)
+                answer = cmds.promptDialog(
+                        title="INPUT DIALOG",
+                        message="INSERT FILE NAME",
+                        button=["OK", "Cancel"],
+                        defaultButton="OK",
+                        cancelButton="Cancel",
+                        dismissString="Cancel")
+                if answer == "Cancel":
+                        return
+                self.guides_name = cmds.promptDialog(query=True, text=True)
+
                 if self.guides_folder:
                         self.guides_descendents = cmds.listRelatives(self.guides_folder[0], allDescendents=True, type="joint")
                         if not self.guides_descendents:
@@ -41,21 +51,11 @@ class GuidesExport():
                                 om.MGlobal.displayWarning("Guides are not symmetrical.")
                                 return
                         
-                        self.guides_positions = []
-                        self.guides_parents = []
-                        self.guides_joint_orient = []
-                        for position in self.guides_descendents: #Get the position of each guide
-                                self.guides_positions.append(cmds.xform(position, t=True, ws=True, query=True))
-
-                        for parent in self.guides_descendents: #Get the parent of each guide
-                                self.guides_parents.append(cmds.listRelatives(parent, parent=True)[0])
-                        for joint_orient in self.guides_descendents: #Get the joint orient of each guide
-                                self.guides_joint_orient.append(cmds.getAttr(f"{joint_orient}.jointOrient"))
+                        self.guides_world_matrix = [cmds.getAttr(f"{guide}.worldMatrix[0]") for guide in self.guides_descendents]
+                        self.guides_parents = [cmds.listRelatives(guide, parent=True)[0] for guide in self.guides_descendents]
 
 
-                elif len(self.guides_folder) > 1:
-                        om.MGlobal.displayError(f"More than one {guides} found in the scene.")
-                        return
+
                 else:
                         om.MGlobal.displayError("No guides found in the scene.")
                         return
@@ -65,50 +65,82 @@ class GuidesExport():
         def export_json(self):
 
                 complete_path = os.path.realpath(__file__)
-                script_path = complete_path.replace("\\", "/")
-                relative_path = script_path.split("/scripts/puiastreTools/utils/guides_export.py")[0]
-                relative_path = relative_path.replace("/", "\\")
+                relative_path = complete_path.split("\scripts")[0]
                 final_path = os.path.join(relative_path, "guides")
                 self.guides_data = {self.guides_name: {}}
 
                 for i, guide in enumerate(self.guides_descendents):
                         self.guides_data[self.guides_name][guide] = {
-                                "position": self.guides_positions[i],
+                                "worldPosition": self.guides_world_matrix[i],
                                 "parent": self.guides_parents[i],
-                                "joint_orient": self.guides_joint_orient[i]
                         }
 
                 if not os.path.exists(final_path):
                         os.makedirs(final_path)
 
-                with open(os.path.join(final_path, f'{self.guides_name}.json'), "w") as outfile:
+                with open(os.path.join(final_path, f'{self.guides_name}.guides'), "w") as outfile:
                         json.dump(self.guides_data, outfile, indent=4)
 
                 om.MGlobal.displayInfo(f"Guides data exported to {os.path.join(final_path, f'{self.guides_name}.json')}")
 
 
-        def guide_import(self, name):
+        def guide_import(self, joint_name, all_descendents=True):
 
                 complete_path = os.path.realpath(__file__)
-                script_path = complete_path.replace("\\", "/")
-                relative_path = script_path.split("/scripts/puiastreTools/utils/guides_export.py")[0]
-                relative_path = relative_path.replace("/", "\\")
-                final_path = os.path.join(relative_path, "guides")
+                relative_path = complete_path.split("\scripts")[0]
+                guides_path = os.path.join(relative_path, "guides")
 
-                with open(os.path.join(final_path, f'{name}.json'), "r") as infile:
+                final_path = cmds.fileDialog2(fileMode=1, caption="Select JSON file", dir=guides_path, okCaption="Select")
+
+                if not final_path:
+                        om.MGlobal.displayError("No file selected.")
+                        return
+                
+                name = final_path[0].split("/")[-1].split(".")[0]
+
+                with open(final_path[0], "r") as infile:
                         self.guides_data = json.load(infile)
 
-                guides_node = cmds.createNode("transform", name="C_guides_GRP")
-                
-                for joint, data in reversed(list(self.guides_data[name].items())):
-                        cmds.select(clear=True)
-                        self.imported_joint = cmds.joint(name=joint, position=data["position"])
-                        if data["parent"]:
-                                cmds.parent(joint, data["parent"])
-                                cmds.setAttr(f"{self.imported_joint}.jointOrient", data["joint_orient"][0][0], data["joint_orient"][0][1], data["joint_orient"][0][2])
-                        
 
+                if not cmds.ls("C_guides_GRP"):
+                        guides_node = cmds.createNode("transform", name="C_guides_GRP")
+                else:
+                        guides_node = "C_guides_GRP"
+                
+                if joint_name == "all":
+                        for joint, data in reversed(list(self.guides_data[name].items())):
+                                cmds.select(clear=True)
+                                imported_joint = cmds.joint(name=joint, rad = 1 )
+                                cmds.setAttr(f"{imported_joint}.offsetParentMatrix", data["worldPosition"], type="matrix")
+                                if data["parent"]:
+                                        if data["parent"] == "C_root_JNT":
+                                                cmds.parent(imported_joint, guides_node)   
+                                        else:
+                                                cmds.parent(joint, data["parent"])                        
+
+
+                else:
+                        for main_joint_name, data in self.guides_data[name].items():
+                                        if main_joint_name == joint_name:
+                                                        cmds.select(clear=True) 
+                                                        main_joint = cmds.joint(name=main_joint_name, rad=1)
+                                                        cmds.setAttr(f"{main_joint}.offsetParentMatrix", data["worldPosition"], type="matrix")
+                                                        cmds.parent(main_joint, guides_node)
+                                                        break
+
+                        if all_descendents:
+                                parent_map = {joint: data["parent"] for joint, data in self.guides_data[name].items()}                                
+                                processing_queue = [joint for joint, parent in parent_map.items() if parent == joint_name]
                                 
+                                while processing_queue:
+                                                joint = processing_queue.pop(0)
+                                                cmds.select(clear=True)
+                                                imported_joint = cmds.joint(name=joint, rad=1)
+                                                cmds.setAttr(f"{imported_joint}.offsetParentMatrix", self.guides_data[name][joint]["worldPosition"], type="matrix")
+                                                parent = parent_map[joint]
+                                                cmds.parent(imported_joint, guides_node if parent == "C_root_JNT" else parent)
+                                                processing_queue.extend([child for child, parent in parent_map.items() if parent == joint])
+                        
                 cmds.select(clear=True)
                 
 
@@ -118,7 +150,7 @@ class GuidesExport():
 from puiastreTools.utils import guides_export
 from importlib import reload
 reload(guides_export)
-guides_export.GuidesExport().guides_export("C_guides_GRP", "azhurean_guides")
+guides_export.GuidesExport().guides_export()
 
 """
 
