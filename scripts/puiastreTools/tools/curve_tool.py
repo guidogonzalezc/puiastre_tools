@@ -38,7 +38,7 @@ def create_curve_from_data(degree, form, knots, cvs, lineWidth, colourShape, col
 
     return renamed_curve
 
-def controller_creator(name):
+def controller_creator(name, suffixes = ["GRP", "SPC", "OFF", "SDK", "ANM"]):
     """
     Creates a controller with a specific name and offset transformsand returns the controller and the groups.
 
@@ -46,7 +46,7 @@ def controller_creator(name):
         name (str): Name of the controller.
     """
     created_grps = []
-    for suffix in ["GRP", "SPC", "OFF", "SDK", "ANM"]:
+    for suffix in suffixes:
         if cmds.ls(f"{name}_{suffix}"):
             om.MGlobal.displayWarning(f"{name}_{suffix} already exists.")
             if created_grps:
@@ -187,9 +187,8 @@ def get_script_file_path():
     Returns the file path of the currently executed script.
     """
     complete_path = os.path.realpath(__file__)
-    script_path = complete_path.replace("\\", "/")
-    relative_path = script_path.split("/scripts/puiastreTools/tools/curve_tool.py")[0]
-    relative_path = relative_path.replace("/", "\\")
-    final_path = os.path.join(relative_path, "curves", "curve_test.json")
+    relative_path = complete_path.split("\scripts")[0]
+    final_path = os.path.join(relative_path, "curves", "foot_ctl.json") 
+
     return final_path
 
