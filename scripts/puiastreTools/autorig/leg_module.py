@@ -28,9 +28,9 @@ class LegModule():
 
         self.duplicate_leg()
         self.set_controllers()
-        # self.pairBlends()
+        self.pairBlends()
         # self.reverse_foot()
-        # self.soft_stretch()
+        self.soft_stretch()
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
         for attr in attrs:
@@ -66,10 +66,10 @@ class LegModule():
 
         # -- IK/FK SWITCHCONTROLLER -- # 
 
-        self.ik_trn = cmds.createNode("transform", name=f"{self.side}_legIk_GRP", parent=self.controllers_trn)
-        self.fk_trn = cmds.createNode("transform", name=f"{self.side}_legFk_GRP", parent=self.controllers_trn)
+        self.ik_trn = cmds.createNode("transform", name=f"{self.side}_legIkControllers_GRP", parent=self.controllers_trn)
+        self.fk_trn = cmds.createNode("transform", name=f"{self.side}_legFkControllers_GRP", parent=self.controllers_trn)
 
-        self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_LegSettings")
+        self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_LegSettings", suffixes = ["GRP"])
         cmds.matchTransform(self.settings_curve_grp[0], self.ik_chain[0], pos=True)
         cmds.move(100, 0, 0, self.settings_curve_grp[0], r=True, os=True)
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
@@ -86,7 +86,7 @@ class LegModule():
         self.fk_grp_list = []
 
         for i, joint in enumerate(self.fk_chain[:-1]):
-            fk_ctl, fk_grp = curve_tool.controller_creator(joint.replace('_JNT', ''))
+            fk_ctl, fk_grp = curve_tool.controller_creator(joint.replace('_JNT', ''), suffixes = ["GRP", "OFF"])
             self.fk_ctl_list.append(fk_ctl)
             self.fk_grp_list.append(fk_grp)
 
@@ -106,11 +106,13 @@ class LegModule():
 
 
         #-- IK CONTROLLER -- #
-
         if not cmds.pluginInfo("ikSpringSolver", query=True, loaded=True):
             cmds.loadPlugin("ikSpringSolver")
+        
+        mel.eval("ikSpringSolver")
 
         self.ikHandleManager = cmds.createNode("transform", name=f"{self.side}_legIkHandleManager_GRP", p=self.module_trn)
+        cmds.matchTransform(self.ikHandleManager, self.ik_chain[3], pos=True)
 
         self.springIkHandle = cmds.ikHandle(
             name=f"{self.side}_legIkHandle",
@@ -137,14 +139,15 @@ class LegModule():
             solver="ikSCsolver",
         )[0]
 
+        cmds.parent(self.springIkHandle, self.ballIkHandle, self.tipIkHandle, self.module_trn)
 
         ik_controllers = {
-            self.ik_chain[0]: ["rootIk",True, self.ik_chain[0]],
-            self.ik_chain[1]: ["legPv", False, self.springIkHandle],
+            self.ik_chain[0]: [f"{self.side}_rootIk",True, [self.ik_chain[0]]],
+            self.ik_chain[1]: [f"{self.side}_legPv", False, [self.springIkHandle]],
             self.ik_chain[2]: [None, False, False],
-            self.ik_chain[3]: ["legIk", False, False],
-            self.ik_chain[4]: ["ballIk", True, self.ballIkHandle],
-            self.ik_chain[5]: ["toeIk", True, self.tipIkHandle],  
+            self.ik_chain[3]: [f"{self.side}_legIk", False, False],
+            self.ik_chain[4]: [f"{self.side}_ballIk", True, [self.ballIkHandle, self.ikHandleManager]],
+            self.ik_chain[5]: [f"{self.side}_toeIk", True, [self.tipIkHandle]],  
 
         }
 
@@ -152,11 +155,13 @@ class LegModule():
         self.ik_ctls = []
 
         for name, data in ik_controllers.items():
-            print (name, data)
             if data[0]:
-                ik_ctl, ik_grp = curve_tool.controller_creator(data[0])
+                ik_ctl, ik_grp = curve_tool.controller_creator(data[0], suffixes = ["GRP", "OFF"])
                 cmds.parent(ik_grp[0], self.ik_trn)
-                
+                self.ik_ctl_grps.append(ik_grp[0])
+                self.ik_ctls.append(ik_ctl)
+                self.lock_attr(ik_ctl)
+
             else:
                 continue
             if data[0]:
@@ -168,38 +173,37 @@ class LegModule():
                     cmds.move(0, 0, 150, ik_grp[0], r=True, ws=True)
                     cmds.poleVectorConstraint(ik_ctl, data[2])    
                 else:
-                   cmds.parentConstraint(ik_ctl, data[2], mo=True)
+                    for child_constraints in data[2]:
+                        cmds.parentConstraint(ik_ctl, child_constraints, mo=True)
 
 
-            self.ik_ctl_grps.append(ik_grp[0])
-            self.ik_ctls.append(ik_ctl)
+            
 
 
 
 
-
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
-        # cmds.setAttr(self.ik_ankle_ctl+".strechySep", channelBox=True, lock=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
-        # cmds.setAttr(self.ik_ankle_ctl+".softSep", channelBox=True, lock=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
-        # cmds.setAttr(self.ik_ankle_ctl+".extraSep", channelBox=True, lock=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ankle_ctl, shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.ik_ctls[2]+".strechySep", channelBox=True, lock=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.ik_ctls[2]+".softSep", channelBox=True, lock=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.ik_ctls[2]+".extraSep", channelBox=True, lock=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
 
     def pairBlends(self):
-        for i, joint in enumerate(self.foot_joints):
+        for i, joint in enumerate(self.blend_chain):
             pairblend_node = cmds.createNode("pairBlend", name=f"{joint.replace('JNT', 'PBL')}", ss=True)
             cmds.connectAttr(f"{self.ik_chain[i]}.translate", f"{pairblend_node}.inTranslate1")
             cmds.connectAttr(f"{self.fk_chain[i]}.translate", f"{pairblend_node}.inTranslate2")
@@ -211,7 +215,15 @@ class LegModule():
 
     def soft_stretch(self):
 
-        masterwalk = "C_masterwalk_CTL"
+        masterwalk = "C_masterwalk_CTL" # Change this to the actual masterwalk controller name
+
+        self.soft_off = cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", p=self.module_trn)
+        cmds.pointConstraint(self.ik_ctls[0], self.soft_off)
+        cmds.aimConstraint(self.ikHandleManager, self.soft_off, aimVector=(1,0,0), upVector= (0,0,1), worldUpType ="none", maintainOffset=False)
+
+        self.soft_trn = cmds.createNode("transform", name=f"{self.side}_legSoft_TRN", p=self.soft_off)
+
+
 
         nodes_to_create = {
             f"{self.side}_legDistanceToControl_DBT": ("distanceBetween", None), #0
@@ -309,7 +321,8 @@ class LegModule():
         cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[23]+".floatB")
         cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[24]+".floatA")
 
-        cmds.connectAttr(self.ik_ankle_ctl + ".stretch", created_nodes[20]+".floatB")
+
+        cmds.connectAttr(self.ik_ctls[2] + ".stretch", created_nodes[20]+".floatB")
 
         cmds.connectAttr(created_nodes[22] + ".outFloat", created_nodes[18]+".colorIfTrueR")
         cmds.connectAttr(created_nodes[23] + ".outFloat", created_nodes[18]+".colorIfTrueG")
@@ -322,14 +335,16 @@ class LegModule():
 
         # Connections TRN and nodes
 
-        cmds.connectAttr(f"{self.root_ctl}.worldMatrix", f"{created_nodes[0]}.inMatrix1")
+
+
+        cmds.connectAttr(f"{self.ik_ctls[0]}.worldMatrix", f"{created_nodes[0]}.inMatrix1")
         cmds.connectAttr(f"{self.ikHandleManager}.worldMatrix", f"{created_nodes[0]}.inMatrix2")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.lowerLengthMult", f"{created_nodes[4]}.floatA")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.upperLengthMult", f"{created_nodes[2]}.floatA")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.middleLengthMult", f"{created_nodes[30]}.floatA")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.soft", f"{created_nodes[5]}.inputValue")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.lowerLengthMult", f"{created_nodes[4]}.floatA")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.upperLengthMult", f"{created_nodes[2]}.floatA")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.middleLengthMult", f"{created_nodes[30]}.floatA")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.soft", f"{created_nodes[5]}.inputValue")
         cmds.connectAttr(f"{masterwalk}.globalScale", f"{created_nodes[1]}.floatB")
-        cmds.connectAttr(f"{created_nodes[18]}.outColorR",f"{self.trn_node}.translateX")
+        cmds.connectAttr(f"{created_nodes[18]}.outColorR",f"{self.soft_trn}.translateX")
 
         # setAttr nodes
 
@@ -347,11 +362,12 @@ class LegModule():
         cmds.setAttr(f"{created_nodes[18]}.operation", 2)
         cmds.setAttr(f"{created_nodes[19]}.floatB", 1)
 
+        cmds.parentConstraint(self.soft_trn, self.springIkHandle, mo=True)
 
    
 
 
-        cmds.parentConstraint(self.trn_node, self.ik_handle_spring[0], mo=True)
+        # cmds.parentConstraint(self.trn_node, self.ik_handle_spring[0], mo=True)
 
                
 
