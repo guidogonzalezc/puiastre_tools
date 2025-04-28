@@ -6,18 +6,20 @@ Arm system for the dragon wing.
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
+from puiastreTools.tools.curve_tool import controller_creator
 import maya.mel as mel
 import math
 import os
 from importlib import reload
 reload(guides_manager)
-reload(curve_tool)    
+reload(curve_tool)
+reload(controller_creator)
 
 class WingArmModule(object):
     def __init__(self):
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "arm_guides_template_01.guides")
+        self.guides_path = os.path.join(self.relative_path, "guides", "arm_guides_v001.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "arm_ctl.json")
     
     def make(self, side):
@@ -31,7 +33,6 @@ class WingArmModule(object):
         self.duplicate_guides()
         self.pair_blends()
         self.set_controllers()
-
         self.soft_stretch()
         self.handles_setup()
 
