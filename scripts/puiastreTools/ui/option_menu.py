@@ -29,6 +29,13 @@ def leg_module(*args):
     module = leg_module.LegModule()
     module.make(side = "L")
 
+def arm_module(*args):
+    from puiastreTools.autorig import wing_arm_module   
+    from importlib import reload
+    reload(wing_arm_module)
+    module = wing_arm_module.WingArmModule()
+    module.make(side = "L")
+
 def export_curves(*args):   
     from puiastreTools.tools import curve_tool
     from importlib import reload
@@ -62,6 +69,7 @@ def puiastre_ui():
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
     cmds.menuItem(label="   Build L leg (dev only)", command=leg_module)
+    cmds.menuItem(label="   Build L arm (dev only)", command=arm_module)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

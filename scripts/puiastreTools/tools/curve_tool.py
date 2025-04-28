@@ -1,44 +1,191 @@
+import maya.api.OpenMaya as om
 import maya.cmds as cmds
-import maya.OpenMaya as om
 import json
 import os
 
-def create_curve_from_data(degree, form, knots, cvs, lineWidth, colourShape, colourTransform, shape_name):
-    """
-    Creates a NURBS curve in Maya.
+complete_path = os.path.realpath(__file__)
+relative_path = complete_path.split("\scripts")[0]
+TEMPLATE_FILE = os.path.join(relative_path, "curves", "foot_ctl.json") 
 
-    Args:
-        degree (int): Degree of the curve.
-        form (int): Form of the curve (open, closed, periodic).
-        knots (list): Knot values.
-        cvs (list): CV positions.
-        name (str): Name of the new curve.
-        lineWidth (int): Width of the curve.
-        colour (int): Colour of the curve.
-    """
-    # Create curve
-    curve = cmds.curve(d=degree, p=cvs, k=knots)
-    shape = cmds.listRelatives(curve, shapes=True)[0]
 
-    # Close curve if necessary
-    if form == 2 or form == 3:
-        cmds.closeCurve(curve, preserveShape=False, replaceOriginal=True)
-    # Add the thickness and colour
-    cmds.setAttr(f"{curve}.lineWidth", lineWidth)
-    cmds.setAttr(f"{shape}.overrideEnabled", 1)
-    cmds.setAttr(f"{shape}.overrideColor", colourShape)
-    cmds.setAttr(f"{curve}.overrideEnabled", 1)
-    cmds.setAttr(f"{curve}.overrideColor", colourTransform)
+def get_all_ctl_curves_data():
+    ctl_data = {}
 
-    # Rename curve
-    renamed_curve = cmds.rename(curve, shape_name)  
+    transforms = cmds.ls("*_CTL*", type="transform", long=True)
 
-    # Delete construction history
-    cmds.delete(renamed_curve, constructionHistory=True)
+    for transform_name in transforms:
+        shapes = cmds.listRelatives(transform_name, shapes=True, fullPath=True) or []
+        nurbs_shapes = []
 
-    return renamed_curve
+        for shape in shapes:
+            if cmds.nodeType(shape) == "nurbsCurve":
+                nurbs_shapes.append(shape)
 
-def controller_creator(name, suffixes = ["GRP", "SPC", "OFF", "SDK", "ANM"]):
+        if not nurbs_shapes:
+            continue  
+
+        sel_list = om.MSelectionList()
+        sel_list.add(transform_name)
+        transform_obj = sel_list.getDependNode(0)
+
+        def get_override_info(node_obj):
+            fn_dep = om.MFnDependencyNode(node_obj)
+            try:
+                override_enabled = fn_dep.findPlug('overrideEnabled', False).asBool()
+                override_color = fn_dep.findPlug('overrideColor', False) if override_enabled else None
+                override_color_value = override_color.asInt() if override_color else None
+            except:
+                override_enabled = False
+                override_color_value = None
+            return override_enabled, override_color_value
+
+        transform_override_enabled, transform_override_color = get_override_info(transform_obj)
+
+        shape_data_list = []
+
+        for shape in nurbs_shapes:
+            sel_list.clear()
+            sel_list.add(shape)
+            shape_obj = sel_list.getDependNode(0)
+
+            shape_override_enabled, shape_override_color = get_override_info(shape_obj)
+
+            fn_shape_dep = om.MFnDependencyNode(shape_obj)
+            try:
+                always_on_top = fn_shape_dep.findPlug('alwaysDrawOnTop', False).asBool()
+            except:
+                always_on_top = False
+
+            curve_fn = om.MFnNurbsCurve(shape_obj)
+
+            cvs = []
+            for i in range(curve_fn.numCVs):
+                pt = curve_fn.cvPosition(i)
+                cvs.append((pt.x, pt.y, pt.z))
+
+            form_types = {
+                om.MFnNurbsCurve.kOpen: "open",
+                om.MFnNurbsCurve.kClosed: "closed",
+                om.MFnNurbsCurve.kPeriodic: "periodic"
+            }
+
+            form = form_types.get(curve_fn.form, "unknown")
+            if form == "unknown":
+                om.MGlobal.displayWarning(f"Curve form unknown for {shape}")
+
+            knots = curve_fn.knots()
+            degree = curve_fn.degree
+
+            shape_data_list.append({
+                "name": shape.split("|")[-1],
+                "overrideEnabled": shape_override_enabled,
+                "overrideColor": shape_override_color,
+                "alwaysDrawOnTop": always_on_top,
+                "curve": {
+                    "cvs": cvs,
+                    "form": form,
+                    "knots": list(knots),
+                    "degree": degree
+                }
+            })
+
+        ctl_data[transform_name] = {
+            "transform": {
+                "name": transform_name.split("|")[-1],
+                "overrideEnabled": transform_override_enabled,
+                "overrideColor": transform_override_color
+            },
+            "shapes": shape_data_list
+        }
+
+    with open(TEMPLATE_FILE, "w") as f:
+        json.dump(ctl_data, f, indent=4)
+
+    print(f"Controllers template saved to: {TEMPLATE_FILE}")
+
+def build_curves_from_template(target_transform_name=None):
+    if not os.path.exists(TEMPLATE_FILE):
+        om.MGlobal.displayError("Template file does not exist.")
+        return
+
+    with open(TEMPLATE_FILE, "r") as f:
+        ctl_data = json.load(f)
+
+    if target_transform_name:
+        ctl_data = {k: v for k, v in ctl_data.items() if v["transform"]["name"] == target_transform_name}
+        if not ctl_data:
+            om.MGlobal.displayError(f"Transform '{target_transform_name}' not found in template.")
+            return
+
+    created_transforms = []
+
+    for transform_path, data in ctl_data.items():
+        transform_info = data["transform"]
+        shape_data_list = data["shapes"]
+
+        dag_modifier = om.MDagModifier()
+        transform_obj = dag_modifier.createNode("transform")
+        dag_modifier.doIt()
+
+        transform_fn = om.MFnDagNode(transform_obj)
+        final_name = transform_fn.setName(transform_info["name"])
+        created_transforms.append(final_name)
+
+        if transform_info["overrideEnabled"]:
+            fn_dep = om.MFnDependencyNode(transform_obj)
+            fn_dep.findPlug('overrideEnabled', False).setBool(True)
+            fn_dep.findPlug('overrideColor', False).setInt(transform_info["overrideColor"])
+
+        created_shapes = []
+
+        for shape_data in shape_data_list:
+            curve_info = shape_data["curve"]
+            cvs = curve_info["cvs"]
+            degree = curve_info["degree"]
+            knots = curve_info["knots"]
+            form = curve_info["form"]
+
+            form_flags = {
+                "open": om.MFnNurbsCurve.kOpen,
+                "closed": om.MFnNurbsCurve.kClosed,
+                "periodic": om.MFnNurbsCurve.kPeriodic
+            }
+            form_flag = form_flags.get(form, om.MFnNurbsCurve.kOpen)
+
+            points = om.MPointArray()
+            for pt in cvs:
+                points.append(om.MPoint(pt[0], pt[1], pt[2]))
+
+            curve_fn = om.MFnNurbsCurve()
+            shape_obj = curve_fn.create(
+                points,
+                knots,
+                degree,
+                form_flag,
+                False,    
+                True,     
+                transform_obj
+            )
+
+            shape_fn = om.MFnDagNode(shape_obj)
+            shape_fn.setName(shape_data["name"])
+
+            if shape_data["overrideEnabled"]:
+                fn_dep = om.MFnDependencyNode(shape_obj)
+                fn_dep.findPlug('overrideEnabled', False).setBool(True)
+                fn_dep.findPlug('overrideColor', False).setInt(shape_data["overrideColor"])
+
+            if shape_data.get("alwaysDrawOnTop", False):
+                fn_dep = om.MFnDependencyNode(shape_obj)
+                fn_dep.findPlug('alwaysDrawOnTop', False).setBool(True)
+
+            created_shapes.append(shape_obj)
+
+
+    return created_transforms
+
+
+def controller_creator(name, suffixes = ["GRP"]):
     """
     Creates a controller with a specific name and offset transformsand returns the controller and the groups.
 
@@ -63,132 +210,8 @@ def controller_creator(name, suffixes = ["GRP", "SPC", "OFF", "SDK", "ANM"]):
             cmds.delete(created_grps[0])
         return
     else:
-        ctl = import_nurbs_curves_from_json(f"{name}_CTL")
+        ctl = build_curves_from_template(f"{name}_CTL")
         cmds.parent(ctl, created_grps[-1])
 
-        return ctl, created_grps # Return the controller and the groups
-
-def export_nurbs_curve():
-    """
-    Exports selected NURBS curves in Maya to a JSON file.
-    """
-    # selection = cmds.ls(selection=True)
-    
-    # # Check if a NURBS curve is selected
-    # if not selection:
-    #     om.MGlobal.displayError("Please select a NURBS curve to export.")
-    #     return
-
-    selection = [obj for obj in cmds.ls(type="transform") if "_CTL" in obj]
-    
-    curve_dict = {}
-
-    # Iterate through selected NURBS curves
-    for transforms in selection:
-        relatives = cmds.listRelatives(transforms, fullPath=True, shapes=True)
-
-        # Check if the selected object is a NURBS curve
-        if not relatives:
-            om.MGlobal.displayError(f"{transforms} is not a NURBS curve.")
-            continue
-
-        shapes_dict = {}
-        for i, shape in enumerate(relatives):
-            dag_path = om.MDagPath()
-            selection_list = om.MSelectionList()
-            selection_list.add(shape)
-            selection_list.getDagPath(0, dag_path)
-            shape_fn = om.MFnNurbsCurve(dag_path)
-
-            # Get curve data
-            degree = shape_fn.degree()
-            form = shape_fn.form()
-            cvs = cmds.ls(f'{shape}.cv[*]', fl=1)
-            points = []
-            for cv in cvs:
-                loc = cmds.xform(cv, q=1, t=1, ws=True)
-                rounded_loc = tuple(round(coord, 2) for coord in loc)
-                points.append(rounded_loc)
-
-
-            num_points = len(points)
-            num_knots = num_points + degree - 1
-            knots = [i for i in range(-degree + 1, num_knots - degree + 1)]
-
-            # Populate shape dictionary
-            shapes_dict[f"{transforms}_shape{i+1}"] = {
-                "knots": knots,
-                "degree": degree,
-                "form": form,
-                "points": points,
-                "lineWidth": cmds.getAttr(f"{shape}.lineWidth"),
-                "colourShape": cmds.getAttr(f"{shape}.overrideColor"),
-                "colourTransform": cmds.getAttr(f"{transforms}.overrideColor"),
-            }
-
-            curve_dict[transforms] = shapes_dict
-
-    # Specify JSON file path
-    file_path = cmds.fileDialog2(dialogStyle=2, fileMode=0, fileFilter="JSON Files (*.json)")
-    if file_path:
-        file_path = file_path[0]
-
-        # Write to JSON file
-        with open(file_path, 'w') as json_file:
-            json.dump(curve_dict, json_file, indent=4)
-
-        om.MGlobal.displayInfo(f"NURBS curve data exported to {file_path}.")
-    else:
-        om.MGlobal.displayError("Export cancelled.")
-
-def import_nurbs_curves_from_json(shape_name):
-    """
-    Imports NURBS curves from a JSON file and creates them in Maya.
-
-    Args:
-        json_path (str): Path to the JSON file.
-    """
-    json_path = get_script_file_path()
-    with open(json_path, 'r') as file:
-        curve_data = json.load(file)
-    # Extract the data for the specific group
-
-    data = curve_data.get(shape_name)
-
-    if data:
-        main_curve = None
-        for curve_name, shapes in data.items():
-            # Create curve from JSON data
-            degree = shapes['degree']
-            form = shapes['form']
-            knots = shapes['knots']
-            cvs = shapes['points']
-            lineWidth = shapes['lineWidth']
-            colourShape = shapes['colourShape']
-            colourTransform = shapes['colourTransform']
-
-            # Create curve in Maya
-            curve = create_curve_from_data(degree, form, knots, cvs, lineWidth, colourShape, colourTransform, shape_name)
-
-            # Parent shapes to main curve
-            if main_curve:
-                shape = cmds.listRelatives(curve, shapes=True)[0]
-                cmds.parent(shape, main_curve, relative=True, shape=True)
-                cmds.delete(curve)
-            else:
-                main_curve = curve
-    else:
-        main_curve = cmds.circle(name=shape_name, normal=(0, 1, 0), constructionHistory=False)[0]
-    
-    return main_curve
-
-def get_script_file_path():
-    """
-    Returns the file path of the currently executed script.
-    """
-    complete_path = os.path.realpath(__file__)
-    relative_path = complete_path.split("\scripts")[0]
-    final_path = os.path.join(relative_path, "curves", "foot_ctl.json") 
-
-    return final_path
+        return ctl[0], created_grps 
 
