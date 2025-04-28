@@ -63,7 +63,7 @@ class WingArmModule(object):
             cmds.parent(guides[0], self.module_trn)
 
             for joint in guides:
-                chain.append(cmds.rename(joint, joint.replace("_JNT", f"{name}_JNT")))
+                chain.append(cmds.rename(joint, joint.replace('_JNT', f'{name}_JNT')))
 
     def pair_blends(self):
 
