@@ -4,6 +4,7 @@ import maya.cmds as cmds
 from functools import partial
 from importlib import reload
 
+
 def reload_ui(*args):
     from puiastreTools.ui import option_menu
     reload(option_menu)
@@ -11,36 +12,31 @@ def reload_ui(*args):
 
 def export_guides(*args):   
     from puiastreTools.utils import guides_manager
-    from importlib import reload
     reload(guides_manager)
     guides_manager.guides_export()
 
 def import_guides(*args, value=None): 
     if value == True:   
         from puiastreTools.utils import guides_manager
-        from importlib import reload
         reload(guides_manager)
         guides_manager.guide_import(joint_name = "all")
 
 def leg_module(*args):
     from puiastreTools.autorig import leg_module
-    from importlib import reload
     reload(leg_module)
     module = leg_module.LegModule()
     module.make(side = "L")
 
 def arm_module(*args):
-    from puiastreTools.autorig import wing_arm_module   
-    from importlib import reload
+    import puiastreTools.autorig.wing_arm_module as wing_arm_module
     reload(wing_arm_module)
     module = wing_arm_module.WingArmModule()
     module.make(side = "L")
 
 def export_curves(*args):   
     from puiastreTools.tools import curve_tool
-    from importlib import reload
     reload(curve_tool)
-    curve_tool.export_nurbs_curve()
+    curve_tool.get_all_ctl_curves_data()
 
 def puiastre_ui():
 
