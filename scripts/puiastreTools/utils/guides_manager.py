@@ -40,9 +40,9 @@ def guides_export():
                                         right_world_position[0] = right_world_position[0] * -1
 
 
-                                        if left_world_position != right_world_position:
-                                                om.MGlobal.displayWarning(f"Guides are not symmetrical. {right_guide} is not in the same position as {left_guide}.")
-                                                return
+                                        # if left_world_position != right_world_position:
+                                        #         om.MGlobal.displayWarning(f"Guides are not symmetrical. {right_guide} is not in the same position as {left_guide}.")
+                                        #         return
                                                 
 
                 

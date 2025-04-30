@@ -28,7 +28,7 @@ def leg_module(*args):
     module.make(side = "L")
 
 def arm_module(*args):
-    import puiastreTools.autorig.wing_arm_module as wing_arm_module
+    from puiastreTools.autorig import wing_arm_module
     reload(wing_arm_module)
     module = wing_arm_module.WingArmModule()
     module.make(side = "L")

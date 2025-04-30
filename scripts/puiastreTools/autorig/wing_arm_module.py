@@ -69,7 +69,7 @@ class WingArmModule(object):
 
         for i, joint in enumerate(self.blend_chain):
             
-            self.pair_blend_node = cmds.createNode("pairBlend", n=f"{joint.replace("_JNT"), ("_PBL")}")
+            self.pair_blend_node = cmds.createNode("pairBlend", n=f"{joint.replace('_JNT', '_PBL')}")
             cmds.connectAttr(f"{self.ik_chain[i]}.translate", f"{self.pair_blend_node}.inTranslate1")
             cmds.connectAttr(f"{self.fk_chain[i]}.translate", f"{self.pair_blend_node}.inTranslate2")
             cmds.connectAttr(f"{self.ik_chain[i]}.rotate", f"{self.pair_blend_node}.inRotate1")
