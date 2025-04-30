@@ -7,6 +7,15 @@ def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
     for attr in attrs:
         cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
 
+def condition(main_ctl, vis_trn, value):
+    con = cmds.createNode("condition", name = f"{vis_trn}_Visibility_CON", ss=True)
+    cmds.setAttr(con + ".secondTerm", value)
+    cmds.connectAttr(main_ctl, con + ".firstTerm")
+    cmds.setAttr(con + ".colorIfTrueR", 1)
+    cmds.setAttr(con + ".colorIfFalseR", 0)
+    cmds.connectAttr(con + ".outColorR", vis_trn + ".visibility")
+
+
 def create_basic_structure(asset_name = "assetName"):
 
     folder_structure = {
@@ -23,20 +32,24 @@ def create_basic_structure(asset_name = "assetName"):
                 "geoLayering_GRP",
                 "skeletonHirearchy_GRP"
             },
-            "model_GRP": {},
+            "model_GRP": {
+                "PROXY",
+                "LOD_100",
+                "LOD_200"
+            },
             "groom_GRP": {},
             "clothSim_GRP": {}
         }
     }
 
-    main_transform = cmds.createNode("transform", name=asset_name)
+    main_transform = cmds.createNode("transform", name=asset_name, ss=True)
 
     ctls = []
     secondary_transforms = []
     rig_transforms = []
 
     for folder, subfolders in folder_structure[asset_name].items():
-        secondary_transform = cmds.createNode("transform", name=folder, parent=main_transform)
+        secondary_transform = cmds.createNode("transform", name=folder, parent=main_transform, ss=True)
         secondary_transforms.append(secondary_transform)
         for subfolder in subfolders:
             if subfolder.startswith("C_"):
@@ -48,32 +61,44 @@ def create_basic_structure(asset_name = "assetName"):
                     cmds.parent(grp[0], secondary_transform)  
                 ctls.append(ctl)
             else:
-                trn = cmds.createNode("transform", name=subfolder, parent=secondary_transform)
+                trn = cmds.createNode("transform", name=subfolder, parent=secondary_transform, ss=True)
                 rig_transforms.append(trn)
 
-
-
             
+    cmds.addAttr(ctls[0], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=False)
+    cmds.setAttr(ctls[0]+".extraAttributesSep", channelBox=True)
+    cmds.addAttr(ctls[0], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.setAttr(ctls[0]+".reference", channelBox=True)
 
-            cmds.setAttr(f"{ctl[0]}.overrideColor", 14)
-            cmds.addAttr(ctl[0], shortName="reference", niceName="Reference",attributeType="bool", keyable=False)
-            cmds.setAttr(ctl[0]+".reference", channelBox=True)
-            cmds.setAttr(rig_transforms[0]+".overrideDisplayType", 2)
-            cmds.connectAttr(ctl[0]+".reference", rig_transforms[2]+".overrideEnabled")
-            
-            cmds.setAttr(f"{transform}.overrideColor", 17)
-            cmds.addAttr(transform, shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=True)
-            cmds.addAttr(transform, shortName="globalScale", niceName="Global Scale", minValue=0.001,defaultValue=1, keyable=True)
-            cmds.setAttr(transform+".extraAttributesSep", channelBox=True, lock=True)
-            cmds.connectAttr(transform+".globalScale", transform+".scaleX", force=True)
-            cmds.connectAttr(transform+".globalScale", transform+".scaleY", force=True)
-            cmds.connectAttr(transform+".globalScale", transform+".scaleZ", force=True)
-            cmds.setAttr(f"{transform}.overrideColor", 6)
-            cmds.setAttr(attribute, lock=True, keyable=False, channelBox=False)
+    cmds.addAttr(ctls[0], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.addAttr(ctls[0], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.addAttr(ctls[0], shortName="meshLods", niceName="LODS", enumName="PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
+    cmds.setAttr(ctls[0]+".showModules", channelBox=True)
+    cmds.setAttr(ctls[0]+".showSkeleton", channelBox=True)
+    cmds.setAttr(ctls[0]+".meshLods", channelBox=True)
 
+    cmds.setAttr(secondary_transforms[2]+".overrideDisplayType", 2)
+    cmds.connectAttr(ctls[0]+".reference", secondary_transforms[2]+".overrideEnabled")
+        
+    cmds.addAttr(ctls[2], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=True)
+    cmds.addAttr(ctls[2], shortName="globalScale", niceName="Global Scale", minValue=0.001,defaultValue=1, keyable=True)
+    cmds.setAttr(ctls[2]+".extraAttributesSep", channelBox=True, lock=True)
+    cmds.connectAttr(ctls[2]+".globalScale", ctls[2] + ".scaleX", force=True)
+    cmds.connectAttr(ctls[2]+".globalScale", ctls[2] + ".scaleY", force=True)
+    cmds.connectAttr(ctls[2]+".globalScale", ctls[2] + ".scaleZ", force=True)
 
+    condition(f"{ctls[0]}.meshLods", rig_transforms[4], 0)
+    condition(f"{ctls[0]}.meshLods", rig_transforms[5], 1)
+    condition(f"{ctls[0]}.meshLods", rig_transforms[6], 2)
 
+    cmds.connectAttr(f"{ctls[0]}.showModules", rig_transforms[2]+ ".visibility")
+    cmds.connectAttr(f"{ctls[0]}.showSkeleton", rig_transforms[3] + ".visibility")
 
+    lock_attr(ctls[0], ["tx", "tz", "ty", "rx", "ry", "rz", "scaleX", "scaleY", "scaleZ", "visibility"])
+    lock_attr(ctls[1])
+    lock_attr(ctls[2])
+
+    cmds.select(clear=True)
 
 
 """"
