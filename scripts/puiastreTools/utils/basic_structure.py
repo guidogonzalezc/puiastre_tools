@@ -63,41 +63,39 @@ def create_basic_structure(asset_name = "assetName"):
             else:
                 trn = cmds.createNode("transform", name=subfolder, parent=secondary_transform, ss=True)
                 rig_transforms.append(trn)
+          
+    cmds.addAttr(ctls[2], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=False)
+    cmds.setAttr(ctls[2]+".extraAttributesSep", channelBox=True)
+    cmds.addAttr(ctls[2], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.setAttr(ctls[2]+".reference", channelBox=True)
 
-    print(ctls)
-            
-    cmds.addAttr(ctls[1], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=False)
-    cmds.setAttr(ctls[1]+".extraAttributesSep", channelBox=True)
-    cmds.addAttr(ctls[1], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.setAttr(ctls[1]+".reference", channelBox=True)
-
-    cmds.addAttr(ctls[1], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.addAttr(ctls[1], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.addAttr(ctls[1], shortName="meshLods", niceName="LODS", enumName="PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
-    cmds.setAttr(ctls[1]+".showModules", channelBox=True)
-    cmds.setAttr(ctls[1]+".showSkeleton", channelBox=True)
-    cmds.setAttr(ctls[1]+".meshLods", channelBox=True)
+    cmds.addAttr(ctls[2], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.addAttr(ctls[2], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
+    cmds.setAttr(ctls[2]+".showModules", channelBox=True)
+    cmds.setAttr(ctls[2]+".showSkeleton", channelBox=True)
+    cmds.setAttr(ctls[2]+".meshLods", channelBox=True)
 
     cmds.setAttr(secondary_transforms[2]+".overrideDisplayType", 2)
-    cmds.connectAttr(ctls[1]+".reference", secondary_transforms[2]+".overrideEnabled")
+    cmds.connectAttr(ctls[2]+".reference", secondary_transforms[2]+".overrideEnabled")
         
-    cmds.addAttr(ctls[0], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=True)
-    cmds.addAttr(ctls[0], shortName="globalScale", niceName="Global Scale", minValue=0.001,defaultValue=1, keyable=True)
-    cmds.setAttr(ctls[0]+".extraAttributesSep", channelBox=True, lock=True)
-    cmds.connectAttr(ctls[0]+".globalScale", ctls[0] + ".scaleX", force=True)
-    cmds.connectAttr(ctls[0]+".globalScale", ctls[0] + ".scaleY", force=True)
-    cmds.connectAttr(ctls[0]+".globalScale", ctls[0] + ".scaleZ", force=True)
+    cmds.addAttr(ctls[1], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=True)
+    cmds.addAttr(ctls[1], shortName="globalScale", niceName="Global Scale", minValue=0.001,defaultValue=1, keyable=True)
+    cmds.setAttr(ctls[1]+".extraAttributesSep", channelBox=True, lock=True)
+    cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleX", force=True)
+    cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleY", force=True)
+    cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleZ", force=True)
 
-    condition(f"{ctls[1]}.meshLods", rig_transforms[4], 0)
-    condition(f"{ctls[1]}.meshLods", rig_transforms[5], 1)
-    condition(f"{ctls[1]}.meshLods", rig_transforms[6], 2)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[4], 0)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[5], 1)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[6], 2)
 
-    cmds.connectAttr(f"{ctls[1]}.showModules", rig_transforms[2]+ ".visibility")
-    cmds.connectAttr(f"{ctls[1]}.showSkeleton", rig_transforms[3] + ".visibility")
+    cmds.connectAttr(f"{ctls[2]}.showModules", rig_transforms[2]+ ".visibility")
+    cmds.connectAttr(f"{ctls[2]}.showSkeleton", rig_transforms[3] + ".visibility")
 
-    lock_attr(ctls[1], ["tx", "tz", "ty", "rx", "ry", "rz", "scaleX", "scaleY", "scaleZ", "visibility"])
+    lock_attr(ctls[2], ["tx", "tz", "ty", "rx", "ry", "rz", "scaleX", "scaleY", "scaleZ", "visibility"])
     lock_attr(ctls[0])
-    lock_attr(ctls[2])
+    lock_attr(ctls[1])
 
     cmds.select(clear=True)
 
