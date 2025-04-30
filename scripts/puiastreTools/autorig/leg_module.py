@@ -26,11 +26,12 @@ class LegModule():
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP")
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_legSkinning_GRP")
 
+
         self.duplicate_leg()
         self.set_controllers()
         self.pairBlends()
         # self.reverse_foot()
-        self.soft_stretch()
+        # self.soft_stretch()
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
         for attr in attrs:
@@ -59,9 +60,6 @@ class LegModule():
                 chain.append(cmds.rename(joint, joint.replace("_JNT", f"{name}_JNT")))
 
 
-
-
-
     def set_controllers(self):
 
         # -- IK/FK SWITCHCONTROLLER -- # 
@@ -70,8 +68,9 @@ class LegModule():
         self.fk_trn = cmds.createNode("transform", name=f"{self.side}_legFkControllers_GRP", parent=self.controllers_trn)
 
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_LegSettings", suffixes = ["GRP"])
-        cmds.matchTransform(self.settings_curve_grp[0], self.ik_chain[0], pos=True)
-        cmds.move(100, 0, 0, self.settings_curve_grp[0], r=True, os=True)
+        position, rotation = guides_manager.guide_import(joint_name=f"L_legSwitch", filePath=self.guides_path)
+        cmds.xform(self.settings_curve_ctl, ws=True, translation=position)
+        cmds.xform(self.settings_curve_ctl, ws=True, rotation=rotation)
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
         self.lock_attr(self.settings_curve_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
         cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{self.fk_trn}.visibility")
