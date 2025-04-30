@@ -228,7 +228,7 @@ class LegModule():
             f"{self.side}_legDistanceToControl_DBT": ("distanceBetween", None), #0
             f"{self.side}_legDistanceToControlNormalized_FLM": ("floatMath", 3), #1
             f"{self.side}_legUpperLength_FLM": ("floatMath", 2), #2
-            f"{self.side}_legFullLength_FLM": ("floatMath", 0), #3
+            f"{self.side}_legFullLength_PMA": ("plusMinusAverage", 1), #3
             f"{self.side}_legLowerLength_FLM": ("floatMath", 2), #4
             f"{self.side}_legSoftValue_RMV": ("remapValue", None), #5
             f"{self.side}_legSoftDistance_FLM": ("floatMath", 1), #6
@@ -243,7 +243,7 @@ class LegModule():
             f"{self.side}_legLengthRatio_FLM": ("floatMath", 3), #15
             f"{self.side}_legDistanceToControlDividedByTheLengthRatio_FLM": ("floatMath", 3), #16
             f"{self.side}_legSoftEffectorDistance_FLM": ("floatMath", 2), #17
-            f"{self.side}_legSoftCondition_CON": ("condition", None), #18
+            f"{self.side}_legSoftCondition_CON": ("condition", 2), #18
             f"{self.side}_legDistanceToControlDividedByTheSoftEffectorMinusOne_FLM": ("floatMath", 1), #19 
             f"{self.side}_legDistanceToControlDividedByTheSoftEffectorMinusOneMultipliedByTheStretch_FLM": ("floatMath", 2), #20 
             f"{self.side}_legStretchFactor_FLM": ("floatMath", 0), #21 
@@ -251,14 +251,17 @@ class LegModule():
             f"{self.side}_legUpperLengthStretch_FLM": ("floatMath", 2), #23 
             f"{self.side}_legLowerLengthStretch_FLM": ("floatMath", 2), #24 
             f"{self.side}_legDistanceToControlDividedByTheSoftEffector_FLM": ("floatMath", 3), #25
-            f"{self.side}_legMiddleLength_FLM": ("floatMath", 2), #26
-            f"{self.side}_legFullLengthUpperPart_FLM": ("floatMath", 0), #27
-            f"{self.side}_legSoftConditionSegments_CON": ("condition", None), #28
-            f"{self.side}_legMiddleLengthStretch_FLM": ("floatMath", 2), #29
-
+            f"{self.side}_legMiddleLength_FLM": ("floatMath", 2), #30 - 26
+            f"{self.side}_legStretchCondition_CON": ("condition", 2), #32 - 27
+            f"{self.side}_legMiddleLengthStretch_FLM": ("floatMath", 2), #28
 
             
         }
+
+
+
+
+
 
         created_nodes = []
         for node_name, (node_type, operation) in nodes_to_create.items():
@@ -272,17 +275,14 @@ class LegModule():
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[15]+".floatA")
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[7]+".floatA")
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[16]+".floatA")
-
-        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[14]+".floatB")
-        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[6]+".floatA")
-        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[15]+".floatB")
-
+        cmds.connectAttr(created_nodes[3] + ".output1D", created_nodes[14]+".floatB")
+        cmds.connectAttr(created_nodes[3] + ".output1D", created_nodes[6]+".floatA")
+        cmds.connectAttr(created_nodes[3] + ".output1D", created_nodes[15]+".floatB")
         cmds.connectAttr(created_nodes[5] + ".outValue", created_nodes[8]+".floatB")
         cmds.connectAttr(created_nodes[5] + ".outValue", created_nodes[6]+".floatB")
         cmds.connectAttr(created_nodes[5] + ".outValue", created_nodes[12]+".floatA")
         cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[13]+".floatB")
         cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[7]+".floatB")
-        
         cmds.connectAttr(created_nodes[7] + ".outFloat", created_nodes[8]+".floatA")
         cmds.connectAttr(created_nodes[8] + ".outFloat", created_nodes[9]+".floatA")
         cmds.connectAttr(created_nodes[9] + ".outFloat", created_nodes[10]+".floatB")
@@ -293,64 +293,49 @@ class LegModule():
         cmds.connectAttr(created_nodes[14] + ".outFloat", created_nodes[17]+".floatA")
         cmds.connectAttr(created_nodes[15] + ".outFloat", created_nodes[16]+".floatB")
         cmds.connectAttr(created_nodes[16] + ".outFloat", created_nodes[17]+".floatB")
-
-        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[27]+".floatA")
-        cmds.connectAttr(created_nodes[26] + ".outFloat", created_nodes[27]+".floatB")
-        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[3]+".floatB")
-        cmds.connectAttr(created_nodes[27] + ".outFloat", created_nodes[3]+".floatA")
-        
-
+        # cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[31]+".floatA")
+        # cmds.connectAttr(created_nodes[30] + ".outFloat", created_nodes[31]+".floatB")
+        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[3]+".input1D[0]")
+        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[3]+".input1D[1]")
+        cmds.connectAttr(created_nodes[26] + ".outFloat", created_nodes[3]+".input1D[2]")
         cmds.connectAttr(created_nodes[19] + ".outFloat", created_nodes[20]+".floatA")
         cmds.connectAttr(created_nodes[20] + ".outFloat", created_nodes[21]+".floatA")
         cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[23]+".floatA")
         cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[22]+".floatB")
         cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[24]+".floatB")
+        cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[28]+".floatA")
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[25]+".floatA")
         cmds.connectAttr(created_nodes[17] + ".outFloat", created_nodes[25]+".floatB")
         cmds.connectAttr(created_nodes[17] + ".outFloat", created_nodes[22]+".floatA")
-
         cmds.connectAttr(created_nodes[25] + ".outFloat", created_nodes[19]+".floatA")
-
         cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[23]+".floatB")
         cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[24]+".floatA")
+        cmds.connectAttr(created_nodes[26] + ".outFloat", created_nodes[28]+".floatB")
 
-        # cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[27]+".floatB")
-        # cmds.connectAttr(created_nodes[30] + ".outFloat", created_nodes[27]+".floatA")
+
+
 
         cmds.connectAttr(self.ik_ctls[2] + ".stretch", created_nodes[20]+".floatB")
 
+
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[18]+".firstTerm")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[18]+".colorIfFalseR")
         cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[18]+".secondTerm")
+
+        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[18]+".colorIfFalseR")
         cmds.connectAttr(created_nodes[22] + ".outFloat", created_nodes[18]+".colorIfTrueR")
 
-        cmds.connectAttr(f"{created_nodes[18]}.outColorR",f"{self.soft_trn}.translateX")
 
-        cmds.setAttr(f"{created_nodes[18]}.operation", 2)
+        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[27]+".firstTerm")
+        cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[27]+".secondTerm")
 
+        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[27]+".colorIfFalseR")
+        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[27]+".colorIfFalseB")
+        cmds.connectAttr(created_nodes[26] + ".outFloat", created_nodes[27]+".colorIfFalseG")
 
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[28]+".firstTerm")
-        cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[28]+".secondTerm")
-        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[28]+".colorIfFalseR")
-        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[28]+".colorIfFalseG")
-        cmds.connectAttr(created_nodes[26] + ".outFloat", created_nodes[28]+".colorIfFalseB")
-        cmds.connectAttr(created_nodes[23] + ".outFloat", created_nodes[28]+".colorIfTrueR")
-        cmds.connectAttr(created_nodes[24] + ".outFloat", created_nodes[28]+".colorIfTrueG")
-        cmds.connectAttr(created_nodes[29] + ".outFloat", created_nodes[28]+".colorIfTrueB")
+        cmds.connectAttr(created_nodes[23] + ".outFloat", created_nodes[27]+".colorIfTrueR")
+        cmds.connectAttr(created_nodes[24] + ".outFloat", created_nodes[27]+".colorIfTrueB")
+        cmds.connectAttr(created_nodes[28] + ".outFloat", created_nodes[27]+".colorIfTrueG")
 
-        cmds.connectAttr(f"{created_nodes[28]}.outColorR",f"{self.ik_chain[1]}.translateX")
-        cmds.connectAttr(f"{created_nodes[28]}.outColorG",f"{self.ik_chain[3]}.translateX")
-        cmds.connectAttr(f"{created_nodes[28]}.outColorB",f"{self.ik_chain[2]}.translateX")
-
-        cmds.setAttr(f"{created_nodes[28]}.operation", 2)
-
-
-        upper = 2
-        lower = 4
-        middle = 30
-        upper_stretch = 23
-        lower_stretch = 24
-        middle_stretch = 31
 
 
         # Connections TRN and nodes
@@ -361,29 +346,40 @@ class LegModule():
         cmds.connectAttr(f"{self.ikHandleManager}.worldMatrix", f"{created_nodes[0]}.inMatrix2")
         cmds.connectAttr(f"{self.ik_ctls[2]}.lowerLengthMult", f"{created_nodes[4]}.floatA")
         cmds.connectAttr(f"{self.ik_ctls[2]}.upperLengthMult", f"{created_nodes[2]}.floatA")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.middleLengthMult", f"{created_nodes[30]}.floatA")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.middleLengthMult", f"{created_nodes[26]}.floatA")
         cmds.connectAttr(f"{self.ik_ctls[2]}.soft", f"{created_nodes[5]}.inputValue")
         cmds.connectAttr(f"{masterwalk}.globalScale", f"{created_nodes[1]}.floatB")
-        
+        cmds.connectAttr(f"{created_nodes[18]}.outColorR",f"{self.soft_trn}.translateX")
 
         # setAttr nodes
 
 
 
         cmds.setAttr(f"{created_nodes[2]}.floatB", cmds.getAttr(f"{self.ik_chain[1]}.translateX"))
-        cmds.setAttr(f"{created_nodes[4]}.floatB", cmds.getAttr(f"{self.ik_chain[2]}.translateX"))
-        cmds.setAttr(f"{created_nodes[30]}.floatB", cmds.getAttr(f"{self.ik_chain[3]}.translateX"))
-    
+        cmds.setAttr(f"{created_nodes[4]}.floatB", cmds.getAttr(f"{self.ik_chain[3]}.translateX"))
+        cmds.setAttr(f"{created_nodes[26]}.floatB", cmds.getAttr(f"{self.ik_chain[2]}.translateX"))
+
         cmds.setAttr(f"{created_nodes[9]}.floatB", -1)
         cmds.setAttr(f"{created_nodes[10]}.floatA", math.e)
         cmds.setAttr(f"{created_nodes[11]}.floatA", 1)
         cmds.setAttr(f"{created_nodes[5]}.inputMin", 0.001)
-        cmds.setAttr(f"{created_nodes[5]}.outputMax", (cmds.getAttr(f"{created_nodes[3]}.outFloat") - cmds.getAttr(f"{created_nodes[1]}.outFloat")))
+        cmds.setAttr(f"{created_nodes[5]}.outputMax", (cmds.getAttr(f"{created_nodes[3]}.output1D") - cmds.getAttr(f"{created_nodes[1]}.outFloat")))
         cmds.setAttr(f"{created_nodes[19]}.floatB", 1)
+
+
+        
+        cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{self.ik_chain[1]}.translateX")
+        cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{self.ik_chain[2]}.translateX")
+        cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{self.ik_chain[3]}.translateX")
 
         cmds.parentConstraint(self.soft_trn, self.springIkHandle, mo=True)
 
-   
+
+
+
+        # cmds.parentConstraint(self.trn_node, self.ik_handle_spring[0], mo=True)
+
+
 
 
         # cmds.parentConstraint(self.trn_node, self.ik_handle_spring[0], mo=True)
