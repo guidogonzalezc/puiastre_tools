@@ -6,14 +6,14 @@ Arm system for the dragon wing.
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
-from puiastreTools.tools.curve_tool import controller_creator
+# from puiastreTools.tools.curve_tool import controller_creator
 import maya.mel as mel
 import math
 import os
 from importlib import reload
 reload(guides_manager)
 reload(curve_tool)
-reload(controller_creator)
+# reload(controller_creator)
 
 class WingArmModule(object):
     def __init__(self):
