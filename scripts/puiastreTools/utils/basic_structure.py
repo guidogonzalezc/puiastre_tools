@@ -146,4 +146,4 @@ def create_basic_structure(asset_name = "assetName"):
 
 
 
-create_basic_structure()
+# create_basic_structure()

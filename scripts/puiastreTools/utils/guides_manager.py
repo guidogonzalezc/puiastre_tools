@@ -50,7 +50,6 @@ def guides_export():
                 guides_prefered_angle = [cmds.getAttr(f"{guide}.preferredAngle")[0] for guide in guides_descendents]
 
                 guides_loc_descendants = cmds.listRelatives(guides_folder[0], allDescendents=True, type="locator")
-                print(guides_loc_descendants)
                 guides_loc_get_rotation = [cmds.xform(guide.replace("Shape", ""), q=True, ws=True, rotation=True) for guide in guides_loc_descendants]
                 guides_loc_get_translation = [cmds.xform(guide.replace("Shape", ""), q=True, ws=True, translation=True) for guide in guides_loc_descendants]
 
@@ -121,19 +120,26 @@ def guide_import(joint_name, all_descendents=True, filePath=None):
                 for joint, data in reversed(list(guides_data[name].items())):
                         cmds.select(clear=True)
                         if "isLocator" in data and data["isLocator"]:
-                               return data["worldPosition"], data["worldRotation"]
+                               loc = cmds.spaceLocator(name=joint)[0]
+                               cmds.xform(loc, ws=True, t=(data["worldPosition"][0], data["worldPosition"][1], data["worldPosition"][2]))
+                               cmds.xform(loc, ws=True, ro=(data["worldRotation"][0], data["worldRotation"][1], data["worldRotation"][2]))
+                               cmds.parent(loc, guides_node)
+                               cmds.setAttr(f"{loc}.localScaleX", 100)
+                               cmds.setAttr(f"{loc}.localScaleY", 100)
+                               cmds.setAttr(f"{loc}.localScaleZ", 100)
+                               
                         else:
                                 imported_joint = cmds.joint(name=joint, rad=50)
 
-                        cmds.setAttr(f"{imported_joint}.translate", data["worldPosition"][0], data["worldPosition"][1], data["worldPosition"][2])
-                        cmds.setAttr(f"{imported_joint}.rotate", data["worldRotation"][0], data["worldRotation"][1], data["worldRotation"][2])
-                        cmds.makeIdentity(imported_joint, apply=True, r=True)
-                        cmds.setAttr(f"{imported_joint}.preferredAngle", data["preferredAngle"][0], data["preferredAngle"][1], data["preferredAngle"][2])
-                        if data.get("parent"):
-                                if data["parent"] == "C_root_JNT":
-                                        cmds.parent(imported_joint, guides_node)   
-                                else:
-                                        cmds.parent(joint, data["parent"])                        
+                                cmds.setAttr(f"{imported_joint}.translate", data["worldPosition"][0], data["worldPosition"][1], data["worldPosition"][2])
+                                cmds.setAttr(f"{imported_joint}.rotate", data["worldRotation"][0], data["worldRotation"][1], data["worldRotation"][2])
+                                cmds.makeIdentity(imported_joint, apply=True, r=True)
+                                cmds.setAttr(f"{imported_joint}.preferredAngle", data["preferredAngle"][0], data["preferredAngle"][1], data["preferredAngle"][2])
+                                if data.get("parent"):
+                                        if data["parent"] == "C_root_JNT":
+                                                cmds.parent(imported_joint, guides_node)   
+                                        else:
+                                                cmds.parent(joint, data["parent"])                        
 
         else:
                 for main_joint_name, data in guides_data[name].items():
@@ -171,24 +177,3 @@ def guide_import(joint_name, all_descendents=True, filePath=None):
         cmds.select(clear=True)
         if joints_chain:
                 return joints_chain
-        
-        # return guides_node
-
-
-""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR EXPORTING
-
-from puiastreTools.utils import guides_export
-from importlib import reload
-reload(guides_export)
-guides_export.GuidesExport().guides_export()
-
-"""
-
-""" EXECUTE THE CODE IN MAYA SCRIPT EDITOR FOR IMPORTING
-
-from puiastreTools.utils import guide_import
-from importlib import reload
-reload(guides_import)
-guides_import.GuidesExport().guide_import("azhurean_guides")
-
-"""

@@ -4,11 +4,13 @@ Leg module for dragon rigging system
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
+from puiastreTools.utils import basic_structure
 import maya.mel as mel
 import math
 import os
 from importlib import reload
 reload(guides_manager)
+reload(basic_structure)
 reload(curve_tool)    
 
 class LegModule():
@@ -26,12 +28,15 @@ class LegModule():
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP")
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_legSkinning_GRP")
 
+        basic_structure.create_basic_structure(asset_name = "Varyndor")
+
 
         self.duplicate_leg()
         self.set_controllers()
         self.pairBlends()
-        # self.reverse_foot()
         self.soft_stretch()
+        self.reverse_foot()
+
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
         for attr in attrs:
@@ -68,7 +73,7 @@ class LegModule():
         self.fk_trn = cmds.createNode("transform", name=f"{self.side}_legFkControllers_GRP", parent=self.controllers_trn)
 
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_LegSettings", suffixes = ["GRP"])
-        position, rotation = guides_manager.guide_import(joint_name=f"L_legSwitch", filePath=self.guides_path)
+        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_legSwitch", filePath=self.guides_path)
         cmds.xform(self.settings_curve_ctl, ws=True, translation=position)
         cmds.xform(self.settings_curve_ctl, ws=True, rotation=rotation)
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
@@ -114,7 +119,7 @@ class LegModule():
         cmds.matchTransform(self.ikHandleManager, self.ik_chain[3], pos=True)
 
         self.springIkHandle = cmds.ikHandle(
-            name=f"{self.side}_legIkHandle",
+            name=f"{self.side}_legIk_HDL",
             startJoint=self.ik_chain[0],
             endEffector=self.ik_chain[3],
             solver="ikSpringSolver",
@@ -124,15 +129,16 @@ class LegModule():
         cmds.setAttr(f"{self.springIkHandle}.poleVectorY", 0)
         cmds.setAttr(f"{self.springIkHandle}.poleVectorZ", 1)
 
+
         self.ballIkHandle = cmds.ikHandle( 
-            name=f"{self.side}_legBallIkHandle",
+            name=f"{self.side}_legBallIk_HDL",
             startJoint=self.ik_chain[3],
             endEffector=self.ik_chain[4],
             solver="ikSCsolver",
         )[0]
 
         self.tipIkHandle = cmds.ikHandle(
-            name=f"{self.side}_legTipIkHandle",
+            name=f"{self.side}_legTipIk_HDL",
             startJoint=self.ik_chain[4],
             endEffector=self.ik_chain[5],
             solver="ikSCsolver",
@@ -155,9 +161,9 @@ class LegModule():
 
         for name, data in ik_controllers.items():
             if data[0]:
-                ik_ctl, ik_grp = curve_tool.controller_creator(data[0], suffixes = ["GRP", "OFF"])
+                ik_ctl, ik_grp = curve_tool.controller_creator(data[0], suffixes = ["GRP", "SDK"])
                 cmds.parent(ik_grp[0], self.ik_trn)
-                self.ik_ctl_grps.append(ik_grp[0])
+                self.ik_ctl_grps.append(ik_grp)
                 self.ik_ctls.append(ik_ctl)
                 self.lock_attr(ik_ctl)
 
@@ -176,10 +182,19 @@ class LegModule():
                         cmds.parentConstraint(ik_ctl, child_constraints, mo=True)
 
 
-            
+        for item in [f"{self.side}_bankIn", f"{self.side}_bankOut", f"{self.side}_heel"]:
+            position, rotation = guides_manager.guide_import(joint_name=item, filePath=self.guides_path)
+            ctl, clt_grp = curve_tool.controller_creator(item, suffixes = ["GRP", "SDK"])
+            cmds.xform(clt_grp, ws=True, translation=position)
+            cmds.xform(clt_grp, ws=True, rotation=rotation)
+            self.ik_ctls.append(ctl)
+            self.ik_ctl_grps.append(clt_grp)
 
-
-
+        cmds.parent(self.ik_ctl_grps[3][0], self.ik_ctls[4])
+        cmds.parent(self.ik_ctl_grps[4][0], self.ik_ctls[7])
+        cmds.parent(self.ik_ctl_grps[7][0], self.ik_ctls[6])
+        cmds.parent(self.ik_ctl_grps[6][0], self.ik_ctls[5])
+        cmds.parent(self.ik_ctl_grps[5][0], self.ik_ctls[2])
 
         cmds.addAttr(self.ik_ctls[2], shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
         cmds.setAttr(self.ik_ctls[2]+".strechySep", channelBox=True, lock=True)
@@ -200,6 +215,10 @@ class LegModule():
         cmds.addAttr(self.ik_ctls[2], shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
         cmds.addAttr(self.ik_ctls[2], shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
         cmds.addAttr(self.ik_ctls[2], shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias01", niceName="Spring Solver Bias 01",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
+        cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias02", niceName="Spring Solver Bias 02",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
+        cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias01", f"{self.springIkHandle}.springAngleBias[0].springAngleBias_FloatValue")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias02", f"{self.springIkHandle}.springAngleBias[1].springAngleBias_FloatValue")
 
     def pairBlends(self):
         for i, joint in enumerate(self.blend_chain):
@@ -375,43 +394,11 @@ class LegModule():
         cmds.parentConstraint(self.soft_trn, self.springIkHandle, mo=True)
 
 
-
-
-        # cmds.parentConstraint(self.trn_node, self.ik_handle_spring[0], mo=True)
-
-
-
-
-        # cmds.parentConstraint(self.trn_node, self.ik_handle_spring[0], mo=True)
-
-               
-
-        # # FK STRETCH WIP
-
-        # upper_mult = cmds.createNode("multDoubleLinear", name=f"{self.side}_legFkUpperLengthMult_MDL")
-        # lower_mult = cmds.createNode("multDoubleLinear", name=f"{self.side}_legFkLowerLengthMult_MDL")
-
-
-
-        # cmds.setAttr(f"{upper_mult}.input2", cmds.getAttr(f"{self.joint_defaule_names[1]}.translateX"))
-        # cmds.setAttr(f"{lower_mult}.input2", cmds.getAttr(f"{self.joint_defaule_names[2]}.translateX"))
-
-
-        # cmds.connectAttr(f"{shoulderFkCtl}.stretch", upper_mult+".input1")
-        # cmds.connectAttr(f"{elbowFkCtl}.stretch", lower_mult+".input1")
-        # cmds.connectAttr(f"{upper_mult}.output", f"{elbowFkGrp}.translateX")
-        # cmds.connectAttr(f"{lower_mult}.output", f"{wristFkGrp}.translateX")
-
-
-        # shoulderFkCtl = self.created_ctls[0] 
-        # elbowFkCtl = self.created_ctls[1]
-        # elbowFkGrp = self.fk_ctl_transforms[1]
-        # wristFkGrp = self.fk_ctl_transforms[2]
-
     def reverse_foot(self):
+        print(self.ik_ctls)
         #----ADDING THE ROLL----#
 
-        ### GENERATED CODE ###
+       ### GENERATED CODE ###
         nodes_to_create = [
             (f"{self.side}_rollStraightAnglePercentage_RMV", "remapValue", None), #0
             (f"{self.side}_rollLiftAnglePercentage_RMV", "remapValue", None),  #1
@@ -435,23 +422,23 @@ class LegModule():
         # Connections between selected nodes and transform nodes
         cmds.connectAttr(created_nodes[0] + ".outValue", f"{created_nodes[4]}.input1X")
         cmds.connectAttr(created_nodes[0] + ".outValue", f"{created_nodes[2]}.inputX")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[0] + ".inputValue")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.rollLiftAngle", created_nodes[0] + ".inputMin")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.rollStraightAngle", created_nodes[0] + ".inputMax")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[1] + ".inputValue")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[7] + ".inputR")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[5] + ".input2X")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[4] + ".input2X")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.rollLiftAngle", created_nodes[1] + ".inputMax")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.bank", created_nodes[8] + ".inputG")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.bank", created_nodes[8] + ".inputR")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[0] + ".inputValue")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.rollLiftAngle", created_nodes[0] + ".inputMin")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.rollStraightAngle", created_nodes[0] + ".inputMax")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[1] + ".inputValue")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[7] + ".inputR")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[5] + ".input2X")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[4] + ".input2X")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.rollLiftAngle", created_nodes[1] + ".inputMax")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.bank", created_nodes[8] + ".inputG")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.bank", created_nodes[8] + ".inputR")
         cmds.setAttr(f"{created_nodes[6]}.input2X", 1)
         cmds.setAttr(f"{created_nodes[9]}.input2X", 1)
         cmds.setAttr(f"{created_nodes[7]}.minR", -360)
-        if self.side == "L_":
+        if self.side == "L":
             cmds.setAttr(f"{created_nodes[8]}.minG", -360)
             cmds.setAttr(f"{created_nodes[8]}.maxR", 360)
-        elif self.side == "R_":
+        elif self.side == "R":
             cmds.setAttr(f"{created_nodes[8]}.minR", -360)
             cmds.setAttr(f"{created_nodes[8]}.maxG", 360)
         cmds.connectAttr(created_nodes[1] + ".outValue", f"{created_nodes[3]}.input2X")
@@ -459,19 +446,14 @@ class LegModule():
         cmds.connectAttr(created_nodes[3] + ".outputX", f"{created_nodes[5]}.input1X")
         cmds.connectAttr(created_nodes[4] + ".outputX", f"{created_nodes[6]}.input1X")
         cmds.connectAttr(created_nodes[5] + ".outputX", f"{created_nodes[9]}.input1X")
-        cmds.connectAttr(created_nodes[8] + ".outputR", f"{self.ik_bankIn_grp[3]}.rotateZ")
-        cmds.connectAttr(created_nodes[8] + ".outputG", f"{self.bankOut_grp[3]}.rotateZ")
-        cmds.connectAttr(created_nodes[7] + ".outputR", f"{self.ik_heel_grp[3]}.rotateX")
-        cmds.connectAttr(created_nodes[6] + ".outputX", f"{self.ik_tip_grp[3]}.rotateY")
-        cmds.connectAttr(created_nodes[9] + ".outputX", f"{self.ik_toe_grp[3]}.rotateY")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.heelTwist", f"{self.ik_heel_grp[3]}.rotateY")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.tipTwist", f"{self.ik_tip_grp[3]}.rotateZ")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.ballTwist", f"{self.ik_toe_grp[3]}.rotateZ")
-        cmds.connectAttr(f"{self.ik_ankle_ctl}.ankleTwist", self.ik_ankle_grp[3] + ".rotateY")
-
-        cmds.setAttr(f"{created_nodes[7]}.maxR", 360)
-        cmds.setAttr(f"{created_nodes[7]}.minR", -360)
-
-        cmds.parentConstraint(self.ik_toe_ctl, self.ikHandleManager, maintainOffset=True)
+        cmds.connectAttr(created_nodes[8] + ".outputR", f"{self.ik_ctl_grps[5][1]}.rotateZ")
+        cmds.connectAttr(created_nodes[8] + ".outputG", f"{self.ik_ctl_grps[6][1]}.rotateZ")
+        cmds.connectAttr(created_nodes[7] + ".outputR", f"{self.ik_ctl_grps[7][1]}.rotateX")
+        cmds.connectAttr(created_nodes[6] + ".outputX", f"{self.ik_ctl_grps[4][1]}.rotateX")
+        cmds.connectAttr(created_nodes[9] + ".outputX", f"{self.ik_ctl_grps[3][1]}.rotateX")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.heelTwist", f"{self.ik_ctl_grps[7][1]}.rotateY")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.tipTwist", f"{self.ik_ctl_grps[4][1]}.rotateZ")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.ballTwist", f"{self.ik_ctl_grps[3][1]}.rotateZ")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.ankleTwist", self.ik_ctl_grps[2][1] + ".rotateY")
 
 

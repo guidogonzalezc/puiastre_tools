@@ -1,5 +1,5 @@
 {
-    "|assetName|controls_GRP|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_preferences_GRP|C_preferences_ANM|C_preferences_CTL|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL": {
         "transform": {
             "name": "C_characterNode_CTL",
             "overrideEnabled": true,
@@ -90,7 +90,7 @@
             }
         ]
     },
-    "|assetName|controls_GRP|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL": {
         "transform": {
             "name": "C_masterWalk_CTL",
             "overrideEnabled": true,
@@ -181,7 +181,7 @@
             }
         ]
     },
-    "|assetName|controls_GRP|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_preferences_GRP|C_preferences_ANM|C_preferences_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_preferences_GRP|C_preferences_ANM|C_preferences_CTL": {
         "transform": {
             "name": "C_preferences_CTL",
             "overrideEnabled": true,
@@ -724,7 +724,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_toeIk_GRP|L_toeIk_OFF|L_toeIk_CTL|L_ballIk_GRP|L_ballIk_OFF|L_ballIk_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL|L_bankIn_SDK|L_bankIn_CTL|L_toeIk_GRP|L_toeIk_OFF|L_toeIk_CTL|L_ballIk_GRP|L_ballIk_OFF|L_ballIk_CTL": {
         "transform": {
             "name": "L_ballIk_CTL",
             "overrideEnabled": false,
@@ -792,6 +792,188 @@
                             -77.01239030248591,
                             51.370524306628056,
                             0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL|L_bankIn_SDK|L_bankIn_CTL": {
+        "transform": {
+            "name": "L_bankIn_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_bankIn_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            -4.463205671407462,
+                            3.0732864419478925e-05,
+                            -34.81502908377881
+                        ],
+                        [
+                            -27.797377654936103,
+                            2.664535191788543e-20,
+                            -21.650804615764237
+                        ],
+                        [
+                            -19.65573312380015,
+                            24.724091135350655,
+                            -15.309406515847272
+                        ],
+                        [
+                            -2.6707128310682338e-05,
+                            34.965145000961094,
+                            3.428917040615431e-05
+                        ],
+                        [
+                            19.655695354217034,
+                            24.724091135350534,
+                            15.309455008057075
+                        ],
+                        [
+                            27.797377654935666,
+                            1.7763567945256956e-20,
+                            21.65080461576488
+                        ],
+                        [
+                            34.848222806609655,
+                            3.0732864419478905e-05,
+                            -4.196167559874578
+                        ],
+                        [
+                            21.485451662771098,
+                            4.346283367260067e-05,
+                            -27.58508168892936
+                        ],
+                        [
+                            -4.463205671407462,
+                            3.0732864419478925e-05,
+                            -34.81502908377881
+                        ],
+                        [
+                            -27.797377654936103,
+                            2.664535191788543e-20,
+                            -21.650804615764237
+                        ],
+                        [
+                            -19.65573312380015,
+                            24.724091135350655,
+                            -15.309406515847272
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL": {
+        "transform": {
+            "name": "L_bankOut_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_bankOut_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            6.5048245570313865,
+                            16.625496026073638,
+                            -15.36885999983943
+                        ],
+                        [
+                            10.49877722386155,
+                            -3.5399854915856205e-15,
+                            -21.087849466674864
+                        ],
+                        [
+                            -7.45926266490924,
+                            -1.026518898859829,
+                            -22.321007543827147
+                        ],
+                        [
+                            -21.04776764987947,
+                            -1.4517169487998671,
+                            -10.478822127637642
+                        ],
+                        [
+                            -22.30677580322798,
+                            -1.0265188988598262,
+                            7.501715173226695
+                        ],
+                        [
+                            -10.498777223861552,
+                            -5.899975819309365e-16,
+                            21.087849466674903
+                        ],
+                        [
+                            -8.342688581287366,
+                            16.62549602607364,
+                            14.453862717214406
+                        ],
+                        [
+                            -1.2995661144501967,
+                            23.51200196125335,
+                            -0.6470007833114257
+                        ],
+                        [
+                            6.5048245570313865,
+                            16.625496026073638,
+                            -15.36885999983943
+                        ],
+                        [
+                            10.49877722386155,
+                            -3.5399854915856205e-15,
+                            -21.087849466674864
+                        ],
+                        [
+                            -7.45926266490924,
+                            -1.026518898859829,
+                            -22.321007543827147
                         ]
                     ],
                     "form": "periodic",
@@ -883,6 +1065,97 @@
                             -46.63169488701027,
                             60.48229510793609,
                             -76.37161114942053
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL": {
+        "transform": {
+            "name": "L_heel_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_heel_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            20.927546882021034,
+                            20.214458014219396,
+                            -5.416447700342923
+                        ],
+                        [
+                            1.8122335964638324e-15,
+                            28.587560679730554,
+                            -7.6600137977095155
+                        ],
+                        [
+                            -20.927546882021034,
+                            20.21445801421937,
+                            -5.416447700342914
+                        ],
+                        [
+                            -29.59602062775293,
+                            1.4825101912294477e-15,
+                            -1.5342629356083118e-15
+                        ],
+                        [
+                            -20.927546882021034,
+                            7.412550956147238e-16,
+                            20.927546882021034
+                        ],
+                        [
+                            -2.964653627927351e-15,
+                            -2.9650203824588954e-15,
+                            29.59602062775293
+                        ],
+                        [
+                            20.927546882021034,
+                            -7.412550956147238e-16,
+                            20.927546882021023
+                        ],
+                        [
+                            29.59602062775293,
+                            -1.4825101912294477e-15,
+                            4.035998883308007e-15
+                        ],
+                        [
+                            20.927546882021034,
+                            20.214458014219396,
+                            -5.416447700342923
+                        ],
+                        [
+                            1.8122335964638324e-15,
+                            28.587560679730554,
+                            -7.6600137977095155
+                        ],
+                        [
+                            -20.927546882021034,
+                            20.21445801421937,
+                            -5.416447700342914
                         ]
                     ],
                     "form": "periodic",
@@ -1000,8 +1273,8 @@
     "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL": {
         "transform": {
             "name": "L_legIk_CTL",
-            "overrideEnabled": false,
-            "overrideColor": null
+            "overrideEnabled": true,
+            "overrideColor": 6
         },
         "shapes": [
             {
@@ -1091,8 +1364,8 @@
     "|L_legControllers_GRP|L_legIkControllers_GRP|L_legPv_GRP|L_legPv_OFF|L_legPv_CTL": {
         "transform": {
             "name": "L_legPv_CTL",
-            "overrideEnabled": false,
-            "overrideColor": null
+            "overrideEnabled": true,
+            "overrideColor": 6
         },
         "shapes": [
             {
@@ -1182,8 +1455,8 @@
     "|L_legControllers_GRP|L_legIkControllers_GRP|L_rootIk_GRP|L_rootIk_OFF|L_rootIk_CTL": {
         "transform": {
             "name": "L_rootIk_CTL",
-            "overrideEnabled": false,
-            "overrideColor": null
+            "overrideEnabled": true,
+            "overrideColor": 6
         },
         "shapes": [
             {
@@ -1270,7 +1543,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_toeIk_GRP|L_toeIk_OFF|L_toeIk_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL|L_bankIn_SDK|L_bankIn_CTL|L_toeIk_GRP|L_toeIk_OFF|L_toeIk_CTL": {
         "transform": {
             "name": "L_toeIk_CTL",
             "overrideEnabled": false,
@@ -1285,59 +1558,59 @@
                 "curve": {
                     "cvs": [
                         [
-                            77.01239030248591,
-                            51.370524306627885,
-                            0.0
+                            43.691061349518236,
+                            18.24863218334504,
+                            3.0743401341536656e-15
                         ],
                         [
-                            6.6689345787609275e-15,
-                            83.2701008406878,
-                            0.0
+                            3.78345391789718e-15,
+                            36.34606234879044,
+                            3.0743401341536656e-15
                         ],
                         [
-                            -77.01239030248591,
-                            51.370524306627885,
-                            0.0
+                            -43.691061349518236,
+                            18.24863218334504,
+                            3.0743401341536656e-15
                         ],
                         [
-                            -108.91196683654587,
-                            -25.64186599585802,
-                            0.0
+                            -61.788491514963674,
+                            -25.442429166173202,
+                            3.0743401341536656e-15
                         ],
                         [
-                            -77.01239030248591,
-                            -25.642636119741596,
-                            0.0
+                            -43.691061349518236,
+                            -25.442866076775665,
+                            3.0743401341536656e-15
                         ],
                         [
-                            -1.0909786206321613e-14,
-                            -25.64295511549888,
-                            0.0
+                            -6.189395454138231e-15,
+                            -25.443047051072732,
+                            3.0743401341536656e-15
                         ],
                         [
-                            77.01239030248591,
-                            -25.642636119741596,
-                            0.0
+                            43.691061349518236,
+                            -25.442866076775665,
+                            3.0743401341536656e-15
                         ],
                         [
-                            108.91196683654587,
-                            -25.64186599585804,
-                            0.0
+                            61.788491514963674,
+                            -25.442429166173213,
+                            3.0743401341536656e-15
                         ],
                         [
-                            77.01239030248591,
-                            51.370524306627885,
-                            0.0
+                            43.691061349518236,
+                            18.24863218334504,
+                            3.0743401341536656e-15
                         ],
                         [
-                            6.6689345787609275e-15,
-                            83.2701008406878,
-                            0.0
+                            3.78345391789718e-15,
+                            36.34606234879044,
+                            3.0743401341536656e-15
                         ],
                         [
-                            -77.01239030248591,
-                            51.370524306627885,
-                            0.0
+                            -43.691061349518236,
+                            18.24863218334504,
+                            3.0743401341536656e-15
                         ]
                     ],
                     "form": "periodic",
