@@ -5,7 +5,7 @@ import os
 
 complete_path = os.path.realpath(__file__)
 relative_path = complete_path.split("\scripts")[0]
-TEMPLATE_FILE = os.path.join(relative_path, "curves", "foot_ctl.json") 
+TEMPLATE_FILE = os.path.join(relative_path, "curves", "template_curves_001.json") 
 
 
 def get_all_ctl_curves_data():
@@ -199,7 +199,7 @@ def controller_creator(name, suffixes=["GRP"]):
             if created_grps:
                 cmds.delete(created_grps[0])
             return
-        tra = cmds.createNode("transform", name=f"{name}_{suffix}")
+        tra = cmds.createNode("transform", name=f"{name}_{suffix}", ss=True)
         if created_grps:
             cmds.parent(tra, created_grps[-1])
         created_grps.append(tra)
