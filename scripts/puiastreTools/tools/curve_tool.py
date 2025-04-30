@@ -114,7 +114,6 @@ def build_curves_from_template(target_transform_name=None):
     if target_transform_name:
         ctl_data = {k: v for k, v in ctl_data.items() if v["transform"]["name"] == target_transform_name}
         if not ctl_data:
-            om.MGlobal.displayError(f"Transform '{target_transform_name}' not found in template.")
             return
 
     created_transforms = []
