@@ -185,9 +185,9 @@ def build_curves_from_template(target_transform_name=None):
     return created_transforms
 
 
-def controller_creator(name, suffixes = ["GRP"]):
+def controller_creator(name, suffixes=["GRP"]):
     """
-    Creates a controller with a specific name and offset transformsand returns the controller and the groups.
+    Creates a controller with a specific name and offset transforms and returns the controller and the groups.
 
     Args:
         name (str): Name of the controller.
@@ -211,7 +211,11 @@ def controller_creator(name, suffixes = ["GRP"]):
         return
     else:
         ctl = build_curves_from_template(f"{name}_CTL")
-        cmds.parent(ctl, created_grps[-1])
 
-        return ctl[0], created_grps 
+        if not ctl:
+            ctl = cmds.circle(name=f"{name}_CTL", ch=False)
+        else:
+            ctl = [ctl[0]]  # make sure ctl is a list with one element for consistency
 
+        cmds.parent(ctl[0], created_grps[-1])
+        return ctl[0], created_grps
