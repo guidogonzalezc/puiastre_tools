@@ -452,8 +452,8 @@ class LegModule():
         cmds.connectAttr(created_nodes[6] + ".outputX", f"{self.ik_ctl_grps[4][1]}.rotateX")
         cmds.connectAttr(created_nodes[9] + ".outputX", f"{self.ik_ctl_grps[3][1]}.rotateX")
         cmds.connectAttr(f"{self.ik_ctls[2]}.heelTwist", f"{self.ik_ctl_grps[7][1]}.rotateY")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.tipTwist", f"{self.ik_ctl_grps[4][1]}.rotateZ")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.ballTwist", f"{self.ik_ctl_grps[3][1]}.rotateZ")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.tipTwist", f"{self.ik_ctl_grps[4][1]}.rotateY")
+        cmds.connectAttr(f"{self.ik_ctls[2]}.ballTwist", f"{self.ik_ctl_grps[3][1]}.rotateY")
         cmds.connectAttr(f"{self.ik_ctls[2]}.ankleTwist", self.ik_ctl_grps[2][1] + ".rotateY")
 
 
