@@ -87,14 +87,14 @@ class WingArmModule(object):
         cmds.matchTransform(self.settings_curve_grp[0], self.fk_chain[0], pos=True, rot=True)
         cmds.move(100, 0, 0, self.settings_curve_grp[0], r=True, os=True)
         
-        self.arm_fk_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmFKControllers_GRP")
-        self.arm_ik_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmIKControllers_GRP")
+        self.arm_fk_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmFKControllers_GRP", p=self.controllers_trn)
+        self.arm_ik_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmIKControllers_GRP", p=self.controllers_trn)
 
         reverse_vis = cmds.createNode("reverse", n=f"{self.side}_wingArmReverseVis_REV")
         cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{reverse_vis}.inputX")
         cmds.connectAttr(f"{reverse_vis}.outputX", f"{self.arm_ik_controllers_trn}.visibility")
-        cmds.connectAttr(f"{self.settings_curve_ctl}.Switch IK --> FK", f"{self.arm_fk_controllers_trn}.visibility")
-        cmds.parent(self.arm_fk_controllers_trn, self.arm_ik_controllers_trn, self.controllers_trn)
+        cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{self.arm_fk_controllers_trn}.visibility")
+    
 
 
         # --- FK/IK Controllers ---
@@ -102,15 +102,18 @@ class WingArmModule(object):
         self.arm_fk_trns = []
 
         for i, joint in enumerate(self.fk_chain):
-            ctl, grp = curve_tool.controller_creator(f"{self.side}_wingArm{i+1}Fk_CTL", suffixes=["GRP", "OFF"])
-            cmds.parent(grp, self.arm_fk_controllers_trn)
-            cmds.matchTransform(ctl, joint, pos=True, rot=True, scl=False)
-            cmds.parentConstraint(ctl, joint, mo=False)
+            ctl, grp = curve_tool.controller_creator(f"{self.side}_wingArm{i+1}Fk", suffixes=["GRP", "OFF"])
+            cmds.parent(grp[0], self.arm_fk_controllers_trn)
+            cmds.matchTransform(grp[0], joint, pos=True, rot=True)
+            cmds.parentConstraint(ctl, joint, mo=True)
             self.lock_attrs(ctl, ["sx", "sy", "sz", "v"])
             if self.arm_fk_controllers:
-                cmds.parent(grp, self.arm_fk_controllers[-1])
+                cmds.parent(grp[0], self.arm_fk_controllers[-1])
             self.arm_fk_trns.append(grp)
             self.arm_fk_controllers.append(ctl)
+
+        print(self.arm_fk_controllers)
+        print(self.arm_fk_trns)
 
 
         self.arm_ik_controllers = []
@@ -121,32 +124,39 @@ class WingArmModule(object):
         self.lock_attrs(self.wrist_ik_ctl, ["sx", "sy", "sz", "v"])
         cmds.matchTransform(self.root_grp[0], self.ik_chain[0], pos=True, rot=True) 
         cmds.matchTransform(self.wrist_ik_grp[0], self.ik_chain[-1], pos=True, rot=True)
+        self.arm_ik_controllers.append(self.root_ctl, self.wrist_ik_ctl)
         cmds.parent(self.root_grp, self.wrist_ik_grp, self.arm_ik_controllers_trn)
 
    
     def soft_stretch(self):
 
         # --- Stretchy FK Controllers ---
+
         for ctl in self.arm_fk_controllers:
-            cmds.addAttr(ctl, shortName="STRETCHY____", type="enum", enumName="____", keyable=True)
+            cmds.addAttr(ctl, shortName="STRETCHY____", attributeType="enum", enumName="____", keyable=True)
             cmds.setAttr(f"{ctl}.STRETCHY____", lock=True, keyable=False)
-            cmds.addAttr(ctl, shortName="Stretch", minValue=0, defaultValue=0, keyable=True)
+            cmds.addAttr(ctl, shortName="Stretch", minValue=0, defaultValue=1, keyable=True)
 
         self.upper_double_mult_linear = cmds.createNode("multDoubleLinear", n=f"{self.side}_wingArmUpperDoubleMultLinear_MDL")
         self.lower_double_mult_linear = cmds.createNode("multDoubleLinear", n=f"{self.side}_wingArmLowerDoubleMultLinear_MDL")
         cmds.connectAttr(f"{self.arm_fk_controllers[0]}.Stretch", f"{self.upper_double_mult_linear}.input1")
         cmds.connectAttr(f"{self.arm_fk_controllers[1]}.Stretch", f"{self.lower_double_mult_linear}.input1")
-        cmds.setAttr(f"{self.arm_fk_controllers_trn[1]}.translateX", f"{self.upper_double_mult_linear}.input2")
-        cmds.setAttr(f"{self.arm_fk_controllers_trn[2]}.translateX", f"{self.lower_double_mult_linear}.input2")
-        cmds.connectAttr(f"{self.upper_double_mult_linear}.output", f"{self.arm_fk_trns[3]}.Stretch")
-        cmds.connectAttr(f"{self.lower_double_mult_linear}.output", f"{self.arm_fk_trns[-2]}.Stretch")
+
+        upper_distance = cmds.getAttr(f"{self.arm_fk_trns[1][0]}.translateX")
+        lower_distance = cmds.getAttr(f"{self.arm_fk_trns[-1][0]}.translateX")
+
+
+        cmds.setAttr(f"{self.upper_double_mult_linear}.input2", upper_distance)
+        cmds.setAttr(f"{self.lower_double_mult_linear}.input2", lower_distance)
+        cmds.connectAttr(f"{self.upper_double_mult_linear}.output", f"{self.arm_fk_trns[1][0]}.translateX")
+        cmds.connectAttr(f"{self.lower_double_mult_linear}.output", f"{self.arm_fk_trns[-1][0]}.translateX")
 
 
         # --- Stretchy IK Controllers ---
-        cmds.addAttr(self.wrist_ik_ctl, shortName="STRETCHY____", type="enum", enumName="____", keyable=True)
+        cmds.addAttr(self.wrist_ik_ctl, shortName="STRETCHY____", attributeType="enum", enumName="____", keyable=True)
         cmds.setAttr(f"{self.wrist_ik_ctl}.STRETCHY____", lock=True, keyable=False)
         cmds.addAttr(self.wrist_ik_ctl, shortName="Stretch", minValue=0, defaultValue=0, keyable=True)
-        cmds.addAttr(self.wrist_ik_ctl, shortName="SOFT____", type="enum", enumName="____", keyable=True)
+        cmds.addAttr(self.wrist_ik_ctl, shortName="SOFT____", attributeType="enum", enumName="____", keyable=True)
         cmds.setAttr(f"{self.wrist_ik_ctl}.SOFT____", lock=True, keyable=False)
         cmds.addAttr(self.wrist_ik_ctl, shortName="Soft", minValue=0, defaultValue=0, maxValue=1, keyable=True)
 
@@ -154,7 +164,7 @@ class WingArmModule(object):
 
         self.soft_off = cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", p=self.module_trn)
         cmds.pointConstraint(self.arm_ik_controllers[0], self.soft_off)
-        cmds.aimConstraint(self.ikHandleManager, self.soft_off, aimVector=(1,0,0), upVector= (0,0,1), worldUpType ="none", maintainOffset=False)
+        # cmds.aimConstraint(self.ikHandleManager, self.soft_off, aimVector=(1,0,0), upVector= (0,0,1), worldUpType ="none", maintainOffset=False)
 
         self.soft_trn = cmds.createNode("transform", name=f"{self.side}_legSoft_TRN", p=self.soft_off)
 
