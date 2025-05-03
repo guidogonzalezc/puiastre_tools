@@ -11,6 +11,7 @@ import maya.mel as mel
 import math
 import os
 from importlib import reload
+import math
 reload(guides_manager)
 reload(curve_tool)
 # reload(controller_creator)
@@ -33,8 +34,10 @@ class WingArmModule(object):
         self.duplicate_guides()
         self.pair_blends()
         self.set_controllers()
-        self.soft_stretch()
         self.handles_setup()
+        self.soft_stretch()
+        self.pole_vector_setup()
+        
 
 
     def lock_attrs(self, ctl, attrs):
@@ -85,7 +88,8 @@ class WingArmModule(object):
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_ArmSettings", suffixes = ["GRP"])
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
         cmds.matchTransform(self.settings_curve_grp[0], self.fk_chain[0], pos=True, rot=True)
-        cmds.move(100, 0, 0, self.settings_curve_grp[0], r=True, os=True)
+        cmds.move(0, 100, 0, self.settings_curve_grp[0], r=True, os=True)
+        self.lock_attrs(self.settings_curve_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
         
         self.arm_fk_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmFKControllers_GRP", p=self.controllers_trn)
         self.arm_ik_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmIKControllers_GRP", p=self.controllers_trn)
@@ -112,8 +116,6 @@ class WingArmModule(object):
             self.arm_fk_trns.append(grp)
             self.arm_fk_controllers.append(ctl)
 
-        print(self.arm_fk_controllers)
-        print(self.arm_fk_trns)
 
 
         self.arm_ik_controllers = []
@@ -124,8 +126,69 @@ class WingArmModule(object):
         self.lock_attrs(self.wrist_ik_ctl, ["sx", "sy", "sz", "v"])
         cmds.matchTransform(self.root_grp[0], self.ik_chain[0], pos=True, rot=True) 
         cmds.matchTransform(self.wrist_ik_grp[0], self.ik_chain[-1], pos=True, rot=True)
-        self.arm_ik_controllers.append(self.root_ctl, self.wrist_ik_ctl)
-        cmds.parent(self.root_grp, self.wrist_ik_grp, self.arm_ik_controllers_trn)
+        self.arm_ik_controllers.append(self.root_ctl)
+        self.arm_ik_controllers.append(self.wrist_ik_ctl)
+        cmds.parent(self.root_grp[0], self.wrist_ik_grp[0], self.arm_ik_controllers_trn)
+
+    def handles_setup(self):
+
+        # --- Ik Handle ---
+        self.main_ik_handle = cmds.ikHandle(
+            n=f"{self.side}_wingArm_HDL",
+            sj=self.ik_chain[0],
+            ee=self.ik_chain[-1],
+            sol="ikRPsolver",
+        )[0]
+        # Later parent cosntraint to the armSoft TRN
+        
+        cmds.select(clear=True)
+        self.upper_non_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperNonRoll_JNT")
+        self.upper_non_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperNonRollEnd_JNT")
+        # cmds.parent(self.upper_non_roll_end_jnt, self.upper_non_roll_jnt)
+        cmds.matchTransform(self.upper_non_roll_jnt, self.ik_chain[0], pos=True, rot=True)
+        cmds.matchTransform(self.upper_non_roll_end_jnt, self.ik_chain[1], pos=True, rot=True)
+        cmds.select(cl=True)
+
+        self.upper_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRoll_JNT")
+        self.upper_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRollEnd_JNT")
+        # cmds.parent(self.upper_roll_end_jnt, self.upper_roll_jnt)
+        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[1], pos=True, rot=True)
+        cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[2], pos=True, rot=True)
+        cmds.parent(self.upper_roll_jnt, self.upper_non_roll_jnt)
+    
+        
+        self.upper_non_roll_ik_handle = cmds.ikHandle(
+            n=f"{self.side}_wingArmUpperNonRoll_HDL",
+            sj=self.upper_non_roll_jnt,
+            ee=self.upper_non_roll_end_jnt,
+            sol="ikSCsolver",
+        )[0]
+        cmds.pointConstraint(self.blend_chain[1], self.upper_non_roll_ik_handle, mo=True)
+
+        self.upper_roll_ik_handle = cmds.ikHandle(
+            n=f"{self.side}_wingArmUpperRoll_HDL",
+            sj=self.upper_roll_jnt,
+            ee=self.upper_roll_end_jnt,
+            sol="ikSCsolver",
+        )[0]
+        cmds.parentConstraint(self.blend_chain[2], self.upper_roll_ik_handle, mo=True)
+
+        # --- Lower Roll Ik Handle ---
+        cmds.select(clear=True)
+        self.lower_roll_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRoll_JNT")
+        self.lower_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRollEnd_JNT")
+        # cmds.parent(self.lower_roll_end_jnt, self.lower_roll_jnt)
+        cmds.matchTransform(self.lower_roll_jnt, self.ik_chain[1], pos=True, rot=True)
+        cmds.matchTransform(self.lower_roll_end_jnt, self.ik_chain[-1], pos=True, rot=True)
+
+        self.lower_roll_handle = cmds.ikHandle(
+            n=f"{self.side}_wingArmLowerRollIkHandle",
+            sj=self.lower_roll_jnt,
+            ee=self.lower_roll_end_jnt,
+            sol="ikSCsolver",
+        )[0]
+
+        cmds.parent(self.lower_roll_handle, self.main_ik_handle, self.upper_non_roll_ik_handle, self.upper_roll_ik_handle, self.module_trn)
 
    
     def soft_stretch(self):
@@ -154,181 +217,165 @@ class WingArmModule(object):
 
         # --- Stretchy IK Controllers ---
         cmds.addAttr(self.wrist_ik_ctl, shortName="STRETCHY____", attributeType="enum", enumName="____", keyable=True)
-        cmds.setAttr(f"{self.wrist_ik_ctl}.STRETCHY____", lock=True, keyable=False)
-        cmds.addAttr(self.wrist_ik_ctl, shortName="Stretch", minValue=0, defaultValue=0, keyable=True)
+        cmds.setAttr(f"{self.wrist_ik_ctl}.STRETCHY____", lock=True, keyable=False, channelBox=True)
+        cmds.addAttr(self.wrist_ik_ctl, shortName="upperLengthMult", minValue=0.001, defaultValue=1, keyable=True)
+        cmds.addAttr(self.wrist_ik_ctl, shortName="lowerLengthMult", minValue=0.001, defaultValue=1, keyable=True)
+        cmds.addAttr(self.wrist_ik_ctl, shortName="Stretch", minValue=0, defaultValue=0, maxValue=1, keyable=True)
         cmds.addAttr(self.wrist_ik_ctl, shortName="SOFT____", attributeType="enum", enumName="____", keyable=True)
-        cmds.setAttr(f"{self.wrist_ik_ctl}.SOFT____", lock=True, keyable=False)
+        cmds.setAttr(f"{self.wrist_ik_ctl}.SOFT____", lock=True, keyable=False, channelBox=True)
         cmds.addAttr(self.wrist_ik_ctl, shortName="Soft", minValue=0, defaultValue=0, maxValue=1, keyable=True)
+        
+        
+        
 
         masterwalk = "C_masterwalk_CTL" # Change this to the actual masterwalk controller name
 
-        self.soft_off = cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", p=self.module_trn)
+        self.soft_off = cmds.createNode("transform", name=f"{self.side}_armSoft_OFF", p=self.module_trn)
         cmds.pointConstraint(self.arm_ik_controllers[0], self.soft_off)
-        # cmds.aimConstraint(self.ikHandleManager, self.soft_off, aimVector=(1,0,0), upVector= (0,0,1), worldUpType ="none", maintainOffset=False)
+        cmds.aimConstraint(self.wrist_ik_ctl, self.soft_off, aimVector=(1, 0, 0), upVector=(0, 0, 1), worldUpType="None", mo=True)
 
-        self.soft_trn = cmds.createNode("transform", name=f"{self.side}_legSoft_TRN", p=self.soft_off)
+        self.soft_trn = cmds.createNode("transform", name=f"{self.side}_armSoft_TRN", p=self.soft_off)
+        cmds.matchTransform(self.soft_trn, self.ik_chain[-1], pos=True, rot=True)
 
 
 
         nodes_to_create = {
-            f"{self.side}_legDistanceToControl_DBT": ("distanceBetween", None), #0
-            f"{self.side}_legDistanceToControlNormalized_FLM": ("floatMath", 3), #1
-            f"{self.side}_legUpperLength_FLM": ("floatMath", 2), #2
-            f"{self.side}_legFullLength_FLM": ("floatMath", 0), #3
-            f"{self.side}_legLowerLength_FLM": ("floatMath", 2), #4
-            f"{self.side}_legSoftValue_RMV": ("remapValue", None), #5
-            f"{self.side}_legSoftDistance_FLM": ("floatMath", 1), #6
-            f"{self.side}_legDistanceToControlMinusSoftDistance_FLM": ("floatMath", 1), #7
-            f"{self.side}_legDistanceToControlMinusSoftDistanceDividedBySoftValue_FLM": ("floatMath", 3),#8
-            f"{self.side}_legDistanceToControlMinusSoftDistanceDividedBySoftValueNegate_FLM": ("floatMath", 2), #9
-            f"{self.side}_legSoftEPower_FLM": ("floatMath", 6), #10
-            f"{self.side}_legSoftOneMinusEPower_FLM": ("floatMath", 1), #11
-            f"{self.side}_legSoftOneMinusEPowerSoftValueEnable_FLM": ("floatMath", 2), #12
-            f"{self.side}_legSoftConstant_FLM": ("floatMath", 0), #13
-            f"{self.side}_legSoftRatio_FLM": ("floatMath", 3), #14
-            f"{self.side}_legLengthRatio_FLM": ("floatMath", 3), #15
-            f"{self.side}_legDistanceToControlDividedByTheLengthRatio_FLM": ("floatMath", 3), #16
-            f"{self.side}_legSoftEffectorDistance_FLM": ("floatMath", 2), #17
-            f"{self.side}_legSoftCondition_CON": ("condition", None), #18
-            f"{self.side}_legDistanceToControlDividedByTheSoftEffectorMinusOne_FLM": ("floatMath", 1), #19 
-            f"{self.side}_legDistanceToControlDividedByTheSoftEffectorMinusOneMultipliedByTheStretch_FLM": ("floatMath", 2), #20 
-            f"{self.side}_legStretchFactor_FLM": ("floatMath", 0), #21 
-            f"{self.side}_legSoftEffectStretchDistance_FLM": ("floatMath", 2), #22 
-            f"{self.side}_legUpperLengthStretch_FLM": ("floatMath", 2), #23 
-            f"{self.side}_legLowerLengthStretch_FLM": ("floatMath", 2), #24 
-            f"{self.side}_legDistanceToControlDividedByTheSoftEffector_FLM": ("floatMath", 3), #25
-            f"{self.side}_legUpperPin_DBT": ("distanceBetween", None), #26
-            f"{self.side}_legLowerPin_DBT": ("distanceBetween", None), #27
-            f"{self.side}_legUpperPin_BTA": ("blendTwoAttr", None), #28
-            f"{self.side}_legLowerPin_BTA": ("blendTwoAttr", None), #29
-            f"{self.side}_legMiddleLength_FLM": ("floatMath", 2), #30
-            f"{self.side}_legFullLengthUpperPart_FLM": ("floatMath", 0), #31
-            f"{self.side}_legSoftCondition_CON": ("condition", None), #32
-            
+        f"{self.side}_armDistanceToControl_DBT": ("distanceBetween", None),  # 0
+        f"{self.side}_armDistanceToControlNormalized_DBT": ("floatMath", 3),  # 1
+        f"{self.side}_armSoftValue_RMV": ("remapValue", None),  # 2
+        f"{self.side}_armDistanceToControlMinusSoftDistance_FLM": ("floatMath", 1),  # 3
+        f"{self.side}_armUpperLength_FLM": ("floatMath", 2),  # 4
+        f"{self.side}_armDistanceToControlMinusSoftDistanceDividedBySoftValue_FLM": ("floatMath", 3),  # 5
+        f"{self.side}_armFullLength_FLM": ("floatMath", 0),  # 6
+        f"{self.side}_armDistanceToControlMinusSoftDistanceDividedBySoftValueNegate_FLM": ("floatMath", 2),  # 7
+        f"{self.side}_armSoftDistance_FLM": ("floatMath", 1),  # 8
+        f"{self.side}_armSoftEPower_FLM": ("floatMath", 6),  # 9
+        f"{self.side}_armLowerLength_FLM": ("floatMath", 2),  # 10
+        f"{self.side}_armSoftOneMinusEPower_FLM": ("floatMath", 1),  # 11
+        f"{self.side}_armSoftOneMinusEPowerSoftValueEnable_FLM": ("floatMath", 2),  # 12
+        f"{self.side}_armSoftConstant_FLM": ("floatMath", 0),  # 13
+        f"{self.side}_armLengthRatio_FLM": ("floatMath", 3),  # 14
+        f"{self.side}_armSoftRatio_FLM": ("floatMath", 3),  # 15
+        f"{self.side}_armDistanceToControlDividedByTheLengthRatio_FLM": ("floatMath", 3),  # 16
+        f"{self.side}_armSoftEffectorDistance_FLM": ("floatMath", 2),  # 17
+        f"{self.side}_armSoftCondition_CON": ("condition", None),  # 18
+        f"{self.side}_armUpperLengthStretch_FLM": ("floatMath", 2),  # 19
+        f"{self.side}_armDistanceToControlDividedByTheSoftEffector_FLM": ("floatMath", 3),  # 20
+        f"{self.side}_armDistanceToControlDividedByTheSoftEffectorMinusOne_FLM": ("floatMath", 1),  # 21
+        f"{self.side}_armDistanceToControlDividedByTheSoftEffectorMinusOneMultipliedByTheStretch_FLM": ("floatMath", 2),  # 22
+        f"{self.side}_armStretchFactor_FLM": ("floatMath", 0),  # 23
+        f"{self.side}_armSoftEffectStretchDistance_FLM": ("floatMath", 2),  # 24
+        f"{self.side}_armLowerLengthStretch_FLM": ("floatMath", 2),  # 25
         }
 
-
-
-        created_nodes = []
+        self.created_nodes = []
         for node_name, (node_type, operation) in nodes_to_create.items():
             node = cmds.createNode(node_type, name=node_name)
-            created_nodes.append(node)
+            self.created_nodes.append(node)
             if operation is not None:
                 cmds.setAttr(f'{node}.operation', operation)
 
         # Connections between selected nodes
-        cmds.connectAttr(created_nodes[0] + ".distance", created_nodes[1]+".floatA")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[15]+".floatA")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[7]+".floatA")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[16]+".floatA")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[18]+".firstTerm")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[18]+".colorIfFalseR")
-        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[18]+".colorIfFalseG")
-        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[14]+".floatB")
-        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[6]+".floatA")
-        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[15]+".floatB")
-        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[18]+".colorIfFalseB")
-        cmds.connectAttr(created_nodes[5] + ".outValue", created_nodes[8]+".floatB")
-        cmds.connectAttr(created_nodes[5] + ".outValue", created_nodes[6]+".floatB")
-        cmds.connectAttr(created_nodes[5] + ".outValue", created_nodes[12]+".floatA")
-        cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[13]+".floatB")
-        cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[7]+".floatB")
-        cmds.connectAttr(created_nodes[6] + ".outFloat", created_nodes[18]+".secondTerm")
-        cmds.connectAttr(created_nodes[7] + ".outFloat", created_nodes[8]+".floatA")
-        cmds.connectAttr(created_nodes[8] + ".outFloat", created_nodes[9]+".floatA")
-        cmds.connectAttr(created_nodes[9] + ".outFloat", created_nodes[10]+".floatB")
-        cmds.connectAttr(created_nodes[10] + ".outFloat", created_nodes[11]+".floatB")
-        cmds.connectAttr(created_nodes[11] + ".outFloat", created_nodes[12]+".floatB")
-        cmds.connectAttr(created_nodes[12] + ".outFloat", created_nodes[13]+".floatA")
-        cmds.connectAttr(created_nodes[13] + ".outFloat", created_nodes[14]+".floatA")
-        cmds.connectAttr(created_nodes[14] + ".outFloat", created_nodes[17]+".floatA")
-        cmds.connectAttr(created_nodes[15] + ".outFloat", created_nodes[16]+".floatB")
-        cmds.connectAttr(created_nodes[16] + ".outFloat", created_nodes[17]+".floatB")
+        cmds.connectAttr(self.created_nodes[0] + ".distance", self.created_nodes[1]+".floatA")
+        cmds.connectAttr(self.created_nodes[1] + ".outFloat", self.created_nodes[14]+".floatA")
+        cmds.connectAttr(self.created_nodes[1] + ".outFloat", self.created_nodes[3]+".floatA")
+        cmds.connectAttr(self.created_nodes[1] + ".outFloat", self.created_nodes[16]+".floatA")
+        cmds.connectAttr(self.created_nodes[1] + ".outFloat", self.created_nodes[18]+".firstTerm")
+        cmds.connectAttr(self.created_nodes[1] + ".outFloat", self.created_nodes[18]+".colorIfFalseR")
+        cmds.connectAttr(self.created_nodes[1] + ".outFloat", self.created_nodes[20]+".floatA")
+        cmds.connectAttr(self.created_nodes[2] + ".outValue", self.created_nodes[5]+".floatB")
+        cmds.connectAttr(self.created_nodes[2] + ".outValue", self.created_nodes[8]+".floatB")
+        cmds.connectAttr(self.created_nodes[2] + ".outValue", self.created_nodes[12]+".floatA")
+        cmds.connectAttr(self.created_nodes[3] + ".outFloat", self.created_nodes[5]+".floatA")
+        cmds.connectAttr(self.created_nodes[8] + ".outFloat", self.created_nodes[3]+".floatB")
+        cmds.connectAttr(self.created_nodes[4] + ".outFloat", self.created_nodes[18]+".colorIfFalseG")
+        cmds.connectAttr(self.created_nodes[4] + ".outFloat", self.created_nodes[6]+".floatA")
+        cmds.connectAttr(self.created_nodes[4] + ".outFloat", self.created_nodes[19]+".floatB")
+        cmds.connectAttr(self.created_nodes[5] + ".outFloat", self.created_nodes[7]+".floatA")
+        cmds.connectAttr(self.created_nodes[6] + ".outFloat", self.created_nodes[15]+".floatB")
+        cmds.connectAttr(self.created_nodes[6] + ".outFloat", self.created_nodes[8]+".floatA")
+        cmds.connectAttr(self.created_nodes[6] + ".outFloat", self.created_nodes[14]+".floatB")
+        cmds.connectAttr(self.created_nodes[10] + ".outFloat", self.created_nodes[6]+".floatB")
+        cmds.connectAttr(self.created_nodes[7] + ".outFloat", self.created_nodes[9]+".floatB")
+        cmds.connectAttr(self.created_nodes[8] + ".outFloat", self.created_nodes[13]+".floatB")
+        cmds.connectAttr(self.created_nodes[8] + ".outFloat", self.created_nodes[18]+".secondTerm")
+        cmds.connectAttr(self.created_nodes[9] + ".outFloat", self.created_nodes[11]+".floatB")
+        cmds.connectAttr(self.created_nodes[10] + ".outFloat", self.created_nodes[18]+".colorIfFalseB")
+        cmds.connectAttr(self.created_nodes[10] + ".outFloat", self.created_nodes[25]+".floatB")
+        cmds.connectAttr(self.created_nodes[11] + ".outFloat", self.created_nodes[12]+".floatB")
+        cmds.connectAttr(self.created_nodes[12] + ".outFloat", self.created_nodes[13]+".floatA")
+        cmds.connectAttr(self.created_nodes[13] + ".outFloat", self.created_nodes[15]+".floatA")
+        cmds.connectAttr(self.created_nodes[14] + ".outFloat", self.created_nodes[16]+".floatB")
+        cmds.connectAttr(self.created_nodes[15] + ".outFloat", self.created_nodes[17]+".floatA")
+        cmds.connectAttr(self.created_nodes[16] + ".outFloat", self.created_nodes[17]+".floatB")
+        cmds.connectAttr(self.created_nodes[17] + ".outFloat", self.created_nodes[24]+".floatA")
+        cmds.connectAttr(self.created_nodes[17] + ".outFloat", self.created_nodes[20]+".floatB")
+        cmds.connectAttr(self.created_nodes[24] + ".outFloat", self.created_nodes[18]+".colorIfTrueR")
+        cmds.connectAttr(self.created_nodes[19] + ".outFloat", self.created_nodes[18]+".colorIfTrueG")
+        cmds.connectAttr(self.created_nodes[25] + ".outFloat", self.created_nodes[18]+".colorIfTrueB")
+        cmds.connectAttr(self.created_nodes[23] + ".outFloat", self.created_nodes[19]+".floatA")
+        cmds.connectAttr(self.created_nodes[20] + ".outFloat", self.created_nodes[21]+".floatA")
+        cmds.connectAttr(self.created_nodes[21] + ".outFloat", self.created_nodes[22]+".floatA")
+        cmds.connectAttr(self.created_nodes[22] + ".outFloat", self.created_nodes[23]+".floatA")
+        cmds.connectAttr(self.created_nodes[23] + ".outFloat", self.created_nodes[24]+".floatB")
+        cmds.connectAttr(self.created_nodes[23] + ".outFloat", self.created_nodes[25]+".floatA")
 
-        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[31]+".floatA")
-        cmds.connectAttr(created_nodes[30] + ".outFloat", created_nodes[31]+".floatB")
-        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[3]+".floatB")
-        cmds.connectAttr(created_nodes[31] + ".outFloat", created_nodes[3]+".floatA")
+        cmds.setAttr(f"{self.created_nodes[9]}.floatA", math.e)
+        cmds.setAttr(f"{self.created_nodes[4]}.floatB", cmds.getAttr(f"{self.ik_chain[1]}.translateX"))
+        cmds.setAttr(f"{self.created_nodes[10]}.floatB", cmds.getAttr(f"{self.ik_chain[-1]}.translateX"))
+        cmds.setAttr(f"{self.created_nodes[2]}.outputMin", 0.001)
+        cmds.setAttr(f"{self.created_nodes[2]}.outputMax", 154.162)
+        cmds.setAttr(f"{self.created_nodes[7]}.floatB", -1.0)
+        cmds.setAttr(f"{self.created_nodes[18]}.operation", 2)
+
+        cmds.connectAttr(f"{self.wrist_ik_ctl}.upperLengthMult", f"{self.created_nodes[4]}.floatA")
+        cmds.connectAttr(f"{self.wrist_ik_ctl}.lowerLengthMult", f"{self.created_nodes[10]}.floatA")
+        cmds.connectAttr(f"{self.wrist_ik_ctl}.Stretch", f"{self.created_nodes[22]}.floatB")
+        cmds.connectAttr(f"{self.wrist_ik_ctl}.worldMatrix[0]", f"{self.created_nodes[0]}.inMatrix2")
+        cmds.connectAttr(f"{self.wrist_ik_ctl}.Soft", f"{self.created_nodes[2]}.inputValue")
+
+        cmds.connectAttr(f"{self.root_ctl}.worldMatrix[0]", f"{self.created_nodes[0]}.inMatrix1")
+        if cmds.ls(masterwalk):
+            cmds.connectAttr(f"{masterwalk}.globalScale", f"{self.created_nodes[1]}.inputB")
+        else:
+            pass
         
-
-        cmds.connectAttr(created_nodes[19] + ".outFloat", created_nodes[20]+".floatA")
-        cmds.connectAttr(created_nodes[20] + ".outFloat", created_nodes[21]+".floatA")
-        cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[23]+".floatA")
-        cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[22]+".floatB")
-        cmds.connectAttr(created_nodes[21] + ".outFloat", created_nodes[24]+".floatB")
-        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[25]+".floatA")
-        cmds.connectAttr(created_nodes[17] + ".outFloat", created_nodes[25]+".floatB")
-        cmds.connectAttr(created_nodes[17] + ".outFloat", created_nodes[22]+".floatA")
-
-        cmds.connectAttr(created_nodes[25] + ".outFloat", created_nodes[19]+".floatA")
-
-        cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[23]+".floatB")
-        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[24]+".floatA")
+        cmds.connectAttr(f"{self.created_nodes[18]}.outColorR", f"{self.soft_trn}.translateX")
 
 
-        cmds.connectAttr(self.ik_ctls[2] + ".stretch", created_nodes[20]+".floatB")
+        cmds.parentConstraint(self.soft_trn, self.main_ik_handle, mo=True)
 
-        cmds.connectAttr(created_nodes[22] + ".outFloat", created_nodes[18]+".colorIfTrueR")
-        cmds.connectAttr(created_nodes[23] + ".outFloat", created_nodes[18]+".colorIfTrueG")
-        cmds.connectAttr(created_nodes[24] + ".outFloat", created_nodes[18]+".colorIfTrueB")
-
-
-    
-    def handles_setup(self):
-
-        # --- Ik Handle ---
-        self.main_ik_handle = cmds.ikHandle(
-            n=f"{self.side}_wingArmIkHandle",
-            sj=self.ik_chain[0],
-            ee=self.ik_chain[-1],
-            sol="rotatePlaneSolver",
-        )[0]
-        # Later parent cosntraint to the armSoft TRN
-        cmds.parentConstraint(self.soft_off, self.main_ik_handle, mo=True)
-         
-       
-        self.upper_non_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperNonRoll_JNT")
-        self.upper_non_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperNonRollEnd_JNT")
-        cmds.parent(self.upper_non_roll_end_jnt, self.upper_non_roll_jnt)
-        cmds.matchTransform(self.upper_non_roll_jnt, self.ik_chain[0], pos=True, rot=True)
-        cmds.matchTransform(self.upper_non_roll_end_jnt, self.ik_chain[1], pos=True, rot=True)
-
-        self.upper_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRoll_JNT")
-        self.upper_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRollEnd_JNT")
-        cmds.parent(self.upper_roll_end_jnt, self.upper_roll_jnt)
-        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[1], pos=True, rot=True)
-        cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[2], pos=True, rot=True)
-        cmds.parent(self.upper_roll_jnt, self.upper_non_roll_end_jnt)
-    
+    def pole_vector_setup(self):
+        # --- Pole Vector ---
+        self.pole_vector_ctl, self.pole_vector_grp = curve_tool.controller_creator(f"{self.side}_wingArmPV", suffixes=["GRP", "OFF"])
+        cmds.matchTransform(self.pole_vector_grp[0], self.ik_chain[1], pos=True, rot=True)
+        cmds.move(0, 0, -1000, self.pole_vector_grp[0], r=True, os=True)
+        cmds.parent(self.pole_vector_grp[0], self.arm_ik_controllers_trn)
+        cmds.poleVectorConstraint(self.pole_vector_ctl, self.main_ik_handle)
+        self.lock_attrs(self.pole_vector_ctl, ["sx", "sy", "sz", "v"])
         
-        self.upper_non_roll_ik_handle = cmds.ikHandle(
-            n=f"{self.side}_wingArmUpperNonRollIkHandle",
-            sj=self.upper_non_roll_jnt,
-            ee=self.upper_non_roll_end_jnt,
-            sol="ikSCsolver",
-        )[0]
-        cmds.parentConstraint(self.blend_chain[1], self.upper_non_roll_ik_handle, mo=True)
-        self.upper_roll_ik_handle_grp = cmds.ikHandle(
-            n=f"{self.side}_wingArmUpperRollIkHandle",
-            sj=self.upper_roll_jnt,
-            ee=self.upper_roll_end_jnt,
-            sol="ikSCsolver",
-        )[0]
-        cmds.parentConstraint(self.blend_chain[2], self.upper_roll_ik_handle_grp, mo=True)
+        
+        cmds.addAttr(self.pole_vector_ctl, shortName="ELBOW_PINNING____", attributeType="enum", enumName="____", keyable=True)
+        cmds.setAttr(f"{self.pole_vector_ctl}.ELBOW_PINNING____", lock=True, keyable=False, channelBox=True)
+        cmds.addAttr(self.pole_vector_ctl, shortName="Pin", minValue=0, defaultValue=0, maxValue=1, keyable=True)
 
-        # --- Lower Roll Ik Handle ---
-        self.lower_roll_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRoll_JNT")
-        self.lower_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRollEnd_JNT")
-        cmds.parent(self.lower_roll_end_jnt, self.lower_roll_jnt)
-        cmds.matchTransform(self.lower_roll_jnt, self.ik_chain[1], pos=True, rot=True)
-        cmds.matchTransform(self.lower_roll_end_jnt, self.ik_chain[-1], pos=True, rot=True)
+        
+        self.upper_pin_attrblender = cmds.createNode("blendTwoAttr", n=f"{self.side}_wingArmUpperPin_BTA")
+        self.lower_pin_attrblender = cmds.createNode("blendTwoAttr", n=f"{self.side}_wingArmLowerPin_BTA")
 
-        self.lower_roll_handle = cmds.ikHandle(
-            n=f"{self.side}_wingArmLowerRollIkHandle",
-            sj=self.lower_roll_jnt,
-            ee=self.lower_roll_end_jnt,
-            sol="ikSCsolver",
-        )[0]
+        cmds.connectAttr(self.created_nodes[18] + ".outColorG", f"{self.upper_pin_attrblender}.input[0]")
+        cmds.connectAttr(self.created_nodes[0] + ".distance", f"{self.upper_pin_attrblender}.input[1]")
+        cmds.connectAttr(self.pole_vector_ctl + ".Pin", f"{self.upper_pin_attrblender}.attributesBlender")
+        cmds.connectAttr(self.upper_pin_attrblender + ".output", self.ik_chain[1] + ".translateX")
+
+        cmds.connectAttr(self.created_nodes[18] + ".outColorB", f"{self.lower_pin_attrblender}.input[0]")
+        cmds.connectAttr(self.created_nodes[0] + ".distance", f"{self.lower_pin_attrblender}.input[1]")
+        cmds.connectAttr(self.pole_vector_ctl + ".Pin", f"{self.lower_pin_attrblender}.attributesBlender")
+        cmds.connectAttr(self.lower_pin_attrblender + ".output", self.ik_chain[-1] + ".translateX")
+
+        
+    
+    
 
 
 
