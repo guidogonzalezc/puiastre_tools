@@ -542,6 +542,97 @@
             }
         ]
     },
+    "|L_legControllers_GRP|L_backKneeBlendBendy_GRP|L_backKneeBlendBendy_CTL": {
+        "transform": {
+            "name": "L_backKneeBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_backKneeBlendBendy_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 18,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            5.057497701598834,
+                            31.475093389131935,
+                            12.155237246554082
+                        ],
+                        [
+                            4.939774509079827,
+                            30.74244876975201,
+                            -13.946686015497955
+                        ],
+                        [
+                            1.9283984042067577,
+                            12.001294601611452,
+                            -31.87882975983048
+                        ],
+                        [
+                            -2.2126073321919995,
+                            -13.770055178118083,
+                            -31.136787383437323
+                        ],
+                        [
+                            -5.057497701598834,
+                            -31.475093389131935,
+                            -12.155237246554082
+                        ],
+                        [
+                            -4.939774509079827,
+                            -30.74244876975202,
+                            13.946686015497956
+                        ],
+                        [
+                            -1.9283984042067577,
+                            -12.001294601611452,
+                            31.87882975983048
+                        ],
+                        [
+                            2.212607332192001,
+                            13.77005517811808,
+                            31.136787383437323
+                        ],
+                        [
+                            5.057497701598834,
+                            31.475093389131935,
+                            12.155237246554082
+                        ],
+                        [
+                            4.939774509079827,
+                            30.74244876975201,
+                            -13.946686015497955
+                        ],
+                        [
+                            1.9283984042067577,
+                            12.001294601611452,
+                            -31.87882975983048
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|L_legControllers_GRP|L_legFkControllers_GRP|L_hipFk_GRP|L_hipFk_OFF|L_hipFk_CTL|L_frontKneeFk_GRP|L_frontKneeFk_OFF|L_frontKneeFk_CTL|L_backKneeFk_GRP|L_backKneeFk_OFF|L_backKneeFk_CTL": {
         "transform": {
             "name": "L_backKneeFk_CTL",
@@ -724,7 +815,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL|L_bankIn_SDK|L_bankIn_CTL|L_toeIk_GRP|L_toeIk_OFF|L_toeIk_CTL|L_ballIk_GRP|L_ballIk_OFF|L_ballIk_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_toeIk_GRP|L_toeIk_SDK|L_toeIk_CTL|L_ballIk_GRP|L_ballIk_SDK|L_ballIk_CTL": {
         "transform": {
             "name": "L_ballIk_CTL",
             "overrideEnabled": false,
@@ -815,7 +906,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL|L_bankIn_SDK|L_bankIn_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL": {
         "transform": {
             "name": "L_bankIn_CTL",
             "overrideEnabled": false,
@@ -906,7 +997,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL": {
         "transform": {
             "name": "L_bankOut_CTL",
             "overrideEnabled": false,
@@ -974,6 +1065,97 @@
                             -7.45926266490924,
                             -1.026518898859829,
                             -22.321007543827147
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|L_legControllers_GRP|L_frontKneeBlendBendy_GRP|L_frontKneeBlendBendy_CTL": {
+        "transform": {
+            "name": "L_frontKneeBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_frontKneeBlendBendy_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 18,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.13856301713827746,
+                            -9.318263468525128,
+                            32.82012104788313
+                        ],
+                        [
+                            -0.24707709757944762,
+                            16.615757507550594,
+                            29.797065874585623
+                        ],
+                        [
+                            -0.4879827994869075,
+                            32.81649308480578,
+                            9.31929363088042
+                        ],
+                        [
+                            -0.44303479565973003,
+                            29.793772082504592,
+                            -16.61759443005733
+                        ],
+                        [
+                            -0.13856301713827746,
+                            9.318263468525128,
+                            -32.82012104788313
+                        ],
+                        [
+                            0.2470770975794423,
+                            -16.615757507550605,
+                            -29.797065874585634
+                        ],
+                        [
+                            0.4879827994869075,
+                            -32.81649308480578,
+                            -9.31929363088042
+                        ],
+                        [
+                            0.44303479565973003,
+                            -29.793772082504592,
+                            16.61759443005733
+                        ],
+                        [
+                            0.13856301713827746,
+                            -9.318263468525128,
+                            32.82012104788313
+                        ],
+                        [
+                            -0.24707709757944762,
+                            16.615757507550594,
+                            29.797065874585623
+                        ],
+                        [
+                            -0.4879827994869075,
+                            32.81649308480578,
+                            9.31929363088042
                         ]
                     ],
                     "form": "periodic",
@@ -1088,7 +1270,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL": {
         "transform": {
             "name": "L_heel_CTL",
             "overrideEnabled": false,
@@ -1156,6 +1338,97 @@
                             -20.927546882021034,
                             20.21445801421937,
                             -5.416447700342914
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|L_legControllers_GRP|L_hipBlendBendy_GRP|L_hipBlendBendy_CTL": {
+        "transform": {
+            "name": "L_hipBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_hipBlendBendy_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 18,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            -2.5791894906468142,
+                            27.71945578309752,
+                            19.72280740758231
+                        ],
+                        [
+                            -3.1158156092640628,
+                            33.48676525028261,
+                            -5.739148502852846
+                        ],
+                        [
+                            -1.8272392018287784,
+                            19.637981793856312,
+                            -27.839189056789397
+                        ],
+                        [
+                            0.5317091483374624,
+                            -5.714465059774958,
+                            -33.63141022672632
+                        ],
+                        [
+                            2.5791894906449055,
+                            -27.71945578309717,
+                            -19.722807407579253
+                        ],
+                        [
+                            3.1158156092621585,
+                            -33.48676525028222,
+                            5.7391485028562395
+                        ],
+                        [
+                            1.827239201826872,
+                            -19.637981793855968,
+                            27.839189056792456
+                        ],
+                        [
+                            -0.5317091483393762,
+                            5.714465059775333,
+                            33.631410226729436
+                        ],
+                        [
+                            -2.5791894906468142,
+                            27.71945578309752,
+                            19.72280740758231
+                        ],
+                        [
+                            -3.1158156092640628,
+                            33.48676525028261,
+                            -5.739148502852846
+                        ],
+                        [
+                            -1.8272392018287784,
+                            19.637981793856312,
+                            -27.839189056789397
                         ]
                     ],
                     "form": "periodic",
@@ -1270,7 +1543,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL": {
         "transform": {
             "name": "L_legIk_CTL",
             "overrideEnabled": true,
@@ -1361,7 +1634,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legPv_GRP|L_legPv_OFF|L_legPv_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legPv_GRP|L_legPv_SDK|L_legPv_CTL": {
         "transform": {
             "name": "L_legPv_CTL",
             "overrideEnabled": true,
@@ -1452,7 +1725,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_rootIk_GRP|L_rootIk_OFF|L_rootIk_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_rootIk_GRP|L_rootIk_SDK|L_rootIk_CTL": {
         "transform": {
             "name": "L_rootIk_CTL",
             "overrideEnabled": true,
@@ -1543,7 +1816,7 @@
             }
         ]
     },
-    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_OFF|L_legIk_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_bankOut_SDK|L_bankOut_CTL|L_bankIn_SDK|L_bankIn_CTL|L_toeIk_GRP|L_toeIk_OFF|L_toeIk_CTL": {
+    "|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_toeIk_GRP|L_toeIk_SDK|L_toeIk_CTL": {
         "transform": {
             "name": "L_toeIk_CTL",
             "overrideEnabled": false,
