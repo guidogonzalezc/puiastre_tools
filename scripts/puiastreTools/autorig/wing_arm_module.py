@@ -175,9 +175,10 @@ class WingArmModule(object):
         # --- Lower Roll Ik Handle ---
         
         self.lower_roll_offset = cmds.createNode("transform", n=f"{self.side}_wingArmLowerRollOffset_GRP")
+        cmds.select(clear=True)
         self.lower_roll_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRoll_JNT")
         self.lower_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRollEnd_JNT")
-        # cmds.parent(self.lower_roll_jnt, self.lower_roll_offset)
+        cmds.parent(self.lower_roll_jnt, self.lower_roll_offset)
         cmds.matchTransform(self.lower_roll_offset, self.ik_chain[1], pos=True, rot=True)
         cmds.matchTransform(self.lower_roll_end_jnt, self.ik_chain[-1], pos=True, rot=True)
 
@@ -191,7 +192,7 @@ class WingArmModule(object):
         )[0]
         cmds.parentConstraint(self.blend_chain[-1], self.lower_roll_handle, mo=True)
 
-        cmds.parent(self.lower_roll_handle, self.main_ik_handle, self.upper_non_roll_ik_handle, self.upper_roll_ik_handle, self.lower_roll_jnt, self.upper_non_roll_jnt, self.module_trn)
+        cmds.parent(self.lower_roll_handle, self.main_ik_handle, self.upper_non_roll_ik_handle, self.upper_roll_ik_handle, self.lower_roll_offset, self.upper_non_roll_jnt, self.module_trn)
 
    
     def soft_stretch(self):
