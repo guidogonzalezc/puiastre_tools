@@ -401,7 +401,6 @@ class LegModule():
 
 
     def reverse_foot(self):
-        print(self.ik_ctls)
         #----ADDING THE ROLL----#
 
        ### GENERATED CODE ###
