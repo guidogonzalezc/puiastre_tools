@@ -90,6 +90,7 @@ class WingArmModule(object):
         cmds.matchTransform(self.settings_curve_grp[0], self.fk_chain[0], pos=True, rot=True)
         cmds.move(0, 100, 0, self.settings_curve_grp[0], r=True, os=True)
         self.lock_attrs(self.settings_curve_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
+        cmds.parent(self.settings_curve_grp[0], self.controllers_trn)
         
         self.arm_fk_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmFKControllers_GRP", p=self.controllers_trn)
         self.arm_ik_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmIKControllers_GRP", p=self.controllers_trn)
@@ -144,14 +145,12 @@ class WingArmModule(object):
         cmds.select(clear=True)
         self.upper_non_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperNonRoll_JNT")
         self.upper_non_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperNonRollEnd_JNT")
-        # cmds.parent(self.upper_non_roll_end_jnt, self.upper_non_roll_jnt)
         cmds.matchTransform(self.upper_non_roll_jnt, self.ik_chain[0], pos=True, rot=True)
         cmds.matchTransform(self.upper_non_roll_end_jnt, self.ik_chain[1], pos=True, rot=True)
         cmds.select(cl=True)
 
         self.upper_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRoll_JNT")
         self.upper_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRollEnd_JNT")
-        # cmds.parent(self.upper_roll_end_jnt, self.upper_roll_jnt)
         cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[1], pos=True, rot=True)
         cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[2], pos=True, rot=True)
         cmds.parent(self.upper_roll_jnt, self.upper_non_roll_jnt)
@@ -174,21 +173,25 @@ class WingArmModule(object):
         cmds.parentConstraint(self.blend_chain[2], self.upper_roll_ik_handle, mo=True)
 
         # --- Lower Roll Ik Handle ---
-        cmds.select(clear=True)
+        
+        self.lower_roll_offset = cmds.createNode("transform", n=f"{self.side}_wingArmLowerRollOffset_GRP")
         self.lower_roll_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRoll_JNT")
         self.lower_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRollEnd_JNT")
-        # cmds.parent(self.lower_roll_end_jnt, self.lower_roll_jnt)
-        cmds.matchTransform(self.lower_roll_jnt, self.ik_chain[1], pos=True, rot=True)
+        # cmds.parent(self.lower_roll_jnt, self.lower_roll_offset)
+        cmds.matchTransform(self.lower_roll_offset, self.ik_chain[1], pos=True, rot=True)
         cmds.matchTransform(self.lower_roll_end_jnt, self.ik_chain[-1], pos=True, rot=True)
 
+        
+
         self.lower_roll_handle = cmds.ikHandle(
-            n=f"{self.side}_wingArmLowerRollIkHandle",
+            n=f"{self.side}_wingArmLowerRoll_HDL",
             sj=self.lower_roll_jnt,
             ee=self.lower_roll_end_jnt,
             sol="ikSCsolver",
         )[0]
+        cmds.parentConstraint(self.blend_chain[-1], self.lower_roll_handle, mo=True)
 
-        cmds.parent(self.lower_roll_handle, self.main_ik_handle, self.upper_non_roll_ik_handle, self.upper_roll_ik_handle, self.module_trn)
+        cmds.parent(self.lower_roll_handle, self.main_ik_handle, self.upper_non_roll_ik_handle, self.upper_roll_ik_handle, self.lower_roll_jnt, self.upper_non_roll_jnt, self.module_trn)
 
    
     def soft_stretch(self):
@@ -372,6 +375,14 @@ class WingArmModule(object):
         cmds.connectAttr(self.created_nodes[0] + ".distance", f"{self.lower_pin_attrblender}.input[1]")
         cmds.connectAttr(self.pole_vector_ctl + ".Pin", f"{self.lower_pin_attrblender}.attributesBlender")
         cmds.connectAttr(self.lower_pin_attrblender + ".output", self.ik_chain[-1] + ".translateX")
+
+    def bendy_setup(self):
+        # --- Bendy Setup ---
+        self.bendy_module_trn = cmds.createNode("transform", n=f"{self.side}_wingArmBendyModule_GRP", p=self.module_trn)
+
+        self.upper_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmUpperBendyModule_GRP", p=self.bendy_module_trn)
+        self.lower_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmLowerBendyModule_GRP", p=self.bendy_module_trn)
+
 
         
     
