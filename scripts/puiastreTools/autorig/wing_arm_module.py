@@ -399,19 +399,20 @@ class WingArmModule(object):
         )
 
         cmds.rebuildCurve(self.arm_degree2_crv, kr=0, s=2,d=1, kcp=1)
-        
         cmds.parent(self.arm_degree2_crv, self.bendy_module_trn)
+
         self.arm_degree2_crv_shape = cmds.listRelatives(self.arm_degree2_crv, s=True)[0]
-        print(self.arm_degree2_crv_shape)
         
-        cmds.select(f"{self.arm_degree2_crv}.cv[1]")
-        cmds.detachCurve(
-            ch=1, 
+        detached_curves = cmds.detachCurve(
+            self.arm_degree2_crv_shape,
+            p=0.5,
+            ch=1,
             rpo=False
-            )
+        )
         
-        self.upper_segment_crv = cmds.rename(self.upper_segment_crv, f"{self.side}_wingArmUpperSegment_CRV")
-        self.lower_segment_crv = cmds.rename(self.lower_segment_crv, f"{self.side}_wingArmLowerSegment_CRV")
+        self.upper_segment_crv = cmds.rename(detached_curves[0], f"{self.side}_wingArmUpperSegment_CRV")
+        self.lower_segment_crv = cmds.rename(detached_curves[1], f"{self.side}_wingArmLowerSegment_CRV")
+
 
         cmds.rebuildCurve(self.upper_segment_crv, ch=1, rpo=1, rt=0, end=1, kr=1, kcp=0, kep=1, kt=0, fr=0, s=1, d=2, tol=0.01)
         cmds.rebuildCurve(self.lower_segment_crv, ch=1, rpo=1, rt=0, end=1, kr=1, kcp=0, kep=1, kt=0, fr=0, s=1, d=2, tol=0.01)
