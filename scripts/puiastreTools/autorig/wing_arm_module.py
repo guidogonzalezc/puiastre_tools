@@ -570,15 +570,23 @@ class WingArmModule(object):
             cmds.select(clear=True)
             joint = cmds.joint(n=f"{self.side}_wingArmTwist0{i}_JNT")
             mpa = cmds.createNode("motionPath", n=f"{self.side}_wingArmTwist0{i}_MPT", ss=True)
-            cmds.connectAttr(f"{self.upper_bendy_off_curve}.worldSpace[0]", f"{mpa}.geometryPath")
+            cmds.connectAttr(f"{self.upper_bendy_bezier}.worldSpace[0]", f"{mpa}.geometryPath")
             cmds.setAttr(f"{mpa}.frontAxis", 1)
             cmds.setAttr(f"{mpa}.upAxis", 2)
             cmds.setAttr(f"{mpa}.worldUpType", 4)
             cmds.setAttr(f"{mpa}.fractionMode", 1)
             cmds.setAttr(f"{mpa}.follow", 1)
             cmds.setAttr(f"{mpa}.uValue", value)
+            if self.side == "L":
+                cmds.aimConstraint(self.upper_bendy_joints[0], joint, aimVector=(1, 0, 0), upVector=(0, 1, 0), worldUpType="objectRotation", worldUpObject=self.upper_bendy_joints[0], mo=True)
+            elif self.side == "R":
+                cmds.aimConstraint(self.upper_bendy_joints[0], joint, aimVector=(-1, 0, 0), upVector=(0, 1, 0), worldUpType="objectRotation", worldUpObject=self.upper_bendy_joints[0], mo=True)
             if i == 3:
                 cmds.connectAttr(f"{mpa}.allCoordinates", f"{self.upper_aim_helper}.translate")
+
+        
+
+            
 
             
 
