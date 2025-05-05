@@ -17,8 +17,8 @@ class LegModule():
     def __init__(self):
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "leg_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "foot_ctl.json") 
+        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
+        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
 
     def make(self, side):
 
@@ -100,7 +100,7 @@ class LegModule():
             else:
                 cmds.matchTransform(fk_grp[0], joint)
 
-            cmds.parentConstraint(fk_grp[0], joint, mo=True)
+            cmds.parentConstraint(fk_ctl, joint, mo=True)
 
             if i > 0:
                 cmds.parent(fk_grp[0], self.fk_ctl_list[i - 1])
