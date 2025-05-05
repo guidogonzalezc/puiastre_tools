@@ -44,6 +44,13 @@ def export_curves(*args):
     reload(curve_tool)
     curve_tool.get_all_ctl_curves_data()
 
+def data_export(*args):   
+    from puiastreTools.utils import data_export
+    a = data_export.DataExport()
+    a.new_build()
+    a.append_data(dic = {"test": "test"})
+
+
 def puiastre_ui():
 
     if cmds.menu("PuiastreMenu", exists=True):
@@ -52,6 +59,7 @@ def puiastre_ui():
 
     cmds.menuItem(label="   Settings", subMenu=True, tearOff=True, boldFont=True, image="puiastreLogo.png")
     cmds.menuItem(label="   Reload UI", command=reload_ui)
+    cmds.menuItem(label="   New Build Test", command=data_export)
 
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
