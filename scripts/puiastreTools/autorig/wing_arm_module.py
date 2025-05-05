@@ -37,6 +37,7 @@ class WingArmModule(object):
         self.handles_setup()
         self.soft_stretch()
         self.pole_vector_setup()
+        self.bendy_setup()
         
 
 
@@ -383,6 +384,44 @@ class WingArmModule(object):
 
         self.upper_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmUpperBendyModule_GRP", p=self.bendy_module_trn)
         self.lower_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmLowerBendyModule_GRP", p=self.bendy_module_trn)
+
+        #--- Bendy Curves ---
+        self.arm_degree2_crv = cmds.curve(
+            n=f"{self.side}_wingArmDegree2_CRV", 
+            d=1,
+
+            p=[
+                cmds.xform(self.ik_chain[0], q=True, ws=True, t=True),
+                cmds.xform(self.ik_chain[1], q=True, ws=True, t=True),
+                cmds.xform(self.ik_chain[2], q=True, ws=True, t=True),
+                
+            ]
+        )
+
+        cmds.rebuildCurve(self.arm_degree2_crv, kr=0, s=2,d=1, kcp=1)
+        
+        cmds.parent(self.arm_degree2_crv, self.bendy_module_trn)
+        self.arm_degree2_crv_shape = cmds.listRelatives(self.arm_degree2_crv, s=True)[0]
+        print(self.arm_degree2_crv_shape)
+        
+        cmds.select(f"{self.arm_degree2_crv}.cv[1]")
+        cmds.detachCurve(
+            ch=1, 
+            rpo=False
+            )
+        
+        self.upper_segment_crv = cmds.rename(self.upper_segment_crv, f"{self.side}_wingArmUpperSegment_CRV")
+        self.lower_segment_crv = cmds.rename(self.lower_segment_crv, f"{self.side}_wingArmLowerSegment_CRV")
+
+        cmds.rebuildCurve(self.upper_segment_crv, ch=1, rpo=1, rt=0, end=1, kr=1, kcp=0, kep=1, kt=0, fr=0, s=1, d=2, tol=0.01)
+        cmds.rebuildCurve(self.lower_segment_crv, ch=1, rpo=1, rt=0, end=1, kr=1, kcp=0, kep=1, kt=0, fr=0, s=1, d=2, tol=0.01)
+
+
+
+
+        
+        
+        
 
 
         
