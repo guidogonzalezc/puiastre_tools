@@ -46,9 +46,15 @@ def export_curves(*args):
 
 def data_export(*args):   
     from puiastreTools.utils import data_export
-    a = data_export.DataExport()
-    a.new_build()
-    a.append_data(dic = {"test": "test"})
+    reload(data_export)
+    exporter = data_export.DataExport()
+    exporter.new_build()  # Clears the cache
+
+    # Later, from moduleA
+    exporter.append_data("moduleA", {"switchIk": "L_switchIk_CTL"})
+
+    # Another module appends
+    exporter.append_data("moduleB", {"fkCtl": "R_fk_CTL"})
 
 
 def puiastre_ui():

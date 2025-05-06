@@ -1,1 +1,8 @@
-"New Build"
+{
+    "moduleA": {
+        "switchIk": "L_switchIk_CTL"
+    },
+    "moduleB": {
+        "fkCtl": "R_fk_CTL"
+    }
+}

@@ -43,6 +43,14 @@ class FingerModule():
         cmds.addAttr(self.settings_curve_ctl, shortName="curl", niceName="Curl", maxValue=10, minValue=-10,defaultValue=0, keyable=True)
         cmds.addAttr(self.settings_curve_ctl, shortName="spread", niceName="Spread", maxValue=10, minValue=-10,defaultValue=0, keyable=True)
 
+        cmds.addAttr(self.settings_curve_ctl, shortName="globalWaveSep", niceName="GlobalWave_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.settings_curve_ctl+".globalWaveSep", channelBox=True, lock=True)
+        cmds.addAttr(self.settings_curve_ctl, shortName="waveEnvelop", niceName="Wave Envelop", maxValue=1, minValue=0, defaultValue=0, keyable=True)
+        cmds.addAttr(self.settings_curve_ctl, shortName="globalAmplitude", niceName="Global Amplitude", defaultValue=0, keyable=True)
+        cmds.addAttr(self.settings_curve_ctl, shortName="globalWavelength", niceName="Global Wavelength", defaultValue=1, keyable=True)
+        cmds.addAttr(self.settings_curve_ctl, shortName="globalOffset", niceName="Global Offset", defaultValue=0, keyable=True)
+        cmds.addAttr(self.settings_curve_ctl, shortName="globalDropoff", niceName="Global Dropoff", defaultValue=0, minValue = 0, maxValue = 1, keyable=True)
+
 
         self.controllers_fk = []
 
@@ -80,11 +88,11 @@ class FingerModule():
 
         
         values_attr_spread = {
-            "fingerThumb": [-60, None, None],
-            "fingerIndex": [-30, None,None],
-            "fingerMiddle": [-5,  None,None],
-            "fingerRing": [10, None,None],
-            "fingerPinky": [15,None,None]
+            "fingerThumb": [-60, None, None, None],
+            "fingerIndex": [-30, None,None, None],
+            "fingerMiddle": [-5,  None,None, None],
+            "fingerRing": [10, None,None, None],
+            "fingerPinky": [15,None,None, None]
         }
 
 
@@ -101,8 +109,6 @@ class FingerModule():
         
     def set_controllers(self):
 
-
-
         # -- FK CONTROLLER -- #
 
         self.fk_ctl_list = []
@@ -110,7 +116,7 @@ class FingerModule():
 
         self.joint_name = self.blend_chain[0].split("_")[1]
 
-        for i, joint in enumerate(self.blend_chain[:-1]):
+        for i, joint in enumerate(self.blend_chain):
             fk_ctl, fk_grp = curve_tool.controller_creator(joint.replace('_JNT', ''), suffixes = ["GRP", "SDK", "OFF"])
             self.fk_ctl_list.append(fk_ctl)
             self.fk_grp_list.append(fk_grp)
@@ -122,44 +128,71 @@ class FingerModule():
             if i > 0:
                 cmds.parent(fk_grp[0], self.fk_ctl_list[i - 1])
             else:
+                cmds.addAttr(fk_ctl, shortName="waveSep", niceName="Wave_____", enumName="_____",attributeType="enum", keyable=True)
+                cmds.setAttr(fk_ctl+".waveSep", channelBox=True, lock=True)
+                cmds.addAttr(fk_ctl, shortName="amplitude", niceName="Amplitude", defaultValue=0, keyable=True)
+                cmds.addAttr(fk_ctl, shortName="wavelength", niceName="Wavelength", defaultValue=0, keyable=True)
+                cmds.addAttr(fk_ctl, shortName="offset", niceName="Offset", defaultValue=0, keyable=True)
+                cmds.addAttr(fk_ctl, shortName="dropoff", niceName="Dropoff", defaultValue=0, keyable=True)
                 cmds.parent(fk_grp[0], self.settings_curve_ctl)
             
             self.lock_attr(fk_ctl)
-
-        # bendys = []
-        # for i in range(1):
-        #     bendy_ctl, bendy_grp = curve_tool.controller_creator(joint.replace('_JNT', 'Bendy'), suffixes = ["GRP", "OFF"])
-        #     wtadd = cmds.createNode("wtAddMatrix", name=f"{self.side}_{self.joint_name}Bendy{i}_WAM", ss=True)
-        #     cmds.setAttr(f"{wtadd}.wtMatrix[0].weightIn", 0.5)
-        #     cmds.setAttr(f"{wtadd}.wtMatrix[1].weightIn", 0.5)
-        #     cmds.connectAttr(f"{self.fk_ctl_list[i]}.worldMatrix[0]", f"{wtadd}.wtMatrix[0].matrixIn")
-        #     cmds.connectAttr(f"{self.fk_ctl_list[i+1]}.worldMatrix[0]", f"{wtadd}.wtMatrix[1].matrixIn")
-        #     cmds.connectAttr(f"{wtadd}.matrixSum", f"{bendy_grp[0]}.offsetParentMatrix") 
-
-
-
-
-        # fk_curve = cmds.curve(degree=1, point=[(0, 0, 0),(0, 0, 1),(0, 0, 2), (0, 0, 3)], name=f"{self.side}_{self.joint_name}_CRV")
-        # cmds.parent(fk_curve, self.individual_module_trn)
-        # for i, fk_ctl in enumerate(self.blend_chain):
-        #     dcpm = cmds.createNode("decomposeMatrix", name=f"{self.side}_{self.joint_name}0{i}_DPM", ss=True)
-        #     cmds.connectAttr(f"{fk_ctl}.worldMatrix[0]", f"{dcpm}.inputMatrix")
-        #     cmds.connectAttr(f"{dcpm}.outputTranslate", f"{fk_curve}.controlPoints[{i}]")
-        # cmds.rebuildCurve(fk_curve, ch=True, rpo=False, rt=0, end=True, kr=False, kcp=False, kep=True, kt=False, s=4, d=3, tol=0.01)
-
-
-
-
 
 
     def call_bendys(self):
         normals = (0, 0, 1)
         bendy = Bendys(self.side, self.blend_chain[0], self.blend_chain[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
-        bendy.lower_twists_setup()
-        bendy = Bendys(self.side, self.blend_chain[1], self.blend_chain[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
-        bendy.lower_twists_setup()
-       
+        end_bezier01 = bendy.lower_twists_setup()
+        bendy = Bendys(self.side, self.blend_chain[1], self.blend_chain[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
+        end_bezier02 = bendy.lower_twists_setup()
+        bendy = Bendys(self.side, self.blend_chain[2], self.blend_chain[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
+        end_bezier03 = bendy.lower_twists_setup()
 
+        self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03])
+
+    def wave_handle(self, beziers = []):
+        
+        dupe_beziers = []
+        for bezier in beziers:
+            dupe = cmds.duplicate(bezier, name=bezier.replace("_CRV", "Dupe_CRV"))
+            cmds.delete(dupe[0], ch=True)
+            dupe_beziers.append(dupe[0])
+        
+        dupe_parent = cmds.listRelatives(dupe_beziers[0], parent=True, fullPath=True)
+        wave_name = dupe_beziers[0].split("_")[1].split("01")[0]
+        wave = cmds.nonLinear(dupe_beziers, type="wave", name=f"{self.side}_{wave_name}Wave_HDL")
+        cmds.parent(wave[1], dupe_parent)
+        cmds.matchTransform(wave[1], self.blend_chain[1])
+
+        positions = [cmds.xform(jnt, q=True, ws=True, t=True) for jnt in self.blend_chain]
+
+        mid_pos = [sum(coords) / len(coords) for coords in zip(*positions)]
+
+        cmds.xform(wave[1], ws=True, t=mid_pos)
+
+        relative_x_positions = [cmds.getAttr(jnt + ".tx") for jnt in self.blend_chain[1:]]
+        if len(relative_x_positions) == 3:
+            a, b, c = relative_x_positions
+            radius = abs((a + b + c) / 2)
+        else:
+            radius = 0
+        
+        cmds.setAttr(f"{wave[1]}.scaleX", radius)
+        cmds.setAttr(f"{wave[1]}.scaleY", radius)
+        cmds.setAttr(f"{wave[1]}.scaleZ", radius)
+
+        blendshape01 = cmds.blendShape(dupe_beziers[0], beziers[0], name=f"{self.side}_{wave_name}01_BS")[0]
+        blendshape02 = cmds.blendShape(dupe_beziers[1], beziers[1], name=f"{self.side}_{wave_name}02_BS")[0]
+        blendshape03 = cmds.blendShape(dupe_beziers[2], beziers[2], name=f"{self.side}_{wave_name}03_BS")[0]
+
+        for i, blendshape in enumerate([blendshape01, blendshape02, blendshape03]):
+            cmds.connectAttr(f"{self.settings_curve_ctl}.waveEnvelop", f"{blendshape}.{dupe_beziers[i]}", f=True)
+
+        for attr in ["amplitude", "wavelength", "offset", "dropoff"]:
+            pma = cmds.createNode("plusMinusAverage", name=f"{self.side}_{wave_name}{attr}_PMA", ss=True)
+            cmds.connectAttr(f"{self.settings_curve_ctl}.global{attr.capitalize()}", f"{pma}.input1D[0]", f=True)
+            cmds.connectAttr(f"{self.fk_ctl_list[0]}.{attr}", f"{pma}.input1D[1]", f=True)
+            cmds.connectAttr(f"{pma}.output1D", f"{wave[0]}.{attr}", f=True)
 
 
 class Bendys(object):
@@ -191,7 +224,8 @@ class Bendys(object):
         
         cmds.parentConstraint(f"{self.lower_joint}", ik_handle, maintainOffset=True)
 
-        self.hooks()
+        end_bezier = self.hooks()
+        return end_bezier
 
     def hooks(self):
         self.hook_joints = []
@@ -238,17 +272,15 @@ class Bendys(object):
         for joint in self.hook_joints:
             cmds.parent(joint, self.bendy_module)
 
-        # self.bendy_setup()
-
-
-
+        end_bezier = self.bendy_setup()
+        return end_bezier
 
     def bendy_setup(self):
         bendyCurve = cmds.curve(p=(cmds.xform(self.upper_joint, query=True, worldSpace=True, translation=True),cmds.xform(self.lower_joint, query=True, worldSpace=True, translation=True)) , d=1, n=f"{self.side}_{self.part}Bendy_CRV")
-
         cmds.rebuildCurve(bendyCurve, ch=False, rpo=True, rt=0, end=True, kr=False, kcp=False, kep=True, kt=False, fr=False, s=2, d=1, tol=0.01)
         cmds.select(bendyCurve)
-        bezier = cmds.nurbsCurveToBezier()
+
+        bezier = cmds.nurbsCurveToBezier()[0]
 
         cmds.select(f"{bendyCurve}.cv[6]", f"{bendyCurve}.cv[0]")
         cmds.bezierAnchorPreset(p=2)
@@ -264,7 +296,7 @@ class Bendys(object):
         cmds.setAttr(f"{off_curve[1]}.useGivenNormal", 1)
         cmds.setAttr(f"{off_curve[1]}.normal", 0,0,1)
         
-        cmds.connectAttr(f"{bezier[0]}.worldSpace[0]", f"{off_curve[1]}.inputCurve", f=True)
+        cmds.connectAttr(f"{bezier}.worldSpace[0]", f"{off_curve[1]}.inputCurve", f=True)
         cmds.delete(bendyDupe)
         bendyCtl, bendyCtlGRP = curve_tool.controller_creator(f"{self.side}_{self.part}Bendy", suffixes=["GRP"])  
         cmds.parent(bendyCtlGRP[0], self.controls_trn)
@@ -286,7 +318,7 @@ class Bendys(object):
         cmds.skinPercent(bendy_skin_cluster[0], f"{bendyCurve}.cv[6]", transformValue=(self.hook_joints[2], 1))
 
         origin_shape = cmds.listRelatives(bendyCurve, allDescendents=True)
-        origin_shape.remove(bezier[0])
+        origin_shape.remove(bezier)
 
         cmds.connectAttr(f"{origin_shape[0]}.worldSpace[0]", f"{off_curve[1]}.inputCurve", f=True)
 
@@ -306,7 +338,7 @@ class Bendys(object):
         blendy_up_trn = []
 
         for i, value in enumerate([0, 0.25, 0.5, 0.75, 0.95]):
-            bendy_joint.append(cmds.joint(name=f"{self.side}_{self.part}Bendy0{i}_JNT"))
+            bendy_joint.append(cmds.joint(name=f"{self.side}_{self.part}Bendy0{i}_JNT", rad=20))
             mpa = cmds.createNode("motionPath", name=f"{self.side}_{self.part}Bendy0{i}_MPA", ss=True)
             cmds.setAttr(f"{mpa}.fractionMode", True)
             cmds.setAttr(f"{mpa}.uValue", value)
@@ -352,5 +384,10 @@ class Bendys(object):
         cmds.parent(bendyCurve, self.bendy_module)
         cmds.parent(off_curve[0], self.bendy_module)
         cmds.parent(bendy_helper_transform, self.bendy_module)
+
+        bezier_parent = cmds.listRelatives(bezier, parent=True, fullPath=True)
+        end_bezier = cmds.rename(bezier_parent[0], f"{self.side}_{self.part}BendyBezier_CRV")
+
+        return end_bezier
 
                             
