@@ -72,7 +72,8 @@ class WingArmModule(object):
                 chain.append(cmds.rename(joint, joint.replace('_JNT', f'{name}_JNT')))
 
     def pair_blends(self):
-
+        
+        self.pair_blend_nodes = []
         for i, joint in enumerate(self.blend_chain):
             
             self.pair_blend_node = cmds.createNode("pairBlend", n=f"{joint.replace('_JNT', '_PBL')}")
@@ -82,7 +83,7 @@ class WingArmModule(object):
             cmds.connectAttr(f"{self.fk_chain[i]}.rotate", f"{self.pair_blend_node}.inRotate2")
             cmds.connectAttr(f"{self.pair_blend_node}.outTranslate", f"{joint}.translate")
             cmds.connectAttr(f"{self.pair_blend_node}.outRotate", f"{joint}.rotate")
-
+            self.pair_blend_nodes.append(self.pair_blend_node)
 
 
     def set_controllers(self):
@@ -94,6 +95,10 @@ class WingArmModule(object):
         cmds.move(0, 100, 0, self.settings_curve_grp[0], r=True, os=True)
         self.lock_attrs(self.settings_curve_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
         cmds.parent(self.settings_curve_grp[0], self.controllers_trn)
+
+        for node in self.pair_blend_nodes:
+            cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{node}.weight")
+
         
         self.arm_fk_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmFKControllers_GRP", p=self.controllers_trn)
         self.arm_ik_controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmIKControllers_GRP", p=self.controllers_trn)
@@ -387,38 +392,16 @@ class WingArmModule(object):
         self.upper_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmUpperBendyModule_GRP", p=self.bendy_module_trn)
         self.lower_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmLowerBendyModule_GRP", p=self.bendy_module_trn)
 
-        #--- Bendy Curves ---
-        self.arm_degree2_crv = cmds.curve(
-            n=f"{self.side}_wingArmDegree2_CRV", 
-            d=1,
-
-            p=[
-                cmds.xform(self.ik_chain[0], q=True, ws=True, t=True),
-                cmds.xform(self.ik_chain[1], q=True, ws=True, t=True),
-                cmds.xform(self.ik_chain[2], q=True, ws=True, t=True),
-                
-            ]
-        )
-
-        cmds.rebuildCurve(self.arm_degree2_crv, kr=0, s=2,d=1, kcp=1)
-        cmds.parent(self.arm_degree2_crv, self.bendy_module_trn)
-
-        self.arm_degree2_crv_shape = cmds.listRelatives(self.arm_degree2_crv, s=True)[0]
-        
-        detached_curves = cmds.detachCurve(
-            self.arm_degree2_crv_shape,
-            p=0.5,
-            ch=1,
-            rpo=False
-        )
-        
-        self.upper_segment_crv = cmds.rename(detached_curves[0], f"{self.side}_wingArmUpperSegment_CRV")
+        #--- Bendy Curves ---  
+        self.upper_segment_crv = cmds.curve(n=f"{self.side}_wingArmUpperSegment_CRV", d=1, p=[
+            cmds.xform(self.ik_chain[0], q=True, ws=True, t=True),
+            cmds.xform(self.ik_chain[1], q=True, ws=True, t=True)])
         cmds.parent(self.upper_segment_crv, self.upper_bendy_module)
-        self.lower_segment_crv = cmds.rename(detached_curves[1], f"{self.side}_wingArmLowerSegment_CRV")
-        cmds.parent(self.lower_segment_crv, self.lower_bendy_module)
 
-        cmds.rebuildCurve(self.upper_segment_crv, ch=1, rpo=1, rt=0, end=1, kr=1, kcp=0, kep=1, kt=0, fr=0, s=1, d=2, tol=0.01)
-        cmds.rebuildCurve(self.lower_segment_crv, ch=1, rpo=1, rt=0, end=1, kr=1, kcp=0, kep=1, kt=0, fr=0, s=1, d=2, tol=0.01)
+        self.lower_segment_crv = cmds.curve(n=f"{self.side}_wingArmLowerSegment_CRV", d=1, p=[
+            cmds.xform(self.ik_chain[1], q=True, ws=True, t=True),
+            cmds.xform(self.ik_chain[2], q=True, ws=True, t=True)])
+        cmds.parent(self.lower_segment_crv, self.lower_bendy_module)
 
         shoulder_bendy_dpm = cmds.createNode("decomposeMatrix", n=(self.blend_chain[0].replace('JNT', 'DPM')), ss=True)
         cmds.connectAttr(f"{self.blend_chain[0]}.worldMatrix[0]", f"{shoulder_bendy_dpm}.inputMatrix")
@@ -427,9 +410,11 @@ class WingArmModule(object):
         wrist_bendy_dpm = cmds.createNode("decomposeMatrix", n=(self.blend_chain[2].replace('JNT', 'DPM')), ss=True)
         cmds.connectAttr(f"{self.blend_chain[2]}.worldMatrix[0]", f"{wrist_bendy_dpm}.inputMatrix")
 
-        cmds.connectAttr(f"{shoulder_bendy_dpm}.outputTranslate", f"{self.arm_degree2_crv}.controlPoints[0]")
-        cmds.connectAttr(f"{elbow_bendy_dpm}.outputTranslate", f"{self.arm_degree2_crv}.controlPoints[1]")
-        cmds.connectAttr(f"{wrist_bendy_dpm}.outputTranslate", f"{self.arm_degree2_crv}.controlPoints[2]")
+        cmds.connectAttr(f"{shoulder_bendy_dpm}.outputTranslate", f"{self.upper_segment_crv}.controlPoints[0]")
+        cmds.connectAttr(f"{elbow_bendy_dpm}.outputTranslate", f"{self.upper_segment_crv}.controlPoints[1]")
+
+        cmds.connectAttr(f"{elbow_bendy_dpm}.outputTranslate", f"{self.lower_segment_crv}.controlPoints[0]")
+        cmds.connectAttr(f"{wrist_bendy_dpm}.outputTranslate", f"{self.lower_segment_crv}.controlPoints[1]")
 
 
 
@@ -439,13 +424,18 @@ class WingArmModule(object):
         hook_parameters = [0.001, 0.5, 0.999]
         self.upper_bendy_joints = []
         self.lower_bendy_joints = []
+        self.bendy_joints = []
 
         for i, part in enumerate(["Upper", "Lower"]):
             for ii, joint in enumerate(["Root", "Mid", "Tip"]):
 
                 cmds.select(clear=True)
                 hook_joint = cmds.joint(n=f"{self.side}_wingArm{part}Bendy{joint}_JNT")
-                self.upper_bendy_joints.append(hook_joint) if i == 0 else self.lower_bendy_joints.append(hook_joint)
+                if i == 0:
+                    self.upper_bendy_joints.append(hook_joint)
+                else:
+                    self.lower_bendy_joints.append(hook_joint)
+                
                 
                 motion_path = cmds.createNode("motionPath", n=f"{self.side}_wingArm{part}Bendy{joint}{i}_MPT")
                 cmds.setAttr(f"{motion_path}.frontAxis", 0)
@@ -482,8 +472,10 @@ class WingArmModule(object):
                         cmds.parentConstraint(hook_joint, bendy_grp[0], mo=False)
         
                         bendy_joint = cmds.duplicate(hook_joint, n=f"{self.side}_wingArm{part}Bendy_JNT")
+                        self.bendy_joints.append(bendy_joint[0])
                         cmds.parentConstraint(bendy_ctl, bendy_joint, mo=True)
                         cmds.scaleConstraint(bendy_ctl, bendy_joint, mo=True)
+                        cmds.setAttr(f"{bendy_joint[0]}.inheritsTransform", 0)
 
                 else:
                     if ii != 2:
@@ -498,10 +490,13 @@ class WingArmModule(object):
                         cmds.parentConstraint(hook_joint, bendy_grp[0], mo=False)
 
                         bendy_joint = cmds.duplicate(hook_joint, n=f"{self.side}_wingArm{part}Bendy_JNT")
+                        self.bendy_joints.append(bendy_joint[0])
                         cmds.parentConstraint(bendy_ctl, bendy_joint, mo=True)
                         cmds.scaleConstraint(bendy_ctl, bendy_joint, mo=True)
 
                 cmds.setAttr(f"{hook_joint}.inheritsTransform", 0)
+        print(self.upper_bendy_joints)
+        print(self.lower_bendy_joints)
 
 
 
@@ -516,14 +511,14 @@ class WingArmModule(object):
         cmds.bezierAnchorPreset(p=2)
         cmds.select(f"{self.upper_bendy_bezier[0]}.cv[3]")
         cmds.bezierAnchorPreset(p=1)
-        
+       
         cmds.parent(self.upper_bendy_bezier, self.upper_bendy_module)
-        upper_bendy_skin_cluster = cmds.skinCluster(self.upper_bendy_joints[0], self.upper_bendy_joints[1], self.upper_bendy_joints[2], self.upper_bendy_bezier,n=f"{self.side}_wingArmUpperBendyBezier_SKIN")
+        upper_bendy_skin_cluster = cmds.skinCluster(self.upper_bendy_joints[0], self.bendy_joints[0], self.upper_bendy_joints[2], self.upper_bendy_bezier,n=f"{self.side}_wingArmUpperBendyBezier_SKIN")
         
         cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[0]", transformValue=[self.upper_bendy_joints[0], 1])
-        cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[2]", transformValue=[self.upper_bendy_joints[1], 1])
-        cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[3]", transformValue=[self.upper_bendy_joints[1], 1])
-        cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[4]", transformValue=[self.upper_bendy_joints[1], 1])
+        cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[2]", transformValue=[self.bendy_joints[0], 1])
+        cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[3]", transformValue=[self.bendy_joints[0], 1])
+        cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[4]", transformValue=[self.bendy_joints[0], 1])
         cmds.skinPercent(upper_bendy_skin_cluster[0], f"{self.upper_bendy_bezier[0]}.cv[6]", transformValue=[self.upper_bendy_joints[2], 1])
 
 
@@ -541,41 +536,46 @@ class WingArmModule(object):
         cmds.bezierAnchorPreset(p=1)
 
         cmds.parent(self.lower_bendy_bezier, self.lower_bendy_module)
-        lower_bendy_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.lower_bendy_joints[1], self.lower_bendy_joints[2], self.lower_bendy_bezier, tsb=True, n=f"{self.side}_wingArmLowerBendyBezier_SKIN")
+        
+        lower_bendy_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.bendy_joints[1], self.lower_bendy_joints[2], self.lower_bendy_bezier, tsb=True, n=f"{self.side}_wingArmLowerBendyBezier_SKIN")
         
         cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[0]", transformValue=[self.lower_bendy_joints[0], 1])
-        cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[2]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[3]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[4]", transformValue=[self.lower_bendy_joints[1], 1])
+        cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[2]", transformValue=[self.bendy_joints[1], 1])
+        cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[3]", transformValue=[self.bendy_joints[1], 1])
+        cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[4]", transformValue=[self.bendy_joints[1], 1])
         cmds.skinPercent(lower_bendy_skin_cluster[0], f"{self.lower_bendy_bezier[0]}.cv[6]", transformValue=[self.lower_bendy_joints[2], 1])
 
 
     def twists_setup(self):
 
         # --- Twists ---
-        self.upper_bendy_off_curve = cmds.offsetCurve(self.lower_bendy_bezier, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=f"{self.side}_wingArmUpperBendyBezierOffset_CRV", normal=[0, 0, 1])
-        cmds.connectAttr(f"{self.upper_bendy_bezier[0]}.worldSpace[0]", f"{self.upper_bendy_off_curve[1]}.inputCurve", f=True)
+        self.upper_bendy_off_curve = cmds.offsetCurve(self.upper_bendy_bezier, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=f"{self.side}_wingArmUpperBendyBezierOffset_CRV", normal=[0, 0, 1])
+        # cmds.connectAttr(f"{self.upper_bendy_bezier[0]}.worldSpace[0]", f"{self.upper_bendy_off_curve[1]}.inputCurve", f=True)
+        cmds.setAttr(f"{self.upper_bendy_off_curve[1]}.useGivenNormal", 1)
+        cmds.setAttr(f"{self.upper_bendy_off_curve[1]}.normal", 0, 0, 1, type="double3")
         cmds.parent(self.upper_bendy_off_curve[0], self.upper_bendy_module)
+        print(self.bendy_joints)
+        self.upper_offset_curve_skin_cluster = cmds.skinCluster(self.upper_bendy_joints[0], self.bendy_joints[0], self.upper_bendy_joints[2], self.upper_bendy_off_curve[0], tsb=True, n=f"{self.side}_UpperBendyOffset_SKIN")
 
-        self.upper_offset_curve_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.lower_bendy_joints[1], self.lower_bendy_joints[2], self.upper_bendy_off_curve[0], tsb=True, n=f"{self.side}_UpperBendyOffset_SKIN")
-
-        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[0]", transformValue=[self.lower_bendy_joints[0], 1])
-        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[2]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[3]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[4]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[6]", transformValue=[self.lower_bendy_joints[2], 1])
+        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[0]", transformValue=[self.upper_bendy_joints[0], 1])
+        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[2]", transformValue=[self.bendy_joints[0], 1])
+        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[3]", transformValue=[self.bendy_joints[0], 1])
+        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[4]", transformValue=[self.bendy_joints[0], 1])
+        cmds.skinPercent(self.upper_offset_curve_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[6]", transformValue=[self.upper_bendy_joints[2], 1])
 
 
-        self.lower_bendy_off_curve = cmds.offsetCurve(self.upper_bendy_bezier, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=f"{self.side}_wingArmLowerBendyBezierOffset_CRV", normal=[0, 0, 1])
-        cmds.connectAttr(f"{self.lower_bendy_bezier[0]}.worldSpace[0]", f"{self.lower_bendy_off_curve[1]}.inputCurve", f=True)
+        self.lower_bendy_off_curve = cmds.offsetCurve(self.lower_bendy_bezier, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=f"{self.side}_wingArmLowerBendyBezierOffset_CRV", normal=[0, 0, 1])
+        # cmds.connectAttr(f"{self.lower_bendy_bezier[0]}.worldSpace[0]", f"{self.lower_bendy_off_curve[1]}.inputCurve", f=True)
+        cmds.setAttr(f"{self.lower_bendy_off_curve[1]}.useGivenNormal", 1)
+        cmds.setAttr(f"{self.lower_bendy_off_curve[1]}.normal", 0, 0, 1, type="double3")
         cmds.parent(self.lower_bendy_off_curve[0], self.lower_bendy_module)
 
-        self.lower_offset_curve_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.lower_bendy_joints[1], self.lower_bendy_joints[2], self.lower_bendy_off_curve[0], tsb=True, n=f"{self.side}_LowerBendyOffset_SKIN")
+        self.lower_offset_curve_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.bendy_joints[1], self.lower_bendy_joints[2], self.lower_bendy_off_curve[0], tsb=True, n=f"{self.side}_LowerBendyOffset_SKIN")
 
         cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[0]", transformValue=[self.lower_bendy_joints[0], 1])
-        cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[2]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[3]", transformValue=[self.lower_bendy_joints[1], 1])
-        cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[4]", transformValue=[self.lower_bendy_joints[1], 1])
+        cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[2]", transformValue=[self.bendy_joints[1], 1])
+        cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[3]", transformValue=[self.bendy_joints[1], 1])
+        cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[4]", transformValue=[self.bendy_joints[1], 1])
         cmds.skinPercent(self.lower_offset_curve_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[6]", transformValue=[self.lower_bendy_joints[2], 1])
         
         #--- Bendy Aim Helpers ---
@@ -631,7 +631,7 @@ class WingArmModule(object):
                     else:
                         cmds.connectAttr(f"{mpa}.allCoordinates", f"{self.lower_aim_helper}.translate")
                 if i == 0:
-                    cmds.connectAttr(f"{self.lower_bendy_off_curve[0]}.worldSpace[0]", f"{mpa}.geometryPath")
+                    cmds.connectAttr(f"{self.upper_bendy_off_curve[0]}.worldSpace[0]", f"{mpa}.geometryPath")
                     cmds.parent(aim_trn, self.upper_aim_transform_grp)
                 else:
                     cmds.connectAttr(f"{self.lower_bendy_off_curve[0]}.worldSpace[0]", f"{mpa}.geometryPath")
@@ -640,27 +640,26 @@ class WingArmModule(object):
                 self.aim_transforms.append(aim_trn)
                 cmds.setAttr(f"{aim_trn}.inheritsTransform", 0)
 
-
-        print(self.skinning_joints)
+        
         for i, joint in enumerate(self.skinning_joints):
-            if i < 4:
-                if self.side == "L":
-                    cmds.aimConstraint(self.skinning_joints[i+1], joint, aim=[1, 0, 0], u=[0, 1, 0], wut="objectrotation", wuo=self.aim_transforms[i], mo=True)
-                elif self.side == "R":
-                    cmds.aimConstraint(self.skinning_joints[i+1], joint, aim=[-1, 0, 0], u=[0, 1, 0], wut="objectrotation", wuo=self.aim_transforms[i], mo=True)
+            if "04" not in joint:
+                    if self.side == "L":
+                        aim = cmds.aimConstraint(self.skinning_joints[i+1], joint, aim=[1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
+                
+                    elif self.side == "R":
+                        aim = cmds.aimConstraint(self.skinning_joints[i+1], joint, aim=[-1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
         
             else:
                 if self.side == "L":
                     if "Upper" in joint:
-                        cmds.aimConstraint(self.upper_aim_helper, joint, aim=[1, 0, 0], u=[0, 1, 0], wut="objectrotation", wuo=self.aim_transforms[i], mo=True)
+                        aim = cmds.aimConstraint(self.upper_aim_helper, joint, aim=[-1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
                     else:
-                        cmds.aimConstraint(self.lower_aim_helper, joint, aim=[1, 0, 0], u=[0, 1, 0], wut="objectrotation", wuo=self.aim_transforms[i], mo=True)
+                        aim = cmds.aimConstraint(self.lower_aim_helper, joint, aim=[-1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
                 elif self.side == "R":
                     if "Upper" in joint:
-                        cmds.aimConstraint(self.upper_aim_helper, joint, aim=[-1, 0, 0], u=[0, 1, 0], wut="objectrotation", wuo=self.aim_transforms[i], mo=True)
+                        aim = cmds.aimConstraint(self.upper_aim_helper, joint, aim=[1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
                     else:
-                        cmds.aimConstraint(self.lower_aim_helper, joint, aim=[-1, 0, 0], u=[0, 1, 0], wut="objectrotation", wuo=self.aim_transforms[i], mo=True)
-
+                        aim = cmds.aimConstraint(self.lower_aim_helper, joint, aim=[1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
 
             
         for joint in self.skinning_joints:
