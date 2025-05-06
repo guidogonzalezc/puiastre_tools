@@ -1,6 +1,6 @@
 import maya.cmds as cmds
 from puiastreTools.tools.curve_tool import controller_creator
-
+from puiastreTools.utils import data_export
 
 
 def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
@@ -14,7 +14,6 @@ def condition(main_ctl, vis_trn, value):
     cmds.setAttr(con + ".colorIfTrueR", 1)
     cmds.setAttr(con + ".colorIfFalseR", 0)
     cmds.connectAttr(con + ".outColorR", vis_trn + ".visibility")
-
 
 def create_basic_structure(asset_name = "assetName"):
 
@@ -64,7 +63,14 @@ def create_basic_structure(asset_name = "assetName"):
             else:
                 trn = cmds.createNode("transform", name=subfolder, parent=secondary_transform, ss=True)
                 rig_transforms.append(trn)
-          
+
+    print("Controls: ", ctls)
+    data_exporter = data_export.DataExport()
+    data_exporter.append_data("basic_structure", {"modules_GRP": rig_transforms[1],
+                                                  "skel_GRP": rig_transforms[2],
+                                                  "masterWalk_CTL": ctls[1],})
+
+
     cmds.addAttr(ctls[2], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=False)
     cmds.setAttr(ctls[2]+".extraAttributesSep", channelBox=True)
     cmds.addAttr(ctls[2], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
@@ -100,7 +106,7 @@ def create_basic_structure(asset_name = "assetName"):
 
     cmds.select(clear=True)
 
-
+create_basic_structure()
 """"
 
     SETS WIP
