@@ -136,6 +136,7 @@ class WingArmModule(object):
         # cmds.orientConstraint(self.wrist_ik_ctl, self.ik_chain[-1], mo=True)
         cmds.matchTransform(self.root_grp[0], self.ik_chain[0], pos=True, rot=True) 
         cmds.matchTransform(self.wrist_ik_grp[0], self.ik_chain[-1], pos=True, rot=True)
+        cmds.orientConstraint(self.wrist_ik_ctl, self.ik_chain[-1], mo=True)
         self.arm_ik_controllers.append(self.root_ctl)
         self.arm_ik_controllers.append(self.wrist_ik_ctl)
         cmds.parent(self.root_grp[0], self.wrist_ik_grp[0], self.arm_ik_controllers_trn)
