@@ -38,6 +38,7 @@ def arm_module(*args):
     reload(wing_arm_module)
     module = wing_arm_module.WingArmModule()
     module.make(side = "L")
+    module.make(side = "R")
 
 def export_curves(*args): 
     from puiastreTools.tools import curve_tool  
