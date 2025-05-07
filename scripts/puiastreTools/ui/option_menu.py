@@ -32,6 +32,7 @@ def finger_module(*args):
     data_export_func()
     module = finger_module.FingerModule()
     module.make(side = "L")
+    module.make(side = "R")
 
 def arm_module(*args):
     from puiastreTools.autorig import wing_arm_module
@@ -44,6 +45,11 @@ def export_curves(*args):
     from puiastreTools.tools import curve_tool  
     reload(curve_tool)
     curve_tool.get_all_ctl_curves_data()
+
+def mirror_ctl(*args): 
+    from puiastreTools.tools import curve_tool  
+    reload(curve_tool)
+    curve_tool.mirror_all_L_CTL_shapes()
 
 def data_export_func(*args):  
     from puiastreTools.utils import data_export 
@@ -75,6 +81,7 @@ def puiastre_ui():
 
     cmds.menuItem(label="   Controls", subMenu=True, tearOff=True, boldFont=True, image="controllers.png")
     cmds.menuItem(label="   Export all controllers", command=export_curves)
+    cmds.menuItem(label="   Mirror all L_ to R_", command=mirror_ctl)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
