@@ -5,6 +5,7 @@ import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import basic_structure
+from puiastreTools.utils import data_export
 import maya.mel as mel
 import math
 import os
@@ -12,6 +13,7 @@ from importlib import reload
 reload(guides_manager)
 reload(basic_structure)
 reload(curve_tool)    
+reload(data_export)    
 
 class LegModule():
     def __init__(self):
@@ -20,17 +22,22 @@ class LegModule():
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
 
+        basic_structure.create_basic_structure(asset_name = "Varyndor")
+
+        data_exporter = data_export.DataExport()
+
+        self.modules_grp = data_exporter.get_data("basic_structure", "modules_GRP")
+        self.skel_grp = data_exporter.get_data("basic_structure", "skel_GRP")
+        self.masterWalk_ctl = data_exporter.get_data("basic_structure", "masterWalk_CTL")
+
     def make(self, side):
 
         self.side = side    
 
-        self.module_trn = cmds.createNode("transform", name=f"{self.side}_legModule_GRP", ss=True)
+        self.module_trn = cmds.createNode("transform", name=f"{self.side}_legModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP", ss=True)
-        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_legSkinning_GRP", ss=True)
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_legSkinning_GRP", ss=True, parent=self.skel_grp)
         self.bendy_module = cmds.createNode("transform", name=f"{self.side}_legBendyModule_GRP", ss=True, p=self.module_trn)
-
-        basic_structure.create_basic_structure(asset_name = "Varyndor")
-
 
         self.duplicate_leg()
         self.set_controllers()
@@ -239,7 +246,7 @@ class LegModule():
 
     def soft_stretch(self):
 
-        masterwalk = "C_masterWalk_CTL" # Change this to the actual masterwalk controller name
+        masterwalk = self.masterWalk_ctl# Change this to the actual masterwalk controller name
 
         self.soft_off = cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", p=self.module_trn, ss=True)
         cmds.pointConstraint(self.ik_ctls[0], self.soft_off)
