@@ -364,7 +364,10 @@ class WingArmModule(object):
         # --- Pole Vector ---
         self.pole_vector_ctl, self.pole_vector_grp = curve_tool.controller_creator(f"{self.side}_wingArmPV", suffixes=["GRP", "OFF"])
         cmds.matchTransform(self.pole_vector_grp[0], self.ik_chain[1], pos=True, rot=True)
-        cmds.move(0, 0, -1000, self.pole_vector_grp[0], r=True, os=True)
+        if self.side == "L":    
+            cmds.move(0, 0, -1000, self.pole_vector_grp[0], r=True, os=True)
+        else:
+            cmds.move(0, 0, 1000, self.pole_vector_grp[0], r=True, os=True)
         cmds.parent(self.pole_vector_grp[0], self.arm_ik_controllers_trn)
         cmds.poleVectorConstraint(self.pole_vector_ctl, self.main_ik_handle)
         self.lock_attrs(self.pole_vector_ctl, ["sx", "sy", "sz", "v"])
@@ -598,6 +601,8 @@ class WingArmModule(object):
         #--- Bendy Aim Helpers ---
         self.upper_aim_helper = cmds.createNode("transform", n=f"{self.side}_wingArmUpperBendyAimHelper04_TRN", p=self.upper_bendy_module)
         self.lower_aim_helper = cmds.createNode("transform", n=f"{self.side}_wingArmLowerBendyAimHelper04_TRN", p=self.lower_bendy_module)
+        cmds.setAttr(f"{self.upper_aim_helper}.inheritsTransform", 0)
+        cmds.setAttr(f"{self.lower_aim_helper}.inheritsTransform", 0)
 
 
 
