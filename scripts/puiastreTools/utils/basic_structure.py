@@ -106,7 +106,6 @@ def create_basic_structure(asset_name = "assetName"):
 
     cmds.select(clear=True)
 
-create_basic_structure()
 """"
 
     SETS WIP
