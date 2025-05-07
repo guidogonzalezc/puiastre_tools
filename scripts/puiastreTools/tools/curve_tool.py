@@ -218,3 +218,106 @@ def controller_creator(name, suffixes=["GRP"]):
 
         cmds.parent(ctl[0], created_grps[-1])
         return ctl[0], created_grps
+
+import maya.api.OpenMaya as om
+import maya.cmds as cmds
+
+def get_dag_path(node_name):
+    sel = om.MSelectionList()
+    sel.add(node_name)
+    return sel.getDagPath(0)
+
+def curves_match(curveA, curveB):
+    return (
+        curveA.degree == curveB.degree and
+        curveA.numCVs == curveB.numCVs and
+        curveA.form == curveB.form and
+        curveA.numSpans == curveB.numSpans and
+        curveA.knots() == curveB.knots()
+    )
+
+def rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name):
+    # Delete target shape
+    if cmds.objExists(tgt_shape_name):
+        cmds.delete(tgt_shape_name)
+
+    # Duplicate shape from left
+    dup = cmds.duplicate(f"{src_transform}|{src_shape}", name="tempCurveDup", returnRootsOnly=True)[0]
+    new_shape = cmds.listRelatives(dup, shapes=True, fullPath=False)[0]
+
+    # Rename and parent the new shape to the right controller
+    final_shape = cmds.rename(new_shape, tgt_shape_name)
+    cmds.parent(final_shape, tgt_transform, shape=True, relative=True)
+    cmds.delete(dup)  # delete the temp transform
+
+    return final_shape
+
+def mirror_all_L_CTL_shapes():
+    all_transforms = cmds.ls(type="transform")
+    left_ctl_transforms = [t for t in all_transforms if "L_" in t and t.endswith("_CTL")]
+
+    if not left_ctl_transforms:
+        om.MGlobal.displayWarning("No matching 'L_*_CTL' transform nodes found.")
+        return
+
+    mirror_matrix = om.MMatrix([
+        [-1, 0, 0, 0],
+        [ 0, 1, 0, 0],
+        [ 0, 0, 1, 0],
+        [ 0, 0, 0, 1]
+    ])
+
+    for src_transform in left_ctl_transforms:
+        shapes = cmds.listRelatives(src_transform, shapes=True, fullPath=False)
+        if not shapes:
+            om.MGlobal.displayWarning(f"No shape under {src_transform}. Skipping.")
+            continue
+
+        for src_shape in shapes:
+            if not cmds.objectType(src_shape, isType="nurbsCurve"):
+                om.MGlobal.displayWarning(f"{src_shape} is not a nurbsCurve. Skipping.")
+                continue
+
+            if "L_" not in src_shape:
+                continue
+
+            tgt_shape_name = src_shape.replace("L_", "R_", 1)
+            tgt_transform = src_transform.replace("L_", "R_", 1)
+
+            if not cmds.objExists(tgt_transform):
+                om.MGlobal.displayWarning(f"Target transform '{tgt_transform}' not found. Skipping.")
+                continue
+
+            try:
+                src_dag = get_dag_path(f"{src_transform}|{src_shape}")
+                src_curve = om.MFnNurbsCurve(src_dag)
+
+                # Ensure target shape exists and matches structure
+                if not cmds.objExists(tgt_shape_name):
+                    final_shape = rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name)
+                    tgt_dag = get_dag_path(f"{tgt_transform}|{final_shape}")
+                else:
+                    tgt_dag = get_dag_path(f"{tgt_transform}|{tgt_shape_name}")
+                    tgt_curve = om.MFnNurbsCurve(tgt_dag)
+
+                    if not curves_match(src_curve, tgt_curve):
+                        final_shape = rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name)
+                        tgt_dag = get_dag_path(f"{tgt_transform}|{final_shape}")
+
+                tgt_curve = om.MFnNurbsCurve(tgt_dag)
+
+                # Mirror CVs
+                mirrored_points = om.MPointArray()
+                for i in range(src_curve.numCVs):
+                    pt = src_curve.cvPosition(i)
+                    mirrored_points.append(pt * mirror_matrix)
+
+                tgt_curve.setCVPositions(mirrored_points)
+                tgt_curve.updateCurve()
+
+                om.MGlobal.displayInfo(f"Mirrored and synced '{src_shape}' → '{tgt_shape_name}'")
+
+            except Exception as e:
+                om.MGlobal.displayError(f"Error processing {src_shape}: {e}")
+
+
