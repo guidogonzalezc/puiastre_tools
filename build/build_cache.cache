@@ -1,10 +1,4 @@
 {
-    "moduleA": {
-        "switchIk": "L_switchIk_CTL"
-    },
-    "moduleB": {
-        "fkCtl": "R_fk_CTL"
-    },
     "basic_structure": {
         "modules_GRP": "modules_GRP",
         "skel_GRP": "skel_GRP",

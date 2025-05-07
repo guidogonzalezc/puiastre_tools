@@ -3,48 +3,49 @@ import os
 import maya.cmds as cmds
 from functools import partial
 from importlib import reload
-from puiastreTools.ui import option_menu
-from puiastreTools.utils import guides_manager
-from puiastreTools.autorig import leg_module
-from puiastreTools.autorig import finger_module
-from puiastreTools.autorig import wing_arm_module
-from puiastreTools.tools import curve_tool
-from puiastreTools.utils import data_export
 
 def reload_ui(*args):
+    from puiastreTools.ui import option_menu
     reload(option_menu)
     option_menu.puiastre_ui()
 
-def export_guides(*args):   
+def export_guides(*args):  
+    from puiastreTools.utils import guides_manager 
     reload(guides_manager)
     guides_manager.guides_export()
 
 def import_guides(*args, value=None): 
+    from puiastreTools.utils import guides_manager
     if value == True:   
         reload(guides_manager)
         guides_manager.guide_import(joint_name = "all")
 
 def leg_module(*args):
+    from puiastreTools.autorig import leg_module
     reload(leg_module)
     module = leg_module.LegModule()
     module.make(side = "L")
 
 def finger_module(*args):
+    from puiastreTools.autorig import finger_module
     reload(finger_module)
     data_export_func()
     module = finger_module.FingerModule()
     module.make(side = "L")
 
 def arm_module(*args):
+    from puiastreTools.autorig import wing_arm_module
     reload(wing_arm_module)
     module = wing_arm_module.WingArmModule()
     module.make(side = "L")
 
-def export_curves(*args):   
+def export_curves(*args): 
+    from puiastreTools.tools import curve_tool  
     reload(curve_tool)
     curve_tool.get_all_ctl_curves_data()
 
-def data_export_func(*args):   
+def data_export_func(*args):  
+    from puiastreTools.utils import data_export 
     reload(data_export)
     exporter = data_export.DataExport()
     exporter.new_build()  # Clears the cache
