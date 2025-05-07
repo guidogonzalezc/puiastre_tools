@@ -5,6 +5,7 @@ import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import basic_structure
+from puiastreTools.utils import data_export
 import maya.mel as mel
 import math
 import os
@@ -13,6 +14,7 @@ from importlib import reload
 reload(guides_manager)
 reload(basic_structure)
 reload(curve_tool)    
+reload(data_export)    
 
 class FingerModule():
     def __init__(self):
@@ -20,16 +22,21 @@ class FingerModule():
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
+        basic_structure.create_basic_structure(asset_name = "Varyndor")
+
+        data_exporter = data_export.DataExport()
+
+        self.modules_grp = data_exporter.get_data("basic_structure", "modules_GRP")
+        self.skel_grp = data_exporter.get_data("basic_structure", "skel_GRP")
 
     def make(self, side):
 
         self.side = side    
 
-        self.module_trn = cmds.createNode("transform", name=f"{self.side}_fingerModule_GRP", ss=True)
+        self.module_trn = cmds.createNode("transform", name=f"{self.side}_fingerModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_fingerControllers_GRP", ss=True)
-        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_fingerSkinning_GRP", ss=True)
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_fingerSkinning_GRP", ss=True, p=self.skel_grp)
 
-        basic_structure.create_basic_structure(asset_name = "Varyndor")
 
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_fingerAttr", suffixes = ["GRP"])
         position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_fingerAttr", filePath=self.guides_path)
@@ -142,19 +149,21 @@ class FingerModule():
     def call_bendys(self):
         normals = (0, 0, 1)
         bendy = Bendys(self.side, self.blend_chain[0], self.blend_chain[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
-        end_bezier01 = bendy.lower_twists_setup()
+        end_bezier01, bendy_skin_cluster01 = bendy.lower_twists_setup()
         bendy = Bendys(self.side, self.blend_chain[1], self.blend_chain[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
-        end_bezier02 = bendy.lower_twists_setup()
+        end_bezier02, bendy_skin_cluster02 = bendy.lower_twists_setup()
         bendy = Bendys(self.side, self.blend_chain[2], self.blend_chain[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
-        end_bezier03 = bendy.lower_twists_setup()
+        end_bezier03, bendy_skin_cluster03 = bendy.lower_twists_setup()
 
-        self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03])
+        self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03], skc = [bendy_skin_cluster01, bendy_skin_cluster02, bendy_skin_cluster03])
 
-    def wave_handle(self, beziers = []):
+    def wave_handle(self, beziers = [], skc = []):
         
         dupe_beziers = []
+        bezier_shapes = []
         for bezier in beziers:
             dupe = cmds.duplicate(bezier, name=bezier.replace("_CRV", "Dupe_CRV"))
+            bezier_shapes.append(cmds.listRelatives(bezier, shapes=True, fullPath=True)[0])
             cmds.delete(dupe[0], ch=True)
             dupe_beziers.append(dupe[0])
         
@@ -194,6 +203,9 @@ class FingerModule():
             cmds.connectAttr(f"{self.fk_ctl_list[0]}.{attr}", f"{pma}.input1D[1]", f=True)
             cmds.connectAttr(f"{pma}.output1D", f"{wave[0]}.{attr}", f=True)
 
+        for i, bls in enumerate([blendshape01, blendshape02, blendshape03]):
+            cmds.reorderDeformers(skc[i][0], bls, beziers[i])
+
 
 class Bendys(object):
     def __init__(self, side, upper_joint, lower_joint, bendy_module, skinning_trn, normals, controls_trn, name):
@@ -224,8 +236,8 @@ class Bendys(object):
         
         cmds.parentConstraint(f"{self.lower_joint}", ik_handle, maintainOffset=True)
 
-        end_bezier = self.hooks()
-        return end_bezier
+        end_bezier, bendy_skin_cluster = self.hooks()
+        return end_bezier, bendy_skin_cluster
 
     def hooks(self):
         self.hook_joints = []
@@ -272,8 +284,8 @@ class Bendys(object):
         for joint in self.hook_joints:
             cmds.parent(joint, self.bendy_module)
 
-        end_bezier = self.bendy_setup()
-        return end_bezier
+        end_bezier, bendy_skin_cluster = self.bendy_setup()
+        return end_bezier, bendy_skin_cluster
 
     def bendy_setup(self):
         bendyCurve = cmds.curve(p=(cmds.xform(self.upper_joint, query=True, worldSpace=True, translation=True),cmds.xform(self.lower_joint, query=True, worldSpace=True, translation=True)) , d=1, n=f"{self.side}_{self.part}Bendy_CRV")
@@ -386,8 +398,9 @@ class Bendys(object):
         cmds.parent(bendy_helper_transform, self.bendy_module)
 
         bezier_parent = cmds.listRelatives(bezier, parent=True, fullPath=True)
+        bezier_shape = cmds.rename(bezier, f"{self.side}_{self.part}BendyBezierShape_CRV")
         end_bezier = cmds.rename(bezier_parent[0], f"{self.side}_{self.part}BendyBezier_CRV")
 
-        return end_bezier
+        return end_bezier, bendy_skin_cluster
 
                             
