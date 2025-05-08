@@ -40,6 +40,12 @@ def arm_module(*args):
     module.make(side = "L")
     module.make(side = "R")
 
+def neck_module(*args):
+    from puiastreTools.autorig import neck_module
+    reload(neck_module)
+    module = neck_module.NeckModule()
+    module.make()
+
 def export_curves(*args): 
     from puiastreTools.tools import curve_tool  
     reload(curve_tool)
@@ -82,6 +88,7 @@ def puiastre_ui():
     cmds.menuItem(label="   Build L leg (dev only)", command=leg_module)
     cmds.menuItem(label="   Build L arm (dev only)", command=arm_module)
     cmds.menuItem(label="   Build L finger (dev only)", command=finger_module)
+    cmds.menuItem(label="   Build neck (dev only)", command=neck_module)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
