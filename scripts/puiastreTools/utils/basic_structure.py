@@ -64,7 +64,6 @@ def create_basic_structure(asset_name = "assetName"):
                 trn = cmds.createNode("transform", name=subfolder, parent=secondary_transform, ss=True)
                 rig_transforms.append(trn)
 
-    print("Controls: ", ctls)
     data_exporter = data_export.DataExport()
     data_exporter.append_data("basic_structure", {"modules_GRP": rig_transforms[1],
                                                   "skel_GRP": rig_transforms[2],
