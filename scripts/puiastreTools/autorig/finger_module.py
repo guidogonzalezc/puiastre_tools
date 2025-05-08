@@ -28,13 +28,15 @@ class FingerModule():
 
         self.modules_grp = data_exporter.get_data("basic_structure", "modules_GRP")
         self.skel_grp = data_exporter.get_data("basic_structure", "skel_GRP")
+        self.masterWalk_ctl = data_exporter.get_data("basic_structure", "masterWalk_CTL")
+
 
     def make(self, side):
 
         self.side = side    
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_fingerModule_GRP", ss=True, parent=self.modules_grp)
-        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_fingerControllers_GRP", ss=True)
+        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_fingerControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_fingerSkinning_GRP", ss=True, p=self.skel_grp)
 
 

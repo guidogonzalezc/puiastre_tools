@@ -35,7 +35,7 @@ class LegModule():
         self.side = side    
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_legModule_GRP", ss=True, parent=self.modules_grp)
-        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP", ss=True)
+        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_legControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_legSkinning_GRP", ss=True, parent=self.skel_grp)
         self.bendy_module = cmds.createNode("transform", name=f"{self.side}_legBendyModule_GRP", ss=True, p=self.module_trn)
 
@@ -188,6 +188,7 @@ class LegModule():
                 else:
                     for child_constraints in data[2]:
                         cmds.parentConstraint(ik_ctl, child_constraints, mo=True)
+                        
 
 
         for item in [f"{self.side}_bankIn", f"{self.side}_bankOut", f"{self.side}_heel"]:
@@ -387,9 +388,9 @@ class LegModule():
 
 
 
-        cmds.setAttr(f"{created_nodes[2]}.floatB", cmds.getAttr(f"{self.ik_chain[1]}.translateX"))
-        cmds.setAttr(f"{created_nodes[4]}.floatB", cmds.getAttr(f"{self.ik_chain[3]}.translateX"))
-        cmds.setAttr(f"{created_nodes[26]}.floatB", cmds.getAttr(f"{self.ik_chain[2]}.translateX"))
+        cmds.setAttr(f"{created_nodes[2]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[1]}.translateX")))
+        cmds.setAttr(f"{created_nodes[4]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[3]}.translateX")))
+        cmds.setAttr(f"{created_nodes[26]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[2]}.translateX")))
 
         cmds.setAttr(f"{created_nodes[9]}.floatB", -1)
         cmds.setAttr(f"{created_nodes[10]}.floatA", math.e)
@@ -398,11 +399,25 @@ class LegModule():
         cmds.setAttr(f"{created_nodes[5]}.outputMax", (cmds.getAttr(f"{created_nodes[3]}.output1D") - cmds.getAttr(f"{created_nodes[1]}.outFloat")))
         cmds.setAttr(f"{created_nodes[19]}.floatB", 1)
 
+        if self.side == "R":
+            negate = cmds.createNode("multiplyDivide", name=f"{self.side}_legSoftDistanceNegate_MDN", ss=True)
+            cmds.setAttr(f"{negate}.input2X", -1)
+            cmds.setAttr(f"{negate}.input2Y", -1)
+            cmds.setAttr(f"{negate}.input2Z", -1)
+            cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{negate}.input1X")
+            cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{negate}.input1Y")
+            cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{negate}.input1Z")
+            cmds.connectAttr(f"{negate}.outputX",f"{self.ik_chain[1]}.translateX")
+            cmds.connectAttr(f"{negate}.outputY",f"{self.ik_chain[2]}.translateX")
+            cmds.connectAttr(f"{negate}.outputZ",f"{self.ik_chain[3]}.translateX")
+            
 
+
+        if self.side == "L":
+            cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{self.ik_chain[1]}.translateX")
+            cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{self.ik_chain[2]}.translateX")
+            cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{self.ik_chain[3]}.translateX")
         
-        cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{self.ik_chain[1]}.translateX")
-        cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{self.ik_chain[2]}.translateX")
-        cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{self.ik_chain[3]}.translateX")
 
         cmds.parentConstraint(self.soft_trn, self.springIkHandle, mo=True)
 
