@@ -128,4 +128,29 @@ class NeckModule:
 
     def spike(self):
 
-        pass
+        self.upper_spike_joints = guides_manager.guide_import(joint_name=f"{self.side}_upperSpike_JNT", all_descendents=True, filePath=self.guides_path)
+
+        self.upper_spike_ends_joints = []
+        self.upper_spike_ends_joints_pos = []
+
+        for i, end in enumerate(self.upper_spike_joints):
+
+            side = end.split("_")[0]
+            end = cmds.rename(end, f"{side}_upperSpike0{i}_JNT")
+
+            child_jnt = cmds.listRelatives(end, c=True)[0]
+            child_jnt_pos = cmds.xform(child_jnt, q=True, ws=True, t=True)
+            cmds.ikHandle(sj=end, ee=child_jnt, sol="ikSCsolver", n=f"{side}_upperSpike0{i}IkSpline_HDL", createCurve=True, ns=3)
+            self.upper_spike_ends_joints.append(child_jnt)
+            self.upper_spike_ends_joints_pos.append(child_jnt_pos)
+            
+        self.upper_spike_curve = cmds.curve(d=3, p=self.upper_spike_ends_joints_pos, n=f"{self.side}_upperSpikeCurve_CRV")
+
+
+        
+            
+        
+
+        
+
+
