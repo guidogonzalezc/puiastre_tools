@@ -29,11 +29,15 @@ def leg_module(*args):
 
 def finger_module(*args):
     from puiastreTools.autorig import finger_module
+    from puiastreTools.autorig import membrane_module
     reload(finger_module)
+    reload(membrane_module)
     data_export_func()
     module = finger_module.FingerModule()
     module.make(side = "L")
-    module.make(side = "R")
+    # membran = membrane_module.MembraneModule()
+    # membran.make(side = "L")
+    # module.make(side = "R")
 
 def arm_module(*args):
     from puiastreTools.autorig import wing_arm_module
