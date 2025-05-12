@@ -37,7 +37,7 @@ def finger_module(*args):
     module.make(side = "L")
     # membran = membrane_module.MembraneModule()
     # membran.make(side = "L")
-    # module.make(side = "R")
+    module.make(side = "R")
 
 def arm_module(*args):
     from puiastreTools.autorig import wing_arm_module

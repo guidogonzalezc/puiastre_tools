@@ -150,33 +150,41 @@ class FingerModule():
 
 
     def call_bendys(self):
-        normals = (0, 0, 1)
+        normals = (1, 0, 0)
         bendy = Bendys(self.side, self.blend_chain[0], self.blend_chain[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
-        end_bezier01, bendy_skin_cluster01, bendy_joint01 = bendy.lower_twists_setup()
+        end_bezier01, bendy_skin_cluster01, bendy_joint01, off_curve01, bendy_offset_skin_cluster01 = bendy.lower_twists_setup()
         bendy = Bendys(self.side, self.blend_chain[1], self.blend_chain[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
-        end_bezier02, bendy_skin_cluster02, bendy_joint02 = bendy.lower_twists_setup()
+        end_bezier02, bendy_skin_cluster02, bendy_joint02, off_curve02, bendy_offset_skin_cluster02 = bendy.lower_twists_setup()
         bendy = Bendys(self.side, self.blend_chain[2], self.blend_chain[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
-        end_bezier03, bendy_skin_cluster03, bendy_joint03 = bendy.lower_twists_setup()
+        end_bezier03, bendy_skin_cluster03, bendy_joint03, off_curve03, bendy_offset_skin_cluster03 = bendy.lower_twists_setup()
 
-        self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03], skc = [bendy_skin_cluster01, bendy_skin_cluster02, bendy_skin_cluster03])
+        self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03], 
+                         skc = [bendy_skin_cluster01, bendy_skin_cluster02, bendy_skin_cluster03], 
+                         bezier_off = [off_curve01, off_curve02, off_curve03],
+                         offset_skc = [bendy_offset_skin_cluster01, bendy_offset_skin_cluster02, bendy_offset_skin_cluster03])
+        
         bendy_joint = bendy_joint01 + bendy_joint02 + bendy_joint03
         name = re.sub(r'\d', '', self.joint_name)
 
         self.data_exporter.append_data(f"{self.side}_{name}", {"bendy_joints": bendy_joint})
 
-    def wave_handle(self, beziers = [], skc = []):
+    def wave_handle(self, beziers = [], skc = [], bezier_off=[], offset_skc= []):
         
         dupe_beziers = []
+        dupe_beziers_offset = []
         bezier_shapes = []
-        for bezier in beziers:
+        for i, bezier in enumerate(beziers):
             dupe = cmds.duplicate(bezier, name=bezier.replace("_CRV", "Dupe_CRV"))
+            dupe_off = cmds.duplicate(bezier_off[i], name=bezier_off[i].replace("_CRV", "Dupe_CRV"))
             bezier_shapes.append(cmds.listRelatives(bezier, shapes=True, fullPath=True)[0])
             cmds.delete(dupe[0], ch=True)
+            cmds.delete(dupe_off[0], ch=True)
             dupe_beziers.append(dupe[0])
+            dupe_beziers_offset.append(dupe_off[0])
         
         dupe_parent = cmds.listRelatives(dupe_beziers[0], parent=True, fullPath=True)
         wave_name = dupe_beziers[0].split("_")[1].split("01")[0]
-        wave = cmds.nonLinear(dupe_beziers, type="wave", name=f"{self.side}_{wave_name}Wave_HDL")
+        wave = cmds.nonLinear(dupe_beziers, dupe_beziers_offset, type="wave", name=f"{self.side}_{wave_name}Wave_HDL")
         cmds.parent(wave[1], dupe_parent)
         cmds.matchTransform(wave[1], self.blend_chain[1])
 
@@ -201,8 +209,15 @@ class FingerModule():
         blendshape02 = cmds.blendShape(dupe_beziers[1], beziers[1], name=f"{self.side}_{wave_name}02_BS")[0]
         blendshape03 = cmds.blendShape(dupe_beziers[2], beziers[2], name=f"{self.side}_{wave_name}03_BS")[0]
 
+        blendshape01_off = cmds.blendShape(dupe_beziers_offset[0], bezier_off[0], name=f"{self.side}_{wave_name}Offset01_BS")[0]
+        blendshape02_off = cmds.blendShape(dupe_beziers_offset[1], bezier_off[1], name=f"{self.side}_{wave_name}Offset02_BS")[0]
+        blendshape03_off = cmds.blendShape(dupe_beziers_offset[2], bezier_off[2], name=f"{self.side}_{wave_name}Offset03_BS")[0]
+
+        offset_beziers = [blendshape01_off, blendshape02_off, blendshape03_off]
+
         for i, blendshape in enumerate([blendshape01, blendshape02, blendshape03]):
             cmds.connectAttr(f"{self.settings_curve_ctl}.waveEnvelop", f"{blendshape}.{dupe_beziers[i]}", f=True)
+            cmds.connectAttr(f"{self.settings_curve_ctl}.waveEnvelop", f"{offset_beziers[i]}.{dupe_beziers_offset[i]}", f=True)
 
         for attr in ["amplitude", "wavelength", "offset", "dropoff"]:
             pma = cmds.createNode("plusMinusAverage", name=f"{self.side}_{wave_name}{attr}_PMA", ss=True)
@@ -210,8 +225,11 @@ class FingerModule():
             cmds.connectAttr(f"{self.fk_ctl_list[0]}.{attr}", f"{pma}.input1D[1]", f=True)
             cmds.connectAttr(f"{pma}.output1D", f"{wave[0]}.{attr}", f=True)
 
+        print(offset_skc)
+
         for i, bls in enumerate([blendshape01, blendshape02, blendshape03]):
             cmds.reorderDeformers(skc[i][0], bls, beziers[i])
+            cmds.reorderDeformers(offset_skc[i][0], offset_beziers[i], bezier_off[i])
 
 
 class Bendys(object):
@@ -243,8 +261,8 @@ class Bendys(object):
         
         cmds.parentConstraint(f"{self.lower_joint}", ik_handle, maintainOffset=True)
 
-        end_bezier, bendy_skin_cluster, bendy_joint = self.hooks()
-        return end_bezier, bendy_skin_cluster, bendy_joint
+        end_bezier, bendy_skin_cluster, bendy_joint, off_curve, bendy_offset_skin_cluster = self.hooks()
+        return end_bezier, bendy_skin_cluster, bendy_joint, off_curve, bendy_offset_skin_cluster
 
     def hooks(self):
         self.hook_joints = []
@@ -291,8 +309,8 @@ class Bendys(object):
         for joint in self.hook_joints:
             cmds.parent(joint, self.bendy_module)
 
-        end_bezier, bendy_skin_cluster, bendy_joint = self.bendy_setup()
-        return end_bezier, bendy_skin_cluster, bendy_joint
+        end_bezier, bendy_skin_cluster, bendy_joint, off_curve, bendy_offset_skin_cluster= self.bendy_setup()
+        return end_bezier, bendy_skin_cluster, bendy_joint, off_curve, bendy_offset_skin_cluster
 
     def bendy_setup(self):
         bendyCurve = cmds.curve(p=(cmds.xform(self.upper_joint, query=True, worldSpace=True, translation=True),cmds.xform(self.lower_joint, query=True, worldSpace=True, translation=True)) , d=1, n=f"{self.side}_{self.part}Bendy_CRV")
@@ -300,6 +318,8 @@ class Bendys(object):
         cmds.select(bendyCurve)
 
         bezier = cmds.nurbsCurveToBezier()[0]
+        cmds.delete(bezier, ch=True)
+
 
         cmds.select(f"{bendyCurve}.cv[6]", f"{bendyCurve}.cv[0]")
         cmds.bezierAnchorPreset(p=2)
@@ -317,10 +337,24 @@ class Bendys(object):
         cmds.select(f"{off_curve[0]}.cv[3]")
         cmds.bezierAnchorPreset(p=1)
         
+        rotation = cmds.xform(self.upper_joint, query=True, worldSpace=True, rotation=True)
+
+
+        if self.side == "L" and rotation[1] < 0:
+            cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
+        else:
+            cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
+
+        if self.side == "R" and rotation[0] < 0:
+            cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
+        # else:
+        #     cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
+
+
         off_curve[1] = cmds.rename(off_curve[1], f"{self.side}_{self.part}Bendy_OFC")
         cmds.setAttr(f"{off_curve[1]}.useGivenNormal", 1)
-        cmds.setAttr(f"{off_curve[1]}.normal", 0,0,1)
-        cmds.setAttr(f"{off_curve[1]}.distance", 50)
+        cmds.setAttr(f"{off_curve[1]}.subdivisionDensity", 0)
+        cmds.setAttr(f"{off_curve[1]}.distance", 20)
         
         cmds.connectAttr(f"{bezier}.worldSpace[0]", f"{off_curve[1]}.inputCurve", f=True)
         cmds.delete(bendyDupe)
@@ -397,22 +431,13 @@ class Bendys(object):
 
         for i, joint in enumerate(bendy_joint):
             if i != 4:
-                # aim = cmds.aimConstraint(bendy_joint[i+1], joint, aimVector=aimVector, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
-                # cmds.delete(aim)
-                # cmds.makeIdentity(joint, apply=True)
                 cmds.aimConstraint(bendy_joint[i+1], joint, aimVector=aimVector, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
             else:
-                # aim = cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
-                # cmds.delete(aim)
-                # cmds.makeIdentity(joint, apply=True)
                 cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
 
         cmds.parent(bendyCurve, self.bendy_module)
         cmds.parent(off_curve[0], self.bendy_module)
         cmds.parent(bendy_helper_transform, self.bendy_module)
-
-        # if cmds.getAttr(f"{bendy_joint[1]}.rotateX") < 0 and self.side == "L":
-        #     cmds.setAttr(f"{off_curve[1]}.normal", 0,0,-1)
 
         bezier_parent = cmds.listRelatives(bezier, parent=True, fullPath=True)
         bezier_shape = cmds.rename(bezier, f"{self.side}_{self.part}BendyBezierShape_CRV")
@@ -420,6 +445,6 @@ class Bendys(object):
 
 
 
-        return end_bezier, bendy_skin_cluster, bendy_joint
+        return end_bezier, bendy_skin_cluster, bendy_joint, off_curve[0], bendy_offset_skin_cluster
 
                             

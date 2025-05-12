@@ -504,6 +504,12 @@ class LegModule():
         bendy.lower_twists_setup()
         bendy = Bendys(self.side, self.blend_chain[2], self.blend_chain[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn)
         bendy.lower_twists_setup()
+
+        cmds.select(clear=True)
+        ankle_joint = cmds.joint(name=f"{self.side}_ankle_JNT")
+        cmds.connectAttr(f"{self.blend_chain[3]}.worldMatrix[0]", f"{ankle_joint}.offsetParentMatrix")
+        cmds.parent(ankle_joint, self.skinning_trn)
+
         
 
 
@@ -703,12 +709,12 @@ class Bendys(object):
             cmds.parent(blendy_up_trn[i], bendy_up_module)
         
         if self.side == "L":
-            upvector = (0, 1, 0)
+            upvector = (0, 0, -1)
             aimVector = (1,0,0)
             reverseAim = (-1,0,0)
 
         elif self.side == "R":
-            upvector = (0, 1, 0)
+            upvector = (0, 0, 1)
             aimVector = (-1,0,0)
             reverseAim = (1,0,0)
 
@@ -723,6 +729,8 @@ class Bendys(object):
                 cmds.delete(aim)
                 cmds.makeIdentity(joint, apply=True, r=1)
                 cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
+
+
 
         cmds.parent(bendyCurve, self.bendy_module)
         cmds.parent(off_curve[0], self.bendy_module)
