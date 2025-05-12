@@ -125,20 +125,25 @@ class NeckModule:
     def spike_call(self, side, spike_joint):
         
         name = spike_joint.split("_")[1]
-        self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, all_descendents=True, filePath=self.guides_path)
+        self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, allParents=True, filePath=self.guides_path)
         match_jnt = self.spike_joints[0]
         self.spike_joints.remove(self.spike_joints[0])
+        print(self.spike_joints)
 
         self.spike_transform = cmds.createNode("transform", n=f"{side}_{name}Module_GRP", p=self.module_trn)
 
         # Get the positions of the end joints
         end_jnts = []
         end_jnts_pos = []
-        for jnt in self.spike_joints:
-            if jnt.endsWith("End_JNT"):
-                end_jnts_pos.append(cmds.xform(jnt, q=True, ws=True, t=True))
-                end_jnts.append(jnt)
-                self.spike_joints.remove(jnt)
+        for i, jnts in enumerate(self.spike_joints):
+            jnt = cmds.listRelatives(jnts, c=True)
+            end_jnts_pos.append(cmds.xform(jnt, q=True, ws=True, t=True))
+            end_jnts.append(jnt)
+
+        
+        
+        print(end_jnts_pos)
+        print(end_jnts)
 
         # Create a curve from the end joint positions
         curve = cmds.curve(d=1, p=end_jnts_pos, n=f"{side}_{name}_CRV")
