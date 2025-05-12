@@ -23,8 +23,6 @@ class LegModule():
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "foot_ctl.json") 
 
-        basic_structure.create_basic_structure(asset_name = "Varyndor")
-
         data_exporter = data_export.DataExport()
 
         self.modules_grp = data_exporter.get_data("basic_structure", "modules_GRP")

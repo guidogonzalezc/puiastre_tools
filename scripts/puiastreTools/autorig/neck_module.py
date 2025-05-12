@@ -27,7 +27,7 @@ class NeckModule:
         self.import_guides()
         self.controllers()
         self.ik_setup()
-        self.spike()
+        # self.spike()
 
     def lock_attrs(self, ctl, attrs):
         
@@ -125,7 +125,7 @@ class NeckModule:
     def spike_call(self, side, spike_joint):
         
         name = spike_joint.split("_")[1]
-        self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, allParents=True, filePath=self.guides_path)
+        self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, all_descendents=True, filePath=self.guides_path)
         match_jnt = self.spike_joints[0]
         self.spike_joints.remove(self.spike_joints[0])
         print(self.spike_joints)

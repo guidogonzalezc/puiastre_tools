@@ -1,0 +1,37 @@
+from puiastreTools.autorig import finger_module
+from puiastreTools.autorig import leg_module
+from puiastreTools.autorig import neck_module
+from puiastreTools.autorig import wing_arm_module
+from puiastreTools.utils import basic_structure
+import maya.cmds as cmds
+from importlib import reload
+
+reload(leg_module)
+reload(wing_arm_module)
+reload(neck_module)
+reload(finger_module)
+
+def make():   
+    basic_structure.create_basic_structure(asset_name = "Varyndor")
+    
+    fingermodule = finger_module.FingerModule()
+
+    wingmodule = wing_arm_module.WingArmModule()
+
+    module = neck_module.NeckModule()
+    leg_Module = leg_module.LegModule()
+    for side in ["L", "R"]:
+        leg_Module.make(side = side)
+        fingermodule.make(side = side)
+        wingmodule.make(side = side)
+
+    for joint in cmds.ls(type="joint"):
+        cmds.setAttr(f"{joint}.radius", 100)
+        
+    module.make()
+
+    cmds.parent("L_fingerControllers_GRP", "L_wingArmWrist_CTL")
+    cmds.parent("R_fingerControllers_GRP", "R_wingArmWrist_CTL")
+
+
+
