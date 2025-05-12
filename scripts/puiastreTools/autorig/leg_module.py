@@ -2,6 +2,7 @@
 Leg module for dragon rigging system
 """
 import maya.cmds as cmds
+import maya.api.OpenMaya as om
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import basic_structure
@@ -20,7 +21,7 @@ class LegModule():
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
+        self.curves_path = os.path.join(self.relative_path, "curves", "foot_ctl.json") 
 
         basic_structure.create_basic_structure(asset_name = "Varyndor")
 
@@ -183,7 +184,19 @@ class LegModule():
 
             if data[2]:
                 if name == self.ik_chain[1]:
-                    cmds.move(0, 0, 150, ik_grp[0], r=True, ws=True)
+                    arm_pos = om.MVector(cmds.xform(self.ik_chain[0], q=True, rp=True, ws=True))
+                    elbow_pos = om.MVector(cmds.xform(self.ik_chain[1], q=True, rp=True, ws=True))
+                    wrist_pos = om.MVector(cmds.xform(self.ik_chain[2], q=True, rp=True, ws=True))
+
+                    arm_to_wrist = wrist_pos - arm_pos
+                    arm_to_wrist_scaled = arm_to_wrist / 2
+                    mid_point = arm_pos + arm_to_wrist_scaled
+                    mid_point_to_elbow_vec = elbow_pos - mid_point
+                    mid_point_to_elbow_vec_scaled = mid_point_to_elbow_vec * 2
+                    mid_point_to_elbow_point = mid_point + mid_point_to_elbow_vec_scaled
+
+                    cmds.xform(ik_grp[0], translation=mid_point_to_elbow_point)
+
                     cmds.poleVectorConstraint(ik_ctl, data[2])    
                 else:
                     for child_constraints in data[2]:

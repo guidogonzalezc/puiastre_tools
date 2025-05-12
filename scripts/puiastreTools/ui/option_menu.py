@@ -25,7 +25,7 @@ def leg_module(*args):
     reload(leg_module)
     module = leg_module.LegModule()
     module.make(side = "L")
-    module.make(side = "R")
+    # module.make(side = "R")
 
 def finger_module(*args):
     from puiastreTools.autorig import finger_module
