@@ -128,29 +128,28 @@ class NeckModule:
         self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, all_descendents=True, filePath=self.guides_path)
         match_jnt = self.spike_joints[0]
         self.spike_joints.remove(self.spike_joints[0])
-        print(self.spike_joints)
 
         self.spike_transform = cmds.createNode("transform", n=f"{side}_{name}Module_GRP", p=self.module_trn)
+        cmds.parent(match_jnt, self.spike_transform)
 
         # Get the positions of the end joints
         end_jnts = []
         end_jnts_pos = []
-        for i, jnts in enumerate(self.spike_joints):
-            jnt = cmds.listRelatives(jnts, c=True)
-            end_jnts_pos.append(cmds.xform(jnt, q=True, ws=True, t=True))
-            end_jnts.append(jnt)
 
-        
-        
-        print(end_jnts_pos)
-        print(end_jnts)
+        for i, jnts in enumerate(self.spike_joints):
+            if i <= 17:
+                jnt = cmds.listRelatives(jnts, c=True)
+                end_jnts_pos.append(cmds.xform(jnt, q=True, ws=True, t=True))
+                end_jnts.append(jnt)
+                self.spike_joints.remove(jnt[0])
+                cmds.setAttr(f"{jnt[0]}.radius", 5)
 
         # Create a curve from the end joint positions
         curve = cmds.curve(d=1, p=end_jnts_pos, n=f"{side}_{name}_CRV")
         cmds.parent(curve, self.spike_transform)
 
         # Create a locator for each point on the curve
-        locator_transform = cmds.createNode("transform", n=f"{side}_{name}LOC_GRP", p=self.spike_transform)
+        locator_transform = cmds.createNode("transform", n=f"{side}_{name}Locators_GRP", p=self.spike_transform)
         locators = []
         for i in range(len(end_jnts)):
             loc = cmds.spaceLocator(n=f"{side}_{name}0{i}_LOC")[0]
@@ -161,23 +160,24 @@ class NeckModule:
         # Create a single chain solver for each joint
         hdls_transform = cmds.createNode("transform", n=f"{side}_{name}Handles_GRP", p=self.spike_transform)
         for i, jnt in enumerate(self.spike_joints):
-            ik_hdl = cmds.ikHandle(sj=jnt, ee=end_jnts[i], sol="ikSCsolver", n=f"{side}_{name}0{i}Ik_HDL")
+            ik_hdl = cmds.ikHandle(sj=jnt, ee=end_jnts[i][0], sol="ikSCsolver", n=f"{side}_{name}0{i}Ik_HDL")
             cmds.parent(ik_hdl[0], hdls_transform)
             cmds.pointConstraint(locators[i], ik_hdl[0], mo=True)
+            cmds.setAttr(f"{jnt}.radius", 5)
 
         # Add a Sine handle to the curve
-        sine_hdl = cmds.nonLinear(curve, type="sine", n=f"{side}_{name}Sine_HDL")
+        sine_hdl = cmds.nonLinear(curve, type="sine", n=f"{side}_{name}Sine_")
 
         # Create a controller for the curve and the sine handle
         ctl, grp = curve_tool.controller_creator(f"{side}_{name}", ["GRP"])
         cmds.matchTransform(grp, match_jnt, pos=True, rot=True, scl=False)
         self.lock_attrs(ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
-        cmds.addAttr(ctl, ln="Amplitude", type="float", dv=0, keyable=True)
-        cmds.addAttr(ctl, ln="Wave", type="float", dv=0, keyable=True)
-        cmds.addAttr(ctl, ln="Offset", type="float", dv=0, keyable=True)
-        cmds.addAttr(ctl, ln="Dropoff", type="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Amplitude", at="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Wave", at="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Offset", at="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Dropoff", at="float", dv=0, keyable=True)
         cmds.connectAttr(f"{ctl}.Amplitude", f"{sine_hdl[0]}.amplitude")
-        cmds.connectAttr(f"{ctl}.Wave", f"{sine_hdl[0]}.wave")
+        cmds.connectAttr(f"{ctl}.Wave", f"{sine_hdl[0]}.wavelength")
         cmds.connectAttr(f"{ctl}.Offset", f"{sine_hdl[0]}.offset")
         cmds.connectAttr(f"{ctl}.Dropoff", f"{sine_hdl[0]}.dropoff")
         cmds.parent(grp, self.controllers_trn)
