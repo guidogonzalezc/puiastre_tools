@@ -27,6 +27,7 @@ class NeckModule:
         self.import_guides()
         self.controllers()
         self.ik_setup()
+        self.spike()
 
     def lock_attrs(self, ctl, attrs):
         
@@ -37,6 +38,13 @@ class NeckModule:
 
         self.neck_chain = guides_manager.guide_import(joint_name=f"{self.side}_neck00_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.neck_chain[0], self.module_trn)
+
+    def spike(self):
+
+        for side in ["L", "R"]:
+            self.spike_call(side, f"{side}_upperSpike_JNT")
+            self.spike_call(side, f"{side}_lateralSpike_JNT")
+
 
     def controllers(self):
 
@@ -69,18 +77,6 @@ class NeckModule:
         cmds.parent(self.ik_spring_hdl[0], self.module_trn)
         self.ik_curve = self.ik_spring_hdl[2]
         self.ik_curve = cmds.rename(self.ik_curve, f"{self.side}_neckIkCurve_CRV")
-
-        # self.neck_offset = cmds.createNode("transform", n=f"{self.side}_neckOffset_GRP", p=self.neck_ctl)
-        # self.neck_trn = cmds.spaceLocator(n=f"{self.side}_neck_LOC")[0]
-        # cmds.parent(self.neck_trn, self.neck_offset)
-        # cmds.matchTransform(self.neck_trn, self.neck_chain[0], pos=True, rot=True, scl=False)
-        # cmds.move(0, 130, 0, self.neck_offset, r=True)
-
-        # self.head_offset = cmds.createNode("transform", n=f"{self.side}_headNeckEndOffset_GRP", p=self.head_ctl)
-        # self.head_trn = cmds.spaceLocator(n=f"{self.side}_head_LOC")[0]
-        # cmds.parent(self.head_trn, self.head_offset)
-        # cmds.matchTransform(self.head_trn, self.neck_chain[-1], pos=True, rot=True, scl=False)
-        # cmds.move(0, 100, 0, self.head_offset, r=True)
 
         self.neck_start_jnt_offset = cmds.createNode("transform", n=f"{self.side}_neckStart_OFFSET", p=self.module_trn)
         self.neck_start_jnt = cmds.createNode("joint", n=f"{self.side}_neckStart_JNT", p=self.neck_start_jnt_offset)
@@ -126,25 +122,77 @@ class NeckModule:
         self.upper_jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_upperJaw_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.upper_jaw_jnts[0], self.head_jnt)
 
-    def spike(self):
+    def spike_call(self, side, spike_joint):
+        
+        name = spike_joint.split("_")[1]
+        self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, allParents=True, filePath=self.guides_path)
+        match_jnt = self.spike_joints[0]
+        self.spike_joints.remove(self.spike_joints[0])
+        print(self.spike_joints)
 
-        self.upper_spike_joints = guides_manager.guide_import(joint_name=f"{self.side}_upperSpike_JNT", all_descendents=True, filePath=self.guides_path)
+        self.spike_transform = cmds.createNode("transform", n=f"{side}_{name}Module_GRP", p=self.module_trn)
 
-        self.upper_spike_ends_joints = []
-        self.upper_spike_ends_joints_pos = []
+        # Get the positions of the end joints
+        end_jnts = []
+        end_jnts_pos = []
+        for i, jnts in enumerate(self.spike_joints):
+            jnt = cmds.listRelatives(jnts, c=True)
+            end_jnts_pos.append(cmds.xform(jnt, q=True, ws=True, t=True))
+            end_jnts.append(jnt)
 
-        for i, end in enumerate(self.upper_spike_joints):
+        
+        
+        print(end_jnts_pos)
+        print(end_jnts)
 
-            side = end.split("_")[0]
-            end = cmds.rename(end, f"{side}_upperSpike0{i}_JNT")
+        # Create a curve from the end joint positions
+        curve = cmds.curve(d=1, p=end_jnts_pos, n=f"{side}_{name}_CRV")
+        cmds.parent(curve, self.spike_transform)
 
-            child_jnt = cmds.listRelatives(end, c=True)[0]
-            child_jnt_pos = cmds.xform(child_jnt, q=True, ws=True, t=True)
-            cmds.ikHandle(sj=end, ee=child_jnt, sol="ikSCsolver", n=f"{side}_upperSpike0{i}IkSpline_HDL", createCurve=True, ns=3)
-            self.upper_spike_ends_joints.append(child_jnt)
-            self.upper_spike_ends_joints_pos.append(child_jnt_pos)
+        # Create a locator for each point on the curve
+        locator_transform = cmds.createNode("transform", n=f"{side}_{name}LOC_GRP", p=self.spike_transform)
+        locators = []
+        for i in range(len(end_jnts)):
+            loc = cmds.spaceLocator(n=f"{side}_{name}0{i}_LOC")[0]
+            cmds.connectAttr(f"{curve}.editPoints[{i}]", f"{loc}.translate")
+            cmds.parent(loc, locator_transform)
+            locators.append(loc)
+
+        # Create a single chain solver for each joint
+        hdls_transform = cmds.createNode("transform", n=f"{side}_{name}Handles_GRP", p=self.spike_transform)
+        for i, jnt in enumerate(self.spike_joints):
+            ik_hdl = cmds.ikHandle(sj=jnt, ee=end_jnts[i], sol="ikSCsolver", n=f"{side}_{name}0{i}Ik_HDL")
+            cmds.parent(ik_hdl[0], hdls_transform)
+            cmds.pointConstraint(locators[i], ik_hdl[0], mo=True)
+
+        # Add a Sine handle to the curve
+        sine_hdl = cmds.nonLinear(curve, type="sine", n=f"{side}_{name}Sine_HDL")
+
+        # Create a controller for the curve and the sine handle
+        ctl, grp = curve_tool.controller_creator(f"{side}_{name}", ["GRP"])
+        cmds.matchTransform(grp, match_jnt, pos=True, rot=True, scl=False)
+        self.lock_attrs(ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
+        cmds.addAttr(ctl, ln="Amplitude", type="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Wave", type="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Offset", type="float", dv=0, keyable=True)
+        cmds.addAttr(ctl, ln="Dropoff", type="float", dv=0, keyable=True)
+        cmds.connectAttr(f"{ctl}.Amplitude", f"{sine_hdl[0]}.amplitude")
+        cmds.connectAttr(f"{ctl}.Wave", f"{sine_hdl[0]}.wave")
+        cmds.connectAttr(f"{ctl}.Offset", f"{sine_hdl[0]}.offset")
+        cmds.connectAttr(f"{ctl}.Dropoff", f"{sine_hdl[0]}.dropoff")
+        cmds.parent(grp, self.controllers_trn)
+
             
-        self.upper_spike_curve = cmds.curve(d=3, p=self.upper_spike_ends_joints_pos, n=f"{self.side}_upperSpikeCurve_CRV")
+
+        
+
+            
+
+
+
+       
+               
+        
 
 
         
