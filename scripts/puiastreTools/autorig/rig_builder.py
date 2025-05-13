@@ -22,16 +22,21 @@ def make():
     leg_Module = leg_module.LegModule()
     for side in ["L", "R"]:
         leg_Module.make(side = side)
-        fingermodule.make(side = side)
         wingmodule.make(side = side)
+        fingermodule.make(side = side)
 
-    for joint in cmds.ls(type="joint"):
-        cmds.setAttr(f"{joint}.radius", 100)
         
     module.make()
 
-    cmds.parent("L_fingerControllers_GRP", "L_wingArmWrist_CTL")
-    cmds.parent("R_fingerControllers_GRP", "R_wingArmWrist_CTL")
+    
+    for joint in cmds.ls(type="joint"):
+        cmds.setAttr(f"{joint}.radius", 100)
 
+    cmds.inViewMessage(
+    amg='Completed <hl>DRAGON RIG</hl> build.',
+    pos='midCenter',
+    fade=True,
+    alpha=0.8)
 
+    
 

@@ -7,6 +7,8 @@ import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 # from puiastreTools.tools.curve_tool import controller_creator
+from puiastreTools.utils import data_export
+import maya.api.OpenMaya as om
 import maya.mel as mel
 import math
 import os
@@ -22,14 +24,21 @@ class WingArmModule(object):
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "arm_guides_v001.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "arm_ctl.json")
+
+        self.data_exporter = data_export.DataExport()
+
+        self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
+        self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
+        self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
+
     
     def make(self, side):
         
         self.side = side
 
-        self.module_trn = cmds.createNode("transform", n=f"{self.side}_wingArmModule_GRP")
-        self.controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmControllers_GRP")
-        self.skinning_trn = cmds.createNode("transform", n=f"{self.side}_wingArmSkinningJoints_GRP", p=self.module_trn)
+        self.module_trn = cmds.createNode("transform", n=f"{self.side}_wingArmModule_GRP", p=self.modules_grp)
+        self.controllers_trn = cmds.createNode("transform", n=f"{self.side}_wingArmControllers_GRP", p=self.masterWalk_ctl)
+        self.skinning_trn = cmds.createNode("transform", n=f"{self.side}_wingArmSkinningJoints_GRP", p=self.skel_grp)
 
         self.duplicate_guides()
         self.pair_blends()
@@ -40,6 +49,9 @@ class WingArmModule(object):
         self.bendy_curves_setup()
         self.hooks()
         self.twists_setup()
+
+        data_exporter = data_export.DataExport()
+        data_exporter.append_data(f"{self.side}_armModule", {"skinning_joints": self.skinning_joints,})
         
 
 
@@ -363,11 +375,22 @@ class WingArmModule(object):
     def pole_vector_setup(self):
         # --- Pole Vector ---
         self.pole_vector_ctl, self.pole_vector_grp = curve_tool.controller_creator(f"{self.side}_wingArmPV", suffixes=["GRP", "OFF"])
-        cmds.matchTransform(self.pole_vector_grp[0], self.ik_chain[1], pos=True, rot=True)
-        if self.side == "L":    
-            cmds.move(0, 0, -1000, self.pole_vector_grp[0], r=True, os=True)
-        else:
-            cmds.move(0, 0, 1000, self.pole_vector_grp[0], r=True, os=True)
+
+        arm_pos = om.MVector(cmds.xform(self.ik_chain[0], q=True, rp=True, ws=True))
+        elbow_pos = om.MVector(cmds.xform(self.ik_chain[1], q=True, rp=True, ws=True))
+        wrist_pos = om.MVector(cmds.xform(self.ik_chain[2], q=True, rp=True, ws=True))
+
+        arm_to_wrist = wrist_pos - arm_pos
+        arm_to_wrist_scaled = arm_to_wrist / 2
+        mid_point = arm_pos + arm_to_wrist_scaled
+        mid_point_to_elbow_vec = elbow_pos - mid_point
+        mid_point_to_elbow_vec_scaled = mid_point_to_elbow_vec * 2
+        mid_point_to_elbow_point = mid_point + mid_point_to_elbow_vec_scaled
+
+        cmds.xform(self.pole_vector_grp[0], translation=mid_point_to_elbow_point)
+
+
+
         cmds.parent(self.pole_vector_grp[0], self.arm_ik_controllers_trn)
         cmds.poleVectorConstraint(self.pole_vector_ctl, self.main_ik_handle)
         self.lock_attrs(self.pole_vector_ctl, ["sx", "sy", "sz", "v"])
@@ -567,7 +590,7 @@ class WingArmModule(object):
         self.upper_bendy_off_curve_shape = cmds.rename(cmds.listRelatives(self.upper_bendy_off_curve[0], s=True), f"{self.side}_wingArmUpperBendyBezierOffset_CRVShape")
         cmds.delete(self.duplicate_bendy_crv)
 
-        upper_bendy_off_skin_cluster = cmds.skinCluster(self.upper_bendy_joints[0], self.bendy_joints[0], self.upper_bendy_joints[2], self.upper_bendy_off_curve, tsb=True, n=f"{self.side}_wingArmUpperBendyBezierOffset_SKIN")
+        upper_bendy_off_skin_cluster = cmds.skinCluster(self.upper_bendy_joints[0], self.bendy_joints[0], self.upper_bendy_joints[2], self.upper_bendy_off_curve[0], tsb=True, n=f"{self.side}_wingArmUpperBendyBezierOffset_SKIN")
 
         cmds.skinPercent(upper_bendy_off_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[0]", transformValue=[self.upper_bendy_joints[0], 1])
         cmds.skinPercent(upper_bendy_off_skin_cluster[0], f"{self.upper_bendy_off_curve[0]}.cv[2]", transformValue=[self.bendy_joints[0], 1])
@@ -588,7 +611,7 @@ class WingArmModule(object):
         self.lower_bendy_off_curve_shape = cmds.rename(cmds.listRelatives(self.lower_bendy_off_curve[0], s=True), f"{self.side}_wingArmLowerBendyBezierOffset_CRVShape")
         cmds.delete(self.duplicate_bendy_crv)
 
-        lower_bendy_off_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.bendy_joints[1], self.lower_bendy_joints[2], self.lower_bendy_off_curve, tsb=True, n=f"{self.side}_wingArmLowerBendyBezierOffset_SKIN")
+        lower_bendy_off_skin_cluster = cmds.skinCluster(self.lower_bendy_joints[0], self.bendy_joints[1], self.lower_bendy_joints[2], self.lower_bendy_off_curve[0], tsb=True, n=f"{self.side}_wingArmLowerBendyBezierOffset_SKIN")
 
         cmds.skinPercent(lower_bendy_off_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[0]", transformValue=[self.lower_bendy_joints[0], 1])
         cmds.skinPercent(lower_bendy_off_skin_cluster[0], f"{self.lower_bendy_off_curve[0]}.cv[2]", transformValue=[self.bendy_joints[1], 1])
@@ -683,7 +706,12 @@ class WingArmModule(object):
                     else:
                         aim = cmds.aimConstraint(self.lower_aim_helper, joint, aim=[1, 0, 0], u=[0, 1, 0], wut="object", wuo=self.aim_transforms[i], mo=False)
 
-            
+        cmds.select(clear=True)
+        end_joint = cmds.joint(name=f"{self.side}_wristSkinning_JNT")
+        cmds.connectAttr(f"{self.blend_chain[-1]}.worldMatrix[0]", f"{end_joint}.offsetParentMatrix")
+        cmds.parent(end_joint, self.skinning_trn)
+        self.skinning_joints.append(end_joint)
+
         for joint in self.skinning_joints:
             cmds.setAttr(f"{joint}.radius", 30)
             

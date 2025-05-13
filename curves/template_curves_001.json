@@ -90,7 +90,7 @@
             }
         ]
     },
-    "|C_neckControllers_GRP|C_head_GRP|C_head_OFF|C_head_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_OFF|C_head_CTL": {
         "transform": {
             "name": "C_head_CTL",
             "overrideEnabled": false,
@@ -272,7 +272,7 @@
             }
         ]
     },
-    "|C_neckControllers_GRP|C_neckMid_GRP|C_neckMid_OFF|C_neckMid_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMid_GRP|C_neckMid_OFF|C_neckMid_CTL": {
         "transform": {
             "name": "C_neckMid_CTL",
             "overrideEnabled": false,
@@ -363,7 +363,7 @@
             }
         ]
     },
-    "|C_neckControllers_GRP|C_neck_GRP|C_neck_OFF|C_neck_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neck_GRP|C_neck_OFF|C_neck_CTL": {
         "transform": {
             "name": "C_neck_CTL",
             "overrideEnabled": false,
@@ -701,6 +701,734 @@
                             135.93982521698223,
                             98.70878831281395,
                             -2.4837408948898347e-13
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_LegSettings_GRP|L_LegSettings_CTL": {
+        "transform": {
+            "name": "L_LegSettings_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_LegSettings_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legFkControllers_GRP|L_hipFk_GRP|L_hipFk_OFF|L_hipFk_CTL|L_frontKneeFk_GRP|L_frontKneeFk_OFF|L_frontKneeFk_CTL|L_backKneeFk_GRP|L_backKneeFk_OFF|L_backKneeFk_CTL|L_ankleFk_GRP|L_ankleFk_OFF|L_ankleFk_CTL": {
+        "transform": {
+            "name": "L_ankleFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_ankleFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_backKneeBlendBendy_GRP|L_backKneeBlendBendy_CTL": {
+        "transform": {
+            "name": "L_backKneeBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_backKneeBlendBendy_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legFkControllers_GRP|L_hipFk_GRP|L_hipFk_OFF|L_hipFk_CTL|L_frontKneeFk_GRP|L_frontKneeFk_OFF|L_frontKneeFk_CTL|L_backKneeFk_GRP|L_backKneeFk_OFF|L_backKneeFk_CTL": {
+        "transform": {
+            "name": "L_backKneeFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_backKneeFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legFkControllers_GRP|L_hipFk_GRP|L_hipFk_OFF|L_hipFk_CTL|L_frontKneeFk_GRP|L_frontKneeFk_OFF|L_frontKneeFk_CTL|L_backKneeFk_GRP|L_backKneeFk_OFF|L_backKneeFk_CTL|L_ankleFk_GRP|L_ankleFk_OFF|L_ankleFk_CTL|L_ballFk_GRP|L_ballFk_OFF|L_ballFk_CTL": {
+        "transform": {
+            "name": "L_ballFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_ballFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_toeIk_GRP|L_toeIk_SDK|L_toeIk_CTL|L_ballIk_GRP|L_ballIk_SDK|L_ballIk_CTL": {
+        "transform": {
+            "name": "L_ballIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_ballIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL": {
+        "transform": {
+            "name": "L_bankIn_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_bankIn_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL": {
+        "transform": {
+            "name": "L_bankOut_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_bankOut_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
                         ]
                     ],
                     "form": "periodic",
@@ -4000,6 +4728,1531 @@
             }
         ]
     },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_frontKneeBlendBendy_GRP|L_frontKneeBlendBendy_CTL": {
+        "transform": {
+            "name": "L_frontKneeBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_frontKneeBlendBendy_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legFkControllers_GRP|L_hipFk_GRP|L_hipFk_OFF|L_hipFk_CTL|L_frontKneeFk_GRP|L_frontKneeFk_OFF|L_frontKneeFk_CTL": {
+        "transform": {
+            "name": "L_frontKneeFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_frontKneeFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL": {
+        "transform": {
+            "name": "L_heel_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_heel_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_hipBlendBendy_GRP|L_hipBlendBendy_CTL": {
+        "transform": {
+            "name": "L_hipBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_hipBlendBendy_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legFkControllers_GRP|L_hipFk_GRP|L_hipFk_OFF|L_hipFk_CTL": {
+        "transform": {
+            "name": "L_hipFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_hipFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|L_lateralSpike_GRP|L_lateralSpike_CTL": {
+        "transform": {
+            "name": "L_lateralSpike_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_lateralSpike_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 20,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0,
+                        16.0,
+                        17.0,
+                        18.0,
+                        19.0,
+                        20.0,
+                        21.0,
+                        22.0,
+                        23.0,
+                        24.0,
+                        25.0,
+                        26.0,
+                        27.0,
+                        28.0,
+                        29.0,
+                        30.0,
+                        31.0,
+                        32.0,
+                        33.0,
+                        34.0,
+                        35.0,
+                        36.0,
+                        37.0,
+                        38.0,
+                        39.0,
+                        40.0,
+                        41.0,
+                        42.0,
+                        43.0,
+                        44.0,
+                        45.0,
+                        46.0,
+                        47.0,
+                        48.0,
+                        49.0,
+                        50.0,
+                        51.0,
+                        52.0,
+                        53.0,
+                        54.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL": {
+        "transform": {
+            "name": "L_legIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_legIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legPv_GRP|L_legPv_SDK|L_legPv_CTL": {
+        "transform": {
+            "name": "L_legPv_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_legPv_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_rootIk_GRP|L_rootIk_SDK|L_rootIk_CTL": {
+        "transform": {
+            "name": "L_rootIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_rootIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legControllers_GRP|L_legIkControllers_GRP|L_legIk_GRP|L_legIk_SDK|L_legIk_CTL|L_bankIn_GRP|L_bankIn_SDK|L_bankIn_CTL|L_bankOut_GRP|L_bankOut_SDK|L_bankOut_CTL|L_heel_GRP|L_heel_SDK|L_heel_CTL|L_toeIk_GRP|L_toeIk_SDK|L_toeIk_CTL": {
+        "transform": {
+            "name": "L_toeIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_toeIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|L_upperSpike_GRP|L_upperSpike_CTL": {
+        "transform": {
+            "name": "L_upperSpike_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_upperSpike_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 20,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0,
+                        16.0,
+                        17.0,
+                        18.0,
+                        19.0,
+                        20.0,
+                        21.0,
+                        22.0,
+                        23.0,
+                        24.0,
+                        25.0,
+                        26.0,
+                        27.0,
+                        28.0,
+                        29.0,
+                        30.0,
+                        31.0,
+                        32.0,
+                        33.0,
+                        34.0,
+                        35.0,
+                        36.0,
+                        37.0,
+                        38.0,
+                        39.0,
+                        40.0,
+                        41.0,
+                        42.0,
+                        43.0,
+                        44.0,
+                        45.0,
+                        46.0,
+                        47.0,
+                        48.0,
+                        49.0,
+                        50.0,
+                        51.0,
+                        52.0,
+                        53.0,
+                        54.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL": {
         "transform": {
             "name": "L_wingArm1Fk_CTL",
@@ -4737,6 +6990,734 @@
         "shapes": [
             {
                 "name": "R_ArmSettings_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_LegSettings_GRP|R_LegSettings_CTL": {
+        "transform": {
+            "name": "R_LegSettings_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_LegSettings_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legFkControllers_GRP|R_hipFk_GRP|R_hipFk_OFF|R_hipFk_CTL|R_frontKneeFk_GRP|R_frontKneeFk_OFF|R_frontKneeFk_CTL|R_backKneeFk_GRP|R_backKneeFk_OFF|R_backKneeFk_CTL|R_ankleFk_GRP|R_ankleFk_OFF|R_ankleFk_CTL": {
+        "transform": {
+            "name": "R_ankleFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_ankleFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_backKneeBlendBendy_GRP|R_backKneeBlendBendy_CTL": {
+        "transform": {
+            "name": "R_backKneeBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_backKneeBlendBendy_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legFkControllers_GRP|R_hipFk_GRP|R_hipFk_OFF|R_hipFk_CTL|R_frontKneeFk_GRP|R_frontKneeFk_OFF|R_frontKneeFk_CTL|R_backKneeFk_GRP|R_backKneeFk_OFF|R_backKneeFk_CTL": {
+        "transform": {
+            "name": "R_backKneeFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_backKneeFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legFkControllers_GRP|R_hipFk_GRP|R_hipFk_OFF|R_hipFk_CTL|R_frontKneeFk_GRP|R_frontKneeFk_OFF|R_frontKneeFk_CTL|R_backKneeFk_GRP|R_backKneeFk_OFF|R_backKneeFk_CTL|R_ankleFk_GRP|R_ankleFk_OFF|R_ankleFk_CTL|R_ballFk_GRP|R_ballFk_OFF|R_ballFk_CTL": {
+        "transform": {
+            "name": "R_ballFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_ballFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legIk_GRP|R_legIk_SDK|R_legIk_CTL|R_bankIn_GRP|R_bankIn_SDK|R_bankIn_CTL|R_bankOut_GRP|R_bankOut_SDK|R_bankOut_CTL|R_heel_GRP|R_heel_SDK|R_heel_CTL|R_toeIk_GRP|R_toeIk_SDK|R_toeIk_CTL|R_ballIk_GRP|R_ballIk_SDK|R_ballIk_CTL": {
+        "transform": {
+            "name": "R_ballIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_ballIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legIk_GRP|R_legIk_SDK|R_legIk_CTL|R_bankIn_GRP|R_bankIn_SDK|R_bankIn_CTL": {
+        "transform": {
+            "name": "R_bankIn_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_bankIn_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legIk_GRP|R_legIk_SDK|R_legIk_CTL|R_bankIn_GRP|R_bankIn_SDK|R_bankIn_CTL|R_bankOut_GRP|R_bankOut_SDK|R_bankOut_CTL": {
+        "transform": {
+            "name": "R_bankOut_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_bankOut_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -8091,6 +11072,1531 @@
                         10.0
                     ],
                     "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_frontKneeBlendBendy_GRP|R_frontKneeBlendBendy_CTL": {
+        "transform": {
+            "name": "R_frontKneeBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_frontKneeBlendBendy_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legFkControllers_GRP|R_hipFk_GRP|R_hipFk_OFF|R_hipFk_CTL|R_frontKneeFk_GRP|R_frontKneeFk_OFF|R_frontKneeFk_CTL": {
+        "transform": {
+            "name": "R_frontKneeFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_frontKneeFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legIk_GRP|R_legIk_SDK|R_legIk_CTL|R_bankIn_GRP|R_bankIn_SDK|R_bankIn_CTL|R_bankOut_GRP|R_bankOut_SDK|R_bankOut_CTL|R_heel_GRP|R_heel_SDK|R_heel_CTL": {
+        "transform": {
+            "name": "R_heel_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_heel_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_hipBlendBendy_GRP|R_hipBlendBendy_CTL": {
+        "transform": {
+            "name": "R_hipBlendBendy_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_hipBlendBendy_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legFkControllers_GRP|R_hipFk_GRP|R_hipFk_OFF|R_hipFk_CTL": {
+        "transform": {
+            "name": "R_hipFk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_hipFk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|R_lateralSpike_GRP|R_lateralSpike_CTL": {
+        "transform": {
+            "name": "R_lateralSpike_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_lateralSpike_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 20,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0,
+                        16.0,
+                        17.0,
+                        18.0,
+                        19.0,
+                        20.0,
+                        21.0,
+                        22.0,
+                        23.0,
+                        24.0,
+                        25.0,
+                        26.0,
+                        27.0,
+                        28.0,
+                        29.0,
+                        30.0,
+                        31.0,
+                        32.0,
+                        33.0,
+                        34.0,
+                        35.0,
+                        36.0,
+                        37.0,
+                        38.0,
+                        39.0,
+                        40.0,
+                        41.0,
+                        42.0,
+                        43.0,
+                        44.0,
+                        45.0,
+                        46.0,
+                        47.0,
+                        48.0,
+                        49.0,
+                        50.0,
+                        51.0,
+                        52.0,
+                        53.0,
+                        54.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legIk_GRP|R_legIk_SDK|R_legIk_CTL": {
+        "transform": {
+            "name": "R_legIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_legIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legPv_GRP|R_legPv_SDK|R_legPv_CTL": {
+        "transform": {
+            "name": "R_legPv_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_legPv_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_rootIk_GRP|R_rootIk_SDK|R_rootIk_CTL": {
+        "transform": {
+            "name": "R_rootIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_rootIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legControllers_GRP|R_legIkControllers_GRP|R_legIk_GRP|R_legIk_SDK|R_legIk_CTL|R_bankIn_GRP|R_bankIn_SDK|R_bankIn_CTL|R_bankOut_GRP|R_bankOut_SDK|R_bankOut_CTL|R_heel_GRP|R_heel_SDK|R_heel_CTL|R_toeIk_GRP|R_toeIk_SDK|R_toeIk_CTL": {
+        "transform": {
+            "name": "R_toeIk_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_toeIk_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|R_upperSpike_GRP|R_upperSpike_CTL": {
+        "transform": {
+            "name": "R_upperSpike_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_upperSpike_CTLShape",
+                "overrideEnabled": true,
+                "overrideColor": 20,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            -4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            19.39649978597043,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ],
+                        [
+                            -4.849124946492608,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            1.6346999893336005
+                        ],
+                        [
+                            -19.39649978597043,
+                            4.849124946492608,
+                            -1.6346999893336005
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0,
+                        16.0,
+                        17.0,
+                        18.0,
+                        19.0,
+                        20.0,
+                        21.0,
+                        22.0,
+                        23.0,
+                        24.0,
+                        25.0,
+                        26.0,
+                        27.0,
+                        28.0,
+                        29.0,
+                        30.0,
+                        31.0,
+                        32.0,
+                        33.0,
+                        34.0,
+                        35.0,
+                        36.0,
+                        37.0,
+                        38.0,
+                        39.0,
+                        40.0,
+                        41.0,
+                        42.0,
+                        43.0,
+                        44.0,
+                        45.0,
+                        46.0,
+                        47.0,
+                        48.0,
+                        49.0,
+                        50.0,
+                        51.0,
+                        52.0,
+                        53.0,
+                        54.0
+                    ],
+                    "degree": 1
                 }
             }
         ]

@@ -34,6 +34,9 @@ class FingerModule():
 
         self.side = side    
 
+        self.arm_skinning_joints = self.data_exporter.get_data(f"{self.side}_armModule", "skinning_joints")
+
+
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_fingerModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_fingerControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_fingerSkinning_GRP", ss=True, p=self.skel_grp)
@@ -44,6 +47,7 @@ class FingerModule():
         cmds.xform(self.settings_curve_grp[0], ws=True, translation=position)
         cmds.xform(self.settings_curve_grp[0], ws=True, rotation=rotation)
         cmds.parent(self.settings_curve_grp[0], self.controllers_trn)
+        cmds.parentConstraint(self.arm_skinning_joints[-1], self.settings_curve_grp[0], mo=True)
         self.lock_attr(self.settings_curve_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
 
         cmds.addAttr(self.settings_curve_ctl, shortName="handSep", niceName="Hand_____", enumName="_____",attributeType="enum", keyable=True)
@@ -224,8 +228,6 @@ class FingerModule():
             cmds.connectAttr(f"{self.fk_ctl_list[0]}.{attr}", f"{pma}.input1D[1]", f=True)
             cmds.connectAttr(f"{pma}.output1D", f"{wave[0]}.{attr}", f=True)
 
-        print(offset_skc)
-
         for i, bls in enumerate([blendshape01, blendshape02, blendshape03]):
             cmds.reorderDeformers(skc[i][0], bls, beziers[i])
             cmds.reorderDeformers(offset_skc[i][0], offset_beziers[i], bezier_off[i])
@@ -396,19 +398,28 @@ class Bendys(object):
         bendy_joint = []
         blendy_up_trn = []
 
-        for i, value in enumerate([0, 0.25, 0.5, 0.75, 0.95]):
+        if not "01" in self.part:
+            values = [0, 0.25, 0.5, 0.75, 0.95]
+            number = 3
+        else:
+            values = [0.1, 0.25, 0.5, 0.75, 0.95]
+            number = 3
+
+
+
+        for i, value in enumerate(values):
             bendy_joint.append(cmds.joint(name=f"{self.side}_{self.part}Bendy0{i}_JNT", rad=20))
             mpa = cmds.createNode("motionPath", name=f"{self.side}_{self.part}Bendy0{i}_MPA", ss=True)
             cmds.setAttr(f"{mpa}.fractionMode", True)
             cmds.setAttr(f"{mpa}.uValue", value)
             cmds.connectAttr(f"{bendyCurve}.worldSpace[0]", f"{mpa}.geometryPath")
             cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_joint[i]}.translate")
-            if i == 3:
+            if i == number:
                 cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_helper_transform}.translate")
             cmds.parent(bendy_joint[i], self.skinning_trn)
         
         bendy_up_module = cmds.createNode("transform", name=f"{self.side}_{self.part}BendyUpModule_GRP", p=self.bendy_module, ss=True) 
-        for i, value in enumerate([0, 0.25, 0.5, 0.75, 0.95]):
+        for i, value in enumerate(values):
             blendy_up_trn.append(cmds.createNode("transform", name=f"{self.side}_{self.part}BendyUp0{i}_TRN"))
             cmds.setAttr(f"{blendy_up_trn[i]}.inheritsTransform", 0)
             mpa = cmds.createNode("motionPath", name=f"{self.side}_{self.part}BendyUp0{i}_MPA", ss=True)
@@ -429,7 +440,7 @@ class Bendys(object):
             reverseAim = (1,0,0)
 
         for i, joint in enumerate(bendy_joint):
-            if i != 4:
+            if i != number+1:
                 cmds.aimConstraint(bendy_joint[i+1], joint, aimVector=aimVector, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
             else:
                 cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
