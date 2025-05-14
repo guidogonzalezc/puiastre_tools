@@ -419,7 +419,9 @@ class WingArmModule(object):
         self.bendy_module_trn = cmds.createNode("transform", n=f"{self.side}_wingArmBendyModule_GRP", p=self.module_trn)
 
         self.upper_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmUpperBendyModule_GRP", p=self.bendy_module_trn)
+        cmds.parent(self.upper_non_roll_jnt, self.upper_non_roll_ik_handle, self.upper_roll_ik_handle, self.upper_bendy_module)
         self.lower_bendy_module = cmds.createNode("transform", n=f"{self.side}_wingArmLowerBendyModule_GRP", p=self.bendy_module_trn)
+        cmds.parent(self.lower_roll_offset, self.lower_roll_handle, self.lower_bendy_module)
 
         #--- Bendy Curves ---  
         self.upper_segment_crv = cmds.curve(n=f"{self.side}_wingArmUpperSegment_CRV", d=1, p=[
