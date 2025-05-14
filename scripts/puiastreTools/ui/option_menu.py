@@ -114,5 +114,10 @@ def puiastre_ui():
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
+    cmds.menuItem(label="   Skin Cluster", subMenu=True, tearOff=True, boldFont=True)
+    cmds.menuItem(label="   Export Skin Data")
+    cmds.menuItem(label="   Import Skin Data")
+    cmds.setParent("..", menu=True)
+    cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.setParent("..", menu=True)

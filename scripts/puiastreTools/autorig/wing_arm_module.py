@@ -173,8 +173,8 @@ class WingArmModule(object):
 
         self.upper_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRoll_JNT")
         self.upper_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRollEnd_JNT")
-        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[1], pos=True, rot=True)
-        cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[2], pos=True, rot=True)
+        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[0], pos=True, rot=True)
+        cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[1], pos=True, rot=True)
         cmds.parent(self.upper_roll_jnt, self.upper_non_roll_jnt)
     
         
@@ -184,7 +184,7 @@ class WingArmModule(object):
             ee=self.upper_non_roll_end_jnt,
             sol="ikSCsolver",
         )[0]
-        cmds.pointConstraint(self.blend_chain[1], self.upper_non_roll_ik_handle, mo=True)
+        cmds.parentConstraint(self.blend_chain[1], self.upper_non_roll_ik_handle, mo=False)
 
         self.upper_roll_ik_handle = cmds.ikHandle(
             n=f"{self.side}_wingArmUpperRoll_HDL",
@@ -192,7 +192,7 @@ class WingArmModule(object):
             ee=self.upper_roll_end_jnt,
             sol="ikSCsolver",
         )[0]
-        cmds.parentConstraint(self.blend_chain[2], self.upper_roll_ik_handle, mo=True)
+        cmds.parentConstraint(self.blend_chain[1], self.upper_roll_ik_handle, mo=False)
 
         # --- Lower Roll Ik Handle ---
         
@@ -371,6 +371,7 @@ class WingArmModule(object):
 
 
         cmds.parentConstraint(self.soft_trn, self.main_ik_handle, mo=True)
+        cmds.parentConstraint(self.root_ctl, self.ik_chain[0], mo=False)
 
     def pole_vector_setup(self):
         # --- Pole Vector ---
@@ -454,7 +455,7 @@ class WingArmModule(object):
     def hooks(self):
 
         # --- Hooks ---
-        hook_parameters = [0.001, 0.5, 0.999]
+        hook_parameters = [0, 0.5, 1]
         self.upper_bendy_joints = []
         self.lower_bendy_joints = []
         self.bendy_joints = []
@@ -713,9 +714,7 @@ class WingArmModule(object):
         cmds.connectAttr(f"{self.blend_chain[-1]}.worldMatrix[0]", f"{end_joint}.offsetParentMatrix")
         cmds.parent(end_joint, self.skinning_trn)
         self.skinning_joints.append(end_joint)
-
-        for joint in self.skinning_joints:
-            cmds.setAttr(f"{joint}.radius", 30)
+        
             
             
 

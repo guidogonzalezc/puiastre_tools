@@ -633,7 +633,280 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_ArmSettings_GRP|L_ArmSettings_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_spineControllers_GRP|C_spine01_GRP|C_spine01_CTL": {
+        "transform": {
+            "name": "C_spine01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_spine01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            2.0001827153416194e-14,
+                            326.6546267436825,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            -326.6546267436825,
+                            1.6933833533276984e-14,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            -230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            -3.2721217370243466e-14,
+                            -326.65462674368257,
+                            0.0
+                        ],
+                        [
+                            230.97970167641847,
+                            -230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            326.6546267436825,
+                            -4.454577611453009e-14,
+                            0.0
+                        ],
+                        [
+                            230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            2.0001827153416194e-14,
+                            326.6546267436825,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_spineControllers_GRP|C_spine03_GRP|C_spine03_CTL": {
+        "transform": {
+            "name": "C_spine03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_spine03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            2.0001827153416194e-14,
+                            326.6546267436825,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            -326.6546267436825,
+                            1.6933833533276984e-14,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            -230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            -3.2721217370243466e-14,
+                            -326.65462674368257,
+                            0.0
+                        ],
+                        [
+                            230.97970167641847,
+                            -230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            326.6546267436825,
+                            -4.454577611453009e-14,
+                            0.0
+                        ],
+                        [
+                            230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            2.0001827153416194e-14,
+                            326.6546267436825,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_spineControllers_GRP|C_spineTan_SPC|C_spineTan_CTL": {
+        "transform": {
+            "name": "C_spineTan_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 21
+        },
+        "shapes": [
+            {
+                "name": "C_spineTan_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            2.0001827153416194e-14,
+                            326.6546267436825,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            -326.6546267436825,
+                            1.6933833533276984e-14,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            -230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            -3.2721217370243466e-14,
+                            -326.65462674368257,
+                            0.0
+                        ],
+                        [
+                            230.97970167641847,
+                            -230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            326.6546267436825,
+                            -4.454577611453009e-14,
+                            0.0
+                        ],
+                        [
+                            230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ],
+                        [
+                            2.0001827153416194e-14,
+                            326.6546267436825,
+                            0.0
+                        ],
+                        [
+                            -230.97970167641847,
+                            230.97970167641847,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_ArmSettings_GRP|L_ArmSettings_CTL": {
         "transform": {
             "name": "L_ArmSettings_CTL",
             "overrideEnabled": true,
@@ -6253,7 +6526,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL": {
         "transform": {
             "name": "L_wingArm1Fk_CTL",
             "overrideEnabled": true,
@@ -6344,7 +6617,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL|L_wingArm2Fk_GRP|L_wingArm2Fk_OFF|L_wingArm2Fk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL|L_wingArm2Fk_GRP|L_wingArm2Fk_OFF|L_wingArm2Fk_CTL": {
         "transform": {
             "name": "L_wingArm2Fk_CTL",
             "overrideEnabled": false,
@@ -6435,7 +6708,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL|L_wingArm2Fk_GRP|L_wingArm2Fk_OFF|L_wingArm2Fk_CTL|L_wingArm3Fk_GRP|L_wingArm3Fk_OFF|L_wingArm3Fk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmFKControllers_GRP|L_wingArm1Fk_GRP|L_wingArm1Fk_OFF|L_wingArm1Fk_CTL|L_wingArm2Fk_GRP|L_wingArm2Fk_OFF|L_wingArm2Fk_CTL|L_wingArm3Fk_GRP|L_wingArm3Fk_OFF|L_wingArm3Fk_CTL": {
         "transform": {
             "name": "L_wingArm3Fk_CTL",
             "overrideEnabled": false,
@@ -6526,7 +6799,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmLowerBendyMid_GRP|L_wingArmLowerBendyMid_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmLowerBendyMid_GRP|L_wingArmLowerBendyMid_CTL": {
         "transform": {
             "name": "L_wingArmLowerBendyMid_CTL",
             "overrideEnabled": true,
@@ -6617,7 +6890,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmIKControllers_GRP|L_wingArmPV_GRP|L_wingArmPV_OFF|L_wingArmPV_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmIKControllers_GRP|L_wingArmPV_GRP|L_wingArmPV_OFF|L_wingArmPV_CTL": {
         "transform": {
             "name": "L_wingArmPV_CTL",
             "overrideEnabled": false,
@@ -6708,7 +6981,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmIKControllers_GRP|L_wingArmRoot_GRP|L_wingArmRoot_OFF|L_wingArmRoot_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmIKControllers_GRP|L_wingArmRoot_GRP|L_wingArmRoot_OFF|L_wingArmRoot_CTL": {
         "transform": {
             "name": "L_wingArmRoot_CTL",
             "overrideEnabled": true,
@@ -6799,7 +7072,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmUpperBendyMid_GRP|L_wingArmUpperBendyMid_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmUpperBendyMid_GRP|L_wingArmUpperBendyMid_CTL": {
         "transform": {
             "name": "L_wingArmUpperBendyMid_CTL",
             "overrideEnabled": true,
@@ -6890,7 +7163,7 @@
             }
         ]
     },
-    "|L_wingArmControllers_GRP|L_wingArmIKControllers_GRP|L_wingArmWrist_GRP|L_wingArmWrist_OFF|L_wingArmWrist_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_wingArmControllers_GRP|L_wingArmIKControllers_GRP|L_wingArmWrist_GRP|L_wingArmWrist_OFF|L_wingArmWrist_CTL": {
         "transform": {
             "name": "L_wingArmWrist_CTL",
             "overrideEnabled": true,
@@ -6981,7 +7254,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_ArmSettings_GRP|R_ArmSettings_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_ArmSettings_GRP|R_ArmSettings_CTL": {
         "transform": {
             "name": "R_ArmSettings_CTL",
             "overrideEnabled": false,
@@ -12601,7 +12874,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmFKControllers_GRP|R_wingArm1Fk_GRP|R_wingArm1Fk_OFF|R_wingArm1Fk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmFKControllers_GRP|R_wingArm1Fk_GRP|R_wingArm1Fk_OFF|R_wingArm1Fk_CTL": {
         "transform": {
             "name": "R_wingArm1Fk_CTL",
             "overrideEnabled": false,
@@ -12692,7 +12965,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmFKControllers_GRP|R_wingArm1Fk_GRP|R_wingArm1Fk_OFF|R_wingArm1Fk_CTL|R_wingArm2Fk_GRP|R_wingArm2Fk_OFF|R_wingArm2Fk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmFKControllers_GRP|R_wingArm1Fk_GRP|R_wingArm1Fk_OFF|R_wingArm1Fk_CTL|R_wingArm2Fk_GRP|R_wingArm2Fk_OFF|R_wingArm2Fk_CTL": {
         "transform": {
             "name": "R_wingArm2Fk_CTL",
             "overrideEnabled": false,
@@ -12783,7 +13056,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmFKControllers_GRP|R_wingArm1Fk_GRP|R_wingArm1Fk_OFF|R_wingArm1Fk_CTL|R_wingArm2Fk_GRP|R_wingArm2Fk_OFF|R_wingArm2Fk_CTL|R_wingArm3Fk_GRP|R_wingArm3Fk_OFF|R_wingArm3Fk_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmFKControllers_GRP|R_wingArm1Fk_GRP|R_wingArm1Fk_OFF|R_wingArm1Fk_CTL|R_wingArm2Fk_GRP|R_wingArm2Fk_OFF|R_wingArm2Fk_CTL|R_wingArm3Fk_GRP|R_wingArm3Fk_OFF|R_wingArm3Fk_CTL": {
         "transform": {
             "name": "R_wingArm3Fk_CTL",
             "overrideEnabled": false,
@@ -12874,7 +13147,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmLowerBendyMid_GRP|R_wingArmLowerBendyMid_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmLowerBendyMid_GRP|R_wingArmLowerBendyMid_CTL": {
         "transform": {
             "name": "R_wingArmLowerBendyMid_CTL",
             "overrideEnabled": false,
@@ -12965,7 +13238,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmIKControllers_GRP|R_wingArmPV_GRP|R_wingArmPV_OFF|R_wingArmPV_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmIKControllers_GRP|R_wingArmPV_GRP|R_wingArmPV_OFF|R_wingArmPV_CTL": {
         "transform": {
             "name": "R_wingArmPV_CTL",
             "overrideEnabled": false,
@@ -13056,7 +13329,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmIKControllers_GRP|R_wingArmRoot_GRP|R_wingArmRoot_OFF|R_wingArmRoot_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmIKControllers_GRP|R_wingArmRoot_GRP|R_wingArmRoot_OFF|R_wingArmRoot_CTL": {
         "transform": {
             "name": "R_wingArmRoot_CTL",
             "overrideEnabled": false,
@@ -13147,7 +13420,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmUpperBendyMid_GRP|R_wingArmUpperBendyMid_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmUpperBendyMid_GRP|R_wingArmUpperBendyMid_CTL": {
         "transform": {
             "name": "R_wingArmUpperBendyMid_CTL",
             "overrideEnabled": false,
@@ -13238,7 +13511,7 @@
             }
         ]
     },
-    "|R_wingArmControllers_GRP|R_wingArmIKControllers_GRP|R_wingArmWrist_GRP|R_wingArmWrist_OFF|R_wingArmWrist_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_wingArmControllers_GRP|R_wingArmIKControllers_GRP|R_wingArmWrist_GRP|R_wingArmWrist_OFF|R_wingArmWrist_CTL": {
         "transform": {
             "name": "R_wingArmWrist_CTL",
             "overrideEnabled": false,
