@@ -89,3 +89,12 @@ class SpineModule():
         rev = cmds.createNode("reverse", n="C_spineRev")
         cmds.connectAttr(f"{self.spine_ctl[1]}.spineFollow", f"{rev}.inputX")
         cmds.connectAttr(f"{rev}.outputX", f"{parent}.{self.spine_ctl[2]}W1")
+
+        chest_fix = cmds.joint(name = "C_localChest_JNT")
+        cmds.delete(cmds.parentConstraint(self.spine_ctl[-1], chest_fix, mo=False))
+        cmds.parent(chest_fix, self.spine_module)
+        localChest_ctl, localChest_grp = curve_tool.controller_creator(f"C_localChest", suffixes = ["GRP", "SPC"])
+        cmds.pointConstraint(self.blend_chain[-1], localChest_grp[0], mo=False)
+        cmds.orientConstraint(spine_ctl[2], localChest_grp[0], mo=False)
+        cmds.parentConstraint(localChest_ctl, chest_fix, mo=True)
+        cmds.parent(localChest_grp[0], controls_tranforms[5])
