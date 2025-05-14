@@ -153,7 +153,7 @@ class FingerModule():
 
 
     def call_bendys(self):
-        normals = (1, 0, 0)
+        normals = (0, 1, 0)
         bendy = Bendys(self.side, self.blend_chain[0], self.blend_chain[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
         end_bezier01, bendy_skin_cluster01, bendy_joint01, off_curve01, bendy_offset_skin_cluster01 = bendy.lower_twists_setup()
         bendy = Bendys(self.side, self.blend_chain[1], self.blend_chain[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
@@ -190,12 +190,16 @@ class FingerModule():
         wave = cmds.nonLinear(dupe_beziers, dupe_beziers_offset, type="wave", name=f"{self.side}_{wave_name}Wave_HDL")
         cmds.parent(wave[1], dupe_parent)
         cmds.matchTransform(wave[1], self.blend_chain[1])
+        # joint_rotation = cmds.xform(self.blend_chain[1], query=True, worldSpace=True, rotation=True)
+        # cmds.rotate(joint_rotation[1], 0, joint_rotation[0] , wave[1], worldSpace=True, absolute=True)
 
         positions = [cmds.xform(jnt, q=True, ws=True, t=True) for jnt in self.blend_chain]
 
         mid_pos = [sum(coords) / len(coords) for coords in zip(*positions)]
 
         cmds.xform(wave[1], ws=True, t=mid_pos)
+        # cmds.rotate(90,0, 90, wave[1], ws=True, absolute=True)
+
 
         relative_x_positions = [cmds.getAttr(jnt + ".tx") for jnt in self.blend_chain[1:]]
         if len(relative_x_positions) == 3:
@@ -226,6 +230,7 @@ class FingerModule():
             pma = cmds.createNode("plusMinusAverage", name=f"{self.side}_{wave_name}{attr}_PMA", ss=True)
             cmds.connectAttr(f"{self.settings_curve_ctl}.global{attr.capitalize()}", f"{pma}.input1D[0]", f=True)
             cmds.connectAttr(f"{self.fk_ctl_list[0]}.{attr}", f"{pma}.input1D[1]", f=True)
+            
             cmds.connectAttr(f"{pma}.output1D", f"{wave[0]}.{attr}", f=True)
 
         for i, bls in enumerate([blendshape01, blendshape02, blendshape03]):
@@ -341,13 +346,13 @@ class Bendys(object):
         rotation = cmds.xform(self.upper_joint, query=True, worldSpace=True, rotation=True)
 
 
-        if self.side == "L" and rotation[1] < 0:
-            cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
-        else:
-            cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
+        # if self.side == "L" and rotation[1] < 0:
+        #     cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
+        # else:
+        #     cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
 
-        if self.side == "R" and rotation[0] < 0:
-            cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
+        # if self.side == "R" and rotation[0] < 0:
+        #     cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
         # else:
         #     cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
 
@@ -430,12 +435,12 @@ class Bendys(object):
             cmds.parent(blendy_up_trn[i], bendy_up_module)
         
         if self.side == "L":
-            upvector = (0, 1, 0)
+            upvector = (0, 0, -1)
             aimVector = (1,0,0)
             reverseAim = (-1,0,0)
 
         elif self.side == "R":
-            upvector = (0, 1, 0)
+            upvector = (0, 0, -1)
             aimVector = (-1,0,0)
             reverseAim = (1,0,0)
 
