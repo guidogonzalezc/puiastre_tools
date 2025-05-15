@@ -50,7 +50,19 @@ class NeckModule:
 
     def spike(self):
 
-        for side in ["L", "R"]:
+
+        self.attrs_ctl, self.attrs_grp = curve_tool.controller_creator(f"{self.side}_spikeAttributes", ["GRP"])
+        cmds.matchTransform(self.attrs_grp, self.neck_ctl_mid, pos=True, rot=True, scl=False)
+        cmds.move(0, 250, 0, self.attrs_grp, r=True)
+        cmds.parent(self.attrs_grp, self.neck_ctl_mid)
+        self.lock_attrs(self.attrs_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
+        cmds.addAttr(self.attrs_ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
+        cmds.addAttr(self.attrs_ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
+        cmds.addAttr(self.attrs_ctl, ln="Wave", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.attrs_ctl, ln="Dropoff", at="float", dv=0, keyable=True)
+
+
+        for  side in ["L", "R"]:
             self.spike_call(side, f"{side}_upperSpike_JNT")
             self.spike_call(side, f"{side}_lateralSpike_JNT")
 
@@ -190,20 +202,21 @@ class NeckModule:
 
 
         # Create a controller for the curve and the sine handle
-        ctl, grp = curve_tool.controller_creator(f"{side}_{name}", ["GRP"])
-        cmds.matchTransform(grp, match_jnt, pos=True, rot=True, scl=False)
-        self.lock_attrs(ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
-        cmds.addAttr(ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
-        cmds.addAttr(ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
-        cmds.addAttr(ctl, ln="Wave", at="float", dv=0, keyable=True)
-        cmds.addAttr(ctl, ln="Offset", at="float", dv=0, keyable=True)
-        cmds.addAttr(ctl, ln="Dropoff", at="float", dv=0, keyable=True)
-        cmds.connectAttr(f"{ctl}.Envelope", f"{local_bs[0]}.{curve_duplicate}")
-        cmds.connectAttr(f"{ctl}.Amplitude", f"{sine_hdl[0]}.amplitude")
-        cmds.connectAttr(f"{ctl}.Wave", f"{sine_hdl[0]}.wavelength")
-        cmds.connectAttr(f"{ctl}.Offset", f"{sine_hdl[0]}.offset")
-        cmds.connectAttr(f"{ctl}.Dropoff", f"{sine_hdl[0]}.dropoff")
-        cmds.parent(grp, self.controllers_trn)
+        self.ctl, self.grp = curve_tool.controller_creator(f"{side}_{name}", ["GRP"])
+        cmds.parent(self.grp, self.neck_ctl_mid)
+        cmds.matchTransform(self.grp, match_jnt, pos=True, rot=True, scl=False)
+        self.lock_attrs(self.ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
+        cmds.addAttr(self.ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
+        cmds.addAttr(self.ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
+        cmds.addAttr(self.ctl, ln="Wave", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.ctl, ln="Offset", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.ctl, ln="Dropoff", at="float", dv=0, keyable=True)
+        cmds.connectAttr(f"{self.ctl}.Envelope", f"{local_bs[0]}.{curve_duplicate}")
+        cmds.connectAttr(f"{self.ctl}.Amplitude", f"{sine_hdl[0]}.amplitude")
+        cmds.connectAttr(f"{self.ctl}.Wave", f"{sine_hdl[0]}.wavelength")
+        cmds.connectAttr(f"{self.ctl}.Offset", f"{sine_hdl[0]}.offset")
+        cmds.connectAttr(f"{self.ctl}.Dropoff", f"{sine_hdl[0]}.dropoff")
+        
 
         self.spike_skinning_grp = cmds.createNode("transform", n=f"{side}_{name}Skinning_GRP", p=self.skinning_trn)
 
@@ -219,6 +232,7 @@ class NeckModule:
 
 
     def out_skinning_jnts(self):
+
         self.main_chain_skinning_grp = cmds.createNode("transform", n=f"{self.side}_neckSkinning_GRP", p=self.skinning_trn)
         for i, jnt in enumerate(self.neck_chain):
             cmds.select(clear=True)
