@@ -20,28 +20,43 @@ class TailModule(object):
 
         self.data_exporter = data_export.DataExport()
 
-        self.module_trn = self.data_exporter.get_data("basic_structure", "modules_GRP")
+        self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
     def make(self):
-
-        self.side = "C"
-
-        self.import_guides()
         
+        self.side = "C"
+        self.module_trn = cmds.createNode("transform", n=f"{self.side}_tailModule_GRP", p=self.modules_grp)
+        self.controllers_trn = cmds.createNode("transform", n=f"{self.side}_tailControllers_GRP", p=self.masterWalk_ctl)
+        self.skinning_trn = cmds.createNode("transform", n=f"{self.side}_tailSkinningJoints_GRP", p=self.skel_grp)
+        self.import_guides()
+
+        for i, jnt in enumerate(self.tail_chain):
+
+            start = jnt
+            end = self.tail_chain[i+1] if i+1 < len(self.tail_chain) else None
+            name = jnt.split("_")[1]
+
+            self.bendy_setup(start_joint=start, end_joint=end, name=name)
 
 
     def import_guides(self):
 
-        self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_neck00_JNT", all_descendents=True, filePath=self.guides_path)
+        self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.tail_chain[0], self.module_trn)
 
     def bendy_setup(self, start_joint, end_joint, name):
 
         bendy_module = cmds.createNode("transform", n=f"{self.side}_{name}BendyModule_GRP", ss=True, p=self.module_trn)
         skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skel_grp)
+        controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=self.masterWalk_ctl)
         
+        ctl, grp = curve_tool.controller_creator(f"{self.side}_{name}", suffixes=["GRP", "SDK", "OFF"])
+        cmds.matchTransform(grp[0], start_joint, pos=True, rot=True)
+        cmds.parent(grp[0], controllers)
+        cmds.parentConstraint(ctl, start_joint, mo=True)
+
         # Create the roll setup
         roll_joint_offset = cmds.createNode("transform", n=f"{self.side}_{name}Roll_TRN", ss=True, p=bendy_module)
         cmds.select(cl=True)
@@ -75,7 +90,7 @@ class TailModule(object):
             mpa = cmds.createNode("motionPath", n=f"{self.side}_{name}{hook}_MPA", ss=True)
 
             float_constant = cmds.createNode("floatConstant", n=f"{self.side}_{name}{hook}_FLC", ss=True)
-            cmds.setAttr(f"{float_constant}.value", hook_values[i])
+            cmds.setAttr(f"{float_constant}.inFloat", hook_values[i])
             cmds.setAttr(f"{mpa}.frontAxis", 0)
             cmds.setAttr(f"{mpa}.upAxis", 1)
             cmds.setAttr(f"{mpa}.worldUpType", 2)
@@ -162,7 +177,7 @@ class TailModule(object):
         cmds.setAttr(f"{bezier_off_curve[1]}.normal", 0, 0, 1, type="double3")
         cmds.parent(bezier_off_curve[0], bendy_module)
         self.upper_bendy_off_curve_shape = cmds.rename(cmds.listRelatives(bezier_off_curve[0], s=True), f"{self.side}_{name}BendyBezierOffset_CRVShape")
-        cmds.delete(duplicate_bezier_curve)
+        
 
         upper_bendy_off_skin_cluster = cmds.skinCluster(bendy_joints[0], bendy_joint, bendy_joints[2], bezier_off_curve[0], tsb=True, n=f"{self.side}_{name}BendyBezierOffset_SKIN")
 
