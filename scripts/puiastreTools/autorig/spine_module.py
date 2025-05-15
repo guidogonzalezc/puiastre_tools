@@ -119,7 +119,16 @@ class SpineModule():
         self.body_ctl, self.body_ctl_grp = curve_tool.controller_creator(f"C_body", suffixes = ["GRP"])
         cmds.matchTransform(self.body_ctl_grp[0], self.spine_grp[0][0])
 
+        cmds.parent(self.spine_grp[0][0], self.body_ctl) 
+
         self.lock_attr(self.body_ctl)
+        
+        movable_ctl = cmds.circle(n="C_movablePivot_CTL", ch=False, normal=(0,1,0))[0] # Create a controller for the movable pivot
+        cmds.matchTransform(movable_ctl, self.spine_grp[0][0]) # Match the transform to the guide
+        cmds.parent(movable_ctl, self.body_ctl) # Parent the locator to the transform
+
+        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.rotatePivot") # Connect the transform to the IK spline handle
+        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot") # Connect the transform to the IK spline handle
 
         dummy_body = cmds.createNode("transform", n="C_dummyBody_TRN", p=self.body_ctl) 
         cmds.parentConstraint(dummy_body, spine_hip_ctl_grp[0], mo=True) 
