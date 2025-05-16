@@ -218,9 +218,9 @@ class TailModule(object):
         # Create the aim setup
         for i, jnt in enumerate(twist_joints):
             if "04_JNT" not in jnt:
-                aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[0, 0, 1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
+                aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[1, 0, 0], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
             else:
-                aim = cmds.aimConstraint(aim_helper, jnt, aim=[0, 0, -1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
+                aim = cmds.aimConstraint(aim_helper, jnt, aim=[-1, 0, 0], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
             
 
             
