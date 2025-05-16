@@ -24,6 +24,11 @@ class TailModule(object):
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
+        self.ctls = []
+        self.grps = []
+        self.skinning_joints = []
+
+
     def make(self):
         
         self.side = "C"
@@ -39,6 +44,11 @@ class TailModule(object):
                 name = jnt.split("_")[1]
 
                 self.bendy_setup(start_joint=start, end_joint=end, name=name)
+                
+                if len(self.ctls) > 1:
+                    cmds.parent(self.grps[-1], self.ctls[-2])
+
+        self.wave()
 
 
     def import_guides(self):
@@ -46,13 +56,24 @@ class TailModule(object):
         self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.tail_chain[0], self.module_trn)
 
+    def lock_attrs(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
+
+        for attr in attrs:
+            cmds.setAttr(f"{ctl}.{attr}", l=True, k=False, cb=False)
+
+
     def bendy_setup(self, start_joint, end_joint, name):
 
+        
+        
         bendy_module = cmds.createNode("transform", n=f"{self.side}_{name}BendyModule_GRP", ss=True, p=self.module_trn)
         skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skel_grp)
         controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=self.controllers_trn)
         
         ctl, grp = curve_tool.controller_creator(f"{self.side}_{name}", suffixes=["GRP", "SDK", "OFF"])
+        self.lock_attrs(ctl)
+        self.ctls.append(ctl)
+        self.grps.append(grp[0])
         cmds.matchTransform(grp[0], start_joint, pos=True, rot=True)
         cmds.parent(grp[0], controllers)
         cmds.parentConstraint(ctl, start_joint, mo=True)
@@ -221,9 +242,44 @@ class TailModule(object):
                 aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[1, 0, 0], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
             else:
                 aim = cmds.aimConstraint(aim_helper, jnt, aim=[-1, 0, 0], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
-            
+        
+        
 
-            
+        for i, jnt in enumerate(twist_joints):
+            self.skinning_joints.append(jnt)
+
+    def wave(self):
+
+        points = []
+
+        for jnt in self.skinning_joints:
+            points.append(cmds.xform(jnt, q=True, ws=True, t=True))
+
+        wave_curve = cmds.curve(d=3, p=points, n=f"{self.side}_tailWave_CRV")
+        trn_grp = cmds.createNode("transform", n=f"{self.side}_tailWaveTransforms_GRP", ss=True, p=self.module_trn)
+        for i, jnt in enumerate(self.skinning_joints):
+            trn = cmds.createNode("transform", n=f"{self.side}_tailWave0{i}_TRN", ss=True, p=trn_grp)
+            cmds.connectAttr(f"{wave_curve}.editPoints[{i}]", f"{trn}.translate")
+            # cmds.pointConstraint(trn, jnt, mo=True)
+
+
+        wave_hdl = cmds.nonLinear(wave_curve, type="wave", name=f"{self.side}_tailWave")
+        cmds.parent(wave_hdl[1], self.module_trn)
+        cmds.rotate(0, 90, 0, wave_hdl[1], ws=True)
+
+        wave_ctl, wave_grp = curve_tool.controller_creator(f"{self.side}_tailWave", suffixes=["GRP"])
+        cmds.matchTransform(wave_grp, self.tail_chain[len(self.tail_chain)//2], pos=True, rot=True)
+        cmds.move(0, 200, 0, wave_grp, r=True)
+        self.lock_attrs(wave_ctl, attrs=["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
+        cmds.addAttr(wave_ctl, ln="Envelope", at="float", min=0, max=1, dv=0, k=True)
+        cmds.addAttr(wave_ctl, ln="Amplitude", at="float", min=0, dv=0, k=True)
+        cmds.addAttr(wave_ctl, ln="Wavelenght", at="float", min=0, dv=0, k=True)
+        cmds.addAttr(wave_ctl, ln="Offset", at="float", min=0, dv=0, k=True)
+        cmds.connectAttr(f"{wave_ctl}.Envelope", f"{wave_hdl[0]}.envelope")
+        cmds.connectAttr(f"{wave_ctl}.Amplitude", f"{wave_hdl[0]}.amplitude")
+        cmds.connectAttr(f"{wave_ctl}.Wavelenght", f"{wave_hdl[0]}.wavelength")
+        cmds.connectAttr(f"{wave_ctl}.Offset", f"{wave_hdl[0]}.offset")
+        cmds.parent(wave_grp, self.controllers_trn)
             
 
 
