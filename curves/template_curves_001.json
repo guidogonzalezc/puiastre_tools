@@ -16503,13 +16503,13 @@
         "transform": {
             "name": "L_wingArmWrist_CTL",
             "overrideEnabled": true,
-            "overrideColor": 0
+            "overrideColor": 6
         },
         "shapes": [
             {
                 "name": "L_wingArmWrist_CTLShape",
-                "overrideEnabled": true,
-                "overrideColor": 0,
+                "overrideEnabled": false,
+                "overrideColor": null,
                 "alwaysDrawOnTop": false,
                 "curve": {
                     "cvs": [
