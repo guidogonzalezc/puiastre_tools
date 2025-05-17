@@ -417,6 +417,7 @@ class SpineModule():
 
         ctls_sub_spine = []
         sub_spine_ctl_trn = cmds.createNode("transform", n="C_subSpineControllers_GRP", parent=self.masterWalk_ctl)
+        cmds.setAttr(f"{sub_spine_ctl_trn}.inheritsTransform", 0)
         cmds.connectAttr(f"{self.body_ctl}.attachedFKVis", f"{sub_spine_ctl_trn}.visibility")
         for i, joint in enumerate(main_spine_joint):
             

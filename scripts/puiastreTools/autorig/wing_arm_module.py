@@ -22,7 +22,7 @@ class WingArmModule(object):
     def __init__(self):
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "arm_guides_v001.guides")
+        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "arm_ctl.json")
 
         self.data_exporter = data_export.DataExport()

@@ -35,7 +35,7 @@ class NeckModule:
         self.import_guides()
         self.controllers()
         self.ik_setup()
-        self.spike()
+        # self.spike()
         self.out_skinning_jnts()
 
     def lock_attrs(self, ctl, attrs):

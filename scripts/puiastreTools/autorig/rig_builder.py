@@ -38,7 +38,7 @@ def make():
 
     
     for joint in cmds.ls(type="joint"):
-        cmds.setAttr(f"{joint}.radius", 50)
+        cmds.setAttr(f"{joint}.radius", 10)
 
     cmds.inViewMessage(
     amg='Completed <hl>DRAGON RIG</hl> build.',
