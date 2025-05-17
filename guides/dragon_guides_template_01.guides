@@ -12,6 +12,7 @@
                 82.07837622475675
             ],
             "preferredAngle": [
+<<<<<<< HEAD
                 0.0,
                 0.0,
                 0.0
@@ -657,6 +658,652 @@
             "worldRotation": [
                 0.0,
                 0.0,
+=======
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike00_JNT"
+        },
+        "R_upperSpike00_JNT": {
+            "worldPosition": [
+                -21.4212,
+                712.227,
+                1136.42
+            ],
+            "worldRotation": [
+                77.83243423354332,
+                40.191541091265485,
+                82.07837622475675
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd01_JNT": {
+            "worldPosition": [
+                -29.28550000000012,
+                759.0630000000002,
+                1063.58
+            ],
+            "worldRotation": [
+                78.17567092760319,
+                37.177795280076836,
+                82.78977700024593
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike01_JNT"
+        },
+        "R_upperSpike01_JNT": {
+            "worldPosition": [
+                -22.0158,
+                701.599,
+                1107.51
+            ],
+            "worldRotation": [
+                78.17567092760319,
+                37.177795280076836,
+                82.78977700024593
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd02_JNT": {
+            "worldPosition": [
+                -33.44449999999992,
+                776.3839999999984,
+                995.0739999999993
+            ],
+            "worldRotation": [
+                76.04755692021737,
+                37.031441019182914,
+                81.49009551107397
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike02_JNT"
+        },
+        "R_upperSpike02_JNT": {
+            "worldPosition": [
+                -23.1793,
+                707.779,
+                1047.41
+            ],
+            "worldRotation": [
+                76.04755692021737,
+                37.031441019182914,
+                81.49009551107397
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd03_JNT": {
+            "worldPosition": [
+                -31.87679999999966,
+                779.3780000000002,
+                930.2669999999994
+            ],
+            "worldRotation": [
+                76.34944979177095,
+                40.69963576276997,
+                81.00096561135682
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike03_JNT"
+        },
+        "R_upperSpike03_JNT": {
+            "worldPosition": [
+                -20.682899999999997,
+                708.695,
+                991.821
+            ],
+            "worldRotation": [
+                76.34944979177095,
+                40.69963576276997,
+                81.00096561135682
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd04_JNT": {
+            "worldPosition": [
+                -31.344199999999923,
+                774.3240000000003,
+                874.1379999999998
+            ],
+            "worldRotation": [
+                75.62736485647663,
+                38.07045874125583,
+                81.02094092086828
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike04_JNT"
+        },
+        "R_upperSpike04_JNT": {
+            "worldPosition": [
+                -20.238,
+                704.036,
+                929.875
+            ],
+            "worldRotation": [
+                75.62736485647663,
+                38.07045874125583,
+                81.02094092086828
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd05_JNT": {
+            "worldPosition": [
+                -31.735899999999923,
+                772.087,
+                837.6569999999994
+            ],
+            "worldRotation": [
+                77.41408558087497,
+                39.92049938673418,
+                81.84634155124809
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike05_JNT"
+        },
+        "R_upperSpike05_JNT": {
+            "worldPosition": [
+                -21.672999999999995,
+                701.853,
+                897.025
+            ],
+            "worldRotation": [
+                77.41408558087497,
+                39.92049938673418,
+                81.84634155124809
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd06_JNT": {
+            "worldPosition": [
+                -32.08440000000015,
+                771.7019999999999,
+                788.0240000000003
+            ],
+            "worldRotation": [
+                75.82264583362812,
+                40.761113236652726,
+                80.63417156126928
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike06_JNT"
+        },
+        "R_upperSpike06_JNT": {
+            "worldPosition": [
+                -20.4867,
+                701.385,
+                849.456
+            ],
+            "worldRotation": [
+                75.82264583362812,
+                40.761113236652726,
+                80.63417156126928
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd07_JNT": {
+            "worldPosition": [
+                -31.9028000000002,
+                768.5509999999998,
+                720.8770000000003
+            ],
+            "worldRotation": [
+                76.39730064877696,
+                42.32334801973756,
+                80.74637192740249
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike07_JNT"
+        },
+        "R_upperSpike07_JNT": {
+            "worldPosition": [
+                -20.539499999999997,
+                698.806,
+                785.23
+            ],
+            "worldRotation": [
+                76.39730064877696,
+                42.32334801973756,
+                80.74637192740249
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd08_JNT": {
+            "worldPosition": [
+                -31.472999999999985,
+                770.8620000000001,
+                649.419
+            ],
+            "worldRotation": [
+                76.63713172861029,
+                41.494276557202554,
+                81.05576603405379
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike08_JNT"
+        },
+        "R_upperSpike08_JNT": {
+            "worldPosition": [
+                -20.214199999999998,
+                699.326,
+                713.475
+            ],
+            "worldRotation": [
+                76.63713052119182,
+                41.49427655720256,
+                81.0557660340538
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd09_JNT": {
+            "worldPosition": [
+                -31.5251,
+                768.5640000000012,
+                588.1310000000003
+            ],
+            "worldRotation": [
+                76.47734432148283,
+                39.23501994179945,
+                81.35075509937165
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike09_JNT"
+        },
+        "R_upperSpike09_JNT": {
+            "worldPosition": [
+                -21.0908,
+                699.968,
+                644.79
+            ],
+            "worldRotation": [
+                76.47734432148283,
+                39.23501994179945,
+                81.35075509937165
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd10_JNT": {
+            "worldPosition": [
+                -33.307299999999984,
+                770.7730000000003,
+                526.9829999999998
+            ],
+            "worldRotation": [
+                70.8033317607979,
+                42.26246786830003,
+                76.8213313773095
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike10_JNT"
+        },
+        "R_upperSpike10_JNT": {
+            "worldPosition": [
+                -18.157900000000005,
+                706.075,
+                587.366
+            ],
+            "worldRotation": [
+                70.8033317607979,
+                42.26246786830003,
+                76.8213313773095
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd11_JNT": {
+            "worldPosition": [
+                -33.59100000000013,
+                775.9080000000001,
+                474.4409999999999
+            ],
+            "worldRotation": [
+                76.34479316927454,
+                34.26290299653674,
+                82.21162749177176
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike11_JNT"
+        },
+        "R_upperSpike11_JNT": {
+            "worldPosition": [
+                -25.36,
+                715.729,
+                515.817
+            ],
+            "worldRotation": [
+                76.34479316927454,
+                34.26290299653674,
+                82.21162749177176
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd12_JNT": {
+            "worldPosition": [
+                -33.645500000000034,
+                777.6679999999998,
+                434.5460000000001
+            ],
+            "worldRotation": [
+                75.79724629946162,
+                32.960682630780134,
+                82.15984445164213
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike12_JNT"
+        },
+        "R_upperSpike12_JNT": {
+            "worldPosition": [
+                -26.0378,
+                722.418,
+                470.71000000000004
+            ],
+            "worldRotation": [
+                75.79724629946162,
+                32.960682630780134,
+                82.15984445164213
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd13_JNT": {
+            "worldPosition": [
+                -32.89749999999994,
+                775.6260000000001,
+                392.4899999999994
+            ],
+            "worldRotation": [
+                78.87094865375204,
+                37.69823926230699,
+                83.1406163126844
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike13_JNT"
+        },
+        "R_upperSpike13_JNT": {
+            "worldPosition": [
+                -27.444,
+                730.292,
+                427.779
+            ],
+            "worldRotation": [
+                78.87094865375204,
+                37.69823926230699,
+                83.1406163126844
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd14_JNT": {
+            "worldPosition": [
+                -32.76209999999997,
+                771.7779999999999,
+                354.7999999999997
+            ],
+            "worldRotation": [
+                80.04583071134871,
+                40.554674363387285,
+                83.4903093353337
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike14_JNT"
+        },
+        "R_upperSpike14_JNT": {
+            "worldPosition": [
+                -28.106,
+                730.973,
+                389.94399999999996
+            ],
+            "worldRotation": [
+                80.04583071134871,
+                40.554674363387285,
+                83.4903093353337
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd15_JNT": {
+            "worldPosition": [
+                -29.659799999999965,
+                762.0250000000001,
+                328.06899999999956
+            ],
+            "worldRotation": [
+                81.03482131174594,
+                37.16902541197945,
+                84.55532852608148
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike15_JNT"
+        },
+        "R_upperSpike15_JNT": {
+            "worldPosition": [
+                -26.5463,
+                729.36,
+                352.948
+            ],
+            "worldRotation": [
+                81.03482131174594,
+                37.16902541197945,
+                84.55532852608148
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd16_JNT": {
+            "worldPosition": [
+                -29.833299999999895,
+                745.3560000000003,
+                292.7689999999992
+            ],
+            "worldRotation": [
+                78.36137627125412,
+                48.965979398017744,
+                81.16858664446953
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike16_JNT"
+        },
+        "R_upperSpike16_JNT": {
+            "worldPosition": [
+                -26.5618,
+                724.299,
+                317.25299999999993
+            ],
+            "worldRotation": [
+                78.36137627125412,
+                48.965979398017744,
+                81.16858664446953
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpikeEnd17_JNT": {
+            "worldPosition": [
+                -26.591299999999976,
+                730.1089999999997,
+                266.08699999999936
+            ],
+            "worldRotation": [
+                79.55835569325333,
+                57.50347312623518,
+                81.1651515670233
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike17_JNT"
+        },
+        "R_upperSpike17_JNT": {
+            "worldPosition": [
+                -24.5942,
+                717.26,
+                286.501
+            ],
+            "worldRotation": [
+                79.55835569325333,
+                57.50347312623518,
+                81.1651515670233
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_upperSpike_JNT"
+        },
+        "R_upperSpike_JNT": {
+            "worldPosition": [
+                -54.5682,
+                730.392,
+                813.639
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
                 0.0
             ],
             "preferredAngle": [
@@ -666,6 +1313,3572 @@
             ],
             "parent": "C_guides_GRP"
         },
+        "L_lateralSpikeEnd00_JNT": {
+            "worldPosition": [
+                61.233184814453125,
+                686.3635864257812,
+                1087.039428710937
+            ],
+            "worldRotation": [
+                21.26821231410252,
+                33.512262047951744,
+                35.1840674448701
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike00_JNT"
+        },
+        "L_lateralSpike00_JNT": {
+            "worldPosition": [
+                48.61130905151367,
+                677.465087890625,
+                1097.265869140625
+            ],
+            "worldRotation": [
+                21.26821231410252,
+                33.512262047951744,
+                35.1840674448701
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd01_JNT": {
+            "worldPosition": [
+                74.75602722167973,
+                689.6209106445309,
+                1031.020751953125
+            ],
+            "worldRotation": [
+                21.234626083688585,
+                41.86377400729787,
+                30.210003695615022
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike01_JNT"
+        },
+        "L_lateralSpike01_JNT": {
+            "worldPosition": [
+                47.86292266845703,
+                673.9624633789062,
+                1058.9072265625
+            ],
+            "worldRotation": [
+                21.234626083688585,
+                41.86377400729787,
+                30.210003695615022
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd02_JNT": {
+            "worldPosition": [
+                95.6668014526368,
+                694.6619262695308,
+                971.4218139648439
+            ],
+            "worldRotation": [
+                14.480861545910301,
+                38.80100421044758,
+                22.39907469519199
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike02_JNT"
+        },
+        "L_lateralSpike02_JNT": {
+            "worldPosition": [
+                54.32904052734375,
+                677.62451171875,
+                1007.3717651367188
+            ],
+            "worldRotation": [
+                14.480861545910301,
+                38.80100421044758,
+                22.39907469519199
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd03_JNT": {
+            "worldPosition": [
+                96.06548309326226,
+                691.4920043945311,
+                910.9376831054688
+            ],
+            "worldRotation": [
+                16.977980296469184,
+                48.1747455167349,
+                22.27952940414779
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike03_JNT"
+        },
+        "L_lateralSpike03_JNT": {
+            "worldPosition": [
+                55.437904357910156,
+                674.8463745117188,
+                959.9995727539062
+            ],
+            "worldRotation": [
+                16.977980296469184,
+                48.1747455167349,
+                22.27952940414779
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd04_JNT": {
+            "worldPosition": [
+                100.30387878417956,
+                691.1719970703119,
+                856.3979492187501
+            ],
+            "worldRotation": [
+                14.915832525956578,
+                35.069930664733555,
+                24.872603240769685
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike04_JNT"
+        },
+        "L_lateralSpike04_JNT": {
+            "worldPosition": [
+                54.45663070678711,
+                669.9170532226562,
+                891.8746337890625
+            ],
+            "worldRotation": [
+                14.915832525956578,
+                35.069930664733555,
+                24.872603240769685
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd05_JNT": {
+            "worldPosition": [
+                101.52500915527332,
+                696.597412109375,
+                802.3722534179688
+            ],
+            "worldRotation": [
+                18.625227264736974,
+                42.79695673999304,
+                26.38438017811629
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike05_JNT"
+        },
+        "L_lateralSpike05_JNT": {
+            "worldPosition": [
+                52.37226486206055,
+                672.2144775390625,
+                853.1753540039062
+            ],
+            "worldRotation": [
+                18.625227264736974,
+                42.79695673999304,
+                26.38438017811629
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd06_JNT": {
+            "worldPosition": [
+                114.33872985839895,
+                695.8712768554689,
+                753.9181518554692
+            ],
+            "worldRotation": [
+                12.261139124053702,
+                34.58424177864202,
+                20.95045160820206
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike06_JNT"
+        },
+        "L_lateralSpike06_JNT": {
+            "worldPosition": [
+                53.126808166503906,
+                672.4349365234375,
+                799.1080932617188
+            ],
+            "worldRotation": [
+                12.261139124053702,
+                34.58424177864202,
+                20.95045160820206
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd07_JNT": {
+            "worldPosition": [
+                107.16896057128896,
+                690.820007324218,
+                678.9597778320319
+            ],
+            "worldRotation": [
+                14.809984074567412,
+                44.00475438714383,
+                20.835969768643707
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike07_JNT"
+        },
+        "L_lateralSpike07_JNT": {
+            "worldPosition": [
+                52.88147735595703,
+                670.1591186523438,
+                735.062255859375
+            ],
+            "worldRotation": [
+                14.809984074567412,
+                44.00475438714383,
+                20.835969768643707
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd08_JNT": {
+            "worldPosition": [
+                111.5499420166016,
+                698.2539062499998,
+                637.2214355468749
+            ],
+            "worldRotation": [
+                16.99271981338753,
+                36.541300994497014,
+                27.169286126505384
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike08_JNT"
+        },
+        "L_lateralSpike08_JNT": {
+            "worldPosition": [
+                55.76725769042969,
+                669.623291015625,
+                683.687744140625
+            ],
+            "worldRotation": [
+                16.99271981338753,
+                36.541300994497014,
+                27.169286126505384
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd09_JNT": {
+            "worldPosition": [
+                111.14083862304686,
+                698.6851196289069,
+                609.148315429688
+            ],
+            "worldRotation": [
+                12.908520737458858,
+                26.30589332461156,
+                27.34626972226548
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike09_JNT"
+        },
+        "L_lateralSpike09_JNT": {
+            "worldPosition": [
+                59.8126220703125,
+                672.14013671875,
+                637.71533203125
+            ],
+            "worldRotation": [
+                12.908520737458858,
+                26.30589332461156,
+                27.34626972226548
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd10_JNT": {
+            "worldPosition": [
+                125.73564910888692,
+                718.476135253906,
+                540.7748413085936
+            ],
+            "worldRotation": [
+                17.40546380577551,
+                30.075124076740035,
+                32.028095177839944
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike10_JNT"
+        },
+        "L_lateralSpike10_JNT": {
+            "worldPosition": [
+                66.73145294189453,
+                681.5659790039062,
+                581.0789184570312
+            ],
+            "worldRotation": [
+                17.40546380577551,
+                30.075124076740035,
+                32.028095177839944
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd11_JNT": {
+            "worldPosition": [
+                127.32999420166016,
+                737.6276855468749,
+                479.1905822753906
+            ],
+            "worldRotation": [
+                24.140606752970157,
+                33.57880162213178,
+                39.018412012057055
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike11_JNT"
+        },
+        "L_lateralSpike11_JNT": {
+            "worldPosition": [
+                77.68243408203125,
+                697.3974609375,
+                521.6123046875
+            ],
+            "worldRotation": [
+                24.140606752970157,
+                33.57880162213178,
+                39.018412012057055
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd12_JNT": {
+            "worldPosition": [
+                131.3196716308592,
+                747.6996459960939,
+                426.0769958496089
+            ],
+            "worldRotation": [
+                24.363987304711987,
+                32.07400440205076,
+                40.458392320458636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike12_JNT"
+        },
+        "L_lateralSpike12_JNT": {
+            "worldPosition": [
+                88.89256286621094,
+                711.5167236328125,
+                461.0204162597656
+            ],
+            "worldRotation": [
+                24.363987304711987,
+                32.07400440205076,
+                40.458392320458636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd13_JNT": {
+            "worldPosition": [
+                126.94585418701183,
+                747.944702148437,
+                392.4906921386722
+            ],
+            "worldRotation": [
+                26.1094897986904,
+                34.52789564666441,
+                40.848929037243046
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike13_JNT"
+        },
+        "L_lateralSpike13_JNT": {
+            "worldPosition": [
+                88.64024353027344,
+                714.8230590820312,
+                427.3305969238281
+            ],
+            "worldRotation": [
+                26.1094897986904,
+                34.52789564666441,
+                40.848929037243046
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd14_JNT": {
+            "worldPosition": [
+                123.20687866210943,
+                752.9908447265625,
+                344.093292236328
+            ],
+            "worldRotation": [
+                30.374382042274824,
+                35.58516298345979,
+                45.20520574287468
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike14_JNT"
+        },
+        "L_lateralSpike14_JNT": {
+            "worldPosition": [
+                85.96417236328125,
+                715.4804077148438,
+                381.915771484375
+            ],
+            "worldRotation": [
+                30.374382042274824,
+                35.58516298345979,
+                45.20520574287468
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd15_JNT": {
+            "worldPosition": [
+                108.02170562744134,
+                752.9384765624998,
+                306.0808715820311
+            ],
+            "worldRotation": [
+                32.516375782927476,
+                32.1778681791043,
+                50.12434546222636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike15_JNT"
+        },
+        "L_lateralSpike15_JNT": {
+            "worldPosition": [
+                76.5313491821289,
+                715.243896484375,
+                336.98529052734375
+            ],
+            "worldRotation": [
+                32.516375782927476,
+                32.1778681791043,
+                50.12434546222636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd16_JNT": {
+            "worldPosition": [
+                82.72567749023449,
+                734.0413818359375,
+                278.1300048828125
+            ],
+            "worldRotation": [
+                34.998469771682316,
+                42.74477755910341,
+                45.8905455617744
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike16_JNT"
+        },
+        "L_lateralSpike16_JNT": {
+            "worldPosition": [
+                63.56719970703125,
+                714.2778930664062,
+                303.5694885253906
+            ],
+            "worldRotation": [
+                34.998469771682316,
+                42.74477755910341,
+                45.8905455617744
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpikeEnd17_JNT": {
+            "worldPosition": [
+                63.27560424804687,
+                719.8037109374994,
+                255.13894653320315
+            ],
+            "worldRotation": [
+                41.35191275461699,
+                53.07212196738819,
+                47.752127435865454
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike17_JNT"
+        },
+        "L_lateralSpike17_JNT": {
+            "worldPosition": [
+                54.45180892944336,
+                710.0887451171875,
+                272.6007995605469
+            ],
+            "worldRotation": [
+                41.35191275461699,
+                53.07212196738819,
+                47.752127435865454
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lateralSpike_JNT"
+        },
+        "L_lateralSpike_JNT": {
+            "worldPosition": [
+                60.2769,
+                613.729,
+                846.496
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_lateralSpikeEnd00_JNT": {
+            "worldPosition": [
+                -61.23319999999919,
+                686.3640000000006,
+                1087.0399999999995
+            ],
+            "worldRotation": [
+                21.268212314102563,
+                33.51226204795172,
+                35.18406744487014
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike00_JNT"
+        },
+        "R_lateralSpike00_JNT": {
+            "worldPosition": [
+                -48.6113,
+                677.465,
+                1097.27
+            ],
+            "worldRotation": [
+                21.268212314102563,
+                33.51226204795172,
+                35.18406744487014
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd01_JNT": {
+            "worldPosition": [
+                -74.7559999999996,
+                689.6210000000002,
+                1031.0200000000002
+            ],
+            "worldRotation": [
+                21.23462608368859,
+                41.86377400729788,
+                30.210003695615008
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike01_JNT"
+        },
+        "R_lateralSpike01_JNT": {
+            "worldPosition": [
+                -47.8629,
+                673.962,
+                1058.91
+            ],
+            "worldRotation": [
+                21.23462608368859,
+                41.86377400729788,
+                30.210003695615008
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd02_JNT": {
+            "worldPosition": [
+                -95.6668000000007,
+                694.6619999999999,
+                971.4220000000003
+            ],
+            "worldRotation": [
+                14.480861545910232,
+                38.80100421044755,
+                22.399074695191974
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike02_JNT"
+        },
+        "R_lateralSpike02_JNT": {
+            "worldPosition": [
+                -54.329,
+                677.625,
+                1007.37
+            ],
+            "worldRotation": [
+                14.480861545910232,
+                38.80100421044755,
+                22.399074695191974
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd03_JNT": {
+            "worldPosition": [
+                -96.0655,
+                691.4920000000002,
+                910.9379999999994
+            ],
+            "worldRotation": [
+                16.977980296469216,
+                48.1747455167349,
+                22.27952940414779
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike03_JNT"
+        },
+        "R_lateralSpike03_JNT": {
+            "worldPosition": [
+                -55.4379,
+                674.846,
+                960.0
+            ],
+            "worldRotation": [
+                16.977980296469216,
+                48.1747455167349,
+                22.27952940414779
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd04_JNT": {
+            "worldPosition": [
+                -100.30400000000012,
+                691.1720000000004,
+                856.3980000000004
+            ],
+            "worldRotation": [
+                14.915832525956723,
+                35.06993066473359,
+                24.87260324076971
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike04_JNT"
+        },
+        "R_lateralSpike04_JNT": {
+            "worldPosition": [
+                -54.4566,
+                669.917,
+                891.875
+            ],
+            "worldRotation": [
+                14.915832525956723,
+                35.06993066473359,
+                24.87260324076971
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd05_JNT": {
+            "worldPosition": [
+                -101.52500000000018,
+                696.5969999999999,
+                802.372
+            ],
+            "worldRotation": [
+                18.625227264736886,
+                42.796956739993036,
+                26.384380178116285
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike05_JNT"
+        },
+        "R_lateralSpike05_JNT": {
+            "worldPosition": [
+                -52.3723,
+                672.214,
+                853.175
+            ],
+            "worldRotation": [
+                18.625227264736886,
+                42.796956739993036,
+                26.384380178116285
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd06_JNT": {
+            "worldPosition": [
+                -114.33900000000006,
+                695.8709999999999,
+                753.9179999999999
+            ],
+            "worldRotation": [
+                12.26113912405361,
+                34.58424177864202,
+                20.95045160820205
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike06_JNT"
+        },
+        "R_lateralSpike06_JNT": {
+            "worldPosition": [
+                -53.1268,
+                672.435,
+                799.108
+            ],
+            "worldRotation": [
+                12.26113912405361,
+                34.58424177864202,
+                20.95045160820205
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd07_JNT": {
+            "worldPosition": [
+                -107.16899999999937,
+                690.8199999999993,
+                678.9599999999997
+            ],
+            "worldRotation": [
+                14.809984074567412,
+                44.00475438714383,
+                20.835969768643707
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike07_JNT"
+        },
+        "R_lateralSpike07_JNT": {
+            "worldPosition": [
+                -52.8815,
+                670.159,
+                735.062
+            ],
+            "worldRotation": [
+                14.809984074567412,
+                44.00475438714383,
+                20.835969768643707
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd08_JNT": {
+            "worldPosition": [
+                -111.55000000000001,
+                698.2539999999999,
+                637.2210000000001
+            ],
+            "worldRotation": [
+                16.992719813387534,
+                36.541300994497014,
+                27.169286126505376
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike08_JNT"
+        },
+        "R_lateralSpike08_JNT": {
+            "worldPosition": [
+                -55.7673,
+                669.623,
+                683.688
+            ],
+            "worldRotation": [
+                16.992719813387534,
+                36.541300994497014,
+                27.169286126505376
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd09_JNT": {
+            "worldPosition": [
+                -111.141,
+                698.6850000000007,
+                609.1480000000005
+            ],
+            "worldRotation": [
+                12.908520737458856,
+                26.305893324611567,
+                27.34626972226548
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike09_JNT"
+        },
+        "R_lateralSpike09_JNT": {
+            "worldPosition": [
+                -59.8126,
+                672.14,
+                637.715
+            ],
+            "worldRotation": [
+                12.908520737458856,
+                26.305893324611567,
+                27.34626972226548
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd10_JNT": {
+            "worldPosition": [
+                -125.7360000000002,
+                718.4760000000002,
+                540.7750000000001
+            ],
+            "worldRotation": [
+                17.405463805775526,
+                30.075124076740043,
+                32.02809517783994
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike10_JNT"
+        },
+        "R_lateralSpike10_JNT": {
+            "worldPosition": [
+                -66.7315,
+                681.566,
+                581.079
+            ],
+            "worldRotation": [
+                17.405463805775526,
+                30.075124076740043,
+                32.02809517783994
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd11_JNT": {
+            "worldPosition": [
+                -127.33000000000027,
+                737.6280000000008,
+                479.1910000000004
+            ],
+            "worldRotation": [
+                24.140606752970157,
+                33.57880162213178,
+                39.018412012057055
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike11_JNT"
+        },
+        "R_lateralSpike11_JNT": {
+            "worldPosition": [
+                -77.6824,
+                697.397,
+                521.612
+            ],
+            "worldRotation": [
+                24.140606752970157,
+                33.57880162213178,
+                39.018412012057055
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd12_JNT": {
+            "worldPosition": [
+                -131.32000000000033,
+                747.7000000000004,
+                426.07699999999994
+            ],
+            "worldRotation": [
+                24.363987304711987,
+                32.07400440205076,
+                40.458392320458636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike12_JNT"
+        },
+        "R_lateralSpike12_JNT": {
+            "worldPosition": [
+                -88.8926,
+                711.517,
+                461.02
+            ],
+            "worldRotation": [
+                24.363987304711987,
+                32.07400440205076,
+                40.458392320458636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd13_JNT": {
+            "worldPosition": [
+                -126.94600000000021,
+                747.9449999999999,
+                392.4910000000002
+            ],
+            "worldRotation": [
+                26.1094897986904,
+                34.5278956466644,
+                40.84892903724305
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike13_JNT"
+        },
+        "R_lateralSpike13_JNT": {
+            "worldPosition": [
+                -88.6402,
+                714.823,
+                427.331
+            ],
+            "worldRotation": [
+                26.1094897986904,
+                34.5278956466644,
+                40.84892903724305
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd14_JNT": {
+            "worldPosition": [
+                -123.20700000000025,
+                752.9910000000001,
+                344.093
+            ],
+            "worldRotation": [
+                30.37438204227489,
+                35.585162983459796,
+                45.20520574287471
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike14_JNT"
+        },
+        "R_lateralSpike14_JNT": {
+            "worldPosition": [
+                -85.9642,
+                715.48,
+                381.91599999999994
+            ],
+            "worldRotation": [
+                30.37438204227489,
+                35.585162983459796,
+                45.20520574287471
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd15_JNT": {
+            "worldPosition": [
+                -108.02199999999985,
+                752.9380000000002,
+                306.08100000000024
+            ],
+            "worldRotation": [
+                32.51637578292746,
+                32.17786817910429,
+                50.12434546222636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike15_JNT"
+        },
+        "R_lateralSpike15_JNT": {
+            "worldPosition": [
+                -76.5313,
+                715.244,
+                336.985
+            ],
+            "worldRotation": [
+                32.51637578292746,
+                32.17786817910429,
+                50.12434546222636
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd16_JNT": {
+            "worldPosition": [
+                -82.72570000000017,
+                734.0410000000003,
+                278.1300000000003
+            ],
+            "worldRotation": [
+                34.99846977168228,
+                42.7447775591034,
+                45.8905455617744
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike16_JNT"
+        },
+        "R_lateralSpike16_JNT": {
+            "worldPosition": [
+                -63.5672,
+                714.278,
+                303.56899999999996
+            ],
+            "worldRotation": [
+                34.99846977168228,
+                42.7447775591034,
+                45.8905455617744
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpikeEnd17_JNT": {
+            "worldPosition": [
+                -63.27559999999987,
+                719.8039999999995,
+                255.13899999999956
+            ],
+            "worldRotation": [
+                41.35191275461699,
+                53.07212196738819,
+                47.752127435865454
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike17_JNT"
+        },
+        "R_lateralSpike17_JNT": {
+            "worldPosition": [
+                -54.4518,
+                710.089,
+                272.601
+            ],
+            "worldRotation": [
+                41.35191275461699,
+                53.07212196738819,
+                47.752127435865454
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_lateralSpike_JNT"
+        },
+        "R_lateralSpike_JNT": {
+            "worldPosition": [
+                -60.27686309814453,
+                613.7291259765625,
+                846.496337890625
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_upperSpikeEnd17_JNT": {
+            "worldPosition": [
+                26.591310501098754,
+                730.1085205078124,
+                266.08737182617114
+            ],
+            "worldRotation": [
+                79.55835569325333,
+                57.50347312623518,
+                81.1651515670233
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike17_JNT"
+        },
+        "L_upperSpike17_JNT": {
+            "worldPosition": [
+                24.594186782836914,
+                717.2595825195312,
+                286.5010681152344
+            ],
+            "worldRotation": [
+                79.55835569325333,
+                57.50347312623518,
+                81.1651515670233
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd16_JNT": {
+            "worldPosition": [
+                29.8333282470703,
+                745.3556518554686,
+                292.76922607421864
+            ],
+            "worldRotation": [
+                78.36137627125419,
+                48.96597939801773,
+                81.16858664446956
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike16_JNT"
+        },
+        "L_upperSpike16_JNT": {
+            "worldPosition": [
+                26.56177520751953,
+                724.299072265625,
+                317.2532958984375
+            ],
+            "worldRotation": [
+                78.36137627125419,
+                48.96597939801773,
+                81.16858664446956
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd15_JNT": {
+            "worldPosition": [
+                29.65979576110839,
+                762.0249633789057,
+                328.06884765625006
+            ],
+            "worldRotation": [
+                81.03482131174584,
+                37.16902541197938,
+                84.55532852608141
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike15_JNT"
+        },
+        "L_upperSpike15_JNT": {
+            "worldPosition": [
+                26.54631996154785,
+                729.3596801757812,
+                352.94757080078125
+            ],
+            "worldRotation": [
+                81.03482131174584,
+                37.16902541197938,
+                84.55532852608141
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd14_JNT": {
+            "worldPosition": [
+                32.76214599609379,
+                771.7778320312503,
+                354.79956054687443
+            ],
+            "worldRotation": [
+                80.04583071134871,
+                40.55467436338729,
+                83.4903093353337
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike14_JNT"
+        },
+        "L_upperSpike14_JNT": {
+            "worldPosition": [
+                28.106040954589844,
+                730.9730834960938,
+                389.944091796875
+            ],
+            "worldRotation": [
+                80.04583071134871,
+                40.55467436338729,
+                83.4903093353337
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd13_JNT": {
+            "worldPosition": [
+                32.89748764038092,
+                775.6260375976564,
+                392.48989868164006
+            ],
+            "worldRotation": [
+                78.87094865375204,
+                37.69823926230699,
+                83.1406163126844
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike13_JNT"
+        },
+        "L_upperSpike13_JNT": {
+            "worldPosition": [
+                27.444047927856445,
+                730.2918090820312,
+                427.7785339355469
+            ],
+            "worldRotation": [
+                78.87094865375204,
+                37.69823926230699,
+                83.1406163126844
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd12_JNT": {
+            "worldPosition": [
+                33.64547348022465,
+                777.6677246093753,
+                434.54620361328074
+            ],
+            "worldRotation": [
+                75.79724629946159,
+                32.96068263078013,
+                82.15984445164209
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike12_JNT"
+        },
+        "L_upperSpike12_JNT": {
+            "worldPosition": [
+                26.03778839111328,
+                722.4182739257812,
+                470.70977783203125
+            ],
+            "worldRotation": [
+                75.79724629946159,
+                32.96068263078013,
+                82.15984445164209
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd11_JNT": {
+            "worldPosition": [
+                33.59098434448241,
+                775.9075927734372,
+                474.4410705566411
+            ],
+            "worldRotation": [
+                76.34479316927454,
+                34.26290299653674,
+                82.21162749177176
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike11_JNT"
+        },
+        "L_upperSpike11_JNT": {
+            "worldPosition": [
+                25.35995101928711,
+                715.728759765625,
+                515.81689453125
+            ],
+            "worldRotation": [
+                76.34479316927454,
+                34.26290299653674,
+                82.21162749177176
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd10_JNT": {
+            "worldPosition": [
+                33.30728530883768,
+                770.7733764648439,
+                526.9828491210938
+            ],
+            "worldRotation": [
+                70.8033317607979,
+                42.26246786830003,
+                76.8213313773095
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike10_JNT"
+        },
+        "L_upperSpike10_JNT": {
+            "worldPosition": [
+                18.157888412475586,
+                706.0752563476562,
+                587.366455078125
+            ],
+            "worldRotation": [
+                70.8033317607979,
+                42.26246786830003,
+                76.8213313773095
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd09_JNT": {
+            "worldPosition": [
+                31.52513885498052,
+                768.5635375976564,
+                588.1311035156257
+            ],
+            "worldRotation": [
+                76.47734432148283,
+                39.235019941799436,
+                81.35075509937164
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike09_JNT"
+        },
+        "L_upperSpike09_JNT": {
+            "worldPosition": [
+                21.09079360961914,
+                699.9684448242188,
+                644.7901000976562
+            ],
+            "worldRotation": [
+                76.47734432148283,
+                39.235019941799436,
+                81.35075509937164
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd08_JNT": {
+            "worldPosition": [
+                31.47295570373561,
+                770.8619995117195,
+                649.4188842773425
+            ],
+            "worldRotation": [
+                76.63713052119184,
+                41.49427655720256,
+                81.0557660340538
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike08_JNT"
+        },
+        "L_upperSpike08_JNT": {
+            "worldPosition": [
+                20.214155197143555,
+                699.326171875,
+                713.474609375
+            ],
+            "worldRotation": [
+                76.63713052119184,
+                41.49427655720256,
+                81.0557660340538
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd07_JNT": {
+            "worldPosition": [
+                31.902824401855423,
+                768.5512084960941,
+                720.8769531249992
+            ],
+            "worldRotation": [
+                76.39730064877693,
+                42.3233480197376,
+                80.7463719274025
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike07_JNT"
+        },
+        "L_upperSpike07_JNT": {
+            "worldPosition": [
+                20.53953742980957,
+                698.8058471679688,
+                785.2297973632812
+            ],
+            "worldRotation": [
+                76.39730064877693,
+                42.3233480197376,
+                80.7463719274025
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd06_JNT": {
+            "worldPosition": [
+                32.08444595336897,
+                771.7016601562493,
+                788.0242309570319
+            ],
+            "worldRotation": [
+                75.8226458336281,
+                40.761113236652726,
+                80.63417156126924
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike06_JNT"
+        },
+        "L_upperSpike06_JNT": {
+            "worldPosition": [
+                20.486692428588867,
+                701.3850708007812,
+                849.45556640625
+            ],
+            "worldRotation": [
+                75.8226458336281,
+                40.761113236652726,
+                80.63417156126924
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd05_JNT": {
+            "worldPosition": [
+                31.735870361328097,
+                772.0867309570311,
+                837.6571044921881
+            ],
+            "worldRotation": [
+                77.41408558087497,
+                39.92049938673417,
+                81.84634155124809
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike05_JNT"
+        },
+        "L_upperSpike05_JNT": {
+            "worldPosition": [
+                21.67300033569336,
+                701.8529052734375,
+                897.0245361328125
+            ],
+            "worldRotation": [
+                77.41408558087497,
+                39.92049938673417,
+                81.84634155124809
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd04_JNT": {
+            "worldPosition": [
+                31.34421157836917,
+                774.3240966796864,
+                874.1379394531249
+            ],
+            "worldRotation": [
+                75.62736485647659,
+                38.07045874125585,
+                81.02094092086823
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike04_JNT"
+        },
+        "L_upperSpike04_JNT": {
+            "worldPosition": [
+                20.237995147705078,
+                704.0359497070312,
+                929.8754272460938
+            ],
+            "worldRotation": [
+                75.62736485647659,
+                38.07045874125585,
+                81.02094092086823
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd03_JNT": {
+            "worldPosition": [
+                31.876834869384776,
+                779.3782958984374,
+                930.2670898437501
+            ],
+            "worldRotation": [
+                76.34944979177095,
+                40.69963576276997,
+                81.00096561135682
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike03_JNT"
+        },
+        "L_upperSpike03_JNT": {
+            "worldPosition": [
+                20.682884216308594,
+                708.6947631835938,
+                991.8214111328125
+            ],
+            "worldRotation": [
+                76.34944979177095,
+                40.69963576276997,
+                81.00096561135682
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd02_JNT": {
+            "worldPosition": [
+                33.44454574584967,
+                776.3844604492185,
+                995.0744018554686
+            ],
+            "worldRotation": [
+                76.04755692021737,
+                37.0314410191829,
+                81.49009551107402
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike02_JNT"
+        },
+        "L_upperSpike02_JNT": {
+            "worldPosition": [
+                23.17932891845703,
+                707.7794189453125,
+                1047.4072265625
+            ],
+            "worldRotation": [
+                76.04755692021737,
+                37.0314410191829,
+                81.49009551107402
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd01_JNT": {
+            "worldPosition": [
+                29.285482406616108,
+                759.0625610351562,
+                1063.583984375
+            ],
+            "worldRotation": [
+                78.17567092760319,
+                37.177795280076815,
+                82.78977700024589
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike01_JNT"
+        },
+        "L_upperSpike01_JNT": {
+            "worldPosition": [
+                22.01576042175293,
+                701.5992431640625,
+                1107.5133056640625
+            ],
+            "worldRotation": [
+                78.17567092760319,
+                37.177795280076815,
+                82.78977700024589
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpikeEnd00_JNT": {
+            "worldPosition": [
+                26.18959617614724,
+                746.496215820313,
+                1107.1862792968755
+            ],
+            "worldRotation": [
+                77.83243423354347,
+                40.1915410912655,
+                82.07837622475688
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike00_JNT"
+        },
+        "L_upperSpike00_JNT": {
+            "worldPosition": [
+                21.421207427978516,
+                712.227294921875,
+                1136.416015625
+            ],
+            "worldRotation": [
+                77.83243423354347,
+                40.1915410912655,
+                82.07837622475688
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_upperSpike_JNT"
+        },
+        "L_upperSpike_JNT": {
+            "worldPosition": [
+                54.56816101074219,
+                730.3921086729781,
+                813.6387329101562
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "C_upperJawEnd_JNT": {
+            "worldPosition": [
+                2.4833534730625503e-14,
+                625.4308832729445,
+                1355.6712559839625
+            ],
+            "worldRotation": [
+                90.0,
+                -80.0,
+                -90.00000000000023
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_upperJaw_JNT"
+        },
+        "C_upperJaw_JNT": {
+            "worldPosition": [
+                6.328028324457359e-14,
+                660.6521029105437,
+                1155.9217933884836
+            ],
+            "worldRotation": [
+                90.0,
+                -80.0,
+                -90.00000000000023
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "C_jawEnd_JNT": {
+            "worldPosition": [
+                6.373045825471728e-15,
+                542.2020263671875,
+                1338.45263671875
+            ],
+            "worldRotation": [
+                89.99999999999996,
+                -72.7149204230097,
+                -90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_jaw_JNT"
+        },
+        "C_jaw_JNT": {
+            "worldPosition": [
+                0.0,
+                604.0972637423694,
+                1139.5474891969004
+            ],
+            "worldRotation": [
+                89.99999999999996,
+                -72.7149204230097,
+                -90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_fingerPinky04_JNT": {
+            "worldPosition": [
+                -2554.4299999999994,
+                600.9829999999998,
+                1035.3799999999999
+            ],
+            "worldRotation": [
+                -180.0,
+                21.515536563534383,
+                -1.8978050851347404e-31
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerPinky03_JNT"
+        },
+        "R_fingerPinky03_JNT": {
+            "worldPosition": [
+                -2303.44,
+                600.9829999999986,
+                936.4330000000001
+            ],
+            "worldRotation": [
+                -180.0,
+                21.515536563534383,
+                -1.8978050851347404e-31
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerPinky02_JNT"
+        },
+        "R_fingerPinky02_JNT": {
+            "worldPosition": [
+                -2007.63,
+                600.983,
+                825.6259999999999
+            ],
+            "worldRotation": [
+                -180.0,
+                20.535558112822265,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerPinky01_JNT"
+        },
+        "R_fingerPinky01_JNT": {
+            "worldPosition": [
+                -1320.96,
+                600.983,
+                561.619
+            ],
+            "worldRotation": [
+                -180.0,
+                21.03046912358349,
+                1.8915598520140265e-31
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_fingerRing04_JNT": {
+            "worldPosition": [
+                -3220.999999999996,
+                600.9830000000003,
+                605.5589999999991
+            ],
+            "worldRotation": [
+                -179.999999644103,
+                1.8497433743395604,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerRing03_JNT"
+        },
+        "R_fingerRing03_JNT": {
+            "worldPosition": [
+                -2738.7300000000027,
+                600.9829999999995,
+                589.9840000000006
+            ],
+            "worldRotation": [
+                -179.999999644103,
+                1.8497433743395604,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerRing02_JNT"
+        },
+        "R_fingerRing02_JNT": {
+            "worldPosition": [
+                -2112.7100000000055,
+                600.9830000000013,
+                580.48
+            ],
+            "worldRotation": [
+                -179.99999964424745,
+                0.8697649236285191,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerRing01_JNT"
+        },
+        "R_fingerRing01_JNT": {
+            "worldPosition": [
+                -1320.96,
+                600.983,
+                561.619
+            ],
+            "worldRotation": [
+                179.99999914622634,
+                1.3646759343897703,
+                -1.4814813906382914e-24
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_fingerMiddle04_JNT": {
+            "worldPosition": [
+                -3021.6899999999996,
+                600.9830000000012,
+                -320.1209999999995
+            ],
+            "worldRotation": [
+                -180.0,
+                -26.941225266012875,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerMiddle03_JNT"
+        },
+        "R_fingerMiddle03_JNT": {
+            "worldPosition": [
+                -2741.9000000000005,
+                600.9829999999996,
+                -177.92199999999957
+            ],
+            "worldRotation": [
+                -180.0,
+                -26.941225266012875,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerMiddle02_JNT"
+        },
+        "R_fingerMiddle02_JNT": {
+            "worldPosition": [
+                -2073.14,
+                600.9829999999986,
+                168.63000000000017
+            ],
+            "worldRotation": [
+                -180.0,
+                -27.393196741395958,
+                3.977074288259527e-31
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerMiddle01_JNT"
+        },
+        "R_fingerMiddle01_JNT": {
+            "worldPosition": [
+                -1320.96,
+                600.983,
+                561.619
+            ],
+            "worldRotation": [
+                -180.0,
+                -27.585409159845682,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_fingerIndex04_JNT": {
+            "worldPosition": [
+                -2225.8200000000006,
+                600.9829999999986,
+                -1072.35
+            ],
+            "worldRotation": [
+                -180.0,
+                -60.56394481804002,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerIndex03_JNT"
+        },
+        "R_fingerIndex03_JNT": {
+            "worldPosition": [
+                -2010.4899999999993,
+                600.983,
+                -690.7590000000001
+            ],
+            "worldRotation": [
+                -180.0,
+                -60.56394481804002,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerIndex02_JNT"
+        },
+        "R_fingerIndex02_JNT": {
+            "worldPosition": [
+                -1715.3099999999995,
+                600.9830000000001,
+                -155.5830000000003
+            ],
+            "worldRotation": [
+                -180.0,
+                -61.120955270994365,
+                7.311390688099389e-31
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerIndex01_JNT"
+        },
+        "R_fingerIndex01_JNT": {
+            "worldPosition": [
+                -1320.96,
+                600.983,
+                561.619
+            ],
+            "worldRotation": [
+                -180.0,
+                -61.195742978815126,
+                7.328740958059089e-31
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_fingerThumb04_JNT": {
+            "worldPosition": [
+                -1053.8000000000004,
+                600.983,
+                -611.5219999999997
+            ],
+            "worldRotation": [
+                0.0,
+                -77.68611762041412,
+                180.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerThumb03_JNT"
+        },
+        "R_fingerThumb03_JNT": {
+            "worldPosition": [
+                -1113.5099999999984,
+                600.9830000000001,
+                -337.9819999999987
+            ],
+            "worldRotation": [
+                0.0,
+                -77.68611762041412,
+                180.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerThumb02_JNT"
+        },
+        "R_fingerThumb02_JNT": {
+            "worldPosition": [
+                -1193.4,
+                600.9829999999986,
+                0.11103800000000774
+            ],
+            "worldRotation": [
+                0.0,
+                -76.70613916970198,
+                180.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_fingerThumb01_JNT"
+        },
+        "R_fingerThumb01_JNT": {
+            "worldPosition": [
+                -1320.96,
+                600.983,
+                561.619
+            ],
+            "worldRotation": [
+                -3.187933997774457e-30,
+                -77.20105018046324,
+                180.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_fingerPinky04_JNT": {
+            "worldPosition": [
+                2554.4304392165614,
+                600.9832655261865,
+                1035.381041263165
+            ],
+            "worldRotation": [
+                0.0,
+                -21.515536563534734,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerPinky03_JNT"
+        },
+        "L_fingerPinky03_JNT": {
+            "worldPosition": [
+                2303.4368383374776,
+                600.9832655261878,
+                936.4334030526211
+            ],
+            "worldRotation": [
+                0.0,
+                -21.515536563534734,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerPinky02_JNT"
+        },
+        "L_fingerPinky02_JNT": {
+            "worldPosition": [
+                2007.6288516892112,
+                600.9832655261878,
+                825.6260372931429
+            ],
+            "worldRotation": [
+                0.0,
+                -20.535558112822212,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerPinky01_JNT"
+        },
+        "L_fingerPinky01_JNT": {
+            "worldPosition": [
+                1320.9574817577352,
+                600.9832655261878,
+                561.6185390323907
+            ],
+            "worldRotation": [
+                0.0,
+                -21.03046912358347,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_fingerRing04_JNT": {
+            "worldPosition": [
+                3220.999865409221,
+                600.9832655261878,
+                605.5590786542525
+            ],
+            "worldRotation": [
+                0.0,
+                -1.849743374339914,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerRing03_JNT"
+        },
+        "L_fingerRing03_JNT": {
+            "worldPosition": [
+                2738.7316227534347,
+                600.9832655261878,
+                589.984065130775
+            ],
+            "worldRotation": [
+                0.0,
+                -1.849743374339914,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerRing02_JNT"
+        },
+        "L_fingerRing02_JNT": {
+            "worldPosition": [
+                2112.7129847272236,
+                600.9832655261878,
+                580.4802083815113
+            ],
+            "worldRotation": [
+                0.0,
+                -0.8697649236285157,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerRing01_JNT"
+        },
+        "L_fingerRing01_JNT": {
+            "worldPosition": [
+                1320.9574817577352,
+                600.9832655261878,
+                561.6185390323907
+            ],
+            "worldRotation": [
+                0.0,
+                -1.3646759343897703,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_fingerMiddle04_JNT": {
+            "worldPosition": [
+                3021.6934485451766,
+                600.9832655261869,
+                -320.1212011702262
+            ],
+            "worldRotation": [
+                0.0,
+                26.941225266012623,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerMiddle03_JNT"
+        },
+        "L_fingerMiddle03_JNT": {
+            "worldPosition": [
+                2741.902014621434,
+                600.9832655261878,
+                -177.92168325586266
+            ],
+            "worldRotation": [
+                0.0,
+                26.941225266012623,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerMiddle02_JNT"
+        },
+        "L_fingerMiddle02_JNT": {
+            "worldPosition": [
+                2073.1421313563687,
+                600.9832655261878,
+                168.62977656922982
+            ],
+            "worldRotation": [
+                0.0,
+                27.393196741394018,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerMiddle01_JNT"
+        },
+        "L_fingerMiddle01_JNT": {
+            "worldPosition": [
+                1320.9574817577352,
+                600.9832655261878,
+                561.6185390323907
+            ],
+            "worldRotation": [
+                0.0,
+                27.585409159845653,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_fingerIndex04_JNT": {
+            "worldPosition": [
+                2225.8217333054954,
+                600.9832655261865,
+                -1072.3505790448482
+            ],
+            "worldRotation": [
+                0.0,
+                60.563944818039985,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerIndex03_JNT"
+        },
+        "L_fingerIndex03_JNT": {
+            "worldPosition": [
+                2010.4897225167356,
+                600.9832655261878,
+                -690.7594878400051
+            ],
+            "worldRotation": [
+                0.0,
+                60.563944818039985,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerIndex02_JNT"
+        },
+        "L_fingerIndex02_JNT": {
+            "worldPosition": [
+                1715.311751275161,
+                600.9832655261878,
+                -155.58298472623392
+            ],
+            "worldRotation": [
+                0.0,
+                61.12095527099435,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerIndex01_JNT"
+        },
+        "L_fingerIndex01_JNT": {
+            "worldPosition": [
+                1320.9574817577352,
+                600.9832655261878,
+                561.6185390323907
+            ],
+            "worldRotation": [
+                0.0,
+                61.1957429788151,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_fingerThumb04_JNT": {
+            "worldPosition": [
+                1053.8026124483024,
+                600.9832655261877,
+                -611.5218704624799
+            ],
+            "worldRotation": [
+                0.0,
+                102.31388237958579,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerThumb03_JNT"
+        },
+        "L_fingerThumb03_JNT": {
+            "worldPosition": [
+                1113.513476865505,
+                600.9832655261888,
+                -337.9815591458542
+            ],
+            "worldRotation": [
+                0.0,
+                102.31388237958579,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerThumb02_JNT"
+        },
+        "L_fingerThumb02_JNT": {
+            "worldPosition": [
+                1193.396930612833,
+                600.983265526189,
+                0.11103802720288058
+            ],
+            "worldRotation": [
+                0.0,
+                103.29386083029799,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_fingerThumb01_JNT"
+        },
+        "L_fingerThumb01_JNT": {
+            "worldPosition": [
+                1320.9574817577352,
+                600.9832655261878,
+                561.6185390323907
+            ],
+            "worldRotation": [
+                0.0,
+                102.79894981953673,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_wrist_JNT": {
+            "worldPosition": [
+                1309.846858982582,
+                584.7075068658185,
+                558.7158967104615
+            ],
+            "worldRotation": [
+                -0.18515945252592753,
+                -19.73849770459077,
+                -0.43962137102354104
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_elbow_JNT"
+        },
+        "L_elbow_JNT": {
+            "worldPosition": [
+                670.7611083984375,
+                589.6112060546876,
+                329.3987426757813
+            ],
+            "worldRotation": [
+                -0.18515945252592753,
+                -19.73849770459077,
+                -0.43962137102354104
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_shoulder_JNT"
+        },
+        "L_shoulder_JNT": {
+            "worldPosition": [
+                174.95849609375,
+                594.4801025390625,
+                501.4769287109375
+            ],
+            "worldRotation": [
+                -0.18447753154425015,
+                19.139495322157575,
+                -0.5626397389889131
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_wrist_JNT": {
+            "worldPosition": [
+                -1309.846749483574,
+                584.7071752393384,
+                558.7161544166523
+            ],
+            "worldRotation": [
+                179.81484366398826,
+                19.738497704590813,
+                0.4396213710235336
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_elbow_JNT"
+        },
+        "R_elbow_JNT": {
+            "worldPosition": [
+                -670.7609999999994,
+                589.6109999999985,
+                329.39900000000034
+            ],
+            "worldRotation": [
+                179.81484175489237,
+                19.738497704590813,
+                0.43962137102353366
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "R_shoulder_JNT"
+        },
+        "R_shoulder_JNT": {
+            "worldPosition": [
+                -174.958,
+                594.48,
+                501.477
+            ],
+            "worldRotation": [
+                179.81552246845575,
+                -19.13949532215759,
+                0.562639738988913
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "L_tip_JNT": {
+            "worldPosition": [
+                134.71502877536486,
+                25.53609101419878,
+                36.74594116210925
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_ball_JNT"
+        },
+        "L_ball_JNT": {
+            "worldPosition": [
+                134.71502877536471,
+                25.536091014198785,
+                -70.0797286128779
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_ankle_JNT"
+        },
+        "L_ankle_JNT": {
+            "worldPosition": [
+                134.71502877536514,
+                57.115793706563295,
+                -113.50181981487877
+            ],
+            "worldRotation": [
+                90.0,
+                -24.12840293026782,
+                -89.99999999999997
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_backKnee_JNT"
+        },
+        "L_backKnee_JNT": {
+            "worldPosition": [
+                134.7150287753646,
+                208.69836662991185,
+                -181.39818060346224
+            ],
+            "worldRotation": [
+                90.0,
+                -24.12840293026782,
+                -89.99999999999997
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_frontKnee_JNT"
+        },
+        "L_frontKnee_JNT": {
+            "worldPosition": [
+                134.71502877536452,
+                300.2795044377676,
+                -17.183726603167592
+            ],
+            "worldRotation": [
+                90.0,
+                60.851928154287,
+                -90.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "L_hip_JNT"
+        },
+        "L_hip_JNT": {
+            "worldPosition": [
+                134.71502877536477,
+                531.600826659337,
+                -56.65835496862296
+            ],
+            "worldRotation": [
+                90.0,
+                -9.684152104378077,
+                -89.99999999999999
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "R_tip_JNT": {
+            "worldPosition": [
+                -134.71499999999986,
+                25.536099999999955,
+                36.74589999999998
+            ],
+            "worldRotation": [
+                -180.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_ball_JNT"
+        },
+        "R_ball_JNT": {
+            "worldPosition": [
+                -134.71499999999983,
+                25.53610000000002,
+                -70.0796999999999
+            ],
+            "worldRotation": [
+                -180.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_ankle_JNT"
+        },
+        "R_ankle_JNT": {
+            "worldPosition": [
+                -134.71499999999958,
+                57.11579999999998,
+                -113.50199999999985
+            ],
+            "worldRotation": [
+                -90.00000000000003,
+                24.12840293026787,
+                90.00000000000001
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_backKnee_JNT"
+        },
+        "R_backKnee_JNT": {
+            "worldPosition": [
+                -134.71499999999997,
+                208.69799999999944,
+                -181.39799999999997
+            ],
+            "worldRotation": [
+                -90.00000000000003,
+                24.12840293026787,
+                90.00000000000001
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_frontKnee_JNT"
+        },
+        "R_frontKnee_JNT": {
+            "worldPosition": [
+                -134.71499999999997,
+                300.27999999999986,
+                -17.183699999999867
+            ],
+            "worldRotation": [
+                -90.00000000000006,
+                -60.85192815428694,
+                90.00000000000007
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "R_hip_JNT"
+        },
+        "R_hip_JNT": {
+            "worldPosition": [
+                -134.715,
+                531.601,
+                -56.6584
+            ],
+            "worldRotation": [
+                -90.00000000000003,
+                9.684152104378107,
+                90.00000000000001
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                180.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "C_neck10_JNT": {
+            "worldPosition": [
+                -4.830814567813313e-14,
+                633.0624085742849,
+                1119.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck09_JNT"
+        },
+        "C_neck09_JNT": {
+            "worldPosition": [
+                -4.830814567813313e-14,
+                633.0624085742849,
+                1065.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck08_JNT"
+        },
+        "C_neck08_JNT": {
+            "worldPosition": [
+                -4.197987443776974e-14,
+                633.0624085742849,
+                1011.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck07_JNT"
+        },
+        "C_neck07_JNT": {
+            "worldPosition": [
+                -1.991419182334475e-14,
+                633.062408574285,
+                957.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck06_JNT"
+        },
+        "C_neck06_JNT": {
+            "worldPosition": [
+                -1.0921385323880983e-14,
+                633.062408574285,
+                903.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck05_JNT"
+        },
+        "C_neck05_JNT": {
+            "worldPosition": [
+                5.315626411261931e-15,
+                633.062408574285,
+                849.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck04_JNT"
+        },
+        "C_neck04_JNT": {
+            "worldPosition": [
+                2.6216008530699497e-14,
+                633.062408574285,
+                795.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck03_JNT"
+        },
+        "C_neck03_JNT": {
+            "worldPosition": [
+                4.600530026377392e-14,
+                633.0624085742854,
+                741.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck02_JNT"
+        },
+        "C_neck02_JNT": {
+            "worldPosition": [
+                4.5061610692842535e-14,
+                633.0624085742855,
+                687.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck01_JNT"
+        },
+        "C_neck01_JNT": {
+            "worldPosition": [
+                1.8499524828685665e-14,
+                633.0624085742859,
+                633.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_neck00_JNT"
+        },
+        "C_neck00_JNT": {
+            "worldPosition": [
+                0.0,
+                633.0624085742859,
+                579.9960164353572
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "C_spine07_JNT": {
+            "worldPosition": [
+                0.5225670175696119,
+                570.5574873018859,
+                372.02977793626536
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_spine06_JNT"
+        },
+        "C_spine06_JNT": {
+            "worldPosition": [
+                0.4354725146413432,
+                564.8278799913851,
+                310.0248149468875
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_spine05_JNT"
+        },
+        "C_spine05_JNT": {
+            "worldPosition": [
+                0.3483780117130746,
+                559.0982726808829,
+                248.0198519575102
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_spine04_JNT"
+        },
+        "C_spine04_JNT": {
+            "worldPosition": [
+                0.26128350878480555,
+                553.3686653703812,
+                186.01488896813265
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_spine03_JNT"
+        },
+        "C_spine03_JNT": {
+            "worldPosition": [
+                0.1741890058565373,
+                547.639058059881,
+                124.00992597875505
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_spine02_JNT"
+        },
+        "C_spine02_JNT": {
+            "worldPosition": [
+                0.08709450292826848,
+                541.9094507493791,
+                62.004962989377596
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_spine01_JNT"
+        },
+        "C_spine01_JNT": {
+            "worldPosition": [
+                0.0,
+                536.1798434388783,
+                0.0
+            ],
+            "worldRotation": [
+                84.72051500010255,
+                0.07844142415921657,
+                -0.02205848017941581
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+        "C_tail06_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -2351.8397827148438
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tail05_JNT"
+        },
+        "C_tail05_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -2001.8397827148438
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tail04_JNT"
+        },
+        "C_tail04_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -1651.8397827148438
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tail03_JNT"
+        },
+        "C_tail03_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -1301.8397827148438
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tail02_JNT"
+        },
+        "C_tail02_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -951.8397827148438
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tail01_JNT"
+        },
+        "C_tail01_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -601.8397827148438
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tail00_JNT"
+        },
+        "C_tail00_JNT": {
+            "worldPosition": [
+                0.0,
+                522.121337890625,
+                -251.83978271484375
+            ],
+            "worldRotation": [
+                0.0,
+                90.0,
+>>>>>>> a5a5aa8156bdce43204178c6600695b431d9d810
+                0.0
+            ],
+            "preferredAngle": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_guides_GRP"
+        },
+<<<<<<< HEAD
         "L_lateralSpikeEnd00_JNT": {
             "worldPosition": [
                 61.233184814453125,
@@ -1985,12 +6198,20 @@
                 -60.27686309814453,
                 613.7291259765625,
                 846.496337890625
+=======
+        "C_localHip": {
+            "worldPosition": [
+                0.0,
+                531.600830078125,
+                -56.658355712890625
+>>>>>>> a5a5aa8156bdce43204178c6600695b431d9d810
             ],
             "worldRotation": [
-                0.0,
+                90.00000000000003,
                 0.0,
                 0.0
             ],
+<<<<<<< HEAD
             "preferredAngle": [
                 0.0,
                 0.0,
@@ -4351,6 +8572,15 @@
                 77.02649320282498,
                 0.0,
                 -63.792992806000186
+=======
+            "isLocator": true
+        },
+        "R_fingerAttr": {
+            "worldPosition": [
+                -1320.958,
+                651.0746996417528,
+                561.6185302734375
+>>>>>>> a5a5aa8156bdce43204178c6600695b431d9d810
             ],
             "worldRotation": [
                 0.0,
@@ -4372,6 +8602,7 @@
             ],
             "isLocator": true
         },
+<<<<<<< HEAD
         "L_bankOut": {
             "worldPosition": [
                 104.73159736907911,
@@ -4442,6 +8673,13 @@
                 -528.387,
                 456.6790862084927,
                 338.1539611816406
+=======
+        "L_heel": {
+            "worldPosition": [
+                134.71502685546875,
+                0.0,
+                -128.29173706814774
+>>>>>>> a5a5aa8156bdce43204178c6600695b431d9d810
             ],
             "worldRotation": [
                 0.0,
@@ -4450,6 +8688,7 @@
             ],
             "isLocator": true
         },
+<<<<<<< HEAD
         "R_legSwitch": {
             "worldPosition": [
                 -142.7,
@@ -4458,7 +8697,95 @@
             ],
             "worldRotation": [
                 0.0,
+=======
+        "L_legSwitch": {
+            "worldPosition": [
+                272.41533005120533,
+                531.600830078125,
+                -56.658355712890625
+            ],
+            "worldRotation": [
+>>>>>>> a5a5aa8156bdce43204178c6600695b431d9d810
                 0.0,
+                0.0,
+                0.0
+            ],
+            "isLocator": true
+        },
+        "L_bankOut": {
+            "worldPosition": [
+                180.92621150578046,
+                0.0,
+                -91.96386936616858
+            ],
+            "worldRotation": [
+                0.0,
+                26.466834378223158,
+                0.0
+            ],
+            "isLocator": true
+        },
+        "L_bankIn": {
+            "worldPosition": [
+                73.3769807892062,
+                0.0,
+                -91.96386936616858
+            ],
+            "worldRotation": [
+                0.0,
+                -52.0857100549204,
+                0.0
+            ],
+            "isLocator": true
+        },
+        "R_legSwitch": {
+            "worldPosition": [
+                -272.415,
+                531.600830078125,
+                -56.658355712890625
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "isLocator": true
+        },
+        "R_heel": {
+            "worldPosition": [
+                -134.715,
+                0.0,
+                -128.29173706814774
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "isLocator": true
+        },
+        "R_bankIn": {
+            "worldPosition": [
+                -73.377,
+                0.0,
+                -91.96386936616858
+            ],
+            "worldRotation": [
+                0.0,
+                52.086,
+                0.0
+            ],
+            "isLocator": true
+        },
+        "R_bankOut": {
+            "worldPosition": [
+                -180.926,
+                0.0,
+                -91.96386936616858
+            ],
+            "worldRotation": [
+                0.0,
+                -26.467,
                 0.0
             ],
             "isLocator": true
