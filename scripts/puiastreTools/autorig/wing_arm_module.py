@@ -51,8 +51,14 @@ class WingArmModule(object):
         self.twists_setup()
 
         data_exporter = data_export.DataExport()
-        data_exporter.append_data(f"{self.side}_armModule", {"skinning_joints": self.skinning_joints,})
-        
+        data_exporter.append_data(
+            f"{self.side}_armModule",
+            {
+                "skinning_joints": self.skinning_joints,
+                "armIk": self.wrist_ik_ctl,
+                "armSettings": self.settings_curve_ctl
+            }
+        )
 
 
     def lock_attrs(self, ctl, attrs):
@@ -102,9 +108,12 @@ class WingArmModule(object):
         
         # --- FK/IK Switch Controller ---
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_ArmSettings", suffixes = ["GRP"])
+        
+        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_armSettings", filePath=self.guides_path)
+        cmds.xform(self.settings_curve_grp[0], ws=True, translation=position)
+        cmds.xform(self.settings_curve_grp[0], ws=True, rotation=rotation)
+        
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
-        cmds.matchTransform(self.settings_curve_grp[0], self.fk_chain[0], pos=True, rot=True)
-        cmds.move(0, 100, 0, self.settings_curve_grp[0], r=True, os=True)
         self.lock_attrs(self.settings_curve_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
         cmds.parent(self.settings_curve_grp[0], self.controllers_trn)
 
