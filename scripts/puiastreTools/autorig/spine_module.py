@@ -39,6 +39,10 @@ class SpineModule():
         self.squash_system()
         self.volume_preservation_system()
 
+        self.data_exporter.append_data(f"spine", 
+                                    {"lastSpineJnt": self.sub_spine_joints[-1]},
+                                  )
+
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
@@ -439,7 +443,7 @@ class SpineModule():
                 cmds.connectAttr(f"{mmt}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
             ctls_sub_spine.append(ctl)
 
-        sub_spine_joints = []
+        self.sub_spine_joints = []
         for i, joint in enumerate(main_spine_joint):
             cmds.select(clear=True)
             new_joint = cmds.joint(joint, name=f"C_subSpineFk0{i+1}_JNT")
@@ -450,11 +454,12 @@ class SpineModule():
             cmds.connectAttr(f"{ctls_sub_spine[i]}.worldMatrix[0]", f"{new_joint}.offsetParentMatrix")
             for attr in ["translateX","translateY","translateZ"]:
                 cmds.setAttr(f"{new_joint}.{attr}", 0)
-            sub_spine_joints.append(new_joint)
+            self.sub_spine_joints.append(new_joint)
 
         cmds.select(clear=True)
         self.local_hip_joint = cmds.joint(n="C_localHipSkinning_JNT")
         cmds.parent(self.local_hip_joint, self.skinning_trn)
         cmds.connectAttr(f"{self.localHip[0]}.worldMatrix[0]", f"{self.local_hip_joint}.offsetParentMatrix")
 
-        return sub_spine_joints
+        return self.sub_spine_joints
+
