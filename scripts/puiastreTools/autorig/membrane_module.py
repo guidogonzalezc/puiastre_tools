@@ -74,10 +74,8 @@ class MembraneModule():
         name01 = re.search(r"finger(.*?)01Bendy", joint_chain02[0]).group(1)
         module_tn_individual = cmds.createNode("transform", name=f"{self.side}_{name.lower()}{name01}Push_GRP", ss=True, p=self.module_trn)
         module_aim_offset= cmds.createNode("transform", name=f"{self.side}_{name.lower()}{name01}AimOffset_GRP", ss=True, p=module_tn_individual)
-        aim_trn = []
         aim_ctl = []
         picks = []
-        curve_skinning_joints = []
         for i, joint in enumerate(joint_chain01[1:], start=1):
             
             joint1_pos = cmds.xform(joint, query=True, worldSpace=True, translation=True)
@@ -86,13 +84,8 @@ class MembraneModule():
             curve_name = f"{self.side}_{name.lower()}{name01}Rotation{i:02d}_CRV"
             rotation_curve = cmds.curve(degree=1, point=[joint1_pos, joint2_pos], name=curve_name)
             cmds.parent(rotation_curve, module_tn_individual)
-            rotation_skin_cluster = cmds.skinCluster(joint, joint_chain02[i], rotation_curve, tsb=True, omi=False, rui=False, name=f"{self.side}_{name.lower()}{name01}PushRotation_SKC")
 
-            if cmds.getAttr(f"{joint}.rotateY") < 0 or cmds.getAttr(f"{joint_chain02[i]}.rotateY") < 0:
-                normals = (0, 0, -1)
-
-            else:
-                normals = (0, 0, 1)
+            normals = (0, 1, 0)
             curve_name = f"{self.side}_{name.lower()}{name01}RotationOffset{i:02d}_CRV"
 
             off_curve = cmds.offsetCurve(rotation_curve, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=curve_name, normal=normals)
@@ -101,13 +94,10 @@ class MembraneModule():
             cmds.setAttr(f"{off_curve[1]}.normal", 0,0,1)
             cmds.setAttr(f"{off_curve[1]}.distance", 50)
 
-            offset_trn = cmds.createNode("transform", name=f"{self.side}_{name.lower()}{name01}PushOffsetAim{i:02d}_GRP", ss=True, p=module_aim_offset)
-            aim_trn.append(offset_trn)
             cmds.parent(off_curve[0], module_tn_individual)
             mpa = cmds.createNode("motionPath", n=f"{self.side}_{name.lower()}{name01}PushOffset{i:02d}_MPA", ss=True)
             cmds.connectAttr(f"{off_curve[0]}.worldSpace[0]", f"{mpa}.geometryPath")
             cmds.setAttr(f"{mpa}.uValue", 0.5)
-            cmds.connectAttr(f"{mpa}.allCoordinates", f"{offset_trn}.translate")
 
             cmds.select(clear=True)
             secondary_joint = cmds.joint(n=f"{self.side}_{name.lower()}{name01}Push{i:02d}_JNT", rad= 50)
