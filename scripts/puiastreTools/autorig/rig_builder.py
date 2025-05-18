@@ -4,6 +4,7 @@ from puiastreTools.autorig import neck_module
 from puiastreTools.autorig import wing_arm_module
 from puiastreTools.autorig import spine_module
 from puiastreTools.autorig import tail_module
+from puiastreTools.autorig import clavicle_module
 from puiastreTools.utils import basic_structure
 import maya.cmds as cmds
 from importlib import reload
@@ -14,6 +15,7 @@ reload(neck_module)
 reload(finger_module)
 reload(spine_module)
 reload(tail_module)
+reload(clavicle_module)
 
 def make():   
     basic_structure.create_basic_structure(asset_name = "Varyndor")
@@ -24,16 +26,24 @@ def make():
     module = neck_module.NeckModule()
     tail = tail_module.TailModule()
     leg_Module = leg_module.LegModule()
+    clavicle = clavicle_module.ClavicleModule()
+
 
 
     for side in ["L", "R"]:
         leg_Module.make(side = side)
         wingmodule.make(side = side)
-        fingermodule.make(side = side)
+
 
     spinemodule.make()
-    module.make()
-    tail.make()
+    
+
+    for side in ["L", "R"]:
+        clavicle.make(side = side)
+        # fingermodule.make(side = side)
+
+    # module.make()
+    # tail.make()
 
 
     
