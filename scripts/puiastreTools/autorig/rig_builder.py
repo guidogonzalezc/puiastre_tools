@@ -56,5 +56,35 @@ def make():
     fade=True,
     alpha=0.8)
 
+    disable_inherits()
+    rename_ctl_shapes()
+    joint_lable()
+
+def disable_inherits():
+    sel = cmds.ls()
+
+    for obj in sel:
+        if "CRV" in obj:
+            if not "Shape" in obj:
+                cmds.setAttr(obj + ".inheritsTransform", 0)    
+
+def rename_ctl_shapes():
     
+    obj = cmds.ls(type="nurbsCurve")
+
+    for shapes in obj:
+        parentName = cmds.listRelatives(shapes, parent=True)[0]
+        cmds.rename(shapes, f"{parentName}Shape")
+
+def joint_lable():
+    for jnt in cmds.ls(type="joint"):
+        if "L_" in jnt:
+            cmds.setAttr(jnt + ".side", 1)
+        if "R_" in jnt:
+            cmds.setAttr(jnt + ".side", 2)
+        if "C_" in jnt:
+            cmds.setAttr(jnt + ".side", 0)
+        cmds.setAttr(jnt + ".type", 18)
+        cmds.setAttr(jnt + ".otherType", jnt.split("_")[1], type= "string")
+
 
