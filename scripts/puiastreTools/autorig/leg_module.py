@@ -40,10 +40,10 @@ class LegModule():
 
         self.duplicate_leg()
         self.set_controllers()
-        self.pairBlends()
-        self.soft_stretch()
-        self.reverse_foot()
-        self.call_bendys()
+        # self.pairBlends()
+        # self.soft_stretch()
+        # self.reverse_foot()
+        # self.call_bendys()
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
         for attr in attrs:
@@ -54,10 +54,12 @@ class LegModule():
         self.fk_chain = []
         self.ik_chain = []
         self.blend_chain = []
+        self.ikDriver_chain = []
         chains = {
             "Fk": self.fk_chain,
             "Ik": self.ik_chain,
-            "Blend": self.blend_chain
+            "Blend": self.blend_chain,
+            "ikDriver": self.ikDriver_chain
         }
 
         for name, chain in chains.items():
@@ -116,7 +118,7 @@ class LegModule():
             self.lock_attr(fk_ctl)
 
 
-        #-- IK CONTROLLER -- #
+        # -- IK CONTROLLER -- #
         if not cmds.pluginInfo("ikSpringSolver", query=True, loaded=True):
             cmds.loadPlugin("ikSpringSolver")
         
@@ -126,81 +128,108 @@ class LegModule():
         cmds.matchTransform(self.ikHandleManager, self.ik_chain[3], pos=True)
 
         self.springIkHandle = cmds.ikHandle(
-            name=f"{self.side}_legIk_HDL",
-            startJoint=self.ik_chain[0],
-            endEffector=self.ik_chain[3],
+            name=f"{self.side}_legSpringIk_HDL",
+            startJoint=self.ikDriver_chain[0],
+            endEffector=self.ikDriver_chain[3],
             solver="ikSpringSolver",
         )[0]
+
+        for joint in self.ik_chain:
+            cmds.setAttr(f"{joint}.preferredAngleZ", 0)
 
         cmds.setAttr(f"{self.springIkHandle}.poleVectorX", 0)
         cmds.setAttr(f"{self.springIkHandle}.poleVectorY", 0)
         cmds.setAttr(f"{self.springIkHandle}.poleVectorZ", 1)
 
+        self.legRPSIkHandle = cmds.ikHandle( 
+            name=f"{self.side}_legRPSIk_HDL",
+            startJoint=self.ik_chain[0],
+            endEffector=self.ik_chain[2],
+            solver="ikRPsolver",
+        )[0]
 
-        self.ballIkHandle = cmds.ikHandle( 
-            name=f"{self.side}_legBallIk_HDL",
+        self.tipIkHandle = cmds.ikHandle(
+            name=f"{self.side}_legTipIk_HDL",
             startJoint=self.ik_chain[3],
             endEffector=self.ik_chain[4],
             solver="ikSCsolver",
         )[0]
 
-        self.tipIkHandle = cmds.ikHandle(
-            name=f"{self.side}_legTipIk_HDL",
-            startJoint=self.ik_chain[4],
-            endEffector=self.ik_chain[5],
+        self.ballIkHandle = cmds.ikHandle( 
+            name=f"{self.side}_legBallIk_HDL",
+            startJoint=self.ik_chain[2],
+            endEffector=self.ik_chain[3],
             solver="ikSCsolver",
         )[0]
 
-        cmds.parent(self.springIkHandle, self.ballIkHandle, self.tipIkHandle, self.module_trn)
+        cmds.parent(self.springIkHandle, self.ballIkHandle, self.tipIkHandle, self.legRPSIkHandle, self.module_trn)
 
-        ik_controllers = {
-            self.ik_chain[0]: [f"{self.side}_rootIk",True, [self.ik_chain[0]]],
-            self.ik_chain[1]: [f"{self.side}_legPv", False, [self.springIkHandle]],
-            self.ik_chain[2]: [None, False, False],
-            self.ik_chain[3]: [f"{self.side}_legIk", False, False],
-            self.ik_chain[4]: [f"{self.side}_ballIk", True, [self.ballIkHandle, self.ikHandleManager]],
-            self.ik_chain[5]: [f"{self.side}_toeIk", True, [self.tipIkHandle]],  
+        # ik_controllers = {
+        #     self.ik_chain[0]: [f"{self.side}_rootIk",True, [self.ik_chain[0]]],
+        #     self.ik_chain[1]: [f"{self.side}_legPv", False, [self.springIkHandle]],
+        #     self.ik_chain[2]: [None, False, False],
+        #     self.ik_chain[3]: [f"{self.side}_legIk", False, False],
+        #     self.ik_chain[4]: [f"{self.side}_ballIk", True, [self.ballIkHandle, self.ikHandleManager]],
+        #     self.ik_chain[5]: [f"{self.side}_toeIk", True, [self.tipIkHandle]],  
 
-        }
+        # }
 
+
+
+        self.ik_root_ctl, self.ik_root_grp = curve_tool.controller_creator(f"{self.side}_rootIk", suffixes = ["GRP", "SDK"])
+        self.ik_pv_ctl, self.ik_pv_grp = curve_tool.controller_creator(f"{self.side}_legPv", suffixes = ["GRP", "SDK"])
+        self.ik_backLeg_ctl, self.ik_backLeg_grp = curve_tool.controller_creator(f"{self.side}_backLeg", suffixes = ["GRP", "SDK"])
+        self.ik_ankle_ctl, self.ik_ankle_grp = curve_tool.controller_creator(f"{self.side}_legIk", suffixes = ["GRP", "SDK"])
+        self.ik_toe_ctl, self.ik_toe_grp = curve_tool.controller_creator(f"{self.side}_toeIk", suffixes = ["GRP", "SDK"])
+
+        cmds.matchTransform(self.ik_root_grp[0], self.ik_chain[0])
+        cmds.matchTransform(self.ik_ankle_grp[0], self.ik_chain[3], pos=True)
+        cmds.matchTransform(self.ik_backLeg_grp[0], self.ik_chain[1], pos=True)
+        cmds.matchTransform(self.ik_toe_grp[0], self.ik_chain[4], pos=True)
+
+        cmds.parentConstraint(self.ik_root_ctl, self.ik_chain[0], mo=True)
+        cmds.parentConstraint(self.ik_root_ctl, self.ikDriver_chain[0], mo=True)
+        cmds.parentConstraint(self.ik_toe_ctl, self.ik_chain[1], mo=True)
+
+
+        arm_pos = om.MVector(cmds.xform(self.ik_chain[0], q=True, rp=True, ws=True))
+        elbow_pos = om.MVector(cmds.xform(self.ik_chain[1], q=True, rp=True, ws=True))
+        wrist_pos = om.MVector(cmds.xform(self.ik_chain[2], q=True, rp=True, ws=True))
+
+        arm_to_wrist = wrist_pos - arm_pos
+        arm_to_wrist_scaled = arm_to_wrist / 2
+        mid_point = arm_pos + arm_to_wrist_scaled
+        mid_point_to_elbow_vec = elbow_pos - mid_point
+        mid_point_to_elbow_vec_scaled = mid_point_to_elbow_vec * 2
+        mid_point_to_elbow_point = mid_point + mid_point_to_elbow_vec_scaled
+
+        cmds.xform(self.ik_pv_grp[0], translation=mid_point_to_elbow_point)
+
+        cmds.poleVectorConstraint(self.ik_pv_ctl, self.springIkHandle)    
+
+        # for name, data in ik_controllers.items():
+        #     if data[0]:
+        #         ik_ctl, ik_grp = curve_tool.controller_creator(data[0], suffixes = ["GRP", "SDK"])
+        #         cmds.parent(ik_grp[0], self.ik_trn)
+        #         self.ik_ctl_grps.append(ik_grp)
+        #         self.ik_ctls.append(ik_ctl)
+        #         self.lock_attr(ik_ctl)
+
+        #     else:
+        #         continue
+        #     if data[0]:
+        #         match_pos = not data[1]
+        #         cmds.matchTransform(ik_grp[0], name, pos=match_pos)
+
+        #     if data[2]:
+        #         if name == self.ik_chain[1]:
+
+        #         else:
+        #             for child_constraints in data[2]:
+        #                 cmds.parentConstraint(ik_ctl, child_constraints, mo=True)
+                        
         self.ik_ctl_grps = []
         self.ik_ctls = []
-
-        for name, data in ik_controllers.items():
-            if data[0]:
-                ik_ctl, ik_grp = curve_tool.controller_creator(data[0], suffixes = ["GRP", "SDK"])
-                cmds.parent(ik_grp[0], self.ik_trn)
-                self.ik_ctl_grps.append(ik_grp)
-                self.ik_ctls.append(ik_ctl)
-                self.lock_attr(ik_ctl)
-
-            else:
-                continue
-            if data[0]:
-                match_pos = not data[1]
-                cmds.matchTransform(ik_grp[0], name, pos=match_pos)
-
-            if data[2]:
-                if name == self.ik_chain[1]:
-                    arm_pos = om.MVector(cmds.xform(self.ik_chain[0], q=True, rp=True, ws=True))
-                    elbow_pos = om.MVector(cmds.xform(self.ik_chain[1], q=True, rp=True, ws=True))
-                    wrist_pos = om.MVector(cmds.xform(self.ik_chain[2], q=True, rp=True, ws=True))
-
-                    arm_to_wrist = wrist_pos - arm_pos
-                    arm_to_wrist_scaled = arm_to_wrist / 2
-                    mid_point = arm_pos + arm_to_wrist_scaled
-                    mid_point_to_elbow_vec = elbow_pos - mid_point
-                    mid_point_to_elbow_vec_scaled = mid_point_to_elbow_vec * 2
-                    mid_point_to_elbow_point = mid_point + mid_point_to_elbow_vec_scaled
-
-                    cmds.xform(ik_grp[0], translation=mid_point_to_elbow_point)
-
-                    cmds.poleVectorConstraint(ik_ctl, data[2])    
-                else:
-                    for child_constraints in data[2]:
-                        cmds.parentConstraint(ik_ctl, child_constraints, mo=True)
-                        
-
 
         for item in [f"{self.side}_bankIn", f"{self.side}_bankOut", f"{self.side}_heel"]:
             position, rotation = guides_manager.guide_import(joint_name=item, filePath=self.guides_path)
@@ -210,35 +239,35 @@ class LegModule():
             self.ik_ctls.append(ctl)
             self.ik_ctl_grps.append(clt_grp)
 
-        cmds.parent(self.ik_ctl_grps[3][0], self.ik_ctls[4])
-        cmds.parent(self.ik_ctl_grps[4][0], self.ik_ctls[7])
-        cmds.parent(self.ik_ctl_grps[7][0], self.ik_ctls[6])
-        cmds.parent(self.ik_ctl_grps[6][0], self.ik_ctls[5])
-        cmds.parent(self.ik_ctl_grps[5][0], self.ik_ctls[2])
+        # cmds.parent(self.ik_ctl_grps[3][0], self.ik_ctls[4])
+        # cmds.parent(self.ik_ctl_grps[4][0], self.ik_ctls[7])
+        # cmds.parent(self.ik_ctl_grps[7][0], self.ik_ctls[6])
+        # cmds.parent(self.ik_ctl_grps[6][0], self.ik_ctls[5])
+        # cmds.parent(self.ik_ctl_grps[5][0], self.ik_ctls[2])
 
-        cmds.addAttr(self.ik_ctls[2], shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_ctls[2]+".strechySep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_ctls[2]+".softSep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.ik_ctls[2]+".extraSep", channelBox=True, lock=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias01", niceName="Spring Solver Bias 01",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
-        cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias02", niceName="Spring Solver Bias 02",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
-        cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias01", f"{self.springIkHandle}.springAngleBias[0].springAngleBias_FloatValue")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias02", f"{self.springIkHandle}.springAngleBias[1].springAngleBias_FloatValue")
+        # cmds.addAttr(self.ik_ctls[2], shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.ik_ctls[2]+".strechySep", channelBox=True, lock=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.ik_ctls[2]+".softSep", channelBox=True, lock=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.ik_ctls[2]+".extraSep", channelBox=True, lock=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias01", niceName="Spring Solver Bias 01",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
+        # cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias02", niceName="Spring Solver Bias 02",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
+        # cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias01", f"{self.springIkHandle}.springAngleBias[0].springAngleBias_FloatValue")
+        # cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias02", f"{self.springIkHandle}.springAngleBias[1].springAngleBias_FloatValue")
 
     def pairBlends(self):
         for i, joint in enumerate(self.blend_chain):

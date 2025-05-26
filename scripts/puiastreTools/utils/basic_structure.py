@@ -75,7 +75,7 @@ def create_basic_structure(asset_name = "assetName"):
     cmds.addAttr(ctls[2], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
     cmds.setAttr(ctls[2]+".reference", channelBox=True)
 
-    cmds.addAttr(ctls[2], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=False)
+    cmds.addAttr(ctls[2], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=True)
     cmds.addAttr(ctls[2], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
     cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
     cmds.setAttr(ctls[2]+".showModules", channelBox=True)

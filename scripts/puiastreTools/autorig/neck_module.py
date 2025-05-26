@@ -80,15 +80,24 @@ class NeckModule:
         cmds.addAttr(self.neck_ctl_mid, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
         cmds.matchTransform(self.neck_grp_mid[0], self.neck_chain[5], pos=True, rot=True, scl=False)
         self.lock_attrs(self.neck_ctl_mid, ["scaleX", "scaleY", "scaleZ", "visibility"])
-       
+
+
+
+        self.neck_end_ctl, self.neck_end_grp = curve_tool.controller_creator("C_neckEnd", ["GRP", "OFF"])
+        cmds.matchTransform(self.neck_end_grp[0], self.neck_chain[-1], pos=True, rot=True, scl=False)
+        cmds.addAttr(self.neck_end_ctl, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
+        cmds.setAttr(f"{self.neck_end_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
+        cmds.addAttr(self.neck_end_ctl, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
+        self.lock_attrs(self.neck_end_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
+        # cmds.connectAttr(f"{self.neck_end_ctl}.worldMatrix[0]", f"{self.neck_chain[-1]}.offsetParentMatrix")
 
         self.head_ctl, self.head_grp = curve_tool.controller_creator("C_head", ["GRP", "OFF"])
-        cmds.matchTransform(self.head_grp[0], self.neck_chain[-1], pos=True, rot=True, scl=False)
+        # cmds.matchTransform(self.head_grp[0], self.neck_chain[-1], pos=True, rot=True, scl=False)
         cmds.addAttr(self.head_ctl, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
         cmds.setAttr(f"{self.head_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
         cmds.addAttr(self.head_ctl, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
         self.lock_attrs(self.head_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
-        cmds.parent(self.neck_grp[0], self.neck_grp_mid[0], self.head_grp[0], self.controllers_trn)
+        cmds.parent(self.neck_grp[0], self.neck_grp_mid[0], self.neck_end_grp[0], self.head_grp[0], self.controllers_trn)
 
     def ik_setup(self):
 
@@ -119,14 +128,16 @@ class NeckModule:
         cmds.setAttr(f"{self.ik_spring_hdl[0]}.dWorldUpType", 4)
         cmds.setAttr(f"{self.ik_spring_hdl[0]}.dForwardAxis", 4)
         cmds.connectAttr(f"{self.neck_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrix")
-        cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrixEnd")
+        cmds.connectAttr(f"{self.neck_end_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrixEnd")
 
         self.head_jnt_offset = cmds.createNode("transform", n=f"{self.side}_head_OFFSET", p=self.module_trn)
         self.head_jnt = cmds.createNode("joint", n=f"{self.side}_head_JNT", p=self.head_jnt_offset)
-        cmds.matchTransform(self.head_jnt_offset, self.neck_chain[-1], pos=True, rot=True, scl=False)
+        # cmds.matchTransform(self.head_jnt_offset, self.neck_chain[-1], pos=True, rot=True, scl=False)
+        cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{self.head_jnt}.offsetParentMatrix")
 
-        cmds.parentConstraint(self.head_ctl, self.head_neck_end_jnt, mo=True)
-        cmds.pointConstraint(self.neck_chain[-1], self.head_jnt, mo=True)
+        cmds.parentConstraint(self.neck_end_ctl, self.head_neck_end_jnt, mo=True)
+        cmds.connectAttr(f"{self.neck_chain[-1]}.worldMatrix[0]", f"{self.head_grp[0]}.offsetParentMatrix")
+        # cmds.pointConstraint(self.neck_chain[-1], self.head_jnt, mo=True)
         cmds.orientConstraint(self.head_ctl, self.head_jnt, mo=True)
 
         parent = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.neck_grp_mid[1], mo=True)[0]
@@ -233,12 +244,18 @@ class NeckModule:
 
     def out_skinning_jnts(self):
 
-        self.main_chain_skinning_grp = cmds.createNode("transform", n=f"{self.side}_neckSkinning_GRP", p=self.skinning_trn)
+        skinning_jnts = []
         for i, jnt in enumerate(self.neck_chain):
             cmds.select(clear=True)
             skin_joint = cmds.joint(n=jnt.replace("_JNT", "Skinning_JNT"))
             cmds.connectAttr(f"{jnt}.worldMatrix[0]", f"{skin_joint}.offsetParentMatrix")
-            cmds.parent(skin_joint, self.main_chain_skinning_grp)
+            cmds.parent(skin_joint, self.skinning_trn)
+            skinning_jnts.append(skin_joint)
+        
+        cmds.select(clear=True)
+        self.head_jnt_skinning = cmds.joint(n=self.head_jnt.replace("_JNT", "Skinning_JNT"))
+        cmds.connectAttr(f"{self.head_jnt}.worldMatrix[0]", f"{self.head_jnt_skinning}.offsetParentMatrix")
+        cmds.parent(self.head_jnt_skinning, self.skinning_trn)
 
 
         

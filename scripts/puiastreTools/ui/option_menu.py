@@ -3,6 +3,8 @@ import os
 import maya.cmds as cmds
 from functools import partial
 from importlib import reload
+from puiastreTools.utils import basic_structure
+
 
 def reload_ui(*args):
     from puiastreTools.ui import option_menu
@@ -23,6 +25,8 @@ def import_guides(*args, value=None):
 def leg_module(*args):
     from puiastreTools.autorig import leg_module
     reload(leg_module)
+    data_export_func()
+    basic_structure.create_basic_structure(asset_name = "Varyndor")
     module = leg_module.LegModule()
     module.make(side = "L")
     # module.make(side = "R")

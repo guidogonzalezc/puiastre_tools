@@ -182,7 +182,7 @@ class WingArmModule(object):
 
         self.upper_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRoll_JNT")
         self.upper_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRollEnd_JNT")
-        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[0], pos=True, rot=True)
+        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[0], pos=True)
         cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[1], pos=True, rot=True)
         cmds.parent(self.upper_roll_jnt, self.upper_non_roll_jnt)
     
@@ -211,8 +211,9 @@ class WingArmModule(object):
         self.lower_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmLowerRollEnd_JNT")
         cmds.parent(self.lower_roll_jnt, self.lower_roll_offset)
         cmds.matchTransform(self.lower_roll_offset, self.ik_chain[1], pos=True, rot=True)
+        cmds.matchTransform(self.lower_roll_jnt, self.ik_chain[1], pos=True, rot=True)
         cmds.matchTransform(self.lower_roll_end_jnt, self.ik_chain[-1], pos=True, rot=True)
-        cmds.parentConstraint(self.blend_chain[1], self.lower_roll_offset, mo=True)
+        cmds.parentConstraint(self.blend_chain[1], self.lower_roll_offset, mo=False)
 
         
 
@@ -268,10 +269,10 @@ class WingArmModule(object):
 
         self.soft_off = cmds.createNode("transform", name=f"{self.side}_armSoft_OFF", p=self.module_trn)
         cmds.pointConstraint(self.arm_ik_controllers[0], self.soft_off)
-        cmds.aimConstraint(self.wrist_ik_ctl, self.soft_off, aimVector=(1, 0, 0), upVector=(0, 0, 1), worldUpType="None", mo=True)
+        cmds.aimConstraint(self.wrist_ik_ctl, self.soft_off, aimVector=(1, 0, 0), upVector=(0, 1, 0), worldUpType="vector", mo=False)
 
         self.soft_trn = cmds.createNode("transform", name=f"{self.side}_armSoft_TRN", p=self.soft_off)
-        cmds.matchTransform(self.soft_trn, self.ik_chain[-1], pos=True, rot=True)
+        cmds.matchTransform(self.soft_trn, self.blend_chain[-1], pos=True)
 
 
 
@@ -357,8 +358,8 @@ class WingArmModule(object):
         cmds.connectAttr(self.created_nodes[23] + ".outFloat", self.created_nodes[25]+".floatA")
 
         cmds.setAttr(f"{self.created_nodes[9]}.floatA", math.e)
-        cmds.setAttr(f"{self.created_nodes[4]}.floatB", cmds.getAttr(f"{self.ik_chain[1]}.translateX"))
-        cmds.setAttr(f"{self.created_nodes[10]}.floatB", cmds.getAttr(f"{self.ik_chain[-1]}.translateX"))
+        cmds.setAttr(f"{self.created_nodes[4]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[1]}.translateX")))
+        cmds.setAttr(f"{self.created_nodes[10]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[-1]}.translateX")))
         cmds.setAttr(f"{self.created_nodes[2]}.outputMin", 0.001)
         cmds.setAttr(f"{self.created_nodes[2]}.outputMax", 154.162)
         cmds.setAttr(f"{self.created_nodes[7]}.floatB", -1.0)
@@ -376,11 +377,25 @@ class WingArmModule(object):
         else:
             pass
         
-        cmds.connectAttr(f"{self.created_nodes[18]}.outColorR", f"{self.soft_trn}.translateX")
 
+        cmds.connectAttr(f"{self.created_nodes[18]}.outColorR", f"{self.soft_trn}.translateX")
+        if self.side == "L":
+            cmds.connectAttr(f"{self.created_nodes[18]}.outColorG", f"{self.ik_chain[1]}.translateX")
+            cmds.connectAttr(f"{self.created_nodes[18]}.outColorB", f"{self.ik_chain[-1]}.translateX")
+        else:
+            abs_up = cmds.createNode("floatMath", n=f"{self.side}_wingArmAbsUpper_FLM")
+            abs_low = cmds.createNode("floatMath", n=f"{self.side}_wingArmAbsLower_FLM")
+            cmds.setAttr(f"{abs_up}.operation", 2)
+            cmds.setAttr(f"{abs_low}.operation", 2)
+            cmds.setAttr(f"{abs_up}.floatB", -1)
+            cmds.setAttr(f"{abs_low}.floatB", -1)
+            cmds.connectAttr(f"{self.created_nodes[18]}.outColorG", f"{abs_up}.floatA")
+            cmds.connectAttr(f"{self.created_nodes[18]}.outColorB", f"{abs_low}.floatA")
+            cmds.connectAttr(f"{abs_up}.outFloat", f"{self.ik_chain[1]}.translateX")
+            cmds.connectAttr(f"{abs_low}.outFloat", f"{self.ik_chain[-1]}.translateX")
 
         cmds.parentConstraint(self.soft_trn, self.main_ik_handle, mo=True)
-        cmds.parentConstraint(self.root_ctl, self.ik_chain[0], mo=False)
+        cmds.parentConstraint(self.root_ctl, self.ik_chain[0], mo=True)
 
     def pole_vector_setup(self):
         # --- Pole Vector ---
@@ -405,24 +420,6 @@ class WingArmModule(object):
         cmds.poleVectorConstraint(self.pole_vector_ctl, self.main_ik_handle)
         self.lock_attrs(self.pole_vector_ctl, ["sx", "sy", "sz", "v"])
         
-        
-        cmds.addAttr(self.pole_vector_ctl, shortName="ELBOW_PINNING____", attributeType="enum", enumName="____", keyable=True)
-        cmds.setAttr(f"{self.pole_vector_ctl}.ELBOW_PINNING____", lock=True, keyable=False, channelBox=True)
-        cmds.addAttr(self.pole_vector_ctl, shortName="Pin", minValue=0, defaultValue=0, maxValue=1, keyable=True)
-
-        
-        self.upper_pin_attrblender = cmds.createNode("blendTwoAttr", n=f"{self.side}_wingArmUpperPin_BTA")
-        self.lower_pin_attrblender = cmds.createNode("blendTwoAttr", n=f"{self.side}_wingArmLowerPin_BTA")
-
-        cmds.connectAttr(self.created_nodes[18] + ".outColorG", f"{self.upper_pin_attrblender}.input[0]")
-        cmds.connectAttr(self.created_nodes[0] + ".distance", f"{self.upper_pin_attrblender}.input[1]")
-        cmds.connectAttr(self.pole_vector_ctl + ".Pin", f"{self.upper_pin_attrblender}.attributesBlender")
-        cmds.connectAttr(self.upper_pin_attrblender + ".output", self.ik_chain[1] + ".translateX")
-
-        cmds.connectAttr(self.created_nodes[18] + ".outColorB", f"{self.lower_pin_attrblender}.input[0]")
-        cmds.connectAttr(self.created_nodes[0] + ".distance", f"{self.lower_pin_attrblender}.input[1]")
-        cmds.connectAttr(self.pole_vector_ctl + ".Pin", f"{self.lower_pin_attrblender}.attributesBlender")
-        cmds.connectAttr(self.lower_pin_attrblender + ".output", self.ik_chain[-1] + ".translateX")
 
     def bendy_curves_setup(self):
         # --- Bendy Setup ---
@@ -485,6 +482,8 @@ class WingArmModule(object):
                 cmds.setAttr(f"{motion_path}.upAxis", 1)
                 cmds.setAttr(f"{motion_path}.worldUpType", 2)
                 cmds.setAttr(f"{motion_path}.fractionMode", 1)
+                if self.side == "R":
+                    cmds.setAttr(f"{motion_path}.inverseFront", 1)
 
                 float_constant = cmds.createNode("floatConstant", n=f"{self.side}_wingArm{part}Bendy{joint}_FCT")
                 cmds.setAttr(f"{float_constant}.inFloat", hook_parameters[ii])
@@ -499,7 +498,7 @@ class WingArmModule(object):
                 
                 if ii == 1:
                     bendy_ctl, bendy_grp = curve_tool.controller_creator(f"{self.side}_wingArm{part}Bendy{joint}", suffixes=["GRP"])
-                    self.lock_attrs(bendy_ctl, ["sy", "sz", "v"])
+                    self.lock_attrs(bendy_ctl, ["v"])
                     cmds.parent(bendy_grp[0], self.controllers_trn)
 
                 if i == 0:

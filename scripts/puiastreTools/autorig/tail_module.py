@@ -24,6 +24,9 @@ class TailModule(object):
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
+        self.fk_controllers = []
+        self.fk_grps = []
+
     def make(self):
         
         self.side = "C"
@@ -40,6 +43,11 @@ class TailModule(object):
 
                 self.bendy_setup(start_joint=start, end_joint=end, name=name)
 
+        for i, (ctl, grp) in enumerate(zip(self.fk_controllers, self.fk_grps)):
+
+            if i > 0:
+                cmds.parent(grp, self.fk_controllers[i-1])
+
 
     def import_guides(self):
 
@@ -49,13 +57,15 @@ class TailModule(object):
     def bendy_setup(self, start_joint, end_joint, name):
 
         bendy_module = cmds.createNode("transform", n=f"{self.side}_{name}BendyModule_GRP", ss=True, p=self.module_trn)
-        skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skel_grp)
+        skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skinning_trn)
         controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=self.controllers_trn)
         
         ctl, grp = curve_tool.controller_creator(f"{self.side}_{name}", suffixes=["GRP", "SDK", "OFF"])
         cmds.matchTransform(grp[0], start_joint, pos=True, rot=True)
         cmds.parent(grp[0], controllers)
         cmds.parentConstraint(ctl, start_joint, mo=True)
+        self.fk_controllers.append(ctl)
+        self.fk_grps.append(grp[0])
 
         # Create the roll setup
         roll_joint_offset = cmds.createNode("transform", n=f"{self.side}_{name}Roll_TRN", ss=True, p=bendy_module)

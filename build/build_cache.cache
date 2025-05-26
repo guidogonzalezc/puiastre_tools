@@ -17,105 +17,9 @@
             "L_wingArmLowerTwist03_JNT",
             "L_wingArmLowerTwist04_JNT",
             "L_wristSkinning_JNT"
-        ]
-    },
-    "L_finger": {
-        "attr_ctl": "L_fingerAttr_CTL"
-    },
-    "L_fingerThumb": {
-        "bendy_joints": [
-            "L_fingerThumb01Bendy00_JNT",
-            "L_fingerThumb01Bendy01_JNT",
-            "L_fingerThumb01Bendy02_JNT",
-            "L_fingerThumb01Bendy03_JNT",
-            "L_fingerThumb01Bendy04_JNT",
-            "L_fingerThumb02Bendy00_JNT",
-            "L_fingerThumb02Bendy01_JNT",
-            "L_fingerThumb02Bendy02_JNT",
-            "L_fingerThumb02Bendy03_JNT",
-            "L_fingerThumb02Bendy04_JNT",
-            "L_fingerThumb03Bendy00_JNT",
-            "L_fingerThumb03Bendy01_JNT",
-            "L_fingerThumb03Bendy02_JNT",
-            "L_fingerThumb03Bendy03_JNT",
-            "L_fingerThumb03Bendy04_JNT"
-        ]
-    },
-    "L_fingerIndex": {
-        "bendy_joints": [
-            "L_fingerIndex01Bendy00_JNT",
-            "L_fingerIndex01Bendy01_JNT",
-            "L_fingerIndex01Bendy02_JNT",
-            "L_fingerIndex01Bendy03_JNT",
-            "L_fingerIndex01Bendy04_JNT",
-            "L_fingerIndex02Bendy00_JNT",
-            "L_fingerIndex02Bendy01_JNT",
-            "L_fingerIndex02Bendy02_JNT",
-            "L_fingerIndex02Bendy03_JNT",
-            "L_fingerIndex02Bendy04_JNT",
-            "L_fingerIndex03Bendy00_JNT",
-            "L_fingerIndex03Bendy01_JNT",
-            "L_fingerIndex03Bendy02_JNT",
-            "L_fingerIndex03Bendy03_JNT",
-            "L_fingerIndex03Bendy04_JNT"
-        ]
-    },
-    "L_fingerMiddle": {
-        "bendy_joints": [
-            "L_fingerMiddle01Bendy00_JNT",
-            "L_fingerMiddle01Bendy01_JNT",
-            "L_fingerMiddle01Bendy02_JNT",
-            "L_fingerMiddle01Bendy03_JNT",
-            "L_fingerMiddle01Bendy04_JNT",
-            "L_fingerMiddle02Bendy00_JNT",
-            "L_fingerMiddle02Bendy01_JNT",
-            "L_fingerMiddle02Bendy02_JNT",
-            "L_fingerMiddle02Bendy03_JNT",
-            "L_fingerMiddle02Bendy04_JNT",
-            "L_fingerMiddle03Bendy00_JNT",
-            "L_fingerMiddle03Bendy01_JNT",
-            "L_fingerMiddle03Bendy02_JNT",
-            "L_fingerMiddle03Bendy03_JNT",
-            "L_fingerMiddle03Bendy04_JNT"
-        ]
-    },
-    "L_fingerRing": {
-        "bendy_joints": [
-            "L_fingerRing01Bendy00_JNT",
-            "L_fingerRing01Bendy01_JNT",
-            "L_fingerRing01Bendy02_JNT",
-            "L_fingerRing01Bendy03_JNT",
-            "L_fingerRing01Bendy04_JNT",
-            "L_fingerRing02Bendy00_JNT",
-            "L_fingerRing02Bendy01_JNT",
-            "L_fingerRing02Bendy02_JNT",
-            "L_fingerRing02Bendy03_JNT",
-            "L_fingerRing02Bendy04_JNT",
-            "L_fingerRing03Bendy00_JNT",
-            "L_fingerRing03Bendy01_JNT",
-            "L_fingerRing03Bendy02_JNT",
-            "L_fingerRing03Bendy03_JNT",
-            "L_fingerRing03Bendy04_JNT"
-        ]
-    },
-    "L_fingerPinky": {
-        "bendy_joints": [
-            "L_fingerPinky01Bendy00_JNT",
-            "L_fingerPinky01Bendy01_JNT",
-            "L_fingerPinky01Bendy02_JNT",
-            "L_fingerPinky01Bendy03_JNT",
-            "L_fingerPinky01Bendy04_JNT",
-            "L_fingerPinky02Bendy00_JNT",
-            "L_fingerPinky02Bendy01_JNT",
-            "L_fingerPinky02Bendy02_JNT",
-            "L_fingerPinky02Bendy03_JNT",
-            "L_fingerPinky02Bendy04_JNT",
-            "L_fingerPinky03Bendy00_JNT",
-            "L_fingerPinky03Bendy01_JNT",
-            "L_fingerPinky03Bendy02_JNT",
-            "L_fingerPinky03Bendy03_JNT",
-            "L_fingerPinky03Bendy04_JNT"
-        ]
+        ],
+        "armIk": "L_wingArmWrist_CTL",
+        "armSettings": "L_ArmSettings_CTL"
     },
     "R_armModule": {
         "skinning_joints": [
@@ -130,104 +34,11 @@
             "R_wingArmLowerTwist03_JNT",
             "R_wingArmLowerTwist04_JNT",
             "R_wristSkinning_JNT"
-        ]
+        ],
+        "armIk": "R_wingArmWrist_CTL",
+        "armSettings": "R_ArmSettings_CTL"
     },
-    "R_finger": {
-        "attr_ctl": "R_fingerAttr_CTL"
-    },
-    "R_fingerThumb": {
-        "bendy_joints": [
-            "R_fingerThumb01Bendy00_JNT",
-            "R_fingerThumb01Bendy01_JNT",
-            "R_fingerThumb01Bendy02_JNT",
-            "R_fingerThumb01Bendy03_JNT",
-            "R_fingerThumb01Bendy04_JNT",
-            "R_fingerThumb02Bendy00_JNT",
-            "R_fingerThumb02Bendy01_JNT",
-            "R_fingerThumb02Bendy02_JNT",
-            "R_fingerThumb02Bendy03_JNT",
-            "R_fingerThumb02Bendy04_JNT",
-            "R_fingerThumb03Bendy00_JNT",
-            "R_fingerThumb03Bendy01_JNT",
-            "R_fingerThumb03Bendy02_JNT",
-            "R_fingerThumb03Bendy03_JNT",
-            "R_fingerThumb03Bendy04_JNT"
-        ]
-    },
-    "R_fingerIndex": {
-        "bendy_joints": [
-            "R_fingerIndex01Bendy00_JNT",
-            "R_fingerIndex01Bendy01_JNT",
-            "R_fingerIndex01Bendy02_JNT",
-            "R_fingerIndex01Bendy03_JNT",
-            "R_fingerIndex01Bendy04_JNT",
-            "R_fingerIndex02Bendy00_JNT",
-            "R_fingerIndex02Bendy01_JNT",
-            "R_fingerIndex02Bendy02_JNT",
-            "R_fingerIndex02Bendy03_JNT",
-            "R_fingerIndex02Bendy04_JNT",
-            "R_fingerIndex03Bendy00_JNT",
-            "R_fingerIndex03Bendy01_JNT",
-            "R_fingerIndex03Bendy02_JNT",
-            "R_fingerIndex03Bendy03_JNT",
-            "R_fingerIndex03Bendy04_JNT"
-        ]
-    },
-    "R_fingerMiddle": {
-        "bendy_joints": [
-            "R_fingerMiddle01Bendy00_JNT",
-            "R_fingerMiddle01Bendy01_JNT",
-            "R_fingerMiddle01Bendy02_JNT",
-            "R_fingerMiddle01Bendy03_JNT",
-            "R_fingerMiddle01Bendy04_JNT",
-            "R_fingerMiddle02Bendy00_JNT",
-            "R_fingerMiddle02Bendy01_JNT",
-            "R_fingerMiddle02Bendy02_JNT",
-            "R_fingerMiddle02Bendy03_JNT",
-            "R_fingerMiddle02Bendy04_JNT",
-            "R_fingerMiddle03Bendy00_JNT",
-            "R_fingerMiddle03Bendy01_JNT",
-            "R_fingerMiddle03Bendy02_JNT",
-            "R_fingerMiddle03Bendy03_JNT",
-            "R_fingerMiddle03Bendy04_JNT"
-        ]
-    },
-    "R_fingerRing": {
-        "bendy_joints": [
-            "R_fingerRing01Bendy00_JNT",
-            "R_fingerRing01Bendy01_JNT",
-            "R_fingerRing01Bendy02_JNT",
-            "R_fingerRing01Bendy03_JNT",
-            "R_fingerRing01Bendy04_JNT",
-            "R_fingerRing02Bendy00_JNT",
-            "R_fingerRing02Bendy01_JNT",
-            "R_fingerRing02Bendy02_JNT",
-            "R_fingerRing02Bendy03_JNT",
-            "R_fingerRing02Bendy04_JNT",
-            "R_fingerRing03Bendy00_JNT",
-            "R_fingerRing03Bendy01_JNT",
-            "R_fingerRing03Bendy02_JNT",
-            "R_fingerRing03Bendy03_JNT",
-            "R_fingerRing03Bendy04_JNT"
-        ]
-    },
-    "R_fingerPinky": {
-        "bendy_joints": [
-            "R_fingerPinky01Bendy00_JNT",
-            "R_fingerPinky01Bendy01_JNT",
-            "R_fingerPinky01Bendy02_JNT",
-            "R_fingerPinky01Bendy03_JNT",
-            "R_fingerPinky01Bendy04_JNT",
-            "R_fingerPinky02Bendy00_JNT",
-            "R_fingerPinky02Bendy01_JNT",
-            "R_fingerPinky02Bendy02_JNT",
-            "R_fingerPinky02Bendy03_JNT",
-            "R_fingerPinky02Bendy04_JNT",
-            "R_fingerPinky03Bendy00_JNT",
-            "R_fingerPinky03Bendy01_JNT",
-            "R_fingerPinky03Bendy02_JNT",
-            "R_fingerPinky03Bendy03_JNT",
-            "R_fingerPinky03Bendy04_JNT"
-        ]
+    "spine": {
+        "lastSpineJnt": "C_subSpineFk07_JNT"
     }
 }
