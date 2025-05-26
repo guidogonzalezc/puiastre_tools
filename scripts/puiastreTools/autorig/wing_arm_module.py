@@ -182,7 +182,7 @@ class WingArmModule(object):
 
         self.upper_roll_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRoll_JNT")
         self.upper_roll_end_jnt = cmds.joint(n=f"{self.side}_wingArmUpperRollEnd_JNT")
-        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[0], pos=True)
+        cmds.matchTransform(self.upper_roll_jnt, self.ik_chain[0], pos=True, rot=True)
         cmds.matchTransform(self.upper_roll_end_jnt, self.ik_chain[1], pos=True, rot=True)
         cmds.parent(self.upper_roll_jnt, self.upper_non_roll_jnt)
     
