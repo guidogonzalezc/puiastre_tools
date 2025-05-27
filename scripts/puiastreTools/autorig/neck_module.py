@@ -37,6 +37,7 @@ class NeckModule:
         self.ik_setup()
         # self.spike()
         self.out_skinning_jnts()
+        self.space_switch()
 
     def lock_attrs(self, ctl, attrs):
         
@@ -93,9 +94,9 @@ class NeckModule:
 
         self.head_ctl, self.head_grp = curve_tool.controller_creator("C_head", ["GRP", "OFF"])
         # cmds.matchTransform(self.head_grp[0], self.neck_chain[-1], pos=True, rot=True, scl=False)
-        cmds.addAttr(self.head_ctl, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
-        cmds.setAttr(f"{self.head_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
-        cmds.addAttr(self.head_ctl, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
+        # cmds.addAttr(self.head_ctl, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
+        # cmds.setAttr(f"{self.head_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
+        # cmds.addAttr(self.head_ctl, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
         self.lock_attrs(self.head_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
         cmds.parent(self.neck_grp[0], self.neck_grp_mid[0], self.neck_end_grp[0], self.head_grp[0], self.controllers_trn)
 
@@ -146,11 +147,11 @@ class NeckModule:
         cmds.connectAttr(f"{self.neck_ctl_mid}.Follow_Neck", f"{rev_00}.inputX")
         cmds.connectAttr(f"{rev_00}.outputX", f"{parent}.w1")
 
-        parent_02 = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.head_grp[1], mo=True)[0]
-        rev_01 = cmds.createNode("reverse", n=f"{self.side}_headReverse_REV")
-        cmds.connectAttr(f"{self.head_ctl}.Follow_Neck", f"{parent_02}.w0")
-        cmds.connectAttr(f"{self.head_ctl}.Follow_Neck", f"{rev_01}.inputX")
-        cmds.connectAttr(f"{rev_01}.outputX", f"{parent_02}.w1")
+        # parent_02 = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.head_grp[1], mo=True)[0]
+        # rev_01 = cmds.createNode("reverse", n=f"{self.side}_headReverse_REV")
+        # cmds.connectAttr(f"{self.head_ctl}.Follow_Neck", f"{parent_02}.w0")
+        # cmds.connectAttr(f"{self.head_ctl}.Follow_Neck", f"{rev_01}.inputX")
+        # cmds.connectAttr(f"{rev_01}.outputX", f"{parent_02}.w1")
 
 
         self.jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_jaw_JNT", all_descendents=True, filePath=self.guides_path)
@@ -258,7 +259,70 @@ class NeckModule:
         cmds.parent(self.head_jnt_skinning, self.skinning_trn)
 
 
-        
+    def space_switch(self):
+
+        body_ctl = cmds.ls("C_body_CTL")[0]
+
+        # Create the attribute for the head controller
+        cmds.addAttr(self.head_ctl, ln="SPACE_SWITCHES", at="enum", en="____", keyable=True)
+        cmds.setAttr(f"{self.head_ctl}.SPACE_SWITCHES", lock=True, keyable=False, channelBox=True)
+        cmds.addAttr(self.head_ctl, ln="Space_Switch", at="enum", en="Neck:Masterwalk:Body", keyable=True)
+        cmds.addAttr(self.head_ctl, ln="Rotate_Follow", at="float", dv=1, min=0, max=1, keyable=True)
+
+        decompose_matrix_masterwalk = cmds.createNode("decomposeMatrix", n=f"{self.side}_masterWalk_DCM")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{decompose_matrix_masterwalk}.inputMatrix")
+
+        blend_colors = cmds.createNode("blendColors", n=f"{self.side}_blendMatrix_BLC")
+
+        cmds.connectAttr(f"{self.head_ctl}.Rotate_Follow", f"{blend_colors}.blender")
+        cmds.connectAttr(f"{decompose_matrix_masterwalk}.outputRotate", f"{blend_colors}.color2")
+
+        condition_masterwalk = cmds.createNode("condition", n=f"{self.side}_masterWalk_CON")
+        condition_body = cmds.createNode("condition", n=f"{self.side}_body_CON")
+        condition_neck = cmds.createNode("condition", n=f"{self.side}_neckEnd_CON")
+        cmds.setAttr(f"{condition_neck}.operation", 0)
+        cmds.setAttr(f"{condition_neck}.secondTerm", 0)
+        cmds.setAttr(f"{condition_neck}.colorIfTrueR", 1)
+        cmds.setAttr(f"{condition_neck}.colorIfFalseR", 0)
+        cmds.setAttr(f"{condition_masterwalk}.operation", 0)
+        cmds.setAttr(f"{condition_masterwalk}.secondTerm", 1)
+        cmds.setAttr(f"{condition_masterwalk}.colorIfTrueR", 1)
+        cmds.setAttr(f"{condition_masterwalk}.colorIfFalseR", 0)
+        cmds.setAttr(f"{condition_body}.operation", 0)
+        cmds.setAttr(f"{condition_body}.secondTerm", 2)
+        cmds.setAttr(f"{condition_body}.colorIfTrueR", 1)
+        cmds.setAttr(f"{condition_body}.colorIfFalseR", 0)
+
+        cmds.connectAttr(f"{self.head_ctl}.Space_Switch", f"{condition_masterwalk}.firstTerm")
+        cmds.connectAttr(f"{self.head_ctl}.Space_Switch", f"{condition_body}.firstTerm")
+        cmds.connectAttr(f"{self.head_ctl}.Space_Switch", f"{condition_neck}.firstTerm")
+
+        parent_matrix_node = cmds.createNode("parentMatrix", n=f"{self.side}_headParentMatrix_PM")
+        cmds.connectAttr(f"{self.head_grp[0]}.worldMatrix[0]", f"{parent_matrix_node}.inputMatrix")
+
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{parent_matrix_node}.target[0].targetMatrix")
+        cmds.connectAttr(f"{condition_masterwalk}.outColorR", f"{parent_matrix_node}.target[0].weight")
+        cmds.connectAttr(f"{self.neck_end_ctl}.worldMatrix[0]", f"{parent_matrix_node}.target[1].targetMatrix")
+        cmds.connectAttr(f"{condition_neck}.outColorR", f"{parent_matrix_node}.target[1].weight")
+        cmds.connectAttr(f"{body_ctl}.worldMatrix[0]", f"{parent_matrix_node}.target[2].targetMatrix")
+        cmds.connectAttr(f"{condition_body}.outColorR", f"{parent_matrix_node}.target[2].weight")
+
+        mult_matrix_offset = cmds.createNode("multMatrix", n=f"{self.side}_head_MMX")
+        cmds.connectAttr(f"{parent_matrix_node}.outputMatrix", f"{mult_matrix_offset}.matrixIn[0]")
+        cmds.connectAttr(f"{self.head_grp[0]}.worldInverseMatrix", f"{mult_matrix_offset}.matrixIn[1]")
+
+        decompose_head = cmds.createNode("decomposeMatrix", n=f"{self.side}_head_DCM")
+        cmds.connectAttr(f"{mult_matrix_offset}.matrixSum", f"{decompose_head}.inputMatrix")
+        compose_end = cmds.createNode("composeMatrix", n=f"{self.side}_head_COM")
+        cmds.connectAttr(f"{decompose_head}.outputTranslate", f"{compose_end}.inputTranslate")
+        cmds.connectAttr(f"{decompose_head}.outputRotate", f"{blend_colors}.color1")
+        cmds.connectAttr(f"{decompose_head}.outputScale", f"{compose_end}.inputScale")
+        cmds.connectAttr(f"{decompose_head}.outputShear", f"{compose_end}.inputShear")
+        cmds.connectAttr(f"{decompose_head}.outputQuat", f"{compose_end}.inputQuat")
+        cmds.connectAttr(f"{blend_colors}.output", f"{compose_end}.inputRotate")
+
+        cmds.connectAttr(f"{compose_end}.outputMatrix", f"{self.head_ctl}.offsetParentMatrix")
+
 
         
         
