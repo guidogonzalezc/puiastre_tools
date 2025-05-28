@@ -345,18 +345,6 @@ class Bendys(object):
         
         rotation = cmds.xform(self.upper_joint, query=True, worldSpace=True, rotation=True)
 
-
-        # if self.side == "L" and rotation[1] < 0:
-        #     cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
-        # else:
-        #     cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
-
-        # if self.side == "R" and rotation[0] < 0:
-        #     cmds.setAttr(f"{off_curve[1]}.normal", 1,0,0)
-        # else:
-        #     cmds.setAttr(f"{off_curve[1]}.normal", -1,0,0)
-
-
         off_curve[1] = cmds.rename(off_curve[1], f"{self.side}_{self.part}Bendy_OFC")
         cmds.setAttr(f"{off_curve[1]}.useGivenNormal", 1)
         cmds.setAttr(f"{off_curve[1]}.subdivisionDensity", 0)
@@ -410,18 +398,26 @@ class Bendys(object):
             values = [0.1, 0.25, 0.5, 0.75, 0.95]
             number = 3
 
-
+        mps = []
 
         for i, value in enumerate(values):
-            bendy_joint.append(cmds.joint(name=f"{self.side}_{self.part}Bendy0{i}_JNT", rad=20))
+            part_splited = self.part.split("Blend")[0]
+            if i == 0:
+                name = f"{self.side}_{part_splited}Skinning_JNT"
+            else:
+                name = f"{self.side}_{part_splited}Bendy0{i}_JNT"
+            bendy_joint.append(cmds.joint(name=name, rad=20))
             mpa = cmds.createNode("motionPath", name=f"{self.side}_{self.part}Bendy0{i}_MPA", ss=True)
             cmds.setAttr(f"{mpa}.fractionMode", True)
             cmds.setAttr(f"{mpa}.uValue", value)
             cmds.connectAttr(f"{bendyCurve}.worldSpace[0]", f"{mpa}.geometryPath")
-            cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_joint[i]}.translate")
+            # cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_joint[i]}.translate")
             if i == number:
                 cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_helper_transform}.translate")
             cmds.parent(bendy_joint[i], self.skinning_trn)
+
+            mps.append(mpa)
+
         
         bendy_up_module = cmds.createNode("transform", name=f"{self.side}_{self.part}BendyUpModule_GRP", p=self.bendy_module, ss=True) 
         for i, value in enumerate(values):
@@ -435,20 +431,39 @@ class Bendys(object):
             cmds.parent(blendy_up_trn[i], bendy_up_module)
         
         if self.side == "L":
-            upvector = (0, 0, -1)
-            aimVector = (1,0,0)
-            reverseAim = (-1,0,0)
+            primary_upvectorX = 1
+            secondary_upvectorZ =-1
+            reverse_upvectorX = -1
 
         elif self.side == "R":
-            upvector = (0, 0, -1)
-            aimVector = (-1,0,0)
-            reverseAim = (1,0,0)
+            primary_upvectorX = -1
+            secondary_upvectorZ = 1
+            reverse_upvectorX = 1
 
         for i, joint in enumerate(bendy_joint):
-            if i != number+1:
-                cmds.aimConstraint(bendy_joint[i+1], joint, aimVector=aimVector, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
+
+            compose_matrix = cmds.createNode("composeMatrix", name=f"{self.side}_{self.part}Bendy0{i}_CMP", ss=True)
+            aimMatrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.part}Bendy0{i}_AMT", ss=True)
+            cmds.connectAttr(f"{mps[i]}.allCoordinates", f"{compose_matrix}.inputTranslate")   
+            cmds.connectAttr(f"{compose_matrix}.outputMatrix", f"{aimMatrix}.inputMatrix")
+            cmds.connectAttr(f"{aimMatrix}.outputMatrix", f"{joint}.offsetParentMatrix")
+            cmds.connectAttr(f"{blendy_up_trn[i]}.worldMatrix[0]", f"{aimMatrix}.secondaryTargetMatrix")
+            cmds.setAttr(f"{aimMatrix}.primaryInputAxisY", 0)
+            cmds.setAttr(f"{aimMatrix}.primaryInputAxisZ", 0)
+            cmds.setAttr(f"{aimMatrix}.secondaryInputAxisX", 0)
+            cmds.setAttr(f"{aimMatrix}.secondaryInputAxisY", 0)
+            cmds.setAttr(f"{aimMatrix}.secondaryInputAxisZ", secondary_upvectorZ)
+            cmds.setAttr(f"{aimMatrix}.primaryMode", 1)
+            cmds.setAttr(f"{aimMatrix}.secondaryMode", 1) 
+
+            if i != 4:
+                cmds.connectAttr(f"{bendy_joint[i+1]}.worldMatrix[0]", f"{aimMatrix}.primaryTargetMatrix")
+                cmds.setAttr(f"{aimMatrix}.primaryInputAxisX", primary_upvectorX)
+
             else:
-                cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
+                cmds.connectAttr(f"{bendy_helper_transform}.worldMatrix[0]", f"{aimMatrix}.primaryTargetMatrix")
+                cmds.setAttr(f"{aimMatrix}.primaryInputAxisX", reverse_upvectorX)
+
 
         cmds.parent(bendyCurve, self.bendy_module)
         cmds.parent(off_curve[0], self.bendy_module)

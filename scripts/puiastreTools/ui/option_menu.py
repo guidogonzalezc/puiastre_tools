@@ -28,7 +28,7 @@ def leg_module(*args):
     data_export_func()
     basic_structure.create_basic_structure(asset_name = "Varyndor")
     module = leg_module.LegModule()
-    module.make(side = "L")
+    module.make(side = "R")
     # module.make(side = "R")
 
 def finger_module(*args):

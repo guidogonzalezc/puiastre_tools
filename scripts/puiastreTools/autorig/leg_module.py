@@ -40,14 +40,19 @@ class LegModule():
 
         self.duplicate_leg()
         self.set_controllers()
-        # self.pairBlends()
-        # self.soft_stretch()
-        # self.reverse_foot()
-        # self.call_bendys()
+        self.pairBlends()
+        self.soft_stretch()
+        self.reverse_foot()
+        self.call_bendys()
 
-    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
+    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+        
+        if ro:
+            cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+            cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
+
 
     def duplicate_leg(self):
 
@@ -86,7 +91,7 @@ class LegModule():
         cmds.xform(self.settings_curve_ctl, ws=True, translation=position)
         cmds.xform(self.settings_curve_ctl, ws=True, rotation=rotation)
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
-        self.lock_attr(self.settings_curve_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
+        self.lock_attr(self.settings_curve_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"], ro=False)
         cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{self.fk_trn}.visibility")
         rev = cmds.createNode("reverse", name=f"{self.side}_legFkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{rev}.inputX")
@@ -125,7 +130,8 @@ class LegModule():
         mel.eval("ikSpringSolver")
 
         self.ikHandleManager = cmds.createNode("transform", name=f"{self.side}_legIkHandleManager_GRP", p=self.module_trn, ss=True)
-        cmds.matchTransform(self.ikHandleManager, self.ik_chain[3], pos=True)
+
+
 
         self.springIkHandle = cmds.ikHandle(
             name=f"{self.side}_legSpringIk_HDL",
@@ -164,32 +170,36 @@ class LegModule():
 
         cmds.parent(self.springIkHandle, self.ballIkHandle, self.tipIkHandle, self.legRPSIkHandle, self.module_trn)
 
-        # ik_controllers = {
-        #     self.ik_chain[0]: [f"{self.side}_rootIk",True, [self.ik_chain[0]]],
-        #     self.ik_chain[1]: [f"{self.side}_legPv", False, [self.springIkHandle]],
-        #     self.ik_chain[2]: [None, False, False],
-        #     self.ik_chain[3]: [f"{self.side}_legIk", False, False],
-        #     self.ik_chain[4]: [f"{self.side}_ballIk", True, [self.ballIkHandle, self.ikHandleManager]],
-        #     self.ik_chain[5]: [f"{self.side}_toeIk", True, [self.tipIkHandle]],  
-
-        # }
-
-
-
         self.ik_root_ctl, self.ik_root_grp = curve_tool.controller_creator(f"{self.side}_rootIk", suffixes = ["GRP", "SDK"])
         self.ik_pv_ctl, self.ik_pv_grp = curve_tool.controller_creator(f"{self.side}_legPv", suffixes = ["GRP", "SDK"])
-        self.ik_backLeg_ctl, self.ik_backLeg_grp = curve_tool.controller_creator(f"{self.side}_backLeg", suffixes = ["GRP", "SDK"])
+        self.ik_ball_ctl, self.ik_ball_grp = curve_tool.controller_creator(f"{self.side}_ball", suffixes = ["GRP", "SDK"])
         self.ik_ankle_ctl, self.ik_ankle_grp = curve_tool.controller_creator(f"{self.side}_legIk", suffixes = ["GRP", "SDK"])
-        self.ik_toe_ctl, self.ik_toe_grp = curve_tool.controller_creator(f"{self.side}_toeIk", suffixes = ["GRP", "SDK"])
+        self.ik_tip_ctl, self.ik_tip_grp = curve_tool.controller_creator(f"{self.side}_tipIk", suffixes = ["GRP", "SDK"])
 
+        for ctl in [self.ik_root_ctl, self.ik_pv_ctl, self.ik_ball_ctl, self.ik_ankle_ctl, self.ik_tip_ctl]:
+            self.lock_attr(ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
+
+
+        cmds.matchTransform(self.ik_ball_grp[0], self.ikDriver_chain[3])
+        cmds.parentConstraint(self.ikDriver_chain[2], self.ik_ball_grp[0], mo=True)
+
+        cmds.parentConstraint(self.ik_ball_ctl, self.legRPSIkHandle, mo=True)
+
+
+        rps_transform = cmds.createNode("transform", name=f"{self.side}_legRPSIk_TRN", ss=True)
+        cmds.matchTransform(rps_transform, self.ik_chain[3], pos=True)
+
+        cmds.connectAttr(f"{rps_transform}.worldMatrix", f"{self.ikHandleManager}.offsetParentMatrix")
+
+       
         cmds.matchTransform(self.ik_root_grp[0], self.ik_chain[0])
         cmds.matchTransform(self.ik_ankle_grp[0], self.ik_chain[3], pos=True)
-        cmds.matchTransform(self.ik_backLeg_grp[0], self.ik_chain[1], pos=True)
-        cmds.matchTransform(self.ik_toe_grp[0], self.ik_chain[4], pos=True)
+        cmds.matchTransform(self.ik_tip_grp[0], self.ik_chain[4], pos=True)
 
         cmds.parentConstraint(self.ik_root_ctl, self.ik_chain[0], mo=True)
         cmds.parentConstraint(self.ik_root_ctl, self.ikDriver_chain[0], mo=True)
-        cmds.parentConstraint(self.ik_toe_ctl, self.ik_chain[1], mo=True)
+        # cmds.parentConstraint(rps_transform , self.springIkHandle, mo=True)
+
 
 
         arm_pos = om.MVector(cmds.xform(self.ik_chain[0], q=True, rp=True, ws=True))
@@ -205,28 +215,9 @@ class LegModule():
 
         cmds.xform(self.ik_pv_grp[0], translation=mid_point_to_elbow_point)
 
-        cmds.poleVectorConstraint(self.ik_pv_ctl, self.springIkHandle)    
-
-        # for name, data in ik_controllers.items():
-        #     if data[0]:
-        #         ik_ctl, ik_grp = curve_tool.controller_creator(data[0], suffixes = ["GRP", "SDK"])
-        #         cmds.parent(ik_grp[0], self.ik_trn)
-        #         self.ik_ctl_grps.append(ik_grp)
-        #         self.ik_ctls.append(ik_ctl)
-        #         self.lock_attr(ik_ctl)
-
-        #     else:
-        #         continue
-        #     if data[0]:
-        #         match_pos = not data[1]
-        #         cmds.matchTransform(ik_grp[0], name, pos=match_pos)
-
-        #     if data[2]:
-        #         if name == self.ik_chain[1]:
-
-        #         else:
-        #             for child_constraints in data[2]:
-        #                 cmds.parentConstraint(ik_ctl, child_constraints, mo=True)
+        cmds.poleVectorConstraint(self.ik_pv_ctl, self.legRPSIkHandle)   
+        cmds.parent(self.ballIkHandle, self.ikDriver_chain[3])
+        cmds.parentConstraint(self.ik_tip_ctl , self.tipIkHandle, mo=True)
                         
         self.ik_ctl_grps = []
         self.ik_ctls = []
@@ -236,38 +227,42 @@ class LegModule():
             ctl, clt_grp = curve_tool.controller_creator(item, suffixes = ["GRP", "SDK"])
             cmds.xform(clt_grp, ws=True, translation=position)
             cmds.xform(clt_grp, ws=True, rotation=rotation)
+            self.lock_attr(ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
             self.ik_ctls.append(ctl)
             self.ik_ctl_grps.append(clt_grp)
 
-        # cmds.parent(self.ik_ctl_grps[3][0], self.ik_ctls[4])
-        # cmds.parent(self.ik_ctl_grps[4][0], self.ik_ctls[7])
-        # cmds.parent(self.ik_ctl_grps[7][0], self.ik_ctls[6])
-        # cmds.parent(self.ik_ctl_grps[6][0], self.ik_ctls[5])
-        # cmds.parent(self.ik_ctl_grps[5][0], self.ik_ctls[2])
 
-        # cmds.addAttr(self.ik_ctls[2], shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
-        # cmds.setAttr(self.ik_ctls[2]+".strechySep", channelBox=True, lock=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
-        # cmds.setAttr(self.ik_ctls[2]+".softSep", channelBox=True, lock=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
-        # cmds.setAttr(self.ik_ctls[2]+".extraSep", channelBox=True, lock=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=45, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias01", niceName="Spring Solver Bias 01",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
-        # cmds.addAttr(self.ik_ctls[2], shortName="springSolverBias02", niceName="Spring Solver Bias 02",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
-        # cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias01", f"{self.springIkHandle}.springAngleBias[0].springAngleBias_FloatValue")
-        # cmds.connectAttr(f"{self.ik_ctls[2]}.springSolverBias02", f"{self.springIkHandle}.springAngleBias[1].springAngleBias_FloatValue")
+        cmds.parent(self.ik_ctl_grps[0][0], self.ik_ankle_ctl)
+        cmds.parent(self.ik_ctl_grps[1][0], self.ik_ctls[0])
+        cmds.parent(self.ik_ctl_grps[2][0], self.ik_ctls[1])
+        cmds.parent(self.ik_tip_grp[0], self.ik_ctls[2])
+        cmds.parent(rps_transform, self.ik_tip_ctl)
+        cmds.parent(self.ik_pv_grp[0], self.ik_ankle_grp[0], self.ik_root_grp[0], self.ik_ball_grp[0], self.ik_trn)
+
+
+        cmds.addAttr(self.ik_ankle_ctl, shortName="strechySep", niceName="STRECHY_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.ik_ankle_ctl+".strechySep", channelBox=True, lock=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="upperLengthMult", niceName="Upper Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="middleLengthMult", niceName="Middle Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="lowerLengthMult", niceName="Lower Length Mult",minValue=0.001,defaultValue=1, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="stretch", niceName="Stretch",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="softSep", niceName="SOFT_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.ik_ankle_ctl +".softSep", channelBox=True, lock=True)
+        cmds.addAttr(self.ik_ankle_ctl,  shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.ik_ankle_ctl+".extraSep", channelBox=True, lock=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="roll", niceName="Roll",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="rollLiftAngle", niceName="Roll Lift Angle",minValue=0,defaultValue=20, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="rollStraightAngle", niceName="Roll Straight Angle",minValue=0,defaultValue=90, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="bank", niceName="Bank",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="ankleTwist", niceName="Ankle Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="ballTwist", niceName="Ball Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="tipTwist", niceName="Tip Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="heelTwist", niceName="Heel Twist",defaultValue=0, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="springSolverBias01", niceName="Spring Solver Bias 01",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
+        cmds.addAttr(self.ik_ankle_ctl, shortName="springSolverBias02", niceName="Spring Solver Bias 02",defaultValue=0.5,minValue=0, maxValue=1, keyable=True)
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.springSolverBias01", f"{self.springIkHandle}.springAngleBias[0].springAngleBias_FloatValue")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.springSolverBias02", f"{self.springIkHandle}.springAngleBias[1].springAngleBias_FloatValue")
 
     def pairBlends(self):
         for i, joint in enumerate(self.blend_chain):
@@ -280,17 +275,12 @@ class LegModule():
             cmds.connectAttr(f"{pairblend_node}.outRotate", f"{joint}.rotate")
             cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{pairblend_node}.weight")
         
-        cmds.select(clear=True)
-        ball_skinning_joint = cmds.joint(name=f"{self.side}_ball_JNT")
-        cmds.connectAttr(f"{self.blend_chain[4]}.worldMatrix[0]", f"{ball_skinning_joint}.offsetParentMatrix")
-        cmds.parent(ball_skinning_joint, self.skinning_trn)
-
     def soft_stretch(self):
 
         masterwalk = self.masterWalk_ctl# Change this to the actual masterwalk controller name
 
         self.soft_off = cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", p=self.module_trn, ss=True)
-        cmds.pointConstraint(self.ik_ctls[0], self.soft_off)
+        cmds.pointConstraint(self.ik_root_ctl, self.soft_off)
         cmds.aimConstraint(self.ikHandleManager, self.soft_off, aimVector=(1,0,0), upVector= (0,0,1), worldUpType ="none", maintainOffset=False)
 
         self.soft_trn = cmds.createNode("transform", name=f"{self.side}_legSoft_TRN", p=self.soft_off, ss=True)
@@ -388,7 +378,7 @@ class LegModule():
 
 
 
-        cmds.connectAttr(self.ik_ctls[2] + ".stretch", created_nodes[20]+".floatB")
+        cmds.connectAttr(self.ik_ankle_ctl + ".stretch", created_nodes[20]+".floatB")
 
 
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[18]+".firstTerm")
@@ -415,12 +405,12 @@ class LegModule():
 
 
 
-        cmds.connectAttr(f"{self.ik_ctls[0]}.worldMatrix", f"{created_nodes[0]}.inMatrix1")
+        cmds.connectAttr(f"{self.ik_root_ctl}.worldMatrix", f"{created_nodes[0]}.inMatrix1")
         cmds.connectAttr(f"{self.ikHandleManager}.worldMatrix", f"{created_nodes[0]}.inMatrix2")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.lowerLengthMult", f"{created_nodes[4]}.floatA")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.upperLengthMult", f"{created_nodes[2]}.floatA")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.middleLengthMult", f"{created_nodes[26]}.floatA")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.soft", f"{created_nodes[5]}.inputValue")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.lowerLengthMult", f"{created_nodes[4]}.floatA")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.upperLengthMult", f"{created_nodes[2]}.floatA")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.middleLengthMult", f"{created_nodes[26]}.floatA")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.soft", f"{created_nodes[5]}.inputValue")
         cmds.connectAttr(f"{masterwalk}.globalScale", f"{created_nodes[1]}.floatB")
         cmds.connectAttr(f"{created_nodes[18]}.outColorR",f"{self.soft_trn}.translateX")
 
@@ -428,9 +418,9 @@ class LegModule():
 
 
 
-        cmds.setAttr(f"{created_nodes[2]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[1]}.translateX")))
-        cmds.setAttr(f"{created_nodes[4]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[3]}.translateX")))
-        cmds.setAttr(f"{created_nodes[26]}.floatB", abs(cmds.getAttr(f"{self.ik_chain[2]}.translateX")))
+        cmds.setAttr(f"{created_nodes[2]}.floatB", abs(cmds.getAttr(f"{self.ikDriver_chain[1]}.translateX")))
+        cmds.setAttr(f"{created_nodes[4]}.floatB", abs(cmds.getAttr(f"{self.ikDriver_chain[3]}.translateX")))
+        cmds.setAttr(f"{created_nodes[26]}.floatB", abs(cmds.getAttr(f"{self.ikDriver_chain[2]}.translateX")))
 
         cmds.setAttr(f"{created_nodes[9]}.floatB", -1)
         cmds.setAttr(f"{created_nodes[10]}.floatA", math.e)
@@ -447,6 +437,9 @@ class LegModule():
             cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{negate}.input1X")
             cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{negate}.input1Y")
             cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{negate}.input1Z")
+            cmds.connectAttr(f"{negate}.outputX",f"{self.ikDriver_chain[1]}.translateX")
+            cmds.connectAttr(f"{negate}.outputY",f"{self.ikDriver_chain[2]}.translateX")
+            cmds.connectAttr(f"{negate}.outputZ",f"{self.ikDriver_chain[3]}.translateX")
             cmds.connectAttr(f"{negate}.outputX",f"{self.ik_chain[1]}.translateX")
             cmds.connectAttr(f"{negate}.outputY",f"{self.ik_chain[2]}.translateX")
             cmds.connectAttr(f"{negate}.outputZ",f"{self.ik_chain[3]}.translateX")
@@ -454,12 +447,17 @@ class LegModule():
 
 
         if self.side == "L":
+            cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{self.ikDriver_chain[1]}.translateX")
+            cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{self.ikDriver_chain[2]}.translateX")
+            cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{self.ikDriver_chain[3]}.translateX")
             cmds.connectAttr(f"{created_nodes[27]}.outColorR",f"{self.ik_chain[1]}.translateX")
             cmds.connectAttr(f"{created_nodes[27]}.outColorG",f"{self.ik_chain[2]}.translateX")
             cmds.connectAttr(f"{created_nodes[27]}.outColorB",f"{self.ik_chain[3]}.translateX")
-        
+    
 
         cmds.parentConstraint(self.soft_trn, self.springIkHandle, mo=True)
+
+
 
 
     def reverse_foot(self):
@@ -489,16 +487,16 @@ class LegModule():
         # Connections between selected nodes and transform nodes
         cmds.connectAttr(created_nodes[0] + ".outValue", f"{created_nodes[4]}.input1X")
         cmds.connectAttr(created_nodes[0] + ".outValue", f"{created_nodes[2]}.inputX")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[0] + ".inputValue")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.rollLiftAngle", created_nodes[0] + ".inputMin")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.rollStraightAngle", created_nodes[0] + ".inputMax")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[1] + ".inputValue")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[7] + ".inputR")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[5] + ".input2X")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.roll", created_nodes[4] + ".input2X")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.rollLiftAngle", created_nodes[1] + ".inputMax")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.bank", created_nodes[8] + ".inputG")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.bank", created_nodes[8] + ".inputR")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[0] + ".inputValue")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.rollLiftAngle", created_nodes[0] + ".inputMin")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.rollStraightAngle", created_nodes[0] + ".inputMax")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[1] + ".inputValue")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[7] + ".inputR")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[5] + ".input2X")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[4] + ".input2X")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.rollLiftAngle", created_nodes[1] + ".inputMax")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.bank", created_nodes[8] + ".inputG")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.bank", created_nodes[8] + ".inputR")
         cmds.setAttr(f"{created_nodes[6]}.input2X", 1)
         cmds.setAttr(f"{created_nodes[9]}.input2X", 1)
         cmds.setAttr(f"{created_nodes[7]}.minR", -360)
@@ -508,20 +506,22 @@ class LegModule():
         elif self.side == "R":
             cmds.setAttr(f"{created_nodes[8]}.minR", -360)
             cmds.setAttr(f"{created_nodes[8]}.maxG", 360)
+
+        cmds.setAttr(f"{created_nodes[9]}.input2X", -1)
         cmds.connectAttr(created_nodes[1] + ".outValue", f"{created_nodes[3]}.input2X")
         cmds.connectAttr(created_nodes[2] + ".outputX", f"{created_nodes[3]}.input1X")
         cmds.connectAttr(created_nodes[3] + ".outputX", f"{created_nodes[5]}.input1X")
         cmds.connectAttr(created_nodes[4] + ".outputX", f"{created_nodes[6]}.input1X")
         cmds.connectAttr(created_nodes[5] + ".outputX", f"{created_nodes[9]}.input1X")
-        cmds.connectAttr(created_nodes[8] + ".outputR", f"{self.ik_ctl_grps[5][1]}.rotateZ")
-        cmds.connectAttr(created_nodes[8] + ".outputG", f"{self.ik_ctl_grps[6][1]}.rotateZ")
-        cmds.connectAttr(created_nodes[7] + ".outputR", f"{self.ik_ctl_grps[7][1]}.rotateX")
-        cmds.connectAttr(created_nodes[6] + ".outputX", f"{self.ik_ctl_grps[4][1]}.rotateX")
-        cmds.connectAttr(created_nodes[9] + ".outputX", f"{self.ik_ctl_grps[3][1]}.rotateX")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.heelTwist", f"{self.ik_ctl_grps[7][1]}.rotateY")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.tipTwist", f"{self.ik_ctl_grps[4][1]}.rotateY")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.ballTwist", f"{self.ik_ctl_grps[3][1]}.rotateY")
-        cmds.connectAttr(f"{self.ik_ctls[2]}.ankleTwist", self.ik_ctl_grps[2][1] + ".rotateY")
+        cmds.connectAttr(created_nodes[8] + ".outputR", f"{self.ik_ctl_grps[0][1]}.rotateZ")
+        cmds.connectAttr(created_nodes[8] + ".outputG", f"{self.ik_ctl_grps[1][1]}.rotateZ")
+        cmds.connectAttr(created_nodes[7] + ".outputR", f"{self.ik_ctl_grps[2][1]}.rotateX")
+        cmds.connectAttr(created_nodes[6] + ".outputX", f"{self.ik_tip_grp[1]}.rotateX")
+        cmds.connectAttr(created_nodes[9] + ".outputX", f"{self.ik_ball_grp[1]}.rotateZ")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.heelTwist", f"{self.ik_ctl_grps[2][1]}.rotateY")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.tipTwist", f"{self.ik_tip_grp[1]}.rotateY")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.ballTwist", f"{self.ik_ball_grp[1]}.rotateY")
+        cmds.connectAttr(f"{self.ik_ankle_ctl}.ankleTwist", self.ik_ankle_grp[1] + ".rotateY")
 
     def call_bendys(self):
         normals = (0, 0, 1)
@@ -533,7 +533,7 @@ class LegModule():
         bendy.lower_twists_setup()
 
         cmds.select(clear=True)
-        ankle_joint = cmds.joint(name=f"{self.side}_ankle_JNT")
+        ankle_joint = cmds.joint(name=f"{self.side}_ballSkinning_JNT")
         cmds.connectAttr(f"{self.blend_chain[3]}.worldMatrix[0]", f"{ankle_joint}.offsetParentMatrix")
         cmds.parent(ankle_joint, self.skinning_trn)
 
@@ -713,18 +713,26 @@ class Bendys(object):
         bendy_joint = []
         blendy_up_trn = []
 
+        mps =[]
         for i, value in enumerate([0, 0.25, 0.5, 0.75, 0.95]):
-            bendy_joint.append(cmds.joint(name=f"{self.side}_{self.part}Bendy0{i}_JNT"))
+            part_splited = self.part.split("Blend")[0]
+            if i == 0:
+                name = f"{self.side}_{part_splited}Skinning_JNT"
+            else:
+                name = f"{self.side}_{part_splited}Bendy0{i}_JNT"
+            bendy_joint.append(cmds.joint(name=name, rad=20))
             mpa = cmds.createNode("motionPath", name=f"{self.side}_{self.part}Bendy0{i}_MPA", ss=True)
             cmds.setAttr(f"{mpa}.fractionMode", True)
             cmds.setAttr(f"{mpa}.uValue", value)
             cmds.connectAttr(f"{bendyCurve}.worldSpace[0]", f"{mpa}.geometryPath")
-            cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_joint[i]}.translate")
             if i == 3:
                 cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_helper_transform}.translate")
             cmds.parent(bendy_joint[i], self.skinning_trn)
+
+            mps.append(mpa)
         
         bendy_up_module = cmds.createNode("transform", name=f"{self.side}_{self.part}BendyUpModule_GRP", p=self.bendy_module, ss=True) 
+
         for i, value in enumerate([0, 0.25, 0.5, 0.75, 0.95]):
             blendy_up_trn.append(cmds.createNode("transform", name=f"{self.side}_{self.part}BendyUp0{i}_TRN"))
             cmds.setAttr(f"{blendy_up_trn[i]}.inheritsTransform", 0)
@@ -736,28 +744,38 @@ class Bendys(object):
             cmds.parent(blendy_up_trn[i], bendy_up_module)
         
         if self.side == "L":
-            upvector = (0, 0, -1)
-            aimVector = (1,0,0)
-            reverseAim = (-1,0,0)
+            primary_upvectorX = 1
+            secondary_upvectorZ =-1
+            reverse_upvectorX = -1
 
         elif self.side == "R":
-            upvector = (0, 0, 1)
-            aimVector = (-1,0,0)
-            reverseAim = (1,0,0)
+            primary_upvectorX = -1
+            secondary_upvectorZ = 1
+            reverse_upvectorX = 1
 
         for i, joint in enumerate(bendy_joint):
+
+            compose_matrix = cmds.createNode("composeMatrix", name=f"{self.side}_{self.part}Bendy0{i}_CMP", ss=True)
+            aimMatrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.part}Bendy0{i}_AMT", ss=True)
+            cmds.connectAttr(f"{mps[i]}.allCoordinates", f"{compose_matrix}.inputTranslate")   
+            cmds.connectAttr(f"{compose_matrix}.outputMatrix", f"{aimMatrix}.inputMatrix")
+            cmds.connectAttr(f"{aimMatrix}.outputMatrix", f"{joint}.offsetParentMatrix")
+            cmds.connectAttr(f"{blendy_up_trn[i]}.worldMatrix[0]", f"{aimMatrix}.secondaryTargetMatrix")
+            cmds.setAttr(f"{aimMatrix}.primaryInputAxisY", 0)
+            cmds.setAttr(f"{aimMatrix}.primaryInputAxisZ", 0)
+            cmds.setAttr(f"{aimMatrix}.secondaryInputAxisX", 0)
+            cmds.setAttr(f"{aimMatrix}.secondaryInputAxisY", 0)
+            cmds.setAttr(f"{aimMatrix}.secondaryInputAxisZ", secondary_upvectorZ)
+            cmds.setAttr(f"{aimMatrix}.primaryMode", 1)
+            cmds.setAttr(f"{aimMatrix}.secondaryMode", 1) 
+
             if i != 4:
-                aim = cmds.aimConstraint(bendy_joint[i+1], joint, aimVector=aimVector, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
-                cmds.delete(aim)
-                cmds.makeIdentity(joint, apply=True, r=1)
-                cmds.aimConstraint(bendy_joint[i+1], joint, aimVector=aimVector, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
+                cmds.connectAttr(f"{bendy_joint[i+1]}.worldMatrix[0]", f"{aimMatrix}.primaryTargetMatrix")
+                cmds.setAttr(f"{aimMatrix}.primaryInputAxisX", primary_upvectorX)
+
             else:
-                aim = cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
-                cmds.delete(aim)
-                cmds.makeIdentity(joint, apply=True, r=1)
-                cmds.aimConstraint(bendy_helper_transform, joint, aimVector=reverseAim, upVector=upvector, worldUpType="object", worldUpObject=blendy_up_trn[i], maintainOffset=False)
-
-
+                cmds.connectAttr(f"{bendy_helper_transform}.worldMatrix[0]", f"{aimMatrix}.primaryTargetMatrix")
+                cmds.setAttr(f"{aimMatrix}.primaryInputAxisX", reverse_upvectorX)
 
         cmds.parent(bendyCurve, self.bendy_module)
         cmds.parent(off_curve[0], self.bendy_module)

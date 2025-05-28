@@ -31,7 +31,7 @@ def make():
 
 
     for side in ["L", "R"]:
-        # leg_Module.make(side = side)
+        leg_Module.make(side = side)
         wingmodule.make(side = side)
 
 
@@ -40,7 +40,7 @@ def make():
 
     for side in ["L", "R"]:
         clavicle.make(side = side)
-        # fingermodule.make(side = side)
+        fingermodule.make(side = side)
 
     neck.make()
     tail.make()
