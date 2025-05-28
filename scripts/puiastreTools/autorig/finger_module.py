@@ -29,7 +29,6 @@ class FingerModule():
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
-
     def make(self, side):
 
         self.side = side    
@@ -72,12 +71,16 @@ class FingerModule():
             self.bendy_module = cmds.createNode("transform", name=f"{self.side}_{name.lower()}BendyModule_GRP", ss=True, p=self.individual_module_trn)
 
             self.create_chain(name=name)  
-            self.set_controllers()
+            self.set_controllers()  
             self.call_bendys()
 
-    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
+    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+
+        if ro:
+            cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+            cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
     def create_chain(self, name):
         
@@ -124,41 +127,102 @@ class FingerModule():
 
         # -- FK CONTROLLER -- #
 
-        self.fk_ctl_list = []
-        self.fk_grp_list = []
+
 
         self.joint_name = self.blend_chain[0].split("_")[1]
 
+        if not cmds.pluginInfo("ikSpringSolver", query=True, loaded=True):
+            cmds.loadPlugin("ikSpringSolver")
+        
+        mel.eval("ikSpringSolver")
+
+        self.springIkHandle = cmds.ikHandle(
+            name=f"{self.side}_{self.joint_name}SpringIk_HDL",
+            startJoint=self.blend_chain[0],
+            endEffector=self.blend_chain[-1],
+            solver="ikSpringSolver",
+        )[0]
+
+        cmds.parent(self.springIkHandle, self.individual_module_trn)
+
+        pv_ctl, pv_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}PoleVector", suffixes=["GRP", "SDK"])
+        cmds.parent(pv_grp[0], self.controllers_trn) 
+        self.lock_attr(pv_ctl)
+        cmds.matchTransform(pv_grp[0], self.blend_chain[1])
+        if self.side == "L":
+            cmds.move(0, 250, 0, pv_grp[0], relative=True, objectSpace=True, worldSpaceDistance=True)
+        else:
+            cmds.move(0, -250, 0, pv_grp[0], relative=True, objectSpace=True, worldSpaceDistance=True)
+        cmds.xform(pv_grp[0], ws=True, rotation=(0, 0, 0))
+        cmds.poleVectorConstraint(pv_ctl, self.springIkHandle)
+
+        ik_ctl, ik_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}Ik", suffixes=["GRP", "SDK"])
+        cmds.parent(ik_grp[0], self.controllers_trn)
+        self.lock_attr(ik_ctl)
+        cmds.matchTransform(ik_grp[0], self.blend_chain[-1])
+        cmds.parentConstraint(ik_ctl, self.springIkHandle, maintainOffset=True)
+
+        ik_root_ctl, ik_root_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}IkRoot", suffixes=["GRP", "SDK"])
+        cmds.parent(ik_root_grp[0], self.settings_curve_ctl)
+        self.lock_attr(ik_root_ctl)
+        cmds.matchTransform(ik_root_grp[0], self.blend_chain[0])
+        cmds.parentConstraint(ik_root_ctl, self.blend_chain[0], maintainOffset=True)
+
+        sub_spine_ctl_trn = cmds.createNode("transform", n=f"{self.side}_{self.joint_name}Controllers_GRP", parent=self.masterWalk_ctl, ss=True)
+        cmds.setAttr(f"{sub_spine_ctl_trn}.inheritsTransform", 0)
+        
+        self.fk_ctl_list = []
+        self.fk_grp_list = []
+
+        
+
         for i, joint in enumerate(self.blend_chain):
-            fk_ctl, fk_grp = curve_tool.controller_creator(joint.replace('_JNT', ''), suffixes = ["GRP", "SDK", "OFF"])
-            self.fk_ctl_list.append(fk_ctl)
-            self.fk_grp_list.append(fk_grp)
-            cmds.matchTransform(fk_grp[0], joint)
-            cmds.parentConstraint(fk_ctl, joint, mo=True)
-
-            self.attr_curl_setup(fk_grp[1], self.joint_name, i)
-
-            if i > 0:
-                cmds.parent(fk_grp[0], self.fk_ctl_list[i - 1])
-            else:
-                cmds.addAttr(fk_ctl, shortName="waveSep", niceName="Wave_____", enumName="_____",attributeType="enum", keyable=True)
-                cmds.setAttr(fk_ctl+".waveSep", channelBox=True, lock=True)
-                cmds.addAttr(fk_ctl, shortName="amplitude", niceName="Amplitude", defaultValue=0, keyable=True)
-                cmds.addAttr(fk_ctl, shortName="wavelength", niceName="Wavelength", defaultValue=0, keyable=True)
-                cmds.addAttr(fk_ctl, shortName="offset", niceName="Offset", defaultValue=0, keyable=True)
-                cmds.addAttr(fk_ctl, shortName="dropoff", niceName="Dropoff", defaultValue=0, keyable=True)
-                cmds.parent(fk_grp[0], self.settings_curve_ctl)
             
-            self.lock_attr(fk_ctl)
+            ctl, controller_grp = curve_tool.controller_creator(joint.replace('_JNT', ''), suffixes = ["GRP", "SDK"])
+            self.lock_attr(ctl)
+                
+            self.attr_curl_setup(controller_grp[1], self.joint_name, i)
+
+            cmds.parent(controller_grp[0], sub_spine_ctl_trn)
+            
+                
+            if i == 0:
+                cmds.connectAttr(f"{joint}.worldMatrix[0]", f"{controller_grp[0]}.offsetParentMatrix")
+
+                cmds.addAttr(ctl, shortName="waveSep", niceName="Wave_____", enumName="_____",attributeType="enum", keyable=True)
+                cmds.setAttr(ctl+".waveSep", channelBox=True, lock=True)
+                cmds.addAttr(ctl, shortName="amplitude", niceName="Amplitude", defaultValue=0, keyable=True)
+                cmds.addAttr(ctl, shortName="wavelength", niceName="Wavelength", defaultValue=0, keyable=True)
+                cmds.addAttr(ctl, shortName="offset", niceName="Offset", defaultValue=0, keyable=True)
+                cmds.addAttr(ctl, shortName="dropoff", niceName="Dropoff", defaultValue=0, keyable=True)
+            else:
+                mmt = cmds.createNode("multMatrix", n=f"{self.side}_{self.joint_name}Fk0{i+1}_MMT")
+                cmds.connectAttr(f"{joint}.worldMatrix[0]", f"{mmt}.matrixIn[0]")
+                cmds.connectAttr(f"{self.blend_chain[i-1]}.worldInverseMatrix[0]", f"{mmt}.matrixIn[1]")
+                cmds.connectAttr(f"{self.fk_ctl_list[i-1]}.worldMatrix[0]", f"{mmt}.matrixIn[2]")
+                cmds.connectAttr(f"{mmt}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
+            self.fk_ctl_list.append(ctl)
+            self.fk_grp_list.append(controller_grp)  
+
+        self.attached_fk_joints = []
+        for i, joint in enumerate(self.blend_chain):
+            cmds.select(clear=True)
+            new_joint = cmds.joint(joint, name=f"{self.side}_{self.joint_name}Fk0{i+1}_JNT")
+            cmds.setAttr(f"{new_joint}.inheritsTransform", 0)
+
+            cmds.parent(new_joint, self.individual_module_trn)
+
+            cmds.connectAttr(f"{self.fk_ctl_list[i]}.worldMatrix[0]", f"{new_joint}.offsetParentMatrix")
+            self.attached_fk_joints.append(new_joint)
 
 
     def call_bendys(self):
         normals = (0, 1, 0)
-        bendy = Bendys(self.side, self.blend_chain[0], self.blend_chain[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
+        bendy = Bendys(self.side, self.attached_fk_joints[0], self.attached_fk_joints[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
         end_bezier01, bendy_skin_cluster01, bendy_joint01, off_curve01, bendy_offset_skin_cluster01 = bendy.lower_twists_setup()
-        bendy = Bendys(self.side, self.blend_chain[1], self.blend_chain[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
+        bendy = Bendys(self.side, self.attached_fk_joints[1], self.attached_fk_joints[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
         end_bezier02, bendy_skin_cluster02, bendy_joint02, off_curve02, bendy_offset_skin_cluster02 = bendy.lower_twists_setup()
-        bendy = Bendys(self.side, self.blend_chain[2], self.blend_chain[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
+        bendy = Bendys(self.side, self.attached_fk_joints[2], self.attached_fk_joints[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
         end_bezier03, bendy_skin_cluster03, bendy_joint03, off_curve03, bendy_offset_skin_cluster03 = bendy.lower_twists_setup()
 
         self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03], 
@@ -190,15 +254,13 @@ class FingerModule():
         wave = cmds.nonLinear(dupe_beziers, dupe_beziers_offset, type="wave", name=f"{self.side}_{wave_name}Wave_HDL")
         cmds.parent(wave[1], dupe_parent)
         cmds.matchTransform(wave[1], self.blend_chain[1])
-        # joint_rotation = cmds.xform(self.blend_chain[1], query=True, worldSpace=True, rotation=True)
-        # cmds.rotate(joint_rotation[1], 0, joint_rotation[0] , wave[1], worldSpace=True, absolute=True)
+
 
         positions = [cmds.xform(jnt, q=True, ws=True, t=True) for jnt in self.blend_chain]
 
         mid_pos = [sum(coords) / len(coords) for coords in zip(*positions)]
 
         cmds.xform(wave[1], ws=True, t=mid_pos)
-        # cmds.rotate(90,0, 90, wave[1], ws=True, absolute=True)
 
 
         relative_x_positions = [cmds.getAttr(jnt + ".tx") for jnt in self.blend_chain[1:]]
@@ -253,9 +315,12 @@ class Bendys(object):
     def lower_twists_setup(self):
 
         duplicated_twist_joints = cmds.duplicate(self.upper_joint, renameChildren=True)
-        cmds.delete(duplicated_twist_joints[2])
+        duplicated_twist_joints.append(cmds.duplicate(self.lower_joint, renameChildren=True)[0])
+        # cmds.delete(duplicated_twist_joints[2])
         self.twist_joints = cmds.rename(duplicated_twist_joints[0], f"{self.side}_{self.name}{self.part}Roll_JNT")
         twist_end_joints = cmds.rename(duplicated_twist_joints[1], f"{self.side}_{self.part}LowerRollEnd_JNT")
+        cmds.parent(twist_end_joints, self.twist_joints)
+
 
         roll_offset_trn = cmds.createNode("transform", name=f"{self.side}_{self.part}LowerRollOffset_TRN", parent=self.bendy_module, ss=True)
         cmds.delete(cmds.parentConstraint(self.upper_joint, roll_offset_trn, maintainOffset=False))
