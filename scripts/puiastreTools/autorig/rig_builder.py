@@ -126,7 +126,7 @@ def make():
                     legFk: [[localHip], 1],
                     clavicle_ctl: [[localChest], 1],
                     armFk: [[clavicle_ctl, localChest], 1],
-                    armIk: [[clavicle_ctl, localChest], 0],
+                    armIk: [[localChest], 0],
                     armPV: [[armIk], 1],
                     legRoot: [[localHip],1],
                     armRoot: [[clavicle_ctl],1],
