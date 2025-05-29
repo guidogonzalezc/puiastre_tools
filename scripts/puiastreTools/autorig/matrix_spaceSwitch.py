@@ -1,49 +1,75 @@
 import maya.cmds as cmds
 import maya.api.OpenMaya as om
 
-def switch_matrix_space(target, sources = [None]):
+def get_offset_matrix(child, parent):
+    child_dag = om.MSelectionList().add(child).getDagPath(0)
+    parent_dag = om.MSelectionList().add(parent).getDagPath(0)
+    
+    child_world_matrix = child_dag.inclusiveMatrix()
+    parent_world_matrix = parent_dag.inclusiveMatrix()
+    
+    offset_matrix = child_world_matrix * parent_world_matrix.inverse()
+    
+    return offset_matrix
 
+def switch_matrix_space(target, sources = [None], default_value=1): 
+
+    print(target, sources, default_value)
     target_grp = target.replace("CTL", "GRP")
     if not cmds.objExists(target_grp):
         om.MGlobal.displayError(f"Target group '{target_grp}' does not exist.")
         return
     
     
-    parent_matrix = cmds.createNode("parentMatrix", name=target.replace("CTL", "PM"))
-    mult_matrix = cmds.createNode("multMatrix", name=target.replace("CTL", "MMX"))   
-    cmds.connectAttr(f"{target_grp}.worldMatrix[0]", f"{parent_matrix}.inMatrix")
-    cmds.connectAttr(f"{parent_matrix}.outMatrix", f"{mult_matrix}.matrixIn[0]")
-    cmds.connectAttr(f"{parent_matrix}.worldInverseMatrix", f"{mult_matrix}.matrixIn[1]")
+    parent_matrix = cmds.createNode("parentMatrix", name=target.replace("CTL", "PM"), ss=True)
+    mult_matrix = cmds.createNode("multMatrix", name=target.replace("_CTL", "OffsetParent_MMX"), ss=True)   
+    cmds.connectAttr(f"{target_grp}.worldMatrix[0]", f"{parent_matrix}.inputMatrix")
+    cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{mult_matrix}.matrixIn[0]")
+    cmds.connectAttr(f"{target_grp}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
+    target_matrix = cmds.getAttr(f"{target_grp}.worldInverseMatrix[0]")
 
-    spaces = []
     condition_nodes = []
+    spaces = []
     
     for i, matrix in enumerate(sources):
-        cmds.connectAttr(f"{matrix}.worldMatrix[0]", f"{parent_matrix}.target[{i}].targetMatrix")
 
-        condition = cmds.createNode("condition", name=f"{target.replace('CTL', 'COND')}")
-        cmds.setAttr(f"{condition}.operation", i)
-        cmds.setAttr(f"{condition}.colorIfFalseR", 0)
+        matrix_offset = get_offset_matrix(target_grp, matrix)
+
+        cmds.connectAttr(f"{matrix}.worldMatrix[0]", f"{parent_matrix}.target[{i}].targetMatrix")
+        cmds.setAttr(f"{parent_matrix}.target[{i}].offsetMatrix", matrix_offset, type="matrix")
 
         name = matrix.split("_")[1]
-        spaces.append(name)
+        name = name[0].upper() + name[1:].lower()
+
+        replace_name = f"{name}_COND"
+
+        condition = cmds.createNode("condition", name=f"{target.replace('_CTL', replace_name)}", ss=True)
+        cmds.setAttr(f"{condition}.firstTerm", i)
+        cmds.setAttr(f"{condition}.operation", 0)
+        cmds.setAttr(f"{condition}.colorIfFalseR", 0)
+
         condition_nodes.append(condition)
+        spaces.append(name)
 
+    cmds.addAttr(target, longName="SpaceSwitchSep", niceName = "SpaceSwitches_____", attributeType="enum", enumName="____", keyable=True)
+    cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
+    if len(sources) == 1:     
+        cmds.addAttr(target, longName="SpaceSwitch", attributeType="enum", enumName=":".join(spaces), keyable=False)
+        cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
+    else:
+        cmds.addAttr(target, longName="SpaceSwitch", attributeType="enum", enumName=":".join(spaces), keyable=True)
 
-    cmds.addAttr(target, longName="SPACE_SWITCHES", attributeType="enum", enumName="____")
-    cmds.setAttr(f"{target}.SPACE_SWITCHES", lock=True, keyable=False)        
-    cmds.addAttr(target, longName="Space_Switch", attributeType="enum", enumName=",".join(spaces))
-    cmds.addAttr(target, longName="Space_Switch_Value", attributeType="float", min=0, max=1, defaultValue=1, keyable=True)
+    cmds.addAttr(target, longName="FollowValue", attributeType="float", min=0, max=1, defaultValue=default_value, keyable=True)
 
     for i, condition in enumerate(condition_nodes):
-        cmds.connectAttr(f"{target}.Space_Switch", f"{condition}.firstTerm")
-        cmds.connectAttr(f"{target}.Space_Switch_Value", f"{condition}.colorIfTrueR")
-        cmds.connectAttr(f"{condition}.outColorR", f"{parent_matrix}.weight[{i}]")
+        cmds.connectAttr(f"{target}.SpaceSwitch", f"{condition}.secondTerm")
+        cmds.connectAttr(f"{target}.FollowValue", f"{condition}.colorIfTrueR")
+        cmds.connectAttr(f"{condition}.outColorR", f"{parent_matrix}.target[{i}].weight")
 
     
     cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{target}.offsetParentMatrix")
 
 
-switch_matrix_space("myControl", ["source1_CTL", "source2_CTL", "source3_CTL"])
+# switch_matrix_space("C_myControl_CTL", ["C_source1_CTL"])
 
 

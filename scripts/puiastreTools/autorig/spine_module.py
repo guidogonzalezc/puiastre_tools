@@ -39,8 +39,10 @@ class SpineModule():
         self.squash_system()
         self.volume_preservation_system()
 
-        self.data_exporter.append_data(f"spine", 
-                                    {"lastSpineJnt": self.sub_spine_joints[-1]},
+        self.data_exporter.append_data(f"C_spineModule", 
+                                    {"lastSpineJnt": self.sub_spine_joints[-1],
+                                    "localChest": self.localChest_ctl,
+                                    "localHip": self.spine_hip_ctl},
                                   )
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
@@ -105,20 +107,20 @@ class SpineModule():
         self.chest_fix = cmds.joint(name = "C_localChest_JNT")
         cmds.delete(cmds.parentConstraint(self.spine_ctl[-1], self.chest_fix, mo=False))
         cmds.parent(self.chest_fix, self.module_trn)
-        localChest_ctl, localChest_grp = curve_tool.controller_creator(f"C_localChest", suffixes = ["GRP"])
+        self.localChest_ctl, localChest_grp = curve_tool.controller_creator(f"C_localChest", suffixes = ["GRP"])
         cmds.matchTransform(localChest_grp[0], self.blend_chain[-1], pos=True, rot=True)
         cmds.pointConstraint(self.blend_chain[-1], localChest_grp[0], mo=False)
         cmds.orientConstraint(self.spine_ctl[2], localChest_grp[0], mo=True)
-        cmds.parentConstraint(localChest_ctl, self.chest_fix, mo=True)
+        cmds.parentConstraint(self.localChest_ctl, self.chest_fix, mo=True)
 
-        spine_hip_ctl, spine_hip_ctl_grp = curve_tool.controller_creator(f"C_localHip", suffixes = ["GRP"])
+        self.spine_hip_ctl, self.spine_hip_ctl_grp = curve_tool.controller_creator(f"C_localHip", suffixes = ["GRP"])
         position, rotation = guides_manager.guide_import(joint_name=f"C_localHip", filePath=self.guides_path)
 
-        cmds.matchTransform(spine_hip_ctl_grp[0], self.blend_chain[0], pos=True, rot=True)
-        cmds.xform(spine_hip_ctl_grp[0], ws=True, translation=position)
+        cmds.matchTransform(self.spine_hip_ctl_grp[0], self.blend_chain[0], pos=True, rot=True)
+        cmds.xform(self.spine_hip_ctl_grp[0], ws=True, translation=position)
         
-        self.lock_attr(spine_hip_ctl)
-        self.lock_attr(localChest_ctl)
+        self.lock_attr(self.spine_hip_ctl)
+        self.lock_attr(self.localChest_ctl)
 
         self.body_ctl, self.body_ctl_grp = curve_tool.controller_creator(f"C_body", suffixes = ["GRP"])
         cmds.matchTransform(self.body_ctl_grp[0], self.spine_grp[0][0])
@@ -135,14 +137,14 @@ class SpineModule():
         cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot") # Connect the transform to the IK spline handle
 
         dummy_body = cmds.createNode("transform", n="C_dummyBody_TRN", p=self.body_ctl) 
-        cmds.parentConstraint(dummy_body, spine_hip_ctl_grp[0], mo=True) 
+        cmds.parentConstraint(dummy_body, self.spine_hip_ctl_grp[0], mo=True) 
 
         self.localHip = cmds.duplicate(self.blend_chain[0], n=f"C_localHip_JNT", parentOnly=True)
         cmds.scaleConstraint(self.controllers_trn, self.localHip) 
 
-        cmds.parent(localChest_grp[0], spine_hip_ctl_grp[0], self.body_ctl_grp[0], self.controllers_trn)
+        cmds.parent(localChest_grp[0], self.spine_hip_ctl_grp[0], self.body_ctl_grp[0], self.controllers_trn)
 
-        cmds.parentConstraint(spine_hip_ctl, self.localHip)
+        cmds.parentConstraint(self.spine_hip_ctl, self.localHip)
 
         cmds.setAttr(f"{self.ik_sc}.dTwistControlEnable", 1) 
         cmds.setAttr(f"{self.ik_sc}.dWorldUpType", 4)

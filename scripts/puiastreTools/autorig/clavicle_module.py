@@ -8,7 +8,6 @@ reload(guides_manager)
 reload(curve_tool)    
 reload(data_export)    
 
-# FK CHAIN
 
 class ClavicleModule():
     def __init__(self):
@@ -33,6 +32,14 @@ class ClavicleModule():
 
         self.clavicle_module()
 
+        data_exporter = data_export.DataExport()
+        data_exporter.append_data(
+            f"{self.side}_clavicleModule",
+            {
+                "clavicle_ctl": self.ctl_ik,
+            }
+        )
+
     def clavicle_module(self):
         self.clavicle_joint = guides_manager.guide_import(
             joint_name=f"{self.side}_clavicle_JNT",
@@ -54,13 +61,13 @@ class ClavicleModule():
         cmds.parentConstraint(spine_joints, self.module_trn, mo=True)
         cmds.scaleConstraint(self.masterWalk_ctl, self.module_trn, mo=True)
         
-        ctl_ik, created_grps = curve_tool.controller_creator(name=f"{self.side}_clavicleIk",  suffixes = ["GRP", "OFF"])
+        self.ctl_ik, created_grps = curve_tool.controller_creator(name=f"{self.side}_clavicle",  suffixes = ["GRP", "OFF"])
         cmds.parent(created_grps[0], self.masterWalk_ctl)
         cmds.matchTransform(created_grps[0], self.clavicle_joint)
-        cmds.parentConstraint(ctl_ik, self.clavicle_joint, mo=False)
-        cmds.parentConstraint(spine_joints, created_grps[0], mo=True)
+        cmds.parentConstraint(self.ctl_ik, self.clavicle_joint, mo=False)
+        # cmds.parentConstraint(spine_joints, created_grps[0], mo=True)
         for attribute in ["scaleX","scaleY","scaleZ","visibility"]:
-            cmds.setAttr(f"{ctl_ik}.{attribute}", lock=True, keyable=False, channelBox=False)
+            cmds.setAttr(f"{self.ctl_ik}.{attribute}", lock=True, keyable=False, channelBox=False)
 
 
 
@@ -101,4 +108,4 @@ class ClavicleModule():
         cmds.parent(self.clavicle_joint, self.skinning_trn)
         cmds.delete(shoulder)
 
-        return ctl_ik
+        return self.ctl_ik

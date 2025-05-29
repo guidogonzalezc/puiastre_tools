@@ -74,6 +74,16 @@ class FingerModule():
             self.set_controllers()  
             self.call_bendys()
 
+            data_exporter = data_export.DataExport()
+            data_exporter.append_data(
+                f"{self.side}_finger{name}",    
+                {
+                    "ikFinger": self.pv_ctl,
+                    "ikPv": self.ik_ctl,
+                    "settingsAttr": self.settings_curve_ctl,
+                }
+            )
+
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
@@ -145,22 +155,22 @@ class FingerModule():
 
         cmds.parent(self.springIkHandle, self.individual_module_trn)
 
-        pv_ctl, pv_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}PoleVector", suffixes=["GRP", "SDK"])
+        self.pv_ctl, pv_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}PoleVector", suffixes=["GRP", "SDK"])
         cmds.parent(pv_grp[0], self.controllers_trn) 
-        self.lock_attr(pv_ctl)
+        self.lock_attr(self.pv_ctl)
         cmds.matchTransform(pv_grp[0], self.blend_chain[1])
         if self.side == "L":
             cmds.move(0, 250, 0, pv_grp[0], relative=True, objectSpace=True, worldSpaceDistance=True)
         else:
             cmds.move(0, -250, 0, pv_grp[0], relative=True, objectSpace=True, worldSpaceDistance=True)
         cmds.xform(pv_grp[0], ws=True, rotation=(0, 0, 0))
-        cmds.poleVectorConstraint(pv_ctl, self.springIkHandle)
+        cmds.poleVectorConstraint(self.pv_ctl, self.springIkHandle)
 
-        ik_ctl, ik_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}Ik", suffixes=["GRP", "SDK"])
+        self.ik_ctl, ik_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}Ik", suffixes=["GRP", "SDK"])
         cmds.parent(ik_grp[0], self.controllers_trn)
-        self.lock_attr(ik_ctl)
+        self.lock_attr(self.ik_ctl)
         cmds.matchTransform(ik_grp[0], self.blend_chain[-1])
-        cmds.parentConstraint(ik_ctl, self.springIkHandle, maintainOffset=True)
+        cmds.parentConstraint(self.ik_ctl, self.springIkHandle, maintainOffset=True)
 
         ik_root_ctl, ik_root_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}IkRoot", suffixes=["GRP", "SDK"])
         cmds.parent(ik_root_grp[0], self.settings_curve_ctl)

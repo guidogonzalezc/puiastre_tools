@@ -47,6 +47,22 @@ class TailModule(object):
 
             if i > 0:
                 cmds.parent(grp, self.fk_controllers[i-1])
+        
+        """
+        data_exporter = data_export.DataExport()
+        data_exporter.append_data(
+            f"{self.side}_armModule",
+            {
+                "skinning_joints": self.skinning_joints,
+                "armIk": self.wrist_ik_ctl,
+                "armSettings": self.settings_curve_ctl,
+                "armPV": self.pole_vector_ctl,
+                "shoulderFK": self.arm_fk_controllers[0],
+            }
+        )
+
+        """
+
 
 
     def import_guides(self):

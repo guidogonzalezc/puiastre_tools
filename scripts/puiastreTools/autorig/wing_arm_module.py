@@ -56,7 +56,10 @@ class WingArmModule(object):
             {
                 "skinning_joints": self.skinning_joints,
                 "armIk": self.wrist_ik_ctl,
-                "armSettings": self.settings_curve_ctl
+                "armSettings": self.settings_curve_ctl,
+                "armPV": self.pole_vector_ctl,
+                "shoulderFK": self.arm_fk_controllers[0],
+                "armRoot": self.root_ctl,
             }
         )
 

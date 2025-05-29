@@ -45,6 +45,18 @@ class LegModule():
         self.reverse_foot()
         self.call_bendys()
 
+        data_exporter = data_export.DataExport()
+        data_exporter.append_data(
+            f"{self.side}_legModule",
+            {
+                "ik_ctl": self.ik_ankle_ctl,
+                "fk_ctl": self.fk_ctl_list[0],
+                "pv_ctl": self.ik_pv_ctl,
+                "root_ctl": self.ik_root_ctl,
+            }
+        )
+
+
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
