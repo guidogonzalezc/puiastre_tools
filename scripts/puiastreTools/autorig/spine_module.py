@@ -12,7 +12,18 @@ reload(curve_tool)
 reload(data_export)    
 
 class SpineModule():
+    """
+    Class to create a spine module in a Maya rigging setup.
+    This module handles the creation of spine joints, controllers, and various systems such as stretch, reverse, offset, squash, and volume preservation.
+    """
     def __init__(self):
+        """
+        Initializes the SpineModule class, setting up paths and data exporters.
+        
+        Args:
+            self: Instance of the SpineModule class.
+        """
+        
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
@@ -26,6 +37,12 @@ class SpineModule():
 
 
     def make(self):
+        """
+        Creates the spine module, including the spine chain, controllers, and various systems.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
 
         self.module_trn = cmds.createNode("transform", name=f"C_spineModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"C_spineControllers_GRP", ss=True, parent=self.masterWalk_ctl)
@@ -45,11 +62,30 @@ class SpineModule():
                                     "localHip": self.spine_hip_ctl},
                                   )
 
-    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
+    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
+        """
+        Lock specified attributes of a controller, added rotate order attribute if ro is True.
+        
+        Args:
+            ctl (str): The name of the controller to lock attributes on.
+            attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+            ro (bool): If True, adds a rotate order attribute. Default is True.
+        """
+
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+        
+        if ro:
+            cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+            cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
     def create_chain(self):
+        """
+        Creates the spine joint chain by importing guides and parenting the first joint to the module transform.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
         
         self.blend_chain = guides_manager.guide_import(
             joint_name=f"C_spine01_JNT",
@@ -59,6 +95,13 @@ class SpineModule():
         cmds.parent(self.blend_chain[0], self.module_trn)
 
     def spine_module(self):
+        """
+        Creates the spine module by setting up the IK spline handle, controllers, and constraints.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
+
         positions = [cmds.xform(joint, query=True, worldSpace=True, translation=True) for joint in (self.blend_chain[0], self.blend_chain[-1])]
         self.ik_curve = cmds.curve(degree=1, point=positions, name="C_spine_CRV")
         cmds.rebuildCurve(self.ik_curve, rpo=True, rt=0, end=True, kr=False, kcp=False, kep=True, kt=True, fr=False, s=1, d=2, tol=0.01)
@@ -129,12 +172,12 @@ class SpineModule():
 
         self.lock_attr(self.body_ctl)
         
-        movable_ctl = cmds.circle(n="C_movablePivot_CTL", ch=False, normal=(0,1,0))[0] # Create a controller for the movable pivot
-        cmds.matchTransform(movable_ctl, self.spine_grp[0][0]) # Match the transform to the guide
-        cmds.parent(movable_ctl, self.body_ctl) # Parent the locator to the transform
+        movable_ctl = cmds.circle(n="C_movablePivot_CTL", ch=False, normal=(0,1,0))[0] 
+        cmds.matchTransform(movable_ctl, self.spine_grp[0][0]) 
+        cmds.parent(movable_ctl, self.body_ctl) 
 
-        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.rotatePivot") # Connect the transform to the IK spline handle
-        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot") # Connect the transform to the IK spline handle
+        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.rotatePivot") 
+        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot") 
 
         dummy_body = cmds.createNode("transform", n="C_dummyBody_TRN", p=self.body_ctl) 
         cmds.parentConstraint(dummy_body, self.spine_hip_ctl_grp[0], mo=True) 
@@ -160,63 +203,75 @@ class SpineModule():
         cmds.connectAttr(f"{self.spine_ctl[2]}.worldMatrix[0]", f"{self.ik_sc}.dWorldUpMatrixEnd")
 
     def stretch_system(self):
+        """
+        Creates the stretch system for the spine module, including attributes and nodes for stretch and squash functionality.
+        
+        Args:
+            self: Instance of the SpineModule class.
+        """
            
-            cmds.addAttr(self.body_ctl, shortName="STRETCH", niceName="STRETCH_____", enumName="_____",attributeType="enum", keyable=True)
-            cmds.setAttr(self.body_ctl+".STRETCH", channelBox=True, lock=True)
-            cmds.addAttr(self.body_ctl, shortName="stretch", niceName="Stretch", maxValue=1, minValue=0,defaultValue=0, keyable=True)
-            cmds.addAttr(self.body_ctl, shortName="stretchMin", niceName="Stretch Min", maxValue=1, minValue=0.001,defaultValue=0.8, keyable=True)
-            cmds.addAttr(self.body_ctl, shortName="stretchMax", niceName="Stretch Max", minValue=1,defaultValue=1.2, keyable=True)
-            cmds.addAttr(self.body_ctl, shortName="offset", niceName="Offset", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="STRETCH", niceName="STRETCH_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.body_ctl+".STRETCH", channelBox=True, lock=True)
+        cmds.addAttr(self.body_ctl, shortName="stretch", niceName="Stretch", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="stretchMin", niceName="Stretch Min", maxValue=1, minValue=0.001,defaultValue=0.8, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="stretchMax", niceName="Stretch Max", minValue=1,defaultValue=1.2, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="offset", niceName="Offset", maxValue=1, minValue=0,defaultValue=0, keyable=True)
 
-            cmds.addAttr(self.body_ctl, shortName="SQUASH", niceName="SQUASH_____", enumName="_____",attributeType="enum", keyable=True)
-            cmds.setAttr(self.body_ctl+".SQUASH", channelBox=True, lock=True)
-            cmds.addAttr(self.body_ctl, shortName="volumePreservation", niceName="Volume Preservation", maxValue=1, minValue=0,defaultValue=1, keyable=True)
-            cmds.addAttr(self.body_ctl, shortName="falloff", niceName="Falloff", maxValue=1, minValue=0,defaultValue=0, keyable=True)
-            cmds.addAttr(self.body_ctl, shortName="maxPos", niceName="Max Pos", maxValue=1, minValue=0,defaultValue=0.5, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="SQUASH", niceName="SQUASH_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.body_ctl+".SQUASH", channelBox=True, lock=True)
+        cmds.addAttr(self.body_ctl, shortName="volumePreservation", niceName="Volume Preservation", maxValue=1, minValue=0,defaultValue=1, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="falloff", niceName="Falloff", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="maxPos", niceName="Max Pos", maxValue=1, minValue=0,defaultValue=0.5, keyable=True)
 
-            cmds.addAttr(self.body_ctl, shortName="attachedFk", niceName="FK_____", enumName="_____",attributeType="enum", keyable=True)
-            cmds.setAttr(self.body_ctl+".attachedFk", channelBox=True, lock=True)
-            cmds.addAttr(self.body_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+        cmds.addAttr(self.body_ctl, shortName="attachedFk", niceName="FK_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.body_ctl+".attachedFk", channelBox=True, lock=True)
+        cmds.addAttr(self.body_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
 
 
-            nodes_to_create = {
-                "C_spine_CIN": ("curveInfo", None), #0
-                "C_spineStretchFactor_FLM": ("floatMath", 3), #1
-                "C_spineStretchFactor_CLM": ("clamp", None), #2
-                "C_spineInitialArcLegth_FLM": ("floatMath", 2), #3
-                "C_spineBaseStretch_FLC": ("floatConstant", None), #4
-                "C_spineStretch_BTA": ("blendTwoAttr", None), # 5
-                "C_spineStretchValue_FLM": ("floatMath", 2),# 6
-            }
+        nodes_to_create = {
+            "C_spine_CIN": ("curveInfo", None), #0
+            "C_spineStretchFactor_FLM": ("floatMath", 3), #1
+            "C_spineStretchFactor_CLM": ("clamp", None), #2
+            "C_spineInitialArcLegth_FLM": ("floatMath", 2), #3
+            "C_spineBaseStretch_FLC": ("floatConstant", None), #4
+            "C_spineStretch_BTA": ("blendTwoAttr", None), # 5
+            "C_spineStretchValue_FLM": ("floatMath", 2),# 6
+        }
 
-            created_nodes = []
-            for node_name, (node_type, operation) in nodes_to_create.items():
-                node = cmds.createNode(node_type, name=node_name)
-                created_nodes.append(node)
-                if operation is not None:
-                    cmds.setAttr(f'{node}.operation', operation)
+        created_nodes = []
+        for node_name, (node_type, operation) in nodes_to_create.items():
+            node = cmds.createNode(node_type, name=node_name)
+            created_nodes.append(node)
+            if operation is not None:
+                cmds.setAttr(f'{node}.operation', operation)
 
-            # Connections between selected nodes
-            cmds.connectAttr(created_nodes[0] + ".arcLength", created_nodes[1]+".floatA")
-            cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[2]+".inputR")
-            cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[1]+".floatB")
-            cmds.connectAttr(created_nodes[2] + ".outputR", created_nodes[5]+".input[1]")
-            cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[5]+".input[0]")
-            cmds.connectAttr(created_nodes[5] + ".output", created_nodes[6]+".floatA")
-            cmds.setAttr(created_nodes[4]+".inFloat", 1)
-            cmds.connectAttr(f"{self.body_ctl}.stretch", created_nodes[5]+".attributesBlender")
-            cmds.connectAttr(f"{self.body_ctl}.stretchMax", created_nodes[2]+".maxR")
-            cmds.connectAttr(f"{self.body_ctl}.stretchMin", created_nodes[2]+".minR")
-            cmds.connectAttr(f"{self.ik_curve}.worldSpace[0]", created_nodes[0]+".inputCurve")
-            cmds.setAttr(created_nodes[3]+".floatB", cmds.getAttr(created_nodes[0]+".arcLength"))
-            cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", created_nodes[3]+".floatA")
-            cmds.setAttr(created_nodes[6]+".floatB", cmds.getAttr(f"{self.blend_chain[2]}.translateY"))
-            for joint in self.blend_chain[1:]:
-                cmds.connectAttr(created_nodes[6]+".outFloat", f"{joint}.translateY")
+        cmds.connectAttr(created_nodes[0] + ".arcLength", created_nodes[1]+".floatA")
+        cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[2]+".inputR")
+        cmds.connectAttr(created_nodes[3] + ".outFloat", created_nodes[1]+".floatB")
+        cmds.connectAttr(created_nodes[2] + ".outputR", created_nodes[5]+".input[1]")
+        cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[5]+".input[0]")
+        cmds.connectAttr(created_nodes[5] + ".output", created_nodes[6]+".floatA")
+        cmds.setAttr(created_nodes[4]+".inFloat", 1)
+        cmds.connectAttr(f"{self.body_ctl}.stretch", created_nodes[5]+".attributesBlender")
+        cmds.connectAttr(f"{self.body_ctl}.stretchMax", created_nodes[2]+".maxR")
+        cmds.connectAttr(f"{self.body_ctl}.stretchMin", created_nodes[2]+".minR")
+        cmds.connectAttr(f"{self.ik_curve}.worldSpace[0]", created_nodes[0]+".inputCurve")
+        cmds.setAttr(created_nodes[3]+".floatB", cmds.getAttr(created_nodes[0]+".arcLength"))
+        cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", created_nodes[3]+".floatA")
+        cmds.setAttr(created_nodes[6]+".floatB", cmds.getAttr(f"{self.blend_chain[2]}.translateY"))
+        for joint in self.blend_chain[1:]:
+            cmds.connectAttr(created_nodes[6]+".outFloat", f"{joint}.translateY")
 
-            self.stretch_float_math = created_nodes[6]
+        self.stretch_float_math = created_nodes[6]
 
     def reverse_system(self):
+        """
+        Creates the reverse system for the spine module, including a reversed curve and an IK spline handle for the reversed chain.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
+
         reversed_curve = cmds.reverseCurve(self.ik_curve, name="C_spineReversed_CRV",  ch=True, rpo=False)
         cmds.parent(reversed_curve[0], self.module_trn ) 
         reversed_joints = cmds.duplicate(self.blend_chain[0], renameChildren=True)
@@ -251,6 +306,12 @@ class SpineModule():
             cmds.connectAttr(negate_flm+".outFloat", f"{joint}.translateY")
 
     def offset_system(self):
+        """
+        Creates the offset system for the spine module, including nodes for decomposing matrices, nearest point on curve, float constants, and blend two attributes.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
         nodes_to_create = {
             "C_spineReversed05_DCM": ("decomposeMatrix", None),
             "C_spineOffset_NPC": ("nearestPointOnCurve", None),
@@ -275,6 +336,13 @@ class SpineModule():
         cmds.setAttr(created_nodes[2]+".inFloat", 0)
 
     def squash_system(self):
+        """
+        Creates the squash system for the spine module, including a transform node for spine settings, attributes for stretch and squash, and a curve for squash deformation.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
+
         translations = []
 
         self.spine_settings_trn = cmds.createNode("transform", n="C_spineSettings_TRN", parent=self.module_trn)
@@ -333,6 +401,12 @@ class SpineModule():
 
 
     def volume_preservation_system(self):
+        """
+        Creates the volume preservation system for the spine module, including remap value nodes, float math nodes, and connections to squash joints.
+
+        Args:
+            self: Instance of the SpineModule class.
+        """
                 
         squash_joints = self.attached_fk()
        
@@ -414,6 +488,15 @@ class SpineModule():
                 cmds.setAttr(f"{created_nodes[5]}.value[{i}].value_FloatValue", values[i])
 
     def attached_fk(self):
+        """
+        Creates the attached FK controllers for the spine module, including sub-spine controllers and joints.
+
+        Args:
+            self: Instance of the SpineModule class.
+        Returns:
+            list: A list of sub-spine joint names created for the attached FK system.
+        """
+        
         main_spine_joint = []
         for joint in self.blend_chain:
             if "effector" in joint:

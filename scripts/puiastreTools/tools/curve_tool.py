@@ -3,12 +3,19 @@ import maya.cmds as cmds
 import json
 import os
 
+
 complete_path = os.path.realpath(__file__)
 relative_path = complete_path.split("\scripts")[0]
 TEMPLATE_FILE = os.path.join(relative_path, "curves", "template_curves_001.json") 
 
 
 def get_all_ctl_curves_data():
+    """
+    Collects data from all controller curves in the scene and saves it to a JSON file.
+    This function retrieves information about each controller's transform and its associated nurbsCurve shapes,
+    including their CV positions, form, knots, degree, and override attributes.
+    """
+
     ctl_data = {}
 
     transforms = cmds.ls("*_CTL*", type="transform", long=True)
@@ -104,6 +111,16 @@ def get_all_ctl_curves_data():
     print(f"Controllers template saved to: {TEMPLATE_FILE}")
 
 def build_curves_from_template(target_transform_name=None):
+    """
+    Builds controller curves from a predefined template JSON file.
+    If a specific target transform name is provided, it filters the curves to only create those associated with that transform.
+    If no target transform name is provided, it creates all curves defined in the template.
+    Args:
+        target_transform_name (str, optional): The name of the target transform to filter curves by. Defaults to None.
+    Returns:
+        list: A list of created transform names.
+    """
+
     if not os.path.exists(TEMPLATE_FILE):
         om.MGlobal.displayError("Template file does not exist.")
         return
@@ -190,6 +207,7 @@ def controller_creator(name, suffixes=["GRP"]):
 
     Args:
         name (str): Name of the controller.
+        suffixes (list): List of suffixes for the groups to be created. Default is ["GRP"].
     """
     created_grps = []
     for suffix in suffixes:
@@ -219,15 +237,27 @@ def controller_creator(name, suffixes=["GRP"]):
         cmds.parent(ctl[0], created_grps[-1])
         return ctl[0], created_grps
 
-import maya.api.OpenMaya as om
-import maya.cmds as cmds
-
 def get_dag_path(node_name):
+    """
+    Returns the MObject dag path for a given node name.
+    Args:
+        node_name (str): The name of the node to get the dag path for.
+    Returns:
+        om.MDagPath: The dag path of the node.
+    """
     sel = om.MSelectionList()
     sel.add(node_name)
     return sel.getDagPath(0)
 
 def curves_match(curveA, curveB):
+    """
+    Compares two MFnNurbsCurve objects to check if they have the same structure.
+    Args:
+        curveA (om.MFnNurbsCurve): The first curve to compare.
+        curveB (om.MFnNurbsCurve): The second curve to compare.
+    Returns:
+        bool: True if the curves match in structure, False otherwise.
+    """
     return (
         curveA.degree == curveB.degree and
         curveA.numCVs == curveB.numCVs and
@@ -237,22 +267,34 @@ def curves_match(curveA, curveB):
     )
 
 def rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name):
-    # Delete target shape
+    """
+    Rebuilds the target curve shape by duplicating the source curve and renaming it.
+    Args:
+        src_transform (str): The source transform containing the original curve.
+        src_shape (str): The name of the source shape to duplicate.
+        tgt_transform (str): The target transform where the new shape will be parented.
+        tgt_shape_name (str): The name for the new shape in the target transform.
+    Returns:
+        str: The name of the newly created shape in the target transform.
+    """ 
     if cmds.objExists(tgt_shape_name):
         cmds.delete(tgt_shape_name)
 
-    # Duplicate shape from left
     dup = cmds.duplicate(f"{src_transform}|{src_shape}", name="tempCurveDup", returnRootsOnly=True)[0]
     new_shape = cmds.listRelatives(dup, shapes=True, fullPath=False)[0]
 
-    # Rename and parent the new shape to the right controller
     final_shape = cmds.rename(new_shape, tgt_shape_name)
     cmds.parent(final_shape, tgt_transform, shape=True, relative=True)
-    cmds.delete(dup)  # delete the temp transform
+    cmds.delete(dup)  
 
     return final_shape
 
 def mirror_all_L_CTL_shapes():
+    """
+    Mirrors all left controller shapes (L_*_CTL) to their right counterparts (R_*_CTL).
+    This function searches for all transform nodes that match the pattern "L_*_CTL", retrieves their shapes,
+    and creates or updates the corresponding right-side shapes by mirroring the CV positions.
+    """
     all_transforms = cmds.ls(type="transform")
     left_ctl_transforms = [t for t in all_transforms if "L_" in t and t.endswith("_CTL")]
 
@@ -292,7 +334,6 @@ def mirror_all_L_CTL_shapes():
                 src_dag = get_dag_path(f"{src_transform}|{src_shape}")
                 src_curve = om.MFnNurbsCurve(src_dag)
 
-                # Ensure target shape exists and matches structure
                 if not cmds.objExists(tgt_shape_name):
                     final_shape = rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name)
                     tgt_dag = get_dag_path(f"{tgt_transform}|{final_shape}")
@@ -306,7 +347,6 @@ def mirror_all_L_CTL_shapes():
 
                 tgt_curve = om.MFnNurbsCurve(tgt_dag)
 
-                # Mirror CVs
                 mirrored_points = om.MPointArray()
                 for i in range(src_curve.numCVs):
                     pt = src_curve.cvPosition(i)

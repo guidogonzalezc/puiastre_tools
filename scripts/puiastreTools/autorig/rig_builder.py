@@ -22,6 +22,10 @@ reload(data_export)
 reload(matrix_spaceSwitch)
 
 def disable_inherits():
+    """
+    Disable the inheritsTransform attribute for all controllers in the scene.
+    This function iterates through all selected objects and sets the inheritsTransform attribute to 0 for those that contain "CRV" in their name but do not contain "Shape".
+    """
     sel = cmds.ls()
 
     for obj in sel:
@@ -30,6 +34,10 @@ def disable_inherits():
                 cmds.setAttr(obj + ".inheritsTransform", 0)    
 
 def rename_ctl_shapes():
+    """
+    Rename all shapes in the scene to follow a specific naming convention.
+    This function finds all nurbsCurve shapes in the scene, retrieves their parent transform, and renames the shape to match the parent's name with "Shape" appended.
+    """
     
     obj = cmds.ls(type="nurbsCurve")
 
@@ -38,6 +46,11 @@ def rename_ctl_shapes():
         cmds.rename(shapes, f"{parentName}Shape")
 
 def joint_lable():
+    """
+    Set attributes for all joints in the scene to label them according to their side and type.
+    This function iterates through all joints, checks their names for side indicators (L_, R_, C_), and sets the 'side' and 'type' attributes accordingly.
+    """
+
     for jnt in cmds.ls(type="joint"):
         if "L_" in jnt:
             cmds.setAttr(jnt + ".side", 1)
@@ -50,7 +63,13 @@ def joint_lable():
 
 
 
-def make():   
+def make():
+    """
+    Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
+    This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
+    It also sets the radius for all joints and displays a completion message.
+    """   
+    
     basic_structure.create_basic_structure(asset_name = "Varyndor")
     
     fingermodule = finger_module.FingerModule()

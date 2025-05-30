@@ -17,7 +17,19 @@ reload(curve_tool)
 reload(data_export)    
 
 class LegModule():
+    """
+    Class representing a leg module in a rigging system.
+    This class handles the creation and management of leg components, including IK and FK systems, controllers, and soft stretch functionality.
+    
+    """
     def __init__(self):
+        """
+        Initialize the leg module, setting up paths and basic structure.
+        
+        Args:
+            self: The instance of the LegModule class.
+        """
+
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
@@ -30,6 +42,12 @@ class LegModule():
         self.masterWalk_ctl = data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
     def make(self, side):
+        """
+        Create the leg module with the specified side (left or right).
+
+        Args:
+            side (str): The side of the leg module, either "L" for left or "R" for right.
+        """
 
         self.side = side    
 
@@ -58,6 +76,15 @@ class LegModule():
 
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
+        """
+        Lock specified attributes of a controller, added rotate order attribute if ro is True.
+        
+        Args:
+            ctl (str): The name of the controller to lock attributes on.
+            attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+            ro (bool): If True, adds a rotate order attribute. Default is True.
+        """
+
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
         
@@ -67,6 +94,12 @@ class LegModule():
 
 
     def duplicate_leg(self):
+        """
+        Duplicate the leg guides and create the necessary joint chains for IK, FK, and blending.
+        
+        Args:
+            self: The instance of the LegModule class.
+        """
 
         self.fk_chain = []
         self.ik_chain = []
@@ -92,6 +125,12 @@ class LegModule():
 
 
     def set_controllers(self):
+        """
+        Create and set up the controllers for the leg module, including IK and FK controllers, and their visibility connections.
+
+        Args:
+            self: The instance of the LegModule class.
+        """
 
         # -- IK/FK SWITCHCONTROLLER -- # 
 
@@ -152,6 +191,7 @@ class LegModule():
             solver="ikSpringSolver",
         )[0]
 
+        # Setted to 0 because the ikRotatePlane is not working with the preferred angle
         for joint in self.ik_chain:
             cmds.setAttr(f"{joint}.preferredAngleZ", 0)
 
@@ -210,7 +250,6 @@ class LegModule():
 
         cmds.parentConstraint(self.ik_root_ctl, self.ik_chain[0], mo=True)
         cmds.parentConstraint(self.ik_root_ctl, self.ikDriver_chain[0], mo=True)
-        # cmds.parentConstraint(rps_transform , self.springIkHandle, mo=True)
 
 
 
@@ -277,6 +316,14 @@ class LegModule():
         cmds.connectAttr(f"{self.ik_ankle_ctl}.springSolverBias02", f"{self.springIkHandle}.springAngleBias[1].springAngleBias_FloatValue")
 
     def pairBlends(self):
+        """
+        Create pairBlend nodes for blending between IK and FK joint chains.
+
+        Args:
+            self: The instance of the LegModule class.
+
+        """
+
         for i, joint in enumerate(self.blend_chain):
             pairblend_node = cmds.createNode("pairBlend", name=f"{joint.replace('JNT', 'PBL')}", ss=True)
             cmds.connectAttr(f"{self.ik_chain[i]}.translate", f"{pairblend_node}.inTranslate1")
@@ -288,8 +335,14 @@ class LegModule():
             cmds.connectAttr(f"{self.settings_curve_ctl}.switchIkFk", f"{pairblend_node}.weight")
         
     def soft_stretch(self):
+        """
+        Create the soft stretch functionality for the leg module, including distance calculations and remapping values.
 
-        masterwalk = self.masterWalk_ctl# Change this to the actual masterwalk controller name
+        Args:
+            self: The instance of the LegModule class.
+        """
+
+        masterwalk = self.masterWalk_ctl
 
         self.soft_off = cmds.createNode("transform", name=f"{self.side}_legSoft_OFF", p=self.module_trn, ss=True)
         cmds.pointConstraint(self.ik_root_ctl, self.soft_off)
@@ -345,7 +398,6 @@ class LegModule():
             if operation is not None:
                 cmds.setAttr(f'{node}.operation', operation)
 
-        # Connections between selected nodes
         cmds.connectAttr(created_nodes[0] + ".distance", created_nodes[1]+".floatA")
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[15]+".floatA")
         cmds.connectAttr(created_nodes[1] + ".outFloat", created_nodes[7]+".floatA")
@@ -368,8 +420,6 @@ class LegModule():
         cmds.connectAttr(created_nodes[14] + ".outFloat", created_nodes[17]+".floatA")
         cmds.connectAttr(created_nodes[15] + ".outFloat", created_nodes[16]+".floatB")
         cmds.connectAttr(created_nodes[16] + ".outFloat", created_nodes[17]+".floatB")
-        # cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[31]+".floatA")
-        # cmds.connectAttr(created_nodes[30] + ".outFloat", created_nodes[31]+".floatB")
         cmds.connectAttr(created_nodes[2] + ".outFloat", created_nodes[3]+".input1D[0]")
         cmds.connectAttr(created_nodes[4] + ".outFloat", created_nodes[3]+".input1D[1]")
         cmds.connectAttr(created_nodes[26] + ".outFloat", created_nodes[3]+".input1D[2]")
@@ -411,12 +461,6 @@ class LegModule():
         cmds.connectAttr(created_nodes[24] + ".outFloat", created_nodes[27]+".colorIfTrueB")
         cmds.connectAttr(created_nodes[28] + ".outFloat", created_nodes[27]+".colorIfTrueG")
 
-
-
-        # Connections TRN and nodes
-
-
-
         cmds.connectAttr(f"{self.ik_root_ctl}.worldMatrix", f"{created_nodes[0]}.inMatrix1")
         cmds.connectAttr(f"{self.ikHandleManager}.worldMatrix", f"{created_nodes[0]}.inMatrix2")
         cmds.connectAttr(f"{self.ik_ankle_ctl}.lowerLengthMult", f"{created_nodes[4]}.floatA")
@@ -425,10 +469,6 @@ class LegModule():
         cmds.connectAttr(f"{self.ik_ankle_ctl}.soft", f"{created_nodes[5]}.inputValue")
         cmds.connectAttr(f"{masterwalk}.globalScale", f"{created_nodes[1]}.floatB")
         cmds.connectAttr(f"{created_nodes[18]}.outColorR",f"{self.soft_trn}.translateX")
-
-        # setAttr nodes
-
-
 
         cmds.setAttr(f"{created_nodes[2]}.floatB", abs(cmds.getAttr(f"{self.ikDriver_chain[1]}.translateX")))
         cmds.setAttr(f"{created_nodes[4]}.floatB", abs(cmds.getAttr(f"{self.ikDriver_chain[3]}.translateX")))
@@ -473,9 +513,13 @@ class LegModule():
 
 
     def reverse_foot(self):
-        #----ADDING THE ROLL----#
+        """
+        Create the reverse foot setup for the leg module, including clamping and remapping values for the roll and bank angles.
 
-       ### GENERATED CODE ###
+        Args:
+            self: The instance of the LegModule class.
+        """
+        #----ADDING THE ROLL----#
         nodes_to_create = [
             (f"{self.side}_rollStraightAnglePercentage_RMV", "remapValue", None), #0
             (f"{self.side}_rollLiftAnglePercentage_RMV", "remapValue", None),  #1
@@ -496,7 +540,6 @@ class LegModule():
             if operation is not None:
                 cmds.setAttr(f'{node}.operation', operation)
 
-        # Connections between selected nodes and transform nodes
         cmds.connectAttr(created_nodes[0] + ".outValue", f"{created_nodes[4]}.input1X")
         cmds.connectAttr(created_nodes[0] + ".outValue", f"{created_nodes[2]}.inputX")
         cmds.connectAttr(f"{self.ik_ankle_ctl}.roll", created_nodes[0] + ".inputValue")
@@ -536,6 +579,12 @@ class LegModule():
         cmds.connectAttr(f"{self.ik_ankle_ctl}.ankleTwist", self.ik_ankle_grp[1] + ".rotateY")
 
     def call_bendys(self):
+        """
+        Create bendy joints for the leg module, setting up upper and lower twists.
+
+        Args:
+            self: The instance of the LegModule class.
+        """
         normals = (0, 0, 1)
         bendy = Bendys(self.side, self.blend_chain[0], self.blend_chain[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn)
         bendy.upper_twist_setup()
@@ -554,7 +603,24 @@ class LegModule():
 
 
 class Bendys(object):
+    """
+    A class to create and manage bendy joints for a leg module in Maya.
+    This class handles the setup of upper and lower twist joints, ik handles, and hooks for the bendy joints.
+    
+    """
     def __init__(self, side, upper_joint, lower_joint, bendy_module, skinning_trn, normals, controls_trn):
+        """ 
+        Initialize the Bendys class with the necessary parameters.
+        
+        Args:
+            side (str): The side of the leg ('L' or 'R').
+            upper_joint (str): The name of the upper joint.
+            lower_joint (str): The name of the lower joint.
+            bendy_module (str): The name of the bendy module transform.
+            skinning_trn (str): The name of the skinning transform.
+            normals (tuple): The normals for the bendy joints.
+            controls_trn (str): The name of the controls transform.
+        """
         self.normals = normals
         self.skinning_trn = skinning_trn
         self.side = side
@@ -565,6 +631,12 @@ class Bendys(object):
         self.controls_trn = controls_trn
 
     def upper_twist_setup(self):
+        """
+        Create upper twist joints and IK handles for the leg module, setting up the no-roll and roll configurations.
+
+        Args:
+            self: The instance of the Bendys class.
+        """
         self.twist_joints = []
         twist_end_joints = []
         ik_handle = []
@@ -598,6 +670,12 @@ class Bendys(object):
 
     
     def lower_twists_setup(self):
+        """
+        Create lower twist joints and IK handles for the leg module, setting up the roll configuration.
+
+        Args:
+            self: The instance of the Bendys class.
+        """
 
         duplicated_twist_joints = cmds.duplicate(self.upper_joint, renameChildren=True)
         cmds.delete(duplicated_twist_joints[2])
@@ -617,6 +695,13 @@ class Bendys(object):
         self.hooks()
 
     def hooks(self):
+        """
+        Create hook joints and motion paths for the bendy joints, connecting them to the upper and lower joints.
+
+        Args:
+            self: The instance of the Bendys class.
+        """
+
         self.hook_joints = []
         parametric_lenght = [0.001, 0.5, 0.999]
 
@@ -664,6 +749,12 @@ class Bendys(object):
         self.bendy_setup()
 
     def bendy_setup(self):
+        """
+        Create the bendy curve and offset curve for the leg module, setting up the bendy controller and skinning.
+        
+        Args:
+            self: The instance of the Bendys class.
+        """
         bendyCurve = cmds.curve(p=(cmds.xform(self.upper_joint, query=True, worldSpace=True, translation=True),cmds.xform(self.lower_joint, query=True, worldSpace=True, translation=True)) , d=1, n=f"{self.side}_{self.part}Bendy_CRV")
 
         cmds.rebuildCurve(bendyCurve, ch=False, rpo=True, rt=0, end=True, kr=False, kcp=False, kep=True, kt=False, fr=False, s=2, d=1, tol=0.01)

@@ -17,7 +17,16 @@ reload(curve_tool)
 reload(data_export)    
 
 class FingerModule():
+    """
+    Class to create a finger module in a Maya rigging setup.
+    This module handles the creation of finger joints, controllers, and constraints.
+    """
     def __init__(self):
+        """
+        Initializes the FingerModule class, setting up paths and data exporters.
+        Args:
+            self: Instance of the FingerModule class.
+        """
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
@@ -30,6 +39,12 @@ class FingerModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
     def make(self, side):
+        """
+        Creates the finger module for the specified side (left or right).
+
+        Args:
+            side (str): The side for which to create the finger module. Should be either "L" or "R".
+        """
 
         self.side = side    
 
@@ -85,14 +100,29 @@ class FingerModule():
             )
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
+        """
+        Lock specified attributes of a controller, added rotate order attribute if ro is True.
+        
+        Args:
+            ctl (str): The name of the controller to lock attributes on.
+            attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+            ro (bool): If True, adds a rotate order attribute. Default is True.
+        """
+
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
-
+        
         if ro:
             cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
             cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
     def create_chain(self, name):
+        """
+        Create a finger joint chain and import the guide for the specified finger name.
+
+        Args:
+            name (str): The name of the finger to create the joint chain for (e.g., "Thumb", "Index", etc.).
+        """
         
         self.blend_chain = guides_manager.guide_import(
             joint_name=f"{self.side}_finger{name}01_JNT",
@@ -103,6 +133,14 @@ class FingerModule():
 
 
     def attr_curl_setup(self, sdk_grp, jointName, i):
+        """
+        Set up driven keys for finger curl and spread attributes.
+
+        Args:
+            sdk_grp (str): The name of the SDK group to apply driven keys to.
+            jointName (str): The name of the joint to determine the finger type.
+            i (int): The index of the joint in the blend chain.
+        """
         values_attr_curl = {
             "fingerThumb": 40,
             "fingerIndex": 40,
@@ -134,6 +172,12 @@ class FingerModule():
         cmds.setDrivenKeyframe(f"{sdk_grp}.rotateZ", currentDriver=f"{self.settings_curve_ctl}.curl", driverValue=-10, value=10)
         
     def set_controllers(self):
+        """
+        Set up the controllers for the finger module, including IK handles, pole vectors, and FK controllers.
+
+        Args:
+            self: Instance of the FingerModule class.
+        """
 
         # -- FK CONTROLLER -- #
 
@@ -227,6 +271,13 @@ class FingerModule():
 
 
     def call_bendys(self):
+        """
+        Set up bendy joints for the finger module, creating lower twists and wave handles.
+
+        Args:
+            self: Instance of the FingerModule class.
+        """
+
         normals = (0, 1, 0)
         bendy = Bendys(self.side, self.attached_fk_joints[0], self.attached_fk_joints[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
         end_bezier01, bendy_skin_cluster01, bendy_joint01, off_curve01, bendy_offset_skin_cluster01 = bendy.lower_twists_setup()
@@ -246,6 +297,15 @@ class FingerModule():
         self.data_exporter.append_data(f"{self.side}_{name}", {"bendy_joints": bendy_joint})
 
     def wave_handle(self, beziers = [], skc = [], bezier_off=[], offset_skc= []):
+        """
+        Create a wave handle for the finger module using the provided bezier curves and skin clusters.
+
+        Args:
+            beziers (list): List of bezier curves to use for the wave handle.
+            skc (list): List of skin clusters corresponding to the bezier curves.
+            bezier_off (list): List of offset bezier curves.
+            offset_skc (list): List of offset skin clusters corresponding to the offset bezier curves.
+        """
         
         dupe_beziers = []
         dupe_beziers_offset = []
@@ -311,7 +371,24 @@ class FingerModule():
 
 
 class Bendys(object):
+    """
+    Class to create bendy modules for finger rigging in Maya.
+    """
+
     def __init__(self, side, upper_joint, lower_joint, bendy_module, skinning_trn, normals, controls_trn, name):
+        """
+        Initializes the Bendys class with the necessary parameters.
+
+        Args:
+            side (str): The side of the finger (e.g., "L" or "R").
+            upper_joint (str): The name of the upper joint in the finger chain.
+            lower_joint (str): The name of the lower joint in the finger chain.
+            bendy_module (str): The name of the bendy module transform.
+            skinning_trn (str): The name of the skinning transform.
+            normals (tuple): The normals for the bendy module.
+            controls_trn (str): The name of the controls transform.
+            name (str): The name of the finger part (e.g., "Thumb", "Index", etc.).
+        """
         self.name = name
         self.normals = normals
         self.skinning_trn = skinning_trn
@@ -323,10 +400,16 @@ class Bendys(object):
         self.controls_trn = controls_trn
    
     def lower_twists_setup(self):
+        """
+        Set up the lower twists for the finger module, creating twist joints and IK handles.
+
+        Returns:
+            tuple: Contains the end bezier curve, bendy skin cluster, bendy joint, offset curve, and bendy offset skin cluster.
+            
+        """
 
         duplicated_twist_joints = cmds.duplicate(self.upper_joint, renameChildren=True)
         duplicated_twist_joints.append(cmds.duplicate(self.lower_joint, renameChildren=True)[0])
-        # cmds.delete(duplicated_twist_joints[2])
         self.twist_joints = cmds.rename(duplicated_twist_joints[0], f"{self.side}_{self.name}{self.part}Roll_JNT")
         twist_end_joints = cmds.rename(duplicated_twist_joints[1], f"{self.side}_{self.part}LowerRollEnd_JNT")
         cmds.parent(twist_end_joints, self.twist_joints)
@@ -346,6 +429,12 @@ class Bendys(object):
         return end_bezier, bendy_skin_cluster, bendy_joint, off_curve, bendy_offset_skin_cluster
 
     def hooks(self):
+        """
+        Create hook joints and motion paths for the bendy module.
+        
+        Returns:
+            tuple: Contains the end bezier curve, bendy skin cluster, bendy joint, offset curve, and bendy offset skin cluster.
+        """
         self.hook_joints = []
         parametric_lenght = [0.001, 0.5, 0.999]
 
@@ -394,6 +483,13 @@ class Bendys(object):
         return end_bezier, bendy_skin_cluster, bendy_joint, off_curve, bendy_offset_skin_cluster
 
     def bendy_setup(self):
+        """
+        Create the bendy curve and its associated controllers, skin clusters, and offset curves.
+
+        Returns:
+            tuple: Contains the end bezier curve, bendy skin cluster, bendy joint, offset curve, and bendy offset skin cluster.
+        """
+        
         bendyCurve = cmds.curve(p=(cmds.xform(self.upper_joint, query=True, worldSpace=True, translation=True),cmds.xform(self.lower_joint, query=True, worldSpace=True, translation=True)) , d=1, n=f"{self.side}_{self.part}Bendy_CRV")
         cmds.rebuildCurve(bendyCurve, ch=False, rpo=True, rt=0, end=True, kr=False, kcp=False, kep=True, kt=False, fr=False, s=2, d=1, tol=0.01)
         cmds.select(bendyCurve)
@@ -486,7 +582,6 @@ class Bendys(object):
             cmds.setAttr(f"{mpa}.fractionMode", True)
             cmds.setAttr(f"{mpa}.uValue", value)
             cmds.connectAttr(f"{bendyCurve}.worldSpace[0]", f"{mpa}.geometryPath")
-            # cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_joint[i]}.translate")
             if i == number:
                 cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_helper_transform}.translate")
             cmds.parent(bendy_joint[i], self.skinning_trn)

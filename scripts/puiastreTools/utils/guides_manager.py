@@ -5,6 +5,10 @@ import json
 
 
 def guides_export():
+        """
+        Exports the guides from the selected folder in the Maya scene to a JSON file.
+        """
+        
         guides_folder = cmds.ls(sl=True)
         answer = cmds.promptDialog(
                 title="INPUT DIALOG",
@@ -89,6 +93,15 @@ def guides_export():
 
 
 def guide_import(joint_name, all_descendents=True, filePath=None):
+        """
+        Imports guides from a JSON file into the Maya scene.
+        Args:
+                joint_name (str): The name of the joint to import. If "all", imports all guides.
+                all_descendents (bool): If True, imports all descendents of the specified joint. Defaults to True.
+                filePath (str): The path to the JSON file. If None, opens a file dialog to select the file.
+        Returns:
+                list: A list of imported joint names if joint_name is not "all", otherwise returns the world position and rotation of the specified joint.
+        """
 
         if not filePath:
                 complete_path = os.path.realpath(__file__)
@@ -107,9 +120,6 @@ def guide_import(joint_name, all_descendents=True, filePath=None):
 
         with open(final_path, "r") as infile:
                 guides_data = json.load(infile)
-
-
-
         
         joints_chain = []
         if joint_name == "all":

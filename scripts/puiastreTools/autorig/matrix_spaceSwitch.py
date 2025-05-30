@@ -2,6 +2,15 @@ import maya.cmds as cmds
 import maya.api.OpenMaya as om
 
 def get_offset_matrix(child, parent):
+    """
+    Calculate the offset matrix between a child and parent transform in Maya.
+    Args:
+        child (str): The name of the child transform.
+        parent (str): The name of the parent transform. 
+    Returns:
+        om.MMatrix: The offset matrix that transforms the child into the parent's space.
+    """
+
     child_dag = om.MSelectionList().add(child).getDagPath(0)
     parent_dag = om.MSelectionList().add(parent).getDagPath(0)
     
@@ -13,8 +22,15 @@ def get_offset_matrix(child, parent):
     return offset_matrix
 
 def switch_matrix_space(target, sources = [None], default_value=1): 
+    """
+    Switch the matrix space of a target control to multiple source controls in Maya.
 
-    print(target, sources, default_value)
+    Args:
+        target (str): The name of the target control to switch space for.
+        sources (list, optional): A list of source controls to switch to. Defaults to [None].
+        default_value (float, optional): The default value for the follow attribute. Defaults to 1.
+    """
+
     target_grp = target.replace("CTL", "GRP")
     if not cmds.objExists(target_grp):
         om.MGlobal.displayError(f"Target group '{target_grp}' does not exist.")
@@ -70,6 +86,5 @@ def switch_matrix_space(target, sources = [None], default_value=1):
     cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{target}.offsetParentMatrix")
 
 
-# switch_matrix_space("C_myControl_CTL", ["C_source1_CTL"])
 
 

@@ -10,7 +10,18 @@ reload(data_export)
 
 
 class ClavicleModule():
+    """
+    Class to create a clavicle module in a Maya rigging setup.
+    This module handles the creation of clavicle joints, controllers, and constraints.
+
+    """
     def __init__(self):
+        """
+        Initializes the ClavicleModule class, setting up paths and data exporters.
+
+        Args:
+            self: Instance of the ClavicleModule class.
+        """
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
@@ -24,6 +35,12 @@ class ClavicleModule():
 
 
     def make(self, side):
+        """
+        Creates the clavicle module for the specified side (left or right).
+
+        Args:
+            side (str): The side for which to create the clavicle module. Should be either "L" or "R".
+        """
 
         self.side = side   
 
@@ -39,8 +56,30 @@ class ClavicleModule():
                 "clavicle_ctl": self.ctl_ik,
             }
         )
+    def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
+        """
+        Lock specified attributes of a controller, added rotate order attribute if ro is True.
+        
+        Args:
+            ctl (str): The name of the controller to lock attributes on.
+            attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+            ro (bool): If True, adds a rotate order attribute. Default is True.
+        """
+
+        for attr in attrs:
+            cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+        
+        if ro:
+            cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+            cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
     def clavicle_module(self):
+        """
+        Creates the clavicle module by importing guides, creating controllers, and setting up constraints.
+
+        Args:
+            self: Instance of the ClavicleModule class.
+        """
         self.clavicle_joint = guides_manager.guide_import(
             joint_name=f"{self.side}_clavicle_JNT",
             all_descendents=False,
@@ -65,9 +104,7 @@ class ClavicleModule():
         cmds.parent(created_grps[0], self.masterWalk_ctl)
         cmds.matchTransform(created_grps[0], self.clavicle_joint)
         cmds.parentConstraint(self.ctl_ik, self.clavicle_joint, mo=False)
-        # cmds.parentConstraint(spine_joints, created_grps[0], mo=True)
-        for attribute in ["scaleX","scaleY","scaleZ","visibility"]:
-            cmds.setAttr(f"{self.ctl_ik}.{attribute}", lock=True, keyable=False, channelBox=False)
+        self.lock_attr(self.ctl_ik)
 
 
 
@@ -107,5 +144,3 @@ class ClavicleModule():
 
         cmds.parent(self.clavicle_joint, self.skinning_trn)
         cmds.delete(shoulder)
-
-        return self.ctl_ik

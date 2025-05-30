@@ -3,11 +3,32 @@ from puiastreTools.tools.curve_tool import controller_creator
 from puiastreTools.utils import data_export
 
 
-def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"]):
+def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
+    """
+    Lock specified attributes of a controller, added rotate order attribute if ro is True.
+    
+    Args:
+        ctl (str): The name of the controller to lock attributes on.
+        attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+        ro (bool): If True, adds a rotate order attribute. Default is True.
+    """
+
     for attr in attrs:
         cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+    
+    if ro:
+        cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+        cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
 def condition(main_ctl, vis_trn, value):
+    """
+    Create a condition node to control the visibility of a transform based on a controller's attribute.
+
+    Args:
+        main_ctl (str): The name of the controller whose attribute will be used to control visibility.
+        vis_trn (str): The name of the transform whose visibility will be controlled.
+        value (int): The value to compare against the controller's attribute.
+    """
     con = cmds.createNode("condition", name = f"{vis_trn}_Visibility_CON", ss=True)
     cmds.setAttr(con + ".secondTerm", value)
     cmds.connectAttr(main_ctl, con + ".firstTerm")
@@ -16,6 +37,11 @@ def condition(main_ctl, vis_trn, value):
     cmds.connectAttr(con + ".outColorR", vis_trn + ".visibility")
 
 def create_basic_structure(asset_name = "assetName"):
+    """
+    Create a basic structure for a Maya asset, including controllers, rig transforms, and model layers.
+    Args:
+        asset_name (str): The name of the asset to create the structure for. Default is "assetName".
+    """
 
     folder_structure = {
         asset_name: {
@@ -151,4 +177,3 @@ def create_basic_structure(asset_name = "assetName"):
 
 
 
-# create_basic_structure()
