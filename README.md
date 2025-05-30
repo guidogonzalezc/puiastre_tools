@@ -1,43 +1,90 @@
 # puiastre_tools
 
-Welcome to **puiastre_tools**, a collection of utilities designed to simplify and enhance your workflow.
+**puiastre_tools** is an open-source, modular rigging toolkit for Autodesk Maya, designed to streamline the creation of custom rigs for characters and props. Inspired by frameworks like mGear and autoRigger, it offers a flexible and extensible foundation for riggers and technical artists.
 
-## Features
+---
 
-- Lightweight and easy to use.
-- Modular tools for various tasks.
-- Open-source and actively maintained.
+## ✨ Features
 
-## Installation
+- **Modular Rigging System** – Build rigs by combining reusable components.
+- **Custom Guide Templates** – Define and save guide templates for rapid rig setup.
+- **Curve-Based Controls** – Generate animator-friendly controls with customizable shapes.
+- **Icon Library** – Access a collection of icons to enhance UI elements.
+- **Python-Based Scripts** – Automate rigging tasks with a suite of Python tools.
+- **Lightweight and Extensible** – Easily integrate into existing pipelines and extend functionality.
 
-Clone the repository:
+---
 
-```bash
-git clone https://github.com/<your-username>/puiastre_tools.git
-```
+## 📁 Project Structure
 
-Navigate to the project directory:
+puiastre_tools/
+├── build/ # Compiled rig components
+├── curves/ # Curve shapes for controls
+├── guides/ # Guide templates for rigging
+├── icons/ # Icon assets for UI
+├── scripts/ # Python scripts for automation
+├── puiastre_tools.mod # Maya module file
+├── README.md
+├── ROADMAP.md
+└── LICENSE
 
-```bash
-cd puiastre_tools
-```
 
-## Usage
+---
 
-Refer to the documentation for detailed usage instructions.
+## 🔧 Installation
 
-## Contributing
+1. **Clone the Repository**:
 
-Contributions are welcome! Please follow these steps:
+   ```bash
+   git clone https://github.com/GuiidoGC/puiastre_tools.git
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Submit a pull request.
+Set Up Maya Module:
 
-## License
+Copy the puiastre_tools folder to your Maya modules directory.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Ensure the puiastre_tools.mod file is correctly configured to point to the tools' paths.
 
-## Contact
+Restart Maya:
 
-For questions or feedback, feel free to open an issue or contact the maintainer at `<your-email>`.
+Upon restarting, Maya should recognize the new module and load the tools accordingly.
+
+🚀 Usage
+Access the Tools:
+
+Once loaded, the tools can be accessed via the Maya shelf or through custom menus, depending on your setup.
+
+Create a Rig:
+
+Use the provided guide templates to position guides on your model.
+
+Run the build scripts to generate the rig based on the guides.
+
+Customize Controls:
+
+Utilize the curve shapes in the curves/ directory to create custom control shapes.
+
+Enhance UI:
+
+Incorporate icons from the icons/ directory to improve the user interface of your rigging tools.
+
+🛠️ Contributing
+Contributions are welcome! To contribute:
+
+Fork the Repository:
+
+Create your own fork to work on the project.
+
+Create a Feature Branch:
+
+Develop your feature or fix in a separate branch.
+
+Submit a Pull Request:
+
+Once your changes are ready, submit a pull request for review.
+
+Please refer to the CONTRIBUTING.md file for detailed guidelines.
+
+📄 License
+This project is licensed under the Apache License 2.0.
+
+
