@@ -1,6 +1,6 @@
 # puiastre_tools
 
-**puiastre_tools** is an open-source, modular rigging toolkit for Autodesk Maya, designed to streamline the creation of custom rigs for characters and props. Inspired by frameworks like mGear and autoRigger, it offers a flexible and extensible foundation for riggers and technical artists.
+**puiastre_tools** is an open-source, modular dragon auto-rig toolkit for Autodesk Maya, designed to streamline the creation of custom rigs for characters and props, it offers a flexible and extensible foundation for riggers and technical artists.
 
 ---
 
@@ -89,17 +89,6 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 ---
 
-## 📚 Resources
-
-- [Maya Python API Documentation](https://help.autodesk.com/cloudhelp/2022/ENU/Maya-Tech-Docs/CommandsPython/)
-- [mGear Framework](https://www.mgear-framework.com/)
-- [autoRigger by leixingyu](https://github.com/leixingyu/autoRigger)
-- [GameRig by Arminando](https://github.com/Arminando/GameRig)
-- [Pinocchio](https://github.com/stnoh/Pinocchio)
-- [Synty → Godot AutoRig Pro Fix](https://github.com/Vortex-Basis-LLC/fix_synty_anim_to_godot_with_autorigpro)
-- [AuroraFreir AutoRigger](https://github.com/aurorafreir/Autorigger)
-
----
 
 ## 📞 Contact
 
