@@ -258,9 +258,9 @@ class SpineModule():
         cmds.connectAttr(f"{self.ik_curve}.worldSpace[0]", created_nodes[0]+".inputCurve")
         cmds.setAttr(created_nodes[3]+".floatB", cmds.getAttr(created_nodes[0]+".arcLength"))
         cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", created_nodes[3]+".floatA")
-        cmds.setAttr(created_nodes[6]+".floatB", cmds.getAttr(f"{self.blend_chain[2]}.translateY"))
+        cmds.setAttr(created_nodes[6]+".floatB", cmds.getAttr(f"{self.blend_chain[2]}.translateZ"))
         for joint in self.blend_chain[1:]:
-            cmds.connectAttr(created_nodes[6]+".outFloat", f"{joint}.translateY")
+            cmds.connectAttr(created_nodes[6]+".outFloat", f"{joint}.translateZ")
 
         self.stretch_float_math = created_nodes[6]
 
@@ -303,7 +303,7 @@ class SpineModule():
         cmds.connectAttr(self.stretch_float_math+".outFloat", f"{negate_flm}.floatA")
 
         for joint in self.reverse_chain[1:]:
-            cmds.connectAttr(negate_flm+".outFloat", f"{joint}.translateY")
+            cmds.connectAttr(negate_flm+".outFloat", f"{joint}.translateZ")
 
     def offset_system(self):
         """
@@ -478,7 +478,7 @@ class SpineModule():
 
             cmds.connectAttr(f"{self.spine_settings_trn}.maxStretchLength", f"{created_nodes[4]}.value[2].value_Position")
             cmds.connectAttr(f"{self.spine_settings_trn}.minStretchLength", f"{created_nodes[4]}.value[0].value_Position")   
-            cmds.connectAttr(f"{created_nodes[4]}.outValue",f"{joint}.scaleX")   
+            cmds.connectAttr(f"{created_nodes[4]}.outValue",f"{joint}.scaleY")   
             cmds.connectAttr(f"{created_nodes[4]}.outValue",f"{joint}.scaleZ")   
 
 
