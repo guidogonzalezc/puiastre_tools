@@ -210,16 +210,17 @@ def controller_creator(name, suffixes=["GRP"]):
         suffixes (list): List of suffixes for the groups to be created. Default is ["GRP"].
     """
     created_grps = []
-    for suffix in suffixes:
-        if cmds.ls(f"{name}_{suffix}"):
-            om.MGlobal.displayWarning(f"{name}_{suffix} already exists.")
+    if suffixes:
+        for suffix in suffixes:
+            if cmds.ls(f"{name}_{suffix}"):
+                om.MGlobal.displayWarning(f"{name}_{suffix} already exists.")
+                if created_grps:
+                    cmds.delete(created_grps[0])
+                return
+            tra = cmds.createNode("transform", name=f"{name}_{suffix}", ss=True)
             if created_grps:
-                cmds.delete(created_grps[0])
-            return
-        tra = cmds.createNode("transform", name=f"{name}_{suffix}", ss=True)
-        if created_grps:
-            cmds.parent(tra, created_grps[-1])
-        created_grps.append(tra)
+                cmds.parent(tra, created_grps[-1])
+            created_grps.append(tra)
 
     if cmds.ls(f"{name}_CTL"):
         om.MGlobal.displayWarning(f"{name}_CTL already exists.")
@@ -234,7 +235,8 @@ def controller_creator(name, suffixes=["GRP"]):
         else:
             ctl = [ctl[0]]  # make sure ctl is a list with one element for consistency
 
-        cmds.parent(ctl[0], created_grps[-1])
+        if created_grps:
+            cmds.parent(ctl[0], created_grps[-1])
         return ctl[0], created_grps
 
 def get_dag_path(node_name):
