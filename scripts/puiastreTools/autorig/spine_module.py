@@ -172,7 +172,8 @@ class SpineModule():
 
         self.lock_attr(self.body_ctl)
         
-        movable_ctl = cmds.circle(n="C_movablePivot_CTL", ch=False, normal=(0,1,0))[0] 
+        # movable_ctl = cmds.circle(n="C_movablePivot_CTL", ch=False, normal=(0,1,0))[0] 
+        movable_ctl, movable_ctl_grp = curve_tool.controller_creator(f"C_movablePivot", suffixes = [])
         cmds.matchTransform(movable_ctl, self.spine_grp[0][0]) 
         cmds.parent(movable_ctl, self.body_ctl) 
 
