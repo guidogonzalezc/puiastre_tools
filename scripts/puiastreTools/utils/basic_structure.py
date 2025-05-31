@@ -3,7 +3,7 @@ from puiastreTools.tools.curve_tool import controller_creator
 from puiastreTools.utils import data_export
 
 
-def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
+def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
     """
     Lock specified attributes of a controller, added rotate order attribute if ro is True.
     
