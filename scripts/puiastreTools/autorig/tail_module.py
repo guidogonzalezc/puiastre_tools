@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
+from puiastreTools.autorig import matrix_spaceSwitch
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import data_export
 import os
@@ -7,6 +8,7 @@ from importlib import reload
 reload(guides_manager)
 reload(curve_tool)    
 reload(data_export)
+reload(matrix_spaceSwitch)
 
 
 class TailModule(object):
@@ -44,26 +46,16 @@ class TailModule(object):
                 self.bendy_setup(start_joint=start, end_joint=end, name=name)
 
         for i, (ctl, grp) in enumerate(zip(self.fk_controllers, self.fk_grps)):
-
+            if i == 0:
+                self.data_exporter.append_data(
+                f"{self.side}_tailModule",
+                {
+                    "tail00_ctl" : ctl
+            }
+        )
             if i > 0:
                 cmds.parent(grp, self.fk_controllers[i-1])
         
-        """
-        data_exporter = data_export.DataExport()
-        data_exporter.append_data(
-            f"{self.side}_armModule",
-            {
-                "skinning_joints": self.skinning_joints,
-                "armIk": self.wrist_ik_ctl,
-                "armSettings": self.settings_curve_ctl,
-                "armPV": self.pole_vector_ctl,
-                "shoulderFK": self.arm_fk_controllers[0],
-            }
-        )
-
-        """
-
-
 
     def import_guides(self):
 
@@ -247,7 +239,7 @@ class TailModule(object):
                 aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[0, 0, 1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
             else:
                 aim = cmds.aimConstraint(aim_helper, jnt, aim=[0, 0, -1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
-            
+
 
             
             
