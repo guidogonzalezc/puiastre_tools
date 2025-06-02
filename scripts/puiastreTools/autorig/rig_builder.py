@@ -5,6 +5,7 @@ from puiastreTools.autorig import wing_arm_module
 from puiastreTools.autorig import spine_module
 from puiastreTools.autorig import tail_module
 from puiastreTools.autorig import clavicle_module
+from puiastreTools.autorig import spikes_module
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 from puiastreTools.autorig import matrix_spaceSwitch
@@ -18,6 +19,7 @@ reload(finger_module)
 reload(spine_module)
 reload(tail_module)
 reload(clavicle_module)
+reload(spikes_module)
 reload(data_export)
 reload(matrix_spaceSwitch)
 
@@ -79,6 +81,7 @@ def make():
     tail = tail_module.TailModule()
     leg_Module = leg_module.LegModule()
     clavicle = clavicle_module.ClavicleModule()
+    spikes = spikes_module.SpikesModule()
 
 
 
@@ -96,6 +99,7 @@ def make():
 
     neck.make()
     tail.make()
+    spikes.make()
 
 
     
