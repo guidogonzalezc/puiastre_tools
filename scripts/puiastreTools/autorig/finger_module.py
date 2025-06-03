@@ -93,8 +93,8 @@ class FingerModule():
             data_exporter.append_data(
                 f"{self.side}_finger{name}",    
                 {
-                    "ikFinger": self.pv_ctl,
-                    "ikPv": self.ik_ctl,
+                    "ikFinger": self.ik_ctl,
+                    "ikPv": self.pv_ctl,
                     "settingsAttr": self.settings_curve_ctl,
                 }
             )
@@ -562,12 +562,12 @@ class Bendys(object):
         bendy_joint = []
         blendy_up_trn = []
 
-        if not "01" in self.part:
-            values = [0, 0.25, 0.5, 0.75, 0.95]
-            number = 3
-        else:
-            values = [0.1, 0.25, 0.5, 0.75, 0.95]
-            number = 3
+        # if not "01" in self.part:
+        values = [0, 0.25, 0.5, 0.75, 0.95]
+        number = 3
+        # else:
+        #     values = [0.1, 0.25, 0.5, 0.75, 0.95]
+        #     number = 3
 
         mps = []
 

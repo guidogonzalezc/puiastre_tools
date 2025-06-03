@@ -139,7 +139,6 @@ def make():
                 }
             
             for child, (parents, default_value) in spaceSwitches.items():
-                print(f"Creating space switch for {child} with parents {parents} and default value {default_value}")
                 matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
     
@@ -159,7 +158,6 @@ def make():
             matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
     tail00 = data_exporter.get_data("C_tailModule", "tail00_ctl")
-    print(f"Creating space switch for tail00: {tail00}")
     spaceSwitches = {
                 tail00: [[localHip], 1],
             }

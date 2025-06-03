@@ -88,8 +88,8 @@
             "L_fingerThumb01Fk03Bendy03_JNT",
             "L_fingerThumb01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "L_fingerThumb01PoleVector_CTL",
-        "ikPv": "L_fingerThumb01Ik_CTL",
+        "ikFinger": "L_fingerThumb01Ik_CTL",
+        "ikPv": "L_fingerThumb01PoleVector_CTL",
         "settingsAttr": "L_fingerAttr_CTL"
     },
     "L_fingerIndex": {
@@ -110,8 +110,8 @@
             "L_fingerIndex01Fk03Bendy03_JNT",
             "L_fingerIndex01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "L_fingerIndex01PoleVector_CTL",
-        "ikPv": "L_fingerIndex01Ik_CTL",
+        "ikFinger": "L_fingerIndex01Ik_CTL",
+        "ikPv": "L_fingerIndex01PoleVector_CTL",
         "settingsAttr": "L_fingerAttr_CTL"
     },
     "L_fingerMiddle": {
@@ -132,8 +132,8 @@
             "L_fingerMiddle01Fk03Bendy03_JNT",
             "L_fingerMiddle01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "L_fingerMiddle01PoleVector_CTL",
-        "ikPv": "L_fingerMiddle01Ik_CTL",
+        "ikFinger": "L_fingerMiddle01Ik_CTL",
+        "ikPv": "L_fingerMiddle01PoleVector_CTL",
         "settingsAttr": "L_fingerAttr_CTL"
     },
     "L_fingerRing": {
@@ -154,8 +154,8 @@
             "L_fingerRing01Fk03Bendy03_JNT",
             "L_fingerRing01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "L_fingerRing01PoleVector_CTL",
-        "ikPv": "L_fingerRing01Ik_CTL",
+        "ikFinger": "L_fingerRing01Ik_CTL",
+        "ikPv": "L_fingerRing01PoleVector_CTL",
         "settingsAttr": "L_fingerAttr_CTL"
     },
     "L_fingerPinky": {
@@ -176,8 +176,8 @@
             "L_fingerPinky01Fk03Bendy03_JNT",
             "L_fingerPinky01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "L_fingerPinky01PoleVector_CTL",
-        "ikPv": "L_fingerPinky01Ik_CTL",
+        "ikFinger": "L_fingerPinky01Ik_CTL",
+        "ikPv": "L_fingerPinky01PoleVector_CTL",
         "settingsAttr": "L_fingerAttr_CTL"
     },
     "R_clavicleModule": {
@@ -204,8 +204,8 @@
             "R_fingerThumb01Fk03Bendy03_JNT",
             "R_fingerThumb01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "R_fingerThumb01PoleVector_CTL",
-        "ikPv": "R_fingerThumb01Ik_CTL",
+        "ikFinger": "R_fingerThumb01Ik_CTL",
+        "ikPv": "R_fingerThumb01PoleVector_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "R_fingerIndex": {
@@ -226,8 +226,8 @@
             "R_fingerIndex01Fk03Bendy03_JNT",
             "R_fingerIndex01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "R_fingerIndex01PoleVector_CTL",
-        "ikPv": "R_fingerIndex01Ik_CTL",
+        "ikFinger": "R_fingerIndex01Ik_CTL",
+        "ikPv": "R_fingerIndex01PoleVector_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "R_fingerMiddle": {
@@ -248,8 +248,8 @@
             "R_fingerMiddle01Fk03Bendy03_JNT",
             "R_fingerMiddle01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "R_fingerMiddle01PoleVector_CTL",
-        "ikPv": "R_fingerMiddle01Ik_CTL",
+        "ikFinger": "R_fingerMiddle01Ik_CTL",
+        "ikPv": "R_fingerMiddle01PoleVector_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "R_fingerRing": {
@@ -270,8 +270,8 @@
             "R_fingerRing01Fk03Bendy03_JNT",
             "R_fingerRing01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "R_fingerRing01PoleVector_CTL",
-        "ikPv": "R_fingerRing01Ik_CTL",
+        "ikFinger": "R_fingerRing01Ik_CTL",
+        "ikPv": "R_fingerRing01PoleVector_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "R_fingerPinky": {
@@ -292,8 +292,8 @@
             "R_fingerPinky01Fk03Bendy03_JNT",
             "R_fingerPinky01Fk03Bendy04_JNT"
         ],
-        "ikFinger": "R_fingerPinky01PoleVector_CTL",
-        "ikPv": "R_fingerPinky01Ik_CTL",
+        "ikFinger": "R_fingerPinky01Ik_CTL",
+        "ikPv": "R_fingerPinky01PoleVector_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "C_tailModule": {
