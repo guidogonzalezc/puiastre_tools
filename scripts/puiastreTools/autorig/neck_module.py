@@ -10,8 +10,16 @@ reload(guides_manager)
 reload(data_export)
 
 class NeckModule:
+    """
+    A class to create and manage the neck module in a character rig.
+    """
 
     def __init__(self):
+
+        """
+        Initialize the NeckModule class.
+        This constructor sets up the paths for guides and curves, retrieves basic structure data, and initializes module, skeleton, and master walk groups.
+        """
 
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
@@ -25,6 +33,11 @@ class NeckModule:
         self.masterWalk_ctl = data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
     def make(self, side="C"):
+        """
+        Create the neck module with the specified side.
+        Args:
+            side (str): The side of the neck module to create. Default is "C" for center.
+        """
 
         self.side = side
 
@@ -35,22 +48,35 @@ class NeckModule:
         self.import_guides()
         self.controllers()
         self.ik_setup()
-        # self.spike()
         self.out_skinning_jnts()
         self.space_switch()
 
     def lock_attrs(self, ctl, attrs):
+
+        """
+        Lock and hide specified attributes on a controller.
+        Args:
+            ctl (str): The name of the controller.
+            attrs (list): A list of attribute names to lock and hide.
+        """
         
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", lock=True, keyable=False, channelBox=False)
 
     def import_guides(self):
 
+        """
+        Import the neck guides from the guides file and parent them to the module transform.
+        """
+
         self.neck_chain = guides_manager.guide_import(joint_name=f"{self.side}_neck00_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.neck_chain[0], self.module_trn)
 
     def spike(self):
 
+        """
+        Create spike attributes and controllers for the neck module.
+        """
 
         self.attrs_ctl, self.attrs_grp = curve_tool.controller_creator(f"{self.side}_spikeAttributes", ["GRP"])
         cmds.matchTransform(self.attrs_grp, self.neck_ctl_mid, pos=True, rot=True, scl=False)
@@ -69,6 +95,12 @@ class NeckModule:
 
 
     def controllers(self):
+
+        """
+        Create controllers for the neck chain and head.
+        This function creates controllers for the neck chain, including a mid-neck controller, an end-neck controller, and a head controller.
+        It also sets up the necessary attributes and constraints for these controllers.
+        """
 
         self.neck_ctl, self.neck_grp = curve_tool.controller_creator("C_neck", ["GRP", "OFF"])
         cmds.matchTransform(self.neck_grp[0], self.neck_chain[0], pos=True, rot=True, scl=False)
@@ -101,6 +133,11 @@ class NeckModule:
         cmds.parent(self.neck_grp[0], self.neck_grp_mid[0], self.neck_end_grp[0], self.head_grp[0], self.controllers_trn)
 
     def ik_setup(self):
+
+        """
+        Set up the IK handle for the neck chain and create the necessary joints for the IK spline.
+        This function creates an IK spline handle, a curve for the IK, and additional joints for the neck and head.
+        """
 
         self.ik_spring_hdl = cmds.ikHandle(sj=self.neck_chain[0], ee=self.neck_chain[-1], sol="ikSplineSolver", n=f"{self.side}_neckIkSpline_HDL", createCurve=True,  ns=3)
         cmds.parent(self.ik_spring_hdl[0], self.module_trn)
@@ -158,92 +195,15 @@ class NeckModule:
         cmds.parent(self.jaw_jnts[0], self.head_jnt)
         self.upper_jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_upperJaw_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.upper_jaw_jnts[0], self.head_jnt)
-
-    def spike_call(self, side, spike_joint):
-        
-        name = spike_joint.split("_")[1]
-        self.spike_joints = guides_manager.guide_import(joint_name=spike_joint, all_descendents=True, filePath=self.guides_path)
-        match_jnt = self.spike_joints[0]
-        self.spike_joints.remove(self.spike_joints[0])
-
-        self.spike_transform = cmds.createNode("transform", n=f"{side}_{name}Module_GRP", p=self.module_trn)
-        cmds.parent(match_jnt, self.spike_transform)
-
-        # Get the positions of the end joints
-        end_jnts = []
-        end_jnts_pos = []
-
-        for i, jnts in enumerate(self.spike_joints):
-            if i <= 17:
-                jnt = cmds.listRelatives(jnts, c=True)
-                end_jnts_pos.append(cmds.xform(jnt, q=True, ws=True, t=True))
-                end_jnts.append(jnt)
-                self.spike_joints.remove(jnt[0])
-                cmds.setAttr(f"{jnt[0]}.radius", 5)
-
-        # Create a curve from the end joint positions
-        curve = cmds.curve(d=1, p=end_jnts_pos, n=f"{side}_{name}_CRV")
-        cmds.parent(curve, self.spike_transform)
-
-        # Create a locator for each point on the curve
-        locator_transform = cmds.createNode("transform", n=f"{side}_{name}Locators_GRP", p=self.spike_transform)
-        locators = []
-        for i in range(len(end_jnts)):
-            loc = cmds.spaceLocator(n=f"{side}_{name}0{i}_LOC")[0]
-            cmds.connectAttr(f"{curve}.editPoints[{i}]", f"{loc}.translate")
-            cmds.parent(loc, locator_transform)
-            locators.append(loc)
-
-        # Create a single chain solver for each joint
-        joints_grp = cmds.createNode("transform", n=f"{side}_{name}Joints_GRP", p=self.spike_transform)
-        hdls_transform = cmds.createNode("transform", n=f"{side}_{name}Handles_GRP", p=self.spike_transform)
-        for i, jnt in enumerate(self.spike_joints):
-            ik_hdl = cmds.ikHandle(sj=jnt, ee=end_jnts[i][0], sol="ikSCsolver", n=f"{side}_{name}0{i}Ik_HDL")
-            cmds.parent(ik_hdl[0], hdls_transform)
-            cmds.pointConstraint(locators[i], ik_hdl[0], mo=True)
-            cmds.setAttr(f"{jnt}.radius", 5)
-            cmds.parent(jnt, joints_grp)
-
-        # Add a Sine handle to the curve
-        # Do the handle local
-        curve_duplicate = cmds.duplicate(curve, n=f"{side}_{name}Sine_CRV")[0]
-        sine_hdl = cmds.nonLinear(curve_duplicate, type="sine", n=f"{side}_{name}Sine_")
-        cmds.parent(sine_hdl[1], self.spike_transform)
-        cmds.rotate(90, 0, 0, sine_hdl[1], ws=True)
-        local_bs = cmds.blendShape(curve_duplicate, curve, n=f"{side}_{name}SineLocal_BS", origin="world")
-
-
-        # Create a controller for the curve and the sine handle
-        self.ctl, self.grp = curve_tool.controller_creator(f"{side}_{name}", ["GRP"])
-        cmds.parent(self.grp, self.neck_ctl_mid)
-        cmds.matchTransform(self.grp, match_jnt, pos=True, rot=True, scl=False)
-        self.lock_attrs(self.ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
-        cmds.addAttr(self.ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
-        cmds.addAttr(self.ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
-        cmds.addAttr(self.ctl, ln="Wave", at="float", dv=0, keyable=True)
-        cmds.addAttr(self.ctl, ln="Offset", at="float", dv=0, keyable=True)
-        cmds.addAttr(self.ctl, ln="Dropoff", at="float", dv=0, keyable=True)
-        cmds.connectAttr(f"{self.ctl}.Envelope", f"{local_bs[0]}.{curve_duplicate}")
-        cmds.connectAttr(f"{self.ctl}.Amplitude", f"{sine_hdl[0]}.amplitude")
-        cmds.connectAttr(f"{self.ctl}.Wave", f"{sine_hdl[0]}.wavelength")
-        cmds.connectAttr(f"{self.ctl}.Offset", f"{sine_hdl[0]}.offset")
-        cmds.connectAttr(f"{self.ctl}.Dropoff", f"{sine_hdl[0]}.dropoff")
-        
-
-        self.spike_skinning_grp = cmds.createNode("transform", n=f"{side}_{name}Skinning_GRP", p=self.skinning_trn)
-
-        for i, jnt in enumerate(end_jnts):
-            cmds.select(clear=True)
-            skin_joint = cmds.joint(n=jnt[0].replace("_JNT", "Skinning_JNT"))
-            cmds.connectAttr(f"{jnt[0]}.worldMatrix[0]", f"{skin_joint}.offsetParentMatrix")
-            cmds.parent(skin_joint, self.spike_skinning_grp)
-            cmds.setAttr(f"{skin_joint}.radius", 5)
-
-        cmds.delete(match_jnt)
         
 
 
     def out_skinning_jnts(self):
+
+        """
+        Create skinning joints for the neck chain and head joint.
+        These joints will be used for skinning the mesh to the skeleton.
+        """
 
         skinning_jnts = []
         for i, jnt in enumerate(self.neck_chain):
@@ -260,6 +220,10 @@ class NeckModule:
 
 
     def space_switch(self):
+
+        """
+        Create a space switch for the head controller that allows it to follow the masterWalk controller, neck end controller, or body controller.
+        """
 
         body_ctl = cmds.ls("C_body_CTL")[0]
 
@@ -322,31 +286,4 @@ class NeckModule:
         cmds.connectAttr(f"{blend_colors}.output", f"{compose_end}.inputRotate")
 
         cmds.connectAttr(f"{compose_end}.outputMatrix", f"{self.head_ctl}.offsetParentMatrix")
-
-
-        
-        
-        
-
-
-        
-            
-
-        
-
-            
-
-
-
-       
-               
-        
-
-
-        
-            
-        
-
-        
-
 

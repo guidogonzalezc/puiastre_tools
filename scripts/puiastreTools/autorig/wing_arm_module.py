@@ -19,6 +19,10 @@ reload(curve_tool)
 # reload(controller_creator)
 
 class WingArmModule(object):
+
+    """
+    
+    """
     def __init__(self):
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
@@ -33,7 +37,10 @@ class WingArmModule(object):
 
     
     def make(self, side):
+        """
+        Call all the functions to create the arm module.
         
+        """
         self.side = side
 
         self.module_trn = cmds.createNode("transform", n=f"{self.side}_wingArmModule_GRP", p=self.modules_grp)
@@ -65,11 +72,22 @@ class WingArmModule(object):
 
 
     def lock_attrs(self, ctl, attrs):
+
+        """
+        Lock and hide attributes on a controller.
+        Args:
+            ctl (str): The name of the controller.
+            attrs (list): A list of attributes to lock and hide.
+        """
         
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", lock=True, keyable=False, channelBox=False)
 
     def duplicate_guides(self):
+
+        """
+        Duplicate the guides for the arm module and rename them according to the naming convention.
+        """
         
         self.fk_chain = []
         self.ik_chain = []
@@ -93,6 +111,10 @@ class WingArmModule(object):
                 chain.append(cmds.rename(joint, joint.replace('_JNT', f'{name}_JNT')))
 
     def pair_blends(self):
+
+        """
+        Create pairBlend nodes for the FK and IK chains to allow blending between them.
+        """
         
         self.pair_blend_nodes = []
         for i, joint in enumerate(self.blend_chain):
@@ -108,6 +130,10 @@ class WingArmModule(object):
 
 
     def set_controllers(self):
+
+        """
+        Create the controllers for the arm module, including FK and IK controllers, and set their attributes.
+        """
         
         # --- FK/IK Switch Controller ---
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_ArmSettings", suffixes = ["GRP"])
@@ -166,6 +192,10 @@ class WingArmModule(object):
         cmds.parent(self.root_grp[0], self.wrist_ik_grp[0], self.arm_ik_controllers_trn)
 
     def handles_setup(self):
+
+        """
+        Create the IK handles for the arm module, including the main IK handle and the upper and lower roll IK handles.
+        """
 
         # --- Ik Handle ---
         self.main_ik_handle = cmds.ikHandle(
@@ -232,6 +262,10 @@ class WingArmModule(object):
 
    
     def soft_stretch(self):
+
+        """
+        Create the stretchy setup for the arm module, including stretchy FK controllers and stretchy IK controllers.
+        """
 
         # --- Stretchy FK Controllers ---
 
@@ -401,6 +435,11 @@ class WingArmModule(object):
         cmds.parentConstraint(self.root_ctl, self.ik_chain[0], mo=True)
 
     def pole_vector_setup(self):
+
+        """
+        Create the pole vector controller for the arm module, which will control the elbow position.
+        """
+
         # --- Pole Vector ---
         self.pole_vector_ctl, self.pole_vector_grp = curve_tool.controller_creator(f"{self.side}_wingArmPV", suffixes=["GRP", "OFF"])
 
@@ -425,6 +464,11 @@ class WingArmModule(object):
         
 
     def bendy_curves_setup(self):
+
+        """
+        Create the bendy curves for the arm module, which will be used for the bendy setup.
+        """
+
         # --- Bendy Setup ---
         self.bendy_module_trn = cmds.createNode("transform", n=f"{self.side}_wingArmBendyModule_GRP", p=self.module_trn)
 
@@ -462,6 +506,9 @@ class WingArmModule(object):
 
 
     def hooks(self):
+        """
+        Create the hooks for the bendy joints, which will allow for bending control.
+        """
 
         # --- Hooks ---
         hook_parameters = [0, 0.5, 1]
@@ -591,6 +638,10 @@ class WingArmModule(object):
 
 
     def twists_setup(self):
+
+        """
+        Create the twists for the arm module, which will be used for the bendy setup.
+        """
 
         # --- Twists ---
         self.duplicate_bendy_crv = cmds.duplicate(self.upper_bendy_bezier)

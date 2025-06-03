@@ -14,11 +14,15 @@ reload(matrix_spaceSwitch)
 class TailModule(object):
 
     """
-    
+    Creates a tail module with bendy setup and controllers.
     
     """
 
     def __init__(self):
+
+        """
+        Initializes the TailModule class, setting up paths and data structures.
+        """
 
         complete_path = os.path.realpath(__file__)
         self.relative_path = complete_path.split("\scripts")[0]
@@ -35,6 +39,10 @@ class TailModule(object):
         self.fk_grps = []
 
     def make(self):
+
+        """
+        Creates the tail module by importing guides, setting up bendy joints, and creating controllers.
+        """
         
         self.side = "C"
         self.module_trn = cmds.createNode("transform", n=f"{self.side}_tailModule_GRP", p=self.modules_grp)
@@ -62,16 +70,36 @@ class TailModule(object):
                 cmds.parent(grp, self.fk_controllers[i-1])
 
     def lock_attrs(self, ctl, attrs):
+
+        """
+        Locks specified attributes on a controller to prevent accidental changes.
+        Args:
+            ctl (str): The name of the controller to lock attributes on.
+            attrs (list): A list of attribute names to lock.
+        
+        """
         
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", lock=True, keyable=False, channelBox=False)   
 
     def import_guides(self):
 
+        """
+        Imports the tail guides from a specified file path and parents the first joint to the module transform.
+        """
+
         self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.tail_chain[0], self.module_trn)
 
     def bendy_setup(self, start_joint, end_joint, name):
+
+        """
+        Sets up the bendy joint system for the tail module, including creating controllers, roll setup, and bendy joints.
+        Args:
+            start_joint (str): The name of the starting joint for the bendy setup.
+            end_joint (str): The name of the ending joint for the bendy setup.
+            name (str): The name to use for the bendy setup components.
+        """
 
         bendy_module = cmds.createNode("transform", n=f"{self.side}_{name}BendyModule_GRP", ss=True, p=self.module_trn)
         skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skinning_trn)
