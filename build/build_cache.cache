@@ -295,5 +295,8 @@
         "ikFinger": "R_fingerPinky01PoleVector_CTL",
         "ikPv": "R_fingerPinky01Ik_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
+    },
+    "C_tailModule": {
+        "tail00_ctl": "C_tail00_CTL"
     }
 }

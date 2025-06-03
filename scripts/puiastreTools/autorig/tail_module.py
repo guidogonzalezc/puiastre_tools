@@ -13,6 +13,11 @@ reload(matrix_spaceSwitch)
 
 class TailModule(object):
 
+    """
+    
+    
+    """
+
     def __init__(self):
 
         complete_path = os.path.realpath(__file__)
@@ -55,7 +60,11 @@ class TailModule(object):
         )
             if i > 0:
                 cmds.parent(grp, self.fk_controllers[i-1])
+
+    def lock_attrs(self, ctl, attrs):
         
+        for attr in attrs:
+            cmds.setAttr(f"{ctl}.{attr}", lock=True, keyable=False, channelBox=False)   
 
     def import_guides(self):
 
@@ -69,6 +78,7 @@ class TailModule(object):
         controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=self.controllers_trn)
         
         ctl, grp = curve_tool.controller_creator(f"{self.side}_{name}", suffixes=["GRP", "SDK", "OFF"])
+        self.lock_attrs(ctl, ["tx", "ty", "tz", "sx", "sy", "sz", "v"])
         cmds.matchTransform(grp[0], start_joint, pos=True, rot=True)
         cmds.parent(grp[0], controllers)
         cmds.parentConstraint(ctl, start_joint, mo=True)
@@ -139,6 +149,7 @@ class TailModule(object):
 
         # Create the bendy controller and make constraints
         bendy_ctl, bendy_grp = curve_tool.controller_creator(f"{self.side}_{name}Bendy", suffixes=["GRP"])
+        self.lock_attrs(bendy_ctl, ["sx", "sy", "sz", "v"])
         cmds.parent(bendy_grp, controllers)
         cmds.parentConstraint(bendy_joints[1], bendy_grp, mo=False)
         cmds.select(cl=True)
