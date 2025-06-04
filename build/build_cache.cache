@@ -62,7 +62,11 @@
     "C_spineModule": {
         "lastSpineJnt": "C_subSpineFk07_JNT",
         "localChest": "C_localChest_CTL",
-        "localHip": "C_localHip_CTL"
+        "localHip": "C_localHip_CTL",
+        "body": "C_body_CTL",
+        "body_grp": [
+            "C_body_GRP"
+        ]
     },
     "L_clavicleModule": {
         "clavicle_ctl": "L_clavicle_CTL"
@@ -298,5 +302,8 @@
     },
     "C_tailModule": {
         "tail00_ctl": "C_tail00_CTL"
+    },
+    "C_neckModule": {
+        "neck00_ctl": "C_neck_CTL"
     }
 }

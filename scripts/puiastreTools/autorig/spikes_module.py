@@ -64,6 +64,16 @@ class SpikesModule(object):
         for attr in attrs:
             cmds.setAttr(f"{ctl}.{attr}", lock=True, keyable=False, channelBox=False)
 
+    def spike_build(self):
+
+        self.attrs_ctl, self.attrs_grp = curve_tool.controller_creator(f"{self.side}_spikeAttributes", ["GRP"])
+        cmds.move(0, 250, 0, self.attrs_grp, r=True)
+        self.lock_attrs(self.attrs_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
+        cmds.addAttr(self.attrs_ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
+        cmds.addAttr(self.attrs_ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
+        cmds.addAttr(self.attrs_ctl, ln="Wave", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.attrs_ctl, ln="Dropoff", at="float", dv=0, keyable=True)
+
     def spike(self, side, spike_joint):
 
         

@@ -59,7 +59,10 @@ class SpineModule():
         self.data_exporter.append_data(f"C_spineModule", 
                                     {"lastSpineJnt": self.sub_spine_joints[-1],
                                     "localChest": self.localChest_ctl,
-                                    "localHip": self.spine_hip_ctl},
+                                    "localHip": self.spine_hip_ctl,
+                                    "body" : self.body_ctl,
+                                    "body_grp" : self.body_ctl_grp
+                                    }
                                   )
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):

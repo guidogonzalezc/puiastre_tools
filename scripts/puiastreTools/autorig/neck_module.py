@@ -28,11 +28,11 @@ class NeckModule:
         self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
         self.curves_path = os.path.join(self.relative_path, "curves", "neck_ctl.json")
 
-        data_exporter = data_export.DataExport()
+        self.data_exporter = data_export.DataExport()
 
-        self.modules_grp = data_exporter.get_data("basic_structure", "modules_GRP")
-        self.skel_grp = data_exporter.get_data("basic_structure", "skel_GRP")
-        self.masterWalk_ctl = data_exporter.get_data("basic_structure", "masterWalk_CTL")
+        self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
+        self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
+        self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
     def make(self, side="C"):
         """
@@ -52,6 +52,10 @@ class NeckModule:
         self.ik_setup()
         self.out_skinning_jnts()
         self.space_switch()
+
+        self.data_exporter.append_data("C_neckModule",
+        {"neck00_ctl": self.neck_ctl}  
+        )
 
     def lock_attrs(self, ctl, attrs):
 
@@ -74,21 +78,6 @@ class NeckModule:
         self.neck_chain = guides_manager.guide_import(joint_name=f"{self.side}_neck00_JNT", all_descendents=True, filePath=self.guides_path)
         cmds.parent(self.neck_chain[0], self.module_trn)
 
-    def spike(self):
-
-        """
-        Create spike attributes and controllers for the neck module.
-        """
-
-        self.attrs_ctl, self.attrs_grp = curve_tool.controller_creator(f"{self.side}_spikeAttributes", ["GRP"])
-        cmds.matchTransform(self.attrs_grp, self.neck_ctl_mid, pos=True, rot=True, scl=False)
-        cmds.move(0, 250, 0, self.attrs_grp, r=True)
-        cmds.parent(self.attrs_grp, self.neck_ctl_mid)
-        self.lock_attrs(self.attrs_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
-        cmds.addAttr(self.attrs_ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
-        cmds.addAttr(self.attrs_ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
-        cmds.addAttr(self.attrs_ctl, ln="Wave", at="float", dv=0, keyable=True)
-        cmds.addAttr(self.attrs_ctl, ln="Dropoff", at="float", dv=0, keyable=True)
 
     def get_offset_matrix(self, child, parent):
 
@@ -100,14 +89,17 @@ class NeckModule:
         Returns:
             om.MMatrix: The offset matrix that transforms the child into the parent's space.
         """
-
         child_dag = om.MSelectionList().add(child).getDagPath(0)
         parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-
+        
         child_world_matrix = child_dag.inclusiveMatrix()
         parent_world_matrix = parent_dag.inclusiveMatrix()
-
+        
         offset_matrix = child_world_matrix * parent_world_matrix.inverse()
+        # parent_grp_world_matrix = parent_grp_dag.inclusiveMatrix()
+
+
+
 
         print(offset_matrix)
     
@@ -142,13 +134,9 @@ class NeckModule:
         cmds.setAttr(f"{self.neck_end_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
         cmds.addAttr(self.neck_end_ctl, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
         self.lock_attrs(self.neck_end_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
-        # cmds.connectAttr(f"{self.neck_end_ctl}.worldMatrix[0]", f"{self.neck_chain[-1]}.offsetParentMatrix")
 
         self.head_ctl, self.head_grp = curve_tool.controller_creator("C_head", ["GRP", "OFF"])
         cmds.matchTransform(self.head_grp[0], self.neck_chain[-1], pos=True, rot=True, scl=False)
-        # cmds.addAttr(self.head_ctl, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
-        # cmds.setAttr(f"{self.head_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
-        # cmds.addAttr(self.head_ctl, ln="Follow_Neck", at="float", dv=0, min=0, max=1, keyable=True)
         self.lock_attrs(self.head_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
         cmds.parent(self.neck_grp[0], self.neck_grp_mid[0], self.neck_end_grp[0], self.head_grp[0], self.controllers_trn)
 
@@ -212,9 +200,8 @@ class NeckModule:
 
 
         self.jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_jaw_JNT", all_descendents=True, filePath=self.guides_path)
-        # cmds.parent(self.jaw_jnts[0], self.head_jnt)
         self.upper_jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_upperJaw_JNT", all_descendents=True, filePath=self.guides_path)
-        # cmds.parent(self.upper_jaw_jnts[0], self.head_jnt)
+        cmds.parent(self.jaw_jnts, self.upper_jaw_jnts, self.module_trn)
         
 
 
@@ -242,7 +229,10 @@ class NeckModule:
         Create a space switch for the head controller that allows it to follow the masterWalk controller, neck end controller, or body controller.
         """
 
-        body_ctl = cmds.ls("C_body_CTL")[0]
+        body_ctl = self.data_exporter.get_data("C_spineModule", "body")
+        body_grp = self.data_exporter.get_data("C_spineModule", "body_grp")
+        masterwalk_grp = "C_masterWalk_GRP"
+        
 
         # Create the attribute for the head controller
         cmds.addAttr(self.head_ctl, ln="SPACE_SWITCHES", at="enum", en="____", keyable=True)
@@ -288,12 +278,16 @@ class NeckModule:
         cmds.connectAttr(f"{body_ctl}.worldMatrix[0]", f"{parent_matrix_node}.target[2].targetMatrix")
         cmds.connectAttr(f"{condition_body}.outColorR", f"{parent_matrix_node}.target[2].weight")
 
-        neck_offset = self.get_offset_matrix(self.neck_end_ctl, self.head_ctl)
-        cmds.setAttr(f"{parent_matrix_node}.target[0].offsetMatrix", neck_offset)
-        masterwalk_offset = self.get_offset_matrix(self.masterWalk_ctl, self.head_ctl)
-        cmds.setAttr(f"{parent_matrix_node}.target[1].offsetMatrix", masterwalk_offset)
-        body_offset = self.get_offset_matrix(body_ctl, self.head_ctl)
-        cmds.setAttr(f"{parent_matrix_node}.target[2].offsetMatrix", body_offset)
+        head_off = cmds.getAttr(f"{self.head_ctl}.worldMatrix[0]")
+
+        
+        masterwalk_offset = self.get_offset_matrix(self.head_ctl, self.masterWalk_ctl)
+        neck_offset = self.get_offset_matrix(self.head_ctl, self.neck_end_ctl)
+        body_offset = self.get_offset_matrix(self.head_ctl, body_ctl)
+        cmds.setAttr(f"{parent_matrix_node}.target[0].offsetMatrix", masterwalk_offset, type="matrix")
+        cmds.setAttr(f"{parent_matrix_node}.target[1].offsetMatrix", neck_offset, type="matrix")
+        cmds.setAttr(f"{parent_matrix_node}.target[2].offsetMatrix", body_offset, type="matrix")
+
 
         mult_matrix_offset = cmds.createNode("multMatrix", n=f"{self.side}_head_MMX")
         cmds.connectAttr(f"{parent_matrix_node}.outputMatrix", f"{mult_matrix_offset}.matrixIn[0]")

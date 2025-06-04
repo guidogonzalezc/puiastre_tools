@@ -6,6 +6,7 @@ from puiastreTools.autorig import spine_module
 from puiastreTools.autorig import tail_module
 from puiastreTools.autorig import clavicle_module
 from puiastreTools.autorig import spikes_module
+from puiastreTools.autorig import membrane_002
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 from puiastreTools.autorig import matrix_spaceSwitch
@@ -14,6 +15,7 @@ from importlib import reload
 
 reload(leg_module)
 reload(wing_arm_module)
+reload(membrane_002)
 reload(neck_module)
 reload(finger_module)
 reload(spine_module)
@@ -47,7 +49,7 @@ def rename_ctl_shapes():
         parentName = cmds.listRelatives(shapes, parent=True)[0]
         cmds.rename(shapes, f"{parentName}Shape")
 
-def joint_lable():
+def joint_label():
     """
     Set attributes for all joints in the scene to label them according to their side and type.
     This function iterates through all joints, checks their names for side indicators (L_, R_, C_), and sets the 'side' and 'type' attributes accordingly.
@@ -82,6 +84,7 @@ def make():
     leg_Module = leg_module.LegModule()
     clavicle = clavicle_module.ClavicleModule()
     spikes = spikes_module.SpikesModule()
+    membrane = membrane_002.MembraneModule()
 
 
 
@@ -96,6 +99,8 @@ def make():
     for side in ["L", "R"]:
         clavicle.make(side = side)
         fingermodule.make(side = side)
+        membrane.make(side = side)
+
 
     neck.make()
     tail.make()
@@ -158,15 +163,19 @@ def make():
             matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
     tail00 = data_exporter.get_data("C_tailModule", "tail00_ctl")
+    neck00 = data_exporter.get_data("C_neckModule", "neck00_ctl")
     spaceSwitches = {
                 tail00: [[localHip], 1],
+                neck00: [[localChest], 1]
             }
     for child, (parents, default_value) in spaceSwitches.items():
         matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
+        
+
 
     disable_inherits()
     rename_ctl_shapes()
-    joint_lable()
+    joint_label()
 
 
