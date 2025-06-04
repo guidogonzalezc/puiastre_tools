@@ -18,6 +18,8 @@ def get_offset_matrix(child, parent):
     parent_world_matrix = parent_dag.inclusiveMatrix()
     
     offset_matrix = child_world_matrix * parent_world_matrix.inverse()
+
+    print(offset_matrix)
     
     return offset_matrix
 
