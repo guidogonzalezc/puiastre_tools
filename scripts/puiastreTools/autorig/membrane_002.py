@@ -92,7 +92,7 @@ class MembraneModule():
 
         membrane_surface = cmds.loft(loft_curves, name=f"{self.side}_membraneSurface0{index}_NBS", ch=1, u=True, c=False, ar=True, d=3, ss=1, rn=False, po=0, reverseSurfaceNormals=True)[0]
         cmds.delete(membrane_surface, ch=True)
-        cmds.parent(membrane_surface, self.skinning_trn)
+        
 
         for c in loft_curves:
             cmds.delete(c)
@@ -146,6 +146,8 @@ class MembraneModule():
 
         offset_surface = cmds.offsetSurface(membrane_surface, d=20)
         offset_surface = cmds.rename(offset_surface[0], f"{self.side}_membraneOffsetSurface0{index}_NBS")
+
+        cmds.parent(membrane_surface, offset_surface, self.modules_grp)
 
 
         compose_matrices = [[] for _ in range(3)]
@@ -208,5 +210,6 @@ class MembraneModule():
                 cmds.select(clear=True)
                 joint = cmds.joint(name=f"{self.side}_membraneJoint{index}{i}{j}_JNT")
                 cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
+                cmds.parent(joint, self.skinning_trn)
 
-                ctl, grp = curve_tool.controller_creator(name=f"{self.side}_membrane{index}{i}{j}", suffixes=["GRP", "OFF"])
+                # ctl, grp = curve_tool.controller_creator(name=f"{self.side}_membrane{index}{i}{j}", suffixes=["GRP", "OFF"])

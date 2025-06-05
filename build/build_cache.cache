@@ -4,6 +4,21 @@
         "skel_GRP": "skel_GRP",
         "masterWalk_CTL": "C_masterWalk_CTL"
     },
+    "C_spineModule": {
+        "lastSpineJnt": "C_subSpineFk07_JNT",
+        "localChest": "C_localChest_CTL",
+        "localHip": "C_localHip_CTL",
+        "body": "C_body_CTL",
+        "body_grp": [
+            "C_body_GRP"
+        ]
+    },
+    "L_legModule": {
+        "ik_ctl": "L_legIk_CTL",
+        "fk_ctl": "L_hipFk_CTL",
+        "pv_ctl": "L_legPv_CTL",
+        "root_ctl": "L_rootIk_CTL"
+    },
     "L_armModule": {
         "skinning_joints": [
             "L_wingArmUpperTwist00_JNT",
@@ -24,6 +39,12 @@
         "shoulderFK": "L_wingArm1Fk_CTL",
         "armRoot": "L_wingArmRoot_CTL"
     },
+    "R_legModule": {
+        "ik_ctl": "R_legIk_CTL",
+        "fk_ctl": "R_hipFk_CTL",
+        "pv_ctl": "R_legPv_CTL",
+        "root_ctl": "R_rootIk_CTL"
+    },
     "R_armModule": {
         "skinning_joints": [
             "R_wingArmUpperTwist00_JNT",
@@ -43,30 +64,6 @@
         "armPV": "R_wingArmPV_CTL",
         "shoulderFK": "R_wingArm1Fk_CTL",
         "armRoot": "R_wingArmRoot_CTL"
-    },
-    "spine": {
-        "lastSpineJnt": "C_subSpineFk07_JNT"
-    },
-    "L_legModule": {
-        "ik_ctl": "L_legIk_CTL",
-        "fk_ctl": "L_hipFk_CTL",
-        "pv_ctl": "L_legPv_CTL",
-        "root_ctl": "L_rootIk_CTL"
-    },
-    "R_legModule": {
-        "ik_ctl": "R_legIk_CTL",
-        "fk_ctl": "R_hipFk_CTL",
-        "pv_ctl": "R_legPv_CTL",
-        "root_ctl": "R_rootIk_CTL"
-    },
-    "C_spineModule": {
-        "lastSpineJnt": "C_subSpineFk07_JNT",
-        "localChest": "C_localChest_CTL",
-        "localHip": "C_localHip_CTL",
-        "body": "C_body_CTL",
-        "body_grp": [
-            "C_body_GRP"
-        ]
     },
     "L_clavicleModule": {
         "clavicle_ctl": "L_clavicle_CTL"
@@ -160,28 +157,6 @@
         ],
         "ikFinger": "L_fingerRing01Ik_CTL",
         "ikPv": "L_fingerRing01PoleVector_CTL",
-        "settingsAttr": "L_fingerAttr_CTL"
-    },
-    "L_fingerPinky": {
-        "bendy_joints": [
-            "L_fingerPinky01Fk01Skinning_JNT",
-            "L_fingerPinky01Fk01Bendy01_JNT",
-            "L_fingerPinky01Fk01Bendy02_JNT",
-            "L_fingerPinky01Fk01Bendy03_JNT",
-            "L_fingerPinky01Fk01Bendy04_JNT",
-            "L_fingerPinky01Fk02Skinning_JNT",
-            "L_fingerPinky01Fk02Bendy01_JNT",
-            "L_fingerPinky01Fk02Bendy02_JNT",
-            "L_fingerPinky01Fk02Bendy03_JNT",
-            "L_fingerPinky01Fk02Bendy04_JNT",
-            "L_fingerPinky01Fk03Skinning_JNT",
-            "L_fingerPinky01Fk03Bendy01_JNT",
-            "L_fingerPinky01Fk03Bendy02_JNT",
-            "L_fingerPinky01Fk03Bendy03_JNT",
-            "L_fingerPinky01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "L_fingerPinky01Ik_CTL",
-        "ikPv": "L_fingerPinky01PoleVector_CTL",
         "settingsAttr": "L_fingerAttr_CTL"
     },
     "R_clavicleModule": {
@@ -278,32 +253,10 @@
         "ikPv": "R_fingerRing01PoleVector_CTL",
         "settingsAttr": "R_fingerAttr_CTL"
     },
-    "R_fingerPinky": {
-        "bendy_joints": [
-            "R_fingerPinky01Fk01Skinning_JNT",
-            "R_fingerPinky01Fk01Bendy01_JNT",
-            "R_fingerPinky01Fk01Bendy02_JNT",
-            "R_fingerPinky01Fk01Bendy03_JNT",
-            "R_fingerPinky01Fk01Bendy04_JNT",
-            "R_fingerPinky01Fk02Skinning_JNT",
-            "R_fingerPinky01Fk02Bendy01_JNT",
-            "R_fingerPinky01Fk02Bendy02_JNT",
-            "R_fingerPinky01Fk02Bendy03_JNT",
-            "R_fingerPinky01Fk02Bendy04_JNT",
-            "R_fingerPinky01Fk03Skinning_JNT",
-            "R_fingerPinky01Fk03Bendy01_JNT",
-            "R_fingerPinky01Fk03Bendy02_JNT",
-            "R_fingerPinky01Fk03Bendy03_JNT",
-            "R_fingerPinky01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "R_fingerPinky01Ik_CTL",
-        "ikPv": "R_fingerPinky01PoleVector_CTL",
-        "settingsAttr": "R_fingerAttr_CTL"
+    "C_neckModule": {
+        "neck00_ctl": "C_neck_CTL"
     },
     "C_tailModule": {
         "tail00_ctl": "C_tail00_CTL"
-    },
-    "C_neckModule": {
-        "neck00_ctl": "C_neck_CTL"
     }
 }
