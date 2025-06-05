@@ -3,26 +3,12 @@ Finger module for dragon rigging system
 """
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
-from puiastreTools.utils import guides_manager
-from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
-import maya.mel as mel
-import math
-import os
-import re
 from importlib import reload
-reload(guides_manager)
-reload(basic_structure)
-reload(curve_tool)    
 reload(data_export)    
 
 class MembraneModule():
     def __init__(self):
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
-
         self.data_exporter = data_export.DataExport()
 
         self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
@@ -55,21 +41,41 @@ class MembraneModule():
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_membraneControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_membraneSkinning_GRP", ss=True, p=self.skel_grp)
 
-        self.create_nurbs(joint01 = self.thumb_joints, joint02 = self.index_joints, index=1)
-        self.create_nurbs(joint01 = self.index_joints, joint02 = self.middle_joints, index=2)
-        self.create_nurbs(joint01 = self.middle_joints, joint02 = self.ring_joints, index=3)
-        self.create_nurbs(joint01 = self.ring_joints, joint02 = self.pinky_joints, index=4)
+        # self.create_nurbs(joint01 = self.thumb_joints, joint02 = self.index_joints, index=1)
+        # self.create_nurbs(joint01 = self.index_joints, joint02 = self.middle_joints, index=2)
+        # self.create_nurbs(joint01 = self.middle_joints, joint02 = self.ring_joints, index=3)
+        # self.create_nurbs(joint01 = self.ring_joints, joint02 = self.pinky_joints, index=4)
+
+        fingers_chains = []
+
+        for name in [self.thumb_joints, self.index_joints, self.middle_joints, self.ring_joints, self.pinky_joints]:
+            if name:
+                fingers_chains.append(name)
+
+
+        for i in range(len(fingers_chains)-1):
+
+            if fingers_chains[i+1]:
+                joint01 = fingers_chains[i]
+                joint02 = fingers_chains[i+1]
+
+
+                self.create_nurbs(joint01 = joint01, joint02 = joint02, index=i+1)
+
+
+                
+
 
     def create_nurbs(self, joint01, joint02, index):
         def get_world_positions(joints):
             return [cmds.xform(jnt, q=True, ws=True, t=True) for jnt in joints]
 
         if self.side == "L":
-            thumb_positions = get_world_positions(joint02)
-            index_positions = get_world_positions(joint01)
-        else:
             thumb_positions = get_world_positions(joint01)
             index_positions = get_world_positions(joint02)
+        else:
+            thumb_positions = get_world_positions(joint02)
+            index_positions = get_world_positions(joint01)
 
         num_joints = len(thumb_positions)
         loft_curves = []
@@ -149,7 +155,6 @@ class MembraneModule():
             for j in range(5):
 
                 v_parameter = ((len(joint01)) / 6)* (j) +1
-                print(f"v_parameter: {v_parameter}")
                 
                 pointOnSurface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_membranePointOnSurface{index}{i}{j}_POS", ss=True)
                 cmds.connectAttr(f"{membrane_surface}.worldSpace", f"{pointOnSurface}.inputSurface")
@@ -200,4 +205,4 @@ class MembraneModule():
                 cmds.select(clear=True)
                 joint = cmds.joint()
                 cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
-                cmds.setAttr(f"{joint}.radius", 50)
+                cmds.setAttr(f"{joint}.radius", 20)

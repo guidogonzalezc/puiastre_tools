@@ -4,16 +4,10 @@ Finger module for dragon rigging system
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
-from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 import maya.mel as mel
-import math
-import os
 import re
 from importlib import reload
-reload(guides_manager)
-reload(basic_structure)
-reload(curve_tool)    
 reload(data_export)    
 
 class FingerModule():
@@ -27,11 +21,6 @@ class FingerModule():
         Args:
             self: Instance of the FingerModule class.
         """
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
-
         self.data_exporter = data_export.DataExport()
 
         self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
@@ -57,7 +46,7 @@ class FingerModule():
 
 
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_fingerAttr", suffixes = ["GRP"])
-        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_fingerAttr", filePath=self.guides_path)
+        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_fingerAttr")
         cmds.xform(self.settings_curve_grp[0], ws=True, translation=position)
         cmds.xform(self.settings_curve_grp[0], ws=True, rotation=rotation)
         cmds.parent(self.settings_curve_grp[0], self.controllers_trn)
@@ -82,22 +71,28 @@ class FingerModule():
         self.controllers_fk = []
 
         for name in ["Thumb", "Index", "Middle", "Ring", "Pinky"]:
-            self.individual_module_trn = cmds.createNode("transform", name=f"{self.side}_{name.lower()}Module_GRP", ss=True, p=self.module_trn)
-            self.bendy_module = cmds.createNode("transform", name=f"{self.side}_{name.lower()}BendyModule_GRP", ss=True, p=self.individual_module_trn)
+            guide_checker = guides_manager.guide_import(
+            joint_name=f"{self.side}_finger{name}01_JNT",
+            all_descendents=False)
+            if guide_checker:
+                cmds.delete(guide_checker)
 
-            self.create_chain(name=name)  
-            self.set_controllers()  
-            self.call_bendys()
+                self.individual_module_trn = cmds.createNode("transform", name=f"{self.side}_{name.lower()}Module_GRP", ss=True, p=self.module_trn)
+                self.bendy_module = cmds.createNode("transform", name=f"{self.side}_{name.lower()}BendyModule_GRP", ss=True, p=self.individual_module_trn)
 
-            data_exporter = data_export.DataExport()
-            data_exporter.append_data(
-                f"{self.side}_finger{name}",    
-                {
-                    "ikFinger": self.ik_ctl,
-                    "ikPv": self.pv_ctl,
-                    "settingsAttr": self.settings_curve_ctl,
-                }
-            )
+                self.create_chain(name=name)  
+                self.set_controllers()  
+                self.call_bendys()
+
+                data_exporter = data_export.DataExport()
+                data_exporter.append_data(
+                    f"{self.side}_finger{name}",    
+                    {
+                        "ikFinger": self.ik_ctl,
+                        "ikPv": self.pv_ctl,
+                        "settingsAttr": self.settings_curve_ctl,
+                    }
+                )
 
     def lock_attr(self, ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
         """
@@ -126,9 +121,7 @@ class FingerModule():
         
         self.blend_chain = guides_manager.guide_import(
             joint_name=f"{self.side}_finger{name}01_JNT",
-            all_descendents=True,
-            filePath=self.guides_path
-        )
+            all_descendents=True)
         cmds.parent(self.blend_chain[0], self.individual_module_trn)
 
 
@@ -279,12 +272,25 @@ class FingerModule():
         """
 
         normals = (0, 1, 0)
-        bendy = Bendys(self.side, self.attached_fk_joints[0], self.attached_fk_joints[1], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Upper")
-        end_bezier01, bendy_skin_cluster01, bendy_joint01, off_curve01, bendy_offset_skin_cluster01 = bendy.lower_twists_setup()
-        bendy = Bendys(self.side, self.attached_fk_joints[1], self.attached_fk_joints[2], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Middle")
-        end_bezier02, bendy_skin_cluster02, bendy_joint02, off_curve02, bendy_offset_skin_cluster02 = bendy.lower_twists_setup()
-        bendy = Bendys(self.side, self.attached_fk_joints[2], self.attached_fk_joints[3], self.bendy_module, self.skinning_trn, normals, self.controllers_trn, self.joint_name + "Lower")
-        end_bezier03, bendy_skin_cluster03, bendy_joint03, off_curve03, bendy_offset_skin_cluster03 = bendy.lower_twists_setup()
+        bendy_data = []
+        bendy_names = ["Upper", "Middle", "Lower"]
+        for i in range(len(self.attached_fk_joints) - 1):
+            if self.attached_fk_joints[i + 1]:
+                bendy = Bendys(
+                self.side,
+                self.attached_fk_joints[i],
+                self.attached_fk_joints[i + 1],
+                self.bendy_module,
+                self.skinning_trn,
+                normals,
+                self.controllers_trn,
+                self.joint_name + bendy_names[i]
+                )
+                bendy_data.append(bendy.lower_twists_setup())
+
+        (end_bezier01, bendy_skin_cluster01, bendy_joint01, off_curve01, bendy_offset_skin_cluster01) = bendy_data[0]
+        (end_bezier02, bendy_skin_cluster02, bendy_joint02, off_curve02, bendy_offset_skin_cluster02) = bendy_data[1]
+        (end_bezier03, bendy_skin_cluster03, bendy_joint03, off_curve03, bendy_offset_skin_cluster03) = bendy_data[2]
 
         self.wave_handle(beziers=[end_bezier01, end_bezier02, end_bezier03], 
                          skc = [bendy_skin_cluster01, bendy_skin_cluster02, bendy_skin_cluster03], 
