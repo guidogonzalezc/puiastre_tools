@@ -1,3 +1,4 @@
+# Module imporrt
 from puiastreTools.autorig import finger_module
 from puiastreTools.autorig import leg_module
 from puiastreTools.autorig import neck_module
@@ -7,10 +8,17 @@ from puiastreTools.autorig import tail_module
 from puiastreTools.autorig import clavicle_module
 from puiastreTools.autorig import spikes_module
 from puiastreTools.autorig import membrane_002
+
+# Tools / utils import
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 from puiastreTools.autorig import matrix_spaceSwitch
+from puiastreTools.utils import guides_manager
+from puiastreTools.tools import curve_tool
+
+# Python libraries import
 import maya.cmds as cmds
+import os
 from importlib import reload
 
 reload(leg_module)
@@ -24,6 +32,8 @@ reload(clavicle_module)
 reload(spikes_module)
 reload(data_export)
 reload(matrix_spaceSwitch)
+reload(guides_manager)
+reload(curve_tool)
 
 def disable_inherits():
     """
@@ -73,7 +83,18 @@ def make():
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
     """   
-    
+
+    complete_path = os.path.realpath(__file__)
+    relative_path = complete_path.split("\scripts")[0]
+    guides_path = os.path.join(relative_path, "guides", "aychedral_GUIDES_001.guides")
+    curves_path = os.path.join(relative_path, "curves", "template_curves_001.json") 
+
+    guides_manager.init_template_file(guides_path)
+    curve_tool.init_template_file(curves_path)
+
+    data_exporter = data_export.DataExport()
+    data_exporter.new_build()
+
     basic_structure.create_basic_structure(asset_name = "Varyndor")
     
     fingermodule = finger_module.FingerModule()
@@ -83,18 +104,17 @@ def make():
     tail = tail_module.TailModule()
     leg_Module = leg_module.LegModule()
     clavicle = clavicle_module.ClavicleModule()
-    spikes = spikes_module.SpikesModule()
+    # spikes = spikes_module.SpikesModule()
     membrane = membrane_002.MembraneModule()
 
+
+    spinemodule.make()
 
 
     for side in ["L", "R"]:
         leg_Module.make(side = side)
         wingmodule.make(side = side)
 
-
-    spinemodule.make()
-    
 
     for side in ["L", "R"]:
         clavicle.make(side = side)
@@ -104,18 +124,12 @@ def make():
 
     neck.make()
     tail.make()
-    spikes.make()
+    # spikes.make()
 
 
     
     for joint in cmds.ls(type="joint"):
         cmds.setAttr(f"{joint}.radius", 10)
-
-    cmds.inViewMessage(
-    amg='Completed <hl>DRAGON RIG</hl> build.',
-    pos='midCenter',
-    fade=True,
-    alpha=0.8)
 
     data_exporter = data_export.DataExport()
     localHip = data_exporter.get_data("C_spineModule", "localHip")    
@@ -137,6 +151,9 @@ def make():
             fingerPv = data_exporter.get_data(f"{side}_finger{name}", "ikPv")
             fingerIk = data_exporter.get_data(f"{side}_finger{name}", "ikFinger")
             fingerAttr = data_exporter.get_data(f"{side}_finger{name}", "settingsAttr")
+
+            if not fingerPv or not fingerIk or not fingerAttr:
+                continue
 
             spaceSwitches = {
                     fingerPv: [[fingerIk, fingerAttr], 1],
@@ -177,5 +194,11 @@ def make():
     disable_inherits()
     rename_ctl_shapes()
     joint_label()
+
+    cmds.inViewMessage(
+    amg='Completed <hl>DRAGON RIG</hl> build.',
+    pos='midCenter',
+    fade=True,
+    alpha=0.8)
 
 
