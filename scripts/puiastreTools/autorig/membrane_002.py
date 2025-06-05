@@ -180,6 +180,9 @@ class MembraneModule():
                 compose_matrices[i].append(compose_matrix)
                 compose_matrices_offset[i].append(compose_matrix_offset)
 
+        ctls = [[] for _ in range(3)]
+        ctls_grp = [[] for _ in range(3)]
+
         for i in range(0, 3):
             for j in range(5):
                 aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_membraneAimMatrix{index}{i}{j}_AM", ss=True)
@@ -203,6 +206,7 @@ class MembraneModule():
                 cmds.setAttr(f"{aim_matrix}.secondaryMode", 1)
 
                 cmds.select(clear=True)
-                joint = cmds.joint()
+                joint = cmds.joint(name=f"{self.side}_membraneJoint{index}{i}{j}_JNT")
                 cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
-                cmds.setAttr(f"{joint}.radius", 20)
+
+                ctl, grp = curve_tool.controller_creator(name=f"{self.side}_membrane{index}{i}{j}", suffixes=["GRP", "OFF"])

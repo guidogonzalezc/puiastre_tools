@@ -196,7 +196,7 @@ def guide_import(joint_name, all_descendents=True):
                                         cmds.setAttr(f"{imported_joint}.translate", guides_data[name][joint]["worldPosition"][0], guides_data[name][joint]["worldPosition"][1], guides_data[name][joint]["worldPosition"][2])
                                         cmds.setAttr(f"{imported_joint}.rotate", guides_data[name][joint]["worldRotation"][0], guides_data[name][joint]["worldRotation"][1], guides_data[name][joint]["worldRotation"][2])
                                         cmds.makeIdentity(imported_joint, apply=True, r=True)
-                                        cmds.setAttr(f"{imported_joint}.preferredAngle", data["preferredAngle"][0], data["preferredAngle"][1], data["preferredAngle"][2])  
+                                        cmds.setAttr(f"{imported_joint}.preferredAngle", guides_data[name][joint]["preferredAngle"][0], guides_data[name][joint]["preferredAngle"][1], guides_data[name][joint]["preferredAngle"][2])  
                                         parent = parent_map[joint]
                                         if parent != "C_root_JNT":
                                                 cmds.parent(imported_joint, parent)
