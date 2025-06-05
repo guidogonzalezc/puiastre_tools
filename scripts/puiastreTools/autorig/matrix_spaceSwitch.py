@@ -19,7 +19,6 @@ def get_offset_matrix(child, parent):
     
     offset_matrix = child_world_matrix * parent_world_matrix.inverse()
 
-    print(offset_matrix)
     
     return offset_matrix
 

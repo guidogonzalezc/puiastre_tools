@@ -5,10 +5,7 @@ import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import data_export
-import os
 from importlib import reload
-reload(guides_manager)
-reload(curve_tool)    
 reload(data_export)    
 
 class SpineModule():
@@ -24,11 +21,6 @@ class SpineModule():
             self: Instance of the SpineModule class.
         """
         
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
-
         self.data_exporter = data_export.DataExport()
 
         self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
@@ -92,9 +84,7 @@ class SpineModule():
         
         self.blend_chain = guides_manager.guide_import(
             joint_name=f"C_spine01_JNT",
-            all_descendents=True,
-            filePath=self.guides_path
-        )
+            all_descendents=True)
         cmds.parent(self.blend_chain[0], self.module_trn)
 
     def spine_module(self):
@@ -160,7 +150,7 @@ class SpineModule():
         cmds.parentConstraint(self.localChest_ctl, self.chest_fix, mo=True)
 
         self.spine_hip_ctl, self.spine_hip_ctl_grp = curve_tool.controller_creator(f"C_localHip", suffixes = ["GRP"])
-        position, rotation = guides_manager.guide_import(joint_name=f"C_localHip", filePath=self.guides_path)
+        position, rotation = guides_manager.guide_import(joint_name=f"C_localHip")
 
         cmds.matchTransform(self.spine_hip_ctl_grp[0], self.blend_chain[0], pos=True, rot=True)
         cmds.xform(self.spine_hip_ctl_grp[0], ws=True, translation=position)

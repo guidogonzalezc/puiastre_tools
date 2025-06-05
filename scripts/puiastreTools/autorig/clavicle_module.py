@@ -1,11 +1,8 @@
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool 
-import os
 from importlib import reload
 from puiastreTools.utils import data_export
-from puiastreTools.utils import guides_manager
-reload(guides_manager)
-reload(curve_tool)    
+from puiastreTools.utils import guides_manager  
 reload(data_export)    
 
 
@@ -22,10 +19,6 @@ class ClavicleModule():
         Args:
             self: Instance of the ClavicleModule class.
         """
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
 
         self.data_exporter = data_export.DataExport()
 
@@ -82,20 +75,16 @@ class ClavicleModule():
         """
         self.clavicle_joint = guides_manager.guide_import(
             joint_name=f"{self.side}_clavicle_JNT",
-            all_descendents=False,
-            filePath=self.guides_path
-        )
+            all_descendents=False)
 
         shoulder = guides_manager.guide_import(
             joint_name=f"{self.side}_shoulder_JNT",
-            all_descendents=False,
-            filePath=self.guides_path
-        )
+            all_descendents=False)
 
 
         armIk = self.data_exporter.get_data(f"{self.side}_armModule", "armIk") 
         ctl_switch = self.data_exporter.get_data(f"{self.side}_armModule", "armSettings") 
-        spine_joints = self.data_exporter.get_data(f"spine", "lastSpineJnt") 
+        spine_joints = self.data_exporter.get_data(f"C_spineModule", "lastSpineJnt") 
 
         cmds.parentConstraint(spine_joints, self.module_trn, mo=True)
         cmds.scaleConstraint(self.masterWalk_ctl, self.module_trn, mo=True)

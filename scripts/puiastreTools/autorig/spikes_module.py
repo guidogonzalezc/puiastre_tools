@@ -1,27 +1,14 @@
 import maya.cmds as cmds
-import maya.api.OpenMaya as om
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
-from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
-import maya.mel as mel
-import math
-import os
 from importlib import reload
-reload(guides_manager)
-reload(basic_structure)
-reload(curve_tool)    
 reload(data_export)
 
 
 class SpikesModule(object):
     
     def __init__(self):
-
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "foot_ctl.json") 
 
         data_exporter = data_export.DataExport()
 
@@ -55,8 +42,8 @@ class SpikesModule(object):
         
         """
 
-        self.upper_spike = guides_manager.guide_import(joint_name=f"{side}_upperSpike_JNT", all_descendents=True, filePath=self.guides_path)
-        self.lateral_spike = guides_manager.guide_import(joint_name=f"{side}_lateralSpike_JNT", all_descendents=True, filePath=self.guides_path)
+        self.upper_spike = guides_manager.guide_import(joint_name=f"{side}_upperSpike_JNT", all_descendents=True)
+        self.lateral_spike = guides_manager.guide_import(joint_name=f"{side}_lateralSpike_JNT", all_descendents=True)
         cmds.parent(self.upper_spike[0], self.lateral_spike[0], self.module_trn)
     
     def lock_attrs(self, ctl, attrs):

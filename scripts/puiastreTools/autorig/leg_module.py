@@ -5,15 +5,10 @@ import maya.cmds as cmds
 import maya.api.OpenMaya as om
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
-from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 import maya.mel as mel
 import math
-import os
 from importlib import reload
-reload(guides_manager)
-reload(basic_structure)
-reload(curve_tool)    
 reload(data_export)    
 
 class LegModule():
@@ -29,12 +24,6 @@ class LegModule():
         Args:
             self: The instance of the LegModule class.
         """
-
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "foot_ctl.json") 
-
         data_exporter = data_export.DataExport()
 
         self.modules_grp = data_exporter.get_data("basic_structure", "modules_GRP")
@@ -115,9 +104,7 @@ class LegModule():
         for name, chain in chains.items():
             guides = guides_manager.guide_import(
                 joint_name=f"{self.side}_hip_JNT",
-                all_descendents=True,
-                filePath=self.guides_path
-            )
+                all_descendents=True)
             cmds.parent(guides[0], self.module_trn)
 
             for joint in guides:
@@ -138,7 +125,7 @@ class LegModule():
         self.fk_trn = cmds.createNode("transform", name=f"{self.side}_legFkControllers_GRP", parent=self.controllers_trn, ss=True)
 
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_LegSettings", suffixes = ["GRP"])
-        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_legSwitch", filePath=self.guides_path)
+        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_legSwitch")
         cmds.xform(self.settings_curve_ctl, ws=True, translation=position)
         cmds.xform(self.settings_curve_ctl, ws=True, rotation=rotation)
         cmds.addAttr(self.settings_curve_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
@@ -274,7 +261,7 @@ class LegModule():
         self.ik_ctls = []
 
         for item in [f"{self.side}_bankIn", f"{self.side}_bankOut", f"{self.side}_heel"]:
-            position, rotation = guides_manager.guide_import(joint_name=item, filePath=self.guides_path)
+            position, rotation = guides_manager.guide_import(joint_name=item)
             ctl, clt_grp = curve_tool.controller_creator(item, suffixes = ["GRP", "SDK"])
             cmds.xform(clt_grp, ws=True, translation=position)
             cmds.xform(clt_grp, ws=True, rotation=rotation)

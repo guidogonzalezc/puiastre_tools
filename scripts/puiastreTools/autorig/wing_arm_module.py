@@ -6,17 +6,13 @@ Arm system for the dragon wing.
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
-# from puiastreTools.tools.curve_tool import controller_creator
 from puiastreTools.utils import data_export
 import maya.api.OpenMaya as om
-import maya.mel as mel
 import math
 import os
 from importlib import reload
 import math
 reload(guides_manager)
-reload(curve_tool)
-# reload(controller_creator)
 
 class WingArmModule(object):
 
@@ -24,11 +20,6 @@ class WingArmModule(object):
     
     """
     def __init__(self):
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "arm_ctl.json")
-
         self.data_exporter = data_export.DataExport()
 
         self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
@@ -102,9 +93,7 @@ class WingArmModule(object):
         for name, chain in chains.items():
             guides = guides_manager.guide_import(
                 joint_name=f"{self.side}_shoulder_JNT",
-                all_descendents=True,
-                filePath=self.guides_path
-            )
+                all_descendents=True)
             cmds.parent(guides[0], self.module_trn)
 
             for joint in guides:
@@ -138,7 +127,7 @@ class WingArmModule(object):
         # --- FK/IK Switch Controller ---
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_ArmSettings", suffixes = ["GRP"])
         
-        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_armSettings", filePath=self.guides_path)
+        position, rotation = guides_manager.guide_import(joint_name=f"{self.side}_armSettings")
         cmds.xform(self.settings_curve_grp[0], ws=True, translation=position)
         cmds.xform(self.settings_curve_grp[0], ws=True, rotation=rotation)
         

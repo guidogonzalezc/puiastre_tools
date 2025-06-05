@@ -4,10 +4,21 @@ import json
 import os
 
 
-complete_path = os.path.realpath(__file__)
-relative_path = complete_path.split("\scripts")[0]
-TEMPLATE_FILE = os.path.join(relative_path, "curves", "template_curves_001.json") 
+TEMPLATE_FILE = None
 
+def init_template_file(path=None):
+    """
+    Initializes the TEMPLATE_FILE variable.
+    If a path is provided, it sets TEMPLATE_FILE to that path.
+    Otherwise, it uses the default template file path.
+    """
+    global TEMPLATE_FILE
+    if path:
+        TEMPLATE_FILE = path
+    else:
+        complete_path = os.path.realpath(__file__)
+        relative_path = complete_path.split("\scripts")[0]
+        TEMPLATE_FILE = os.path.join(relative_path, "curves", "template_curves_001.json")
 
 def get_all_ctl_curves_data():
     """

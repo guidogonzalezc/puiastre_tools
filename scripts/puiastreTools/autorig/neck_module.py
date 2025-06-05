@@ -1,13 +1,10 @@
 import maya.cmds as cmds
 import maya.api.OpenMaya as om
-import os
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 from importlib import reload
 import puiastreTools.utils.data_export as data_export
 
-reload(curve_tool)
-reload(guides_manager)
 reload(data_export)
 
 class NeckModule:
@@ -22,12 +19,6 @@ class NeckModule:
         Initialize the NeckModule class.
         This constructor sets up the paths for guides and curves, retrieves basic structure data, and initializes module, skeleton, and master walk groups.
         """
-
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "neck_ctl.json")
-
         self.data_exporter = data_export.DataExport()
 
         self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
@@ -75,7 +66,7 @@ class NeckModule:
         Import the neck guides from the guides file and parent them to the module transform.
         """
 
-        self.neck_chain = guides_manager.guide_import(joint_name=f"{self.side}_neck00_JNT", all_descendents=True, filePath=self.guides_path)
+        self.neck_chain = guides_manager.guide_import(joint_name=f"{self.side}_neck00_JNT", all_descendents=True)
         cmds.parent(self.neck_chain[0], self.module_trn)
 
 
@@ -199,9 +190,11 @@ class NeckModule:
         cmds.connectAttr(f"{rev_01}.outputX", f"{parent_02}.w1")
 
 
-        self.jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_jaw_JNT", all_descendents=True, filePath=self.guides_path)
-        self.upper_jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_upperJaw_JNT", all_descendents=True, filePath=self.guides_path)
-        cmds.parent(self.jaw_jnts, self.upper_jaw_jnts, self.module_trn)
+        # COMMENTED FOR AYCHEDRAL, COULD BE USED ON ANOTHER MODULE
+
+        # self.jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_jaw_JNT", all_descendents=True)
+        # self.upper_jaw_jnts = guides_manager.guide_import(joint_name=f"{self.side}_upperJaw_JNT", all_descendents=True)
+        # cmds.parent(self.jaw_jnts, self.upper_jaw_jnts, self.module_trn)
         
 
 

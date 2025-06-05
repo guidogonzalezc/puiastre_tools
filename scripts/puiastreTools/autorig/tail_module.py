@@ -1,14 +1,9 @@
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
-from puiastreTools.autorig import matrix_spaceSwitch
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import data_export
-import os
 from importlib import reload
 reload(guides_manager)
-reload(curve_tool)    
-reload(data_export)
-reload(matrix_spaceSwitch)
 
 
 class TailModule(object):
@@ -23,11 +18,6 @@ class TailModule(object):
         """
         Initializes the TailModule class, setting up paths and data structures.
         """
-
-        complete_path = os.path.realpath(__file__)
-        self.relative_path = complete_path.split("\scripts")[0]
-        self.guides_path = os.path.join(self.relative_path, "guides", "dragon_guides_template_01.guides")
-        self.curves_path = os.path.join(self.relative_path, "curves", "template_curves_001.json") 
 
         self.data_exporter = data_export.DataExport()
 
@@ -88,7 +78,7 @@ class TailModule(object):
         Imports the tail guides from a specified file path and parents the first joint to the module transform.
         """
 
-        self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True, filePath=self.guides_path)
+        self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True)
         cmds.parent(self.tail_chain[0], self.module_trn)
 
     def bendy_setup(self, start_joint, end_joint, name):

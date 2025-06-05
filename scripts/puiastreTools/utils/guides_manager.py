@@ -4,6 +4,23 @@ import os
 import json
 
 
+TEMPLATE_FILE = None
+
+def init_template_file(path=None):
+    """
+    Initializes the TEMPLATE_FILE variable.
+    If a path is provided, it sets TEMPLATE_FILE to that path.
+    Otherwise, it uses the default template file path.
+    """
+    global TEMPLATE_FILE
+    if path:
+        TEMPLATE_FILE = path
+    else:
+        complete_path = os.path.realpath(__file__)
+        relative_path = complete_path.split("\scripts")[0]
+        TEMPLATE_FILE = os.path.join(relative_path, "guides", "dragon_guides_template_01.guides")
+
+
 def guides_export():
         """
         Exports the guides from the selected folder in the Maya scene to a JSON file.
@@ -92,16 +109,18 @@ def guides_export():
         om.MGlobal.displayInfo(f"Guides data exported to {os.path.join(final_path, f'{guides_name}.json')}")
 
 
-def guide_import(joint_name, all_descendents=True, filePath=None):
+def guide_import(joint_name, all_descendents=True):
         """
         Imports guides from a JSON file into the Maya scene.
+        
         Args:
                 joint_name (str): The name of the joint to import. If "all", imports all guides.
                 all_descendents (bool): If True, imports all descendents of the specified joint. Defaults to True.
-                filePath (str): The path to the JSON file. If None, opens a file dialog to select the file.
         Returns:
                 list: A list of imported joint names if joint_name is not "all", otherwise returns the world position and rotation of the specified joint.
         """
+
+        filePath = TEMPLATE_FILE
 
         if not filePath:
                 complete_path = os.path.realpath(__file__)

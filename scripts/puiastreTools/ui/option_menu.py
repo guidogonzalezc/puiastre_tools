@@ -1,9 +1,14 @@
-import sys
-import os
 import maya.cmds as cmds
 from functools import partial
+import os
 from importlib import reload
-from puiastreTools.utils import basic_structure
+
+from puiastreTools.ui import option_menu
+from puiastreTools.utils import guides_manager 
+from puiastreTools.autorig import rig_builder
+from puiastreTools.tools import curve_tool  
+
+
 
 
 def reload_ui(*args):
@@ -13,7 +18,6 @@ def reload_ui(*args):
     Args:
         *args: Variable length argument list, not used in this function.
     """
-    from puiastreTools.ui import option_menu
     reload(option_menu)
     option_menu.puiastre_ui()
 
@@ -24,8 +28,6 @@ def export_guides(*args):
     Args:
         *args: Variable length argument list, not used in this function.
     """ 
-    from puiastreTools.utils import guides_manager 
-    reload(guides_manager)
     guides_manager.guides_export()
 
 def import_guides(*args, value=None): 
@@ -36,9 +38,7 @@ def import_guides(*args, value=None):
         *args: Variable length argument list, not used in this function.
         value (bool, optional): If True, imports all guides. If None, opens an option box. Defaults to None.
     """
-    from puiastreTools.utils import guides_manager
     if value == True:   
-        reload(guides_manager)
         guides_manager.guide_import(joint_name = "all")
 
 def complete_rig(*args):
@@ -48,19 +48,17 @@ def complete_rig(*args):
     Args:
         *args: Variable length argument list, not used in this function.
     """
-    from puiastreTools.autorig import rig_builder
     reload(rig_builder)
     rig_builder.make()
 
-def export_curves(*args): 
+def export_curves(*args, curves_path): 
     """
     Function to export all controller curves data.
 
     Args:
         *args: Variable length argument list, not used in this function.
     """
-    from puiastreTools.tools import curve_tool  
-    reload(curve_tool)
+    curve_tool.init_template_file(curves_path)
     curve_tool.get_all_ctl_curves_data()
 
 def mirror_ctl(*args): 
@@ -70,14 +68,16 @@ def mirror_ctl(*args):
     Args:
         *args: Variable length argument list, not used in this function.
     """
-    from puiastreTools.tools import curve_tool  
-    reload(curve_tool)
     curve_tool.mirror_all_L_CTL_shapes()
 
 def puiastre_ui():
     """
     Create the Puiastre Productions menu in Maya.
     """
+
+    complete_path = os.path.realpath(__file__)
+    relative_path = complete_path.split("\scripts")[0]
+    curves_path = os.path.join(relative_path, "curves", "marica.json") 
 
     if cmds.menu("PuiastreMenu", exists=True):
         cmds.deleteUI("PuiastreMenu")
@@ -98,7 +98,7 @@ def puiastre_ui():
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Controls", subMenu=True, tearOff=True, boldFont=True, image="controllers.png")
-    cmds.menuItem(label="   Export all controllers", command=export_curves)
+    cmds.menuItem(label="   Export all controllers", command=partial(export_curves, curves_path=curves_path))
     cmds.menuItem(label="   Mirror all L_ to R_", command=mirror_ctl)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
