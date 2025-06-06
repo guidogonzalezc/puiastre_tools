@@ -118,7 +118,6 @@ class SpineModule():
                 cmds.setAttr(ctl+".spaceSwitchSep", channelBox=True, lock=True)
                 cmds.addAttr(ctl, shortName="spineFollow", niceName="Spine Follow", maxValue=1, minValue=0, defaultValue=0, keyable=True)
 
-            cmds.parent(ctl_grp[0], self.controllers_trn)
 
             self.lock_attr(ctl)
             cmds.matchTransform(ctl_grp[0], self.blend_chain[value], pos=True, rot=True)
@@ -132,6 +131,10 @@ class SpineModule():
             dcm = cmds.createNode("decomposeMatrix", n=f"C_spine0{i}_DCM") 
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{dcm}.inputMatrix")
             cmds.connectAttr(f"{dcm}.outputTranslate", f"{self.curve_shape}.controlPoints[{i-1}]")
+
+        cmds.parent(self.spine_grp[0][0], self.controllers_trn)
+        cmds.parent(self.spine_grp[2][0], self.spine_ctl[0])        
+        cmds.parent(self.spine_grp[1][0], self.controllers_trn)
 
         parent = cmds.parentConstraint(self.spine_ctl[0], self.spine_ctl[2], self.spine_grp[1][1], mo=True)[0]
 

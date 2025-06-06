@@ -68,8 +68,6 @@ class SpikesModule(object):
         self.spike_joints = cmds.listRelatives(spike_joint, type="joint", allDescendents=True)
         self.spike_joints.reverse() 
         match_jnt = spike_joint
-        print(match_jnt)
-
 
         self.spike_transform = cmds.createNode("transform", n=f"{side}_{name}Module_GRP", p=self.module_trn)
         cmds.parent(match_jnt, self.spike_transform)
@@ -141,6 +139,5 @@ class SpikesModule(object):
             skin_joint = cmds.joint(n=jnt.replace("_JNT", "Skinning_JNT"))
             cmds.connectAttr(f"{jnt}.worldMatrix[0]", f"{skin_joint}.offsetParentMatrix")
             cmds.parent(skin_joint, self.skinning_trn)
-            cmds.setAttr(f"{skin_joint}.radius", 5)
 
         cmds.delete(match_jnt)

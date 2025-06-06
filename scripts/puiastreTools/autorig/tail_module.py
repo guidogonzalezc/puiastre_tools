@@ -40,11 +40,17 @@ class TailModule(object):
         self.skinning_trn = cmds.createNode("transform", n=f"{self.side}_tailSkinningJoints_GRP", p=self.skel_grp)
         self.import_guides()
 
+        self.first_twist = []
+        self.bendy_beziers = []
+        self.bendy_beziers_dup = []
+        self.bendy_offset_beziers = []
+
         for i, jnt in enumerate(self.tail_chain):
             if i != len(self.tail_chain) - 1:
                 start = jnt
                 end = self.tail_chain[i+1] if i+1 < len(self.tail_chain) else None
                 name = jnt.split("_")[1]
+
 
                 self.bendy_setup(start_joint=start, end_joint=end, name=name)
 
@@ -58,6 +64,8 @@ class TailModule(object):
         )
             if i > 0:
                 cmds.parent(grp, self.fk_controllers[i-1])
+
+        self.wave()
 
     def lock_attrs(self, ctl, attrs):
 
@@ -192,6 +200,7 @@ class TailModule(object):
         cmds.bezierAnchorPreset(p=1)
 
         cmds.parent(bezier_curve, bendy_module)
+        self.bendy_beziers.append(bezier_curve)
         bendy_skin_cluster = cmds.skinCluster(bendy_joints[0], bendy_joint, bendy_joints[2], bezier_curve[0], tsb=True, n=f"{self.side}_{name}Bendy_SKIN")
 
         cmds.skinPercent(bendy_skin_cluster[0], f"{bezier_curve[0]}.cv[0]", transformValue=[(bendy_joints[0], 1)])
@@ -203,6 +212,7 @@ class TailModule(object):
 
         twist_joints = []
         for i, value in enumerate([0.05, 0.25, 0.5, 0.75, 0.95]):
+
 
             cmds.select(cl=True)
             mpa = cmds.createNode("motionPath", n=f"{self.side}_{name}Twist0{i}_MPA", ss=True)
@@ -220,10 +230,15 @@ class TailModule(object):
             cmds.parent(twist_jnt, skinning_module)
             twist_joints.append(twist_jnt)
 
+            if i == 0:
+                self.first_twist.append(twist_jnt)
+
 
         # Create the offset setup
         duplicate_bezier_curve = cmds.duplicate(bezier_curve, n=f"{self.side}_{name}BezierDuplicated_CRV")[0]
+        self.bendy_beziers_dup.append(duplicate_bezier_curve)
         bezier_off_curve = cmds.offsetCurve(duplicate_bezier_curve, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=f"{self.side}_{name}BezierOffset_CRV", normal=[0, 0, 1])
+        self.bendy_offset_beziers.append(bezier_off_curve[0])
         upper_bendy_shape_org = cmds.listRelatives(duplicate_bezier_curve, allDescendents=True)[-1]
         
         cmds.connectAttr(f"{upper_bendy_shape_org}.worldSpace[0]", f"{bezier_off_curve[1]}.inputCurve", f=True)
@@ -270,7 +285,49 @@ class TailModule(object):
                 aim = cmds.aimConstraint(aim_helper, jnt, aim=[0, 0, -1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
 
 
-            
+    def wave(self):
+
+        #Create a controller to drive the wave effect on the tail.
+
+        self.wave_ctl, self.wave_grp = curve_tool.controller_creator(f"{self.side}_tailWave", suffixes=["GRP"])
+        self.lock_attrs(self.wave_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
+        cmds.addAttr(self.wave_ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
+        cmds.addAttr(self.wave_ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
+        cmds.addAttr(self.wave_ctl, ln="Wave", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.wave_ctl, ln="Dropoff", at="float", dv=0, keyable=True)
+        
+        cmds.parent(self.wave_grp, self.controllers_trn)
+        cmds.matchTransform(self.wave_grp, self.first_twist[0], pos=True, rot=True)
+        cmds.move(0, 200, 0, self.wave_grp,r =True)
+
+        wave_hdl = cmds.nonLinear(self.bendy_beziers, type="wave", n=f"{self.side}_tailWave_HDL")
+        cmds.parent(wave_hdl[1], self.module_trn)
+        cmds.rotate(180, 90, 0, wave_hdl[1], ws=True)
+
+        plus = len(self.bendy_beziers)
+
+        for i, (bezier, offset) in zip(enumerate(self.bendy_beziers, self.bendy_offset_beziers)):
+
+            cmds.connectAttr(f"{bezier}.worldSpace[0]", f"{wave_hdl[0]}.input[{i}].inputGeometry")
+            cmds.connectAttr(f"{offset}.worldSpace[0]", f"{wave_hdl[0]}.input[{i+plus}].inputGeometry")
+        
+        for i, bezier in enumerate(self.bendy_offset_beziers):
+            cmds.connectAttr(f"{wave_hdl[0]}.outputGeometry[{i}]", f"{bezier}.create")
+
+        
+
+        cmds.connectAttr(f"{self.wave_ctl}.Envelope", f"{wave_hdl[0]}.envelope")
+        cmds.connectAttr(f"{self.wave_ctl}.Amplitude", f"{wave_hdl[0]}.amplitude")
+        cmds.connectAttr(f"{self.wave_ctl}.Wave", f"{wave_hdl[0]}.wavelength")
+        cmds.connectAttr(f"{self.wave_ctl}.Dropoff", f"{wave_hdl[0]}.dropoff")
+
+
+
+
+
+
+
+
             
 
 

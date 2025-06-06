@@ -87,7 +87,7 @@ def make():
     complete_path = os.path.realpath(__file__)
     relative_path = complete_path.split("\scripts")[0]
     guides_path = os.path.join(relative_path, "guides", "aychedral_GUIDES_001.guides")
-    curves_path = os.path.join(relative_path, "curves", "template_curves_001.json") 
+    curves_path = os.path.join(relative_path, "curves", "marica.json") 
 
     guides_manager.init_template_file(guides_path)
     curve_tool.init_template_file(curves_path)
