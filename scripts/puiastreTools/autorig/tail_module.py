@@ -65,7 +65,7 @@ class TailModule(object):
             if i > 0:
                 cmds.parent(grp, self.fk_controllers[i-1])
 
-        self.wave()
+        # self.wave()
 
     def lock_attrs(self, ctl, attrs):
 
