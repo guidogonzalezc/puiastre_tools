@@ -2,6 +2,7 @@ import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import data_export
+import maya.api.OpenMaya as om
 from importlib import reload
 reload(data_export)
 
@@ -141,3 +142,64 @@ class SpikesModule(object):
             cmds.parent(skin_joint, self.skinning_trn)
 
         cmds.delete(match_jnt)
+
+
+
+
+def get_closest_vertex(mesh, target_pos):
+    sel = om.MSelectionList()
+    sel.add(mesh)
+    dagPath = sel.getDagPath(0)
+    mfnMesh = om.MFnMesh(dagPath)
+    verts = mfnMesh.getPoints(om.MSpace.kWorld)
+    
+    min_dist = float('inf')
+    closest_index = -1
+
+    for i, v in enumerate(verts):
+        dist = (om.MVector(v) - om.MVector(target_pos)).length()
+        if dist < min_dist:
+            min_dist = dist
+            closest_index = i
+
+    return closest_index
+
+def get_uv_from_vertex(mesh, vertex_index):
+    sel = om.MSelectionList()
+    sel.add(mesh)
+    dagPath = sel.getDagPath(0)
+    mfnMesh = om.MFnMesh(dagPath)
+    uv_set = mfnMesh.currentUVSetName()
+
+    faceIt = om.MItMeshPolygon(dagPath)
+    while not faceIt.isDone():
+        verts = faceIt.getVertices()
+        if vertex_index in verts:
+            for i in range(faceIt.polygonVertexCount()):
+                if faceIt.vertexIndex(i) == vertex_index:
+                    uv = faceIt.getUV(i, uv_set)
+                    return uv
+        faceIt.next()
+    return (0.0, 0.0)
+
+def create_uv_pin(joint, mesh):
+    joint_pos = cmds.xform(joint, q=True, ws=True, t=True)
+    closest_vtx_index = get_closest_vertex(mesh, joint_pos)
+
+    u, v = get_uv_from_vertex(mesh, closest_vtx_index)
+
+    name = joint.replace("JNT", "UVP")
+
+    uv_pin = cmds.createNode('uvPin', name=f"{name}", ss=True)
+
+    cmds.connectAttr(mesh + ".worldMesh", uv_pin + ".deformedGeometry")
+
+    cmds.setAttr(uv_pin + ".tangentAxis", 1)
+
+    cmds.setAttr(uv_pin + ".coordinate[0].coordinateU", u)
+    cmds.setAttr(uv_pin + ".coordinate[0].coordinateV", v)
+
+    for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
+        cmds.setAttr(joint + "." + attr, 0)
+
+    cmds.connectAttr(uv_pin + ".outputMatrix[0]", joint + ".offsetParentMatrix")

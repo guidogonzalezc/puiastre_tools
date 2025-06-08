@@ -176,6 +176,8 @@ def make():
                     armRoot: [[clavicle_ctl],1],
                 }
 
+        matrix_spaceSwitch.leg_pv_spaceswitch(localHip, legPV, legIk, legRoot)
+
         for child, (parents, default_value) in spaceSwitches.items():
             matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
