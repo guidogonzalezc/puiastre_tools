@@ -89,3 +89,46 @@ def switch_matrix_space(target, sources = [None], default_value=1):
 
 
 
+def leg_pv_spaceswitch(localHip, legPv, footCtl, root):
+
+    side = legPv.split("_")[0]
+    pv_SPC = legPv.replace("_CTL", "_SDK")
+  
+    cmds.addAttr(legPv, shortName="spaceSwitchSep", niceName="SPACE SWITCH_____", enumName="_____",attributeType="enum", keyable=True)
+    cmds.setAttr(legPv+".spaceSwitchSep", channelBox=True, lock=True)
+    cmds.addAttr(legPv, shortName="automaticPoleVector", niceName="Automatic PoleVector", maxValue=1, minValue=0,defaultValue=1, keyable=True)
+    cmds.addAttr(legPv, shortName="spaceSwitchValue", niceName="Space Switch Value", maxValue=1, minValue=0,defaultValue=1, keyable=True)
+
+    pelvis_trn = cmds.createNode("transform", name=f"{side}_followPelvis_TRN", parent=f"{side}_legModule_GRP")
+    foot_trn = cmds.createNode("transform", name=f"{side}_followFoot_TRN", parent=pelvis_trn)
+
+    cmds.pointConstraint(root, pelvis_trn, maintainOffset=False)  
+
+    cmds.aimConstraint(
+        footCtl, pelvis_trn, 
+        aimVector=(0, -1, 0), 
+        upVector=(1, 0, 0), 
+        worldUpType="objectrotation", 
+        worldUpVector=(1, 0, 0), 
+        worldUpObject=localHip
+    )
+
+    cmds.aimConstraint(
+        footCtl, foot_trn,
+        aimVector=(0, -1, 0),
+        upVector=(1, 0, 0),
+        worldUpType="objectrotation",
+        worldUpVector=(1, 0, 0),
+        worldUpObject=footCtl,
+        maintainOffset=False
+    )
+
+    cmds.parentConstraint(foot_trn, pv_SPC, maintainOffset=True)
+
+    cmds.setKeyframe(foot_trn, attribute="rotate")
+    cmds.setKeyframe(pv_SPC, attribute="rotate")
+    cmds.setKeyframe(pv_SPC, attribute="translate")
+
+    cmds.connectAttr(f"{legPv}.spaceSwitchValue", f"{foot_trn}.blendAim1")
+    cmds.connectAttr(f"{legPv}.automaticPoleVector", f"{pv_SPC}.blendParent1")
+
