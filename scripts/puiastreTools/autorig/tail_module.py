@@ -39,16 +39,17 @@ class TailModule(object):
         self.controllers_trn = cmds.createNode("transform", n=f"{self.side}_tailControllers_GRP", p=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", n=f"{self.side}_tailSkinningJoints_GRP", p=self.skel_grp)
         self.import_guides()
+        self.create_ik_fk_setup()
 
         self.first_twist = []
         self.bendy_beziers = []
         self.bendy_beziers_dup = []
         self.bendy_offset_beziers = []
 
-        for i, jnt in enumerate(self.tail_chain):
-            if i != len(self.tail_chain) - 1:
+        for i, jnt in enumerate(self.fk_chain):
+            if i != len(self.fk_chain) - 1:
                 start = jnt
-                end = self.tail_chain[i+1] if i+1 < len(self.tail_chain) else None
+                end = self.fk_chain[i+1] if i+1 < len(self.fk_chain) else None
                 name = jnt.split("_")[1]
 
 
@@ -89,6 +90,56 @@ class TailModule(object):
         self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True)
         cmds.parent(self.tail_chain[0], self.module_trn)
 
+    def create_ik_fk_setup(self):
+        
+        """
+        Creates the IK and FK chains for the tail module.
+        This method is currently a placeholder and does not implement any functionality.
+        """
+
+        #Create the tail settings controller and group
+        self.tail_settings_ctl, self.tail_settings_grp = curve_tool.controller_creator(f"{self.side}_tailSettings", suffixes=["GRP"])
+        self.lock_attrs(self.tail_settings_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
+        cmds.addAttr(self.tail_settings_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", at="float", dv=1, minValue=0, maxValue=1, keyable=True)
+        cmds.parent(self.tail_settings_grp, self.controllers_trn)
+        cmds.matchTransform(self.tail_settings_grp, self.tail_chain[0], pos=True, rot=True)
+        cmds.move(0, 200, 0, self.tail_settings_grp, r=True)
+        
+        # Create the IK and FK chains
+        self.ik_chain = []
+        self.fk_chain = []
+
+        for jnt in self.tail_chain:
+            pair_blend = cmds.createNode("pairBlend", n=jnt.replace("JNT", "PBL"), ss=True)
+            for i in range(2):
+            
+                cmds.select(cl=True)
+                if i == 0:
+                    ik_jnt = cmds.joint(n=jnt.replace("_JNT", "Ik_JNT"))
+                    cmds.matchTransform(ik_jnt, jnt, pos=True, rot=True)
+                    cmds.connectAttr(f"{ik_jnt}.translate", f"{pair_blend}.inTranslate1")
+                    cmds.connectAttr(f"{ik_jnt}.rotate", f"{pair_blend}.inRotate1")
+                    if self.ik_chain:
+                        cmds.parent(ik_jnt, self.ik_chain[-1])
+                    self.ik_chain.append(ik_jnt)
+                else:
+                    fk_jnt = cmds.joint(n=jnt.replace("_JNT", "Fk_JNT"))
+                    cmds.matchTransform(fk_jnt, jnt, pos=True, rot=True)
+                    cmds.connectAttr(f"{fk_jnt}.translate", f"{pair_blend}.inTranslate2")
+                    cmds.connectAttr(f"{fk_jnt}.rotate", f"{pair_blend}.inRotate2")
+                    if self.fk_chain:
+                        cmds.parent(fk_jnt, self.fk_chain[-1])
+                    self.fk_chain.append(fk_jnt)
+                    cmds.connectAttr(f"{pair_blend}.outTranslate", f"{jnt}.translate")
+            cmds.connectAttr(f"{pair_blend}.outRotate", f"{jnt}.rotate")
+            cmds.connectAttr(f"{self.tail_settings_ctl}.switchIkFk", f"{pair_blend}.weight")
+
+        cmds.parent(self.ik_chain[0], self.fk_chain[0], self.module_trn)
+
+
+        
+
+
     def bendy_setup(self, start_joint, end_joint, name):
 
         """
@@ -101,7 +152,12 @@ class TailModule(object):
 
         bendy_module = cmds.createNode("transform", n=f"{self.side}_{name}BendyModule_GRP", ss=True, p=self.module_trn)
         skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skinning_trn)
-        controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=self.controllers_trn)
+        fk_controllers = cmds.createNode("transform", n=f"{self.side}_{name}FkControllers_GRP", ss=True, p=self.controllers_trn)
+        controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=fk_controllers)
+
+        cmds.connectAttr(f"{self.tail_settings_ctl}.switchIkFk", f"{fk_controllers}.visibility")
+
+        
         
         ctl, grp = curve_tool.controller_creator(f"{self.side}_{name}", suffixes=["GRP", "SDK", "OFF"])
         self.lock_attrs(ctl, ["tx", "ty", "tz", "sx", "sy", "sz", "v"])
@@ -176,7 +232,7 @@ class TailModule(object):
         # Create the bendy controller and make constraints
         bendy_ctl, bendy_grp = curve_tool.controller_creator(f"{self.side}_{name}Bendy", suffixes=["GRP"])
         self.lock_attrs(bendy_ctl, ["sx", "sy", "sz", "v"])
-        cmds.parent(bendy_grp, controllers)
+        cmds.parent(bendy_grp, self.controllers_trn)
         cmds.matchTransform(bendy_grp, bendy_joints[1], pos=True)
         cmds.matchTransform(bendy_grp, start_joint, rot=True) 
         cmds.parentConstraint(bendy_joints[1], bendy_grp, mo=True)
@@ -287,6 +343,48 @@ class TailModule(object):
                 aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[0, 0, -1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
             else:
                 aim = cmds.aimConstraint(aim_helper, jnt, aim=[0, 0, 1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
+
+    def ik_setup(self):
+
+        """
+        Set up the IK tail system, creating IK handles and constraints.
+        """
+        controllers = cmds.createNode("transform", n=f"{self.side}_tailIkControllers_GRP", ss=True, p=self.controllers_trn)
+        self.tail_ctl, self.tail_grp = curve_tool.controller_creator(f"{self.side}_tailIk", suffixes=["GRP"])
+        self.tail_ctl_mid, self.tail_grp_mid = curve_tool.controller_creator(f"{self.side}_tailIkMid", suffixes=["GRP"])
+        self.tail_ctl_end, self.tail_grp_end = curve_tool.controller_creator(f"{self.side}_tailIkEnd", suffixes=["GRP"])
+
+        self.ik_spring_hdl = cmds.ikHandle(sj=self.tail_chain[0], ee=self.tail_chain[-1], sol="ikSplineSolver", n=f"{self.side}_tailIkSpline_HDL", createCurve=True,  ns=3)
+        cmds.parent(self.ik_spring_hdl[0], self.module_trn)
+        self.ik_curve = self.ik_spring_hdl[2]
+        self.ik_curve = cmds.rename(self.ik_curve, f"{self.side}_tailIkCurve_CRV")
+
+        self.tail_start_jnt_offset = cmds.createNode("transform", n=f"{self.side}_tailStart_OFFSET", p=self.module_trn)
+        self.tail_start_jnt = cmds.createNode("joint", n=f"{self.side}_tailStart_JNT", p=self.tail_start_jnt_offset)
+        cmds.matchTransform(self.tail_start_jnt_offset, self.tail_chain[0], pos=True, rot=True, scl=False)
+        cmds.parentConstraint(self.tail_ctl, self.tail_start_jnt_offset, mo=True)
+
+        self.tail_mid_jnt_offset = cmds.createNode("transform", n=f"{self.side}_tailMid_OFFSET", p=self.module_trn)
+        self.tail_mid_jnt = cmds.createNode("joint", n=f"{self.side}_tailMid_JNT", p=self.tail_mid_jnt_offset)
+        cmds.matchTransform(self.tail_mid_jnt_offset, self.ik_chain[len(self.ik_chain)//2], pos=True, rot=True, scl=False)
+        cmds.parentConstraint(self.tail_ctl_mid, self.tail_mid_jnt_offset, mo=True)
+
+        self.tail_end_jnt_offset = cmds.createNode("transform", n=f"{self.side}_tailEnd_OFFSET", p=self.module_trn)
+        self.tail_end_jnt = cmds.createNode("joint", n=f"{self.side}_tailEnd_JNT", p=self.tail_end_jnt_offset)
+        cmds.matchTransform(self.tail_end_jnt_offset, self.tail_chain[-1], pos=True, rot=True, scl=False)
+        
+        # Skin the curve to the joints
+        self.curve_skin_cluster = cmds.skinCluster(self.tail_start_jnt, self.tail_mid_jnt, self.tail_end_jnt, self.ik_curve, tsb=True, n=f"{self.side}_tailSkinCluster_SKIN", mi=5)
+
+        # Set the spline with the correct settings
+        cmds.setAttr(f"{self.ik_spring_hdl[0]}.dTwistControlEnable", 1)
+        cmds.setAttr(f"{self.ik_spring_hdl[0]}.dWorldUpType", 4)
+        cmds.setAttr(f"{self.ik_spring_hdl[0]}.dForwardAxis", 4)
+        cmds.connectAttr(f"{self.tail_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrix")
+        cmds.connectAttr(f"{self.tail_ctl_end}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrixEnd")
+        cmds.parentConstraint(self.tail_ctl_end, self.tail_end_jnt, mo=True)
+
+
 
 
     def wave(self):
