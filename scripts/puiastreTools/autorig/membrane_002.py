@@ -27,14 +27,14 @@ class MembraneModule():
         self.pinky_joints = self.data_exporter.get_data(f"{self.side}_fingerPinky", "bendy_joints")
         self.attr_ctl = self.data_exporter.get_data(f"{self.side}_fingerThumb", "settingsAttr") 
 
-        cmds.addAttr(self.attr_ctl, shortName="membraneFoldingSep", niceName="Membrane Folding_____", enumName="_____",attributeType="enum", keyable=True)
-        cmds.setAttr(self.attr_ctl+".membraneFoldingSep", channelBox=True, lock=True)
-        cmds.addAttr(self.attr_ctl, shortName="automaticFold", niceName="Automatic Fold", attributeType="bool", keyable=True, defaultValue=True)
-        cmds.addAttr(self.attr_ctl, shortName="globalFolding", niceName="Global Folding", minValue=0, defaultValue=1.5, keyable=True)
-        cmds.addAttr(self.attr_ctl, shortName="firstSegment", niceName="First Segment",defaultValue=0, keyable=True)
-        cmds.addAttr(self.attr_ctl, shortName="secondSegment", niceName="Second Segment", defaultValue=0, keyable=True)
-        cmds.addAttr(self.attr_ctl, shortName="thirdSegment", niceName="Third Segment", defaultValue=0, keyable=True)
-        cmds.addAttr(self.attr_ctl, shortName="forthSegment", niceName="Forth Segment", defaultValue=0, keyable=True)
+        # cmds.addAttr(self.attr_ctl, shortName="membraneFoldingSep", niceName="Membrane Folding_____", enumName="_____",attributeType="enum", keyable=True)
+        # cmds.setAttr(self.attr_ctl+".membraneFoldingSep", channelBox=True, lock=True)
+        # cmds.addAttr(self.attr_ctl, shortName="automaticFold", niceName="Automatic Fold", attributeType="bool", keyable=True, defaultValue=True)
+        # cmds.addAttr(self.attr_ctl, shortName="globalFolding", niceName="Global Folding", minValue=0, defaultValue=1.5, keyable=True)
+        # cmds.addAttr(self.attr_ctl, shortName="firstSegment", niceName="First Segment",defaultValue=0, keyable=True)
+        # cmds.addAttr(self.attr_ctl, shortName="secondSegment", niceName="Second Segment", defaultValue=0, keyable=True)
+        # cmds.addAttr(self.attr_ctl, shortName="thirdSegment", niceName="Third Segment", defaultValue=0, keyable=True)
+        # cmds.addAttr(self.attr_ctl, shortName="forthSegment", niceName="Forth Segment", defaultValue=0, keyable=True)
 
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_membraneModule_GRP", ss=True, parent=self.modules_grp)

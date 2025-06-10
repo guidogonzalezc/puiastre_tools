@@ -43,6 +43,7 @@ class FingerModule():
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_fingerModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_fingerControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_fingerSkinning_GRP", ss=True, p=self.skel_grp)
+        self.ik_controllers = cmds.createNode("transform", name=f"{self.side}_fingerIkControllers_GRP", ss=True, p=self.controllers_trn)
 
 
         self.settings_curve_ctl, self.settings_curve_grp = curve_tool.controller_creator(f"{self.side}_fingerAttr", suffixes = ["GRP"])
@@ -57,6 +58,8 @@ class FingerModule():
         cmds.setAttr(self.settings_curve_ctl+".handSep", channelBox=True, lock=True)
         cmds.addAttr(self.settings_curve_ctl, shortName="curl", niceName="Curl", maxValue=10, minValue=-10,defaultValue=0, keyable=True)
         cmds.addAttr(self.settings_curve_ctl, shortName="spread", niceName="Spread", maxValue=10, minValue=-10,defaultValue=0, keyable=True)
+        cmds.addAttr(self.settings_curve_ctl, shortName="ikVisibility", niceName="Ik Visibility", attributeType="bool", keyable=True, defaultValue=True)
+        cmds.connectAttr(f"{self.settings_curve_ctl}.ikVisibility", f"{self.ik_controllers}.visibility", f=True)
 
         cmds.addAttr(self.settings_curve_ctl, shortName="globalWaveSep", niceName="GlobalWave_____", enumName="_____",attributeType="enum", keyable=True)
         cmds.setAttr(self.settings_curve_ctl+".globalWaveSep", channelBox=True, lock=True)
@@ -174,8 +177,6 @@ class FingerModule():
 
         # -- FK CONTROLLER -- #
 
-
-
         self.joint_name = self.blend_chain[0].split("_")[1]
 
         if not cmds.pluginInfo("ikSpringSolver", query=True, loaded=True):
@@ -193,14 +194,14 @@ class FingerModule():
         cmds.parent(self.springIkHandle, self.individual_module_trn)
 
         self.ik_ctl, ik_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}Ik", suffixes=["GRP", "SDK"])
-        cmds.parent(ik_grp[0], self.controllers_trn)
+        cmds.parent(ik_grp[0], self.ik_controllers)
         self.lock_attr(self.ik_ctl)
         cmds.matchTransform(ik_grp[0], self.blend_chain[-1])
         cmds.parentConstraint(self.ik_ctl, self.springIkHandle, maintainOffset=True)
 
 
         self.pv_ctl, pv_grp = curve_tool.controller_creator(f"{self.side}_{self.joint_name}PoleVector", suffixes=["GRP", "SDK"])
-        cmds.parent(pv_grp[0], self.controllers_trn) 
+        cmds.parent(pv_grp[0], self.ik_controllers) 
         self.lock_attr(self.pv_ctl)
         cmds.matchTransform(pv_grp[0], self.blend_chain[1])
         if self.side == "L":
@@ -415,7 +416,6 @@ class Bendys(object):
             tuple: Contains the end bezier curve, bendy skin cluster, bendy joint, offset curve, and bendy offset skin cluster.
             
         """
-        print(self.upper_joint, self.lower_joint)
 
         duplicated_twist_joints = cmds.duplicate(self.upper_joint, renameChildren=True)
         duplicated_twist_joints.append(cmds.duplicate(self.lower_joint, renameChildren=True)[0])
