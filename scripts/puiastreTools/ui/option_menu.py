@@ -77,7 +77,7 @@ def puiastre_ui():
 
     complete_path = os.path.realpath(__file__)
     relative_path = complete_path.split("\scripts")[0]
-    curves_path = os.path.join(relative_path, "curves", "marica.json") 
+    curves_path = os.path.join(relative_path, "curves", "AYCHEDRAL_curves_001.json") 
 
     if cmds.menu("PuiastreMenu", exists=True):
         cmds.deleteUI("PuiastreMenu")
