@@ -169,7 +169,7 @@ class WingArmModule(object):
         self.arm_ik_controllers = []
 
         self.root_ctl, self.root_grp = curve_tool.controller_creator(f"{self.side}_wingArmRoot", suffixes=["GRP", "OFF"])
-        self.lock_attrs(self.root_ctl, ["sx", "sy", "sz", "v"])
+        self.lock_attrs(self.root_ctl, ["rx","ry","rz","sx", "sy", "sz", "v"])
         self.wrist_ik_ctl, self.wrist_ik_grp = curve_tool.controller_creator(f"{self.side}_wingArmWrist", suffixes=["GRP", "OFF"])
         self.lock_attrs(self.wrist_ik_ctl, ["sx", "sy", "sz", "v"])
         # cmds.orientConstraint(self.wrist_ik_ctl, self.ik_chain[-1], mo=True)

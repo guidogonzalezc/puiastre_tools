@@ -163,8 +163,8 @@ class TailModule(object):
             cmds.connectAttr(f"{roll_joint}.rotateX", f"{float_math}.floatB")
             cmds.connectAttr(f"{float_math}.outFloat", f"{mpa}.frontTwist")
 
-            if i != 2:
-                cmds.connectAttr(f"{start_joint}.worldMatrix[0]", f"{mpa}.worldUpMatrix")
+            
+            cmds.connectAttr(f"{start_joint}.worldMatrix[0]", f"{mpa}.worldUpMatrix")
 
             bendy_joint = cmds.joint(n=f"{self.side}_{name}{hook}_JNT")
             cmds.connectAttr(f"{mpa}.allCoordinates", f"{bendy_joint}.translate")
@@ -177,7 +177,9 @@ class TailModule(object):
         bendy_ctl, bendy_grp = curve_tool.controller_creator(f"{self.side}_{name}Bendy", suffixes=["GRP"])
         self.lock_attrs(bendy_ctl, ["sx", "sy", "sz", "v"])
         cmds.parent(bendy_grp, controllers)
-        cmds.parentConstraint(bendy_joints[1], bendy_grp, mo=False)
+        cmds.matchTransform(bendy_grp, bendy_joints[1], pos=True)
+        cmds.matchTransform(bendy_grp, start_joint, rot=True) 
+        cmds.parentConstraint(bendy_joints[1], bendy_grp, mo=True)
         cmds.select(cl=True)
         bendy_joint = cmds.joint(n=f"{self.side}_{name}Bendy_JNT")
         cmds.parentConstraint(bendy_ctl, bendy_joint, mo=False)
@@ -208,8 +210,9 @@ class TailModule(object):
         cmds.skinPercent(bendy_skin_cluster[0], f"{bezier_curve[0]}.cv[3]", transformValue=[(bendy_joint, 1)])
         cmds.skinPercent(bendy_skin_cluster[0], f"{bezier_curve[0]}.cv[4]", transformValue=[(bendy_joint, 1)])
         cmds.skinPercent(bendy_skin_cluster[0], f"{bezier_curve[0]}.cv[6]", transformValue=[(bendy_joints[2], 1)])
-
-
+        
+        aimers_trn = cmds.createNode("transform", n=f"{self.side}_{name}Aimmers_GRP", ss=True, p=bendy_module)
+        aim_helper = cmds.createNode("transform", n=f"{self.side}_{name}AimHelper04_GRP", ss=True, p=aimers_trn)
         twist_joints = []
         for i, value in enumerate([0.05, 0.25, 0.5, 0.75, 0.95]):
 
@@ -232,12 +235,14 @@ class TailModule(object):
 
             if i == 0:
                 self.first_twist.append(twist_jnt)
+            if i == 3:
+                cmds.connectAttr(f"{mpa}.allCoordinates", f"{aim_helper}.translate")
 
 
         # Create the offset setup
         duplicate_bezier_curve = cmds.duplicate(bezier_curve, n=f"{self.side}_{name}BezierDuplicated_CRV")[0]
         self.bendy_beziers_dup.append(duplicate_bezier_curve)
-        bezier_off_curve = cmds.offsetCurve(duplicate_bezier_curve, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=1.5, tol=0.01, sd=0, ugn=False, name=f"{self.side}_{name}BezierOffset_CRV", normal=[0, 0, 1])
+        bezier_off_curve = cmds.offsetCurve(duplicate_bezier_curve, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=10, tol=0.01, sd=0, ugn=False, name=f"{self.side}_{name}BezierOffset_CRV")
         self.bendy_offset_beziers.append(bezier_off_curve[0])
         upper_bendy_shape_org = cmds.listRelatives(duplicate_bezier_curve, allDescendents=True)[-1]
         
@@ -256,8 +261,8 @@ class TailModule(object):
         cmds.skinPercent(upper_bendy_off_skin_cluster[0], f"{bezier_off_curve[0]}.cv[4]", transformValue=[bendy_joint, 1])
         cmds.skinPercent(upper_bendy_off_skin_cluster[0], f"{bezier_off_curve[0]}.cv[6]", transformValue=[bendy_joints[2], 1])
 
-        aimers_trn = cmds.createNode("transform", n=f"{self.side}_{name}Aimmers_GRP", ss=True, p=bendy_module)
-        aim_helper = cmds.createNode("transform", n=f"{self.side}_{name}AimHelper04_GRP", ss=True, p=aimers_trn)
+       
+        
 
         aim_trns = []
         for i, value in enumerate([0.05, 0.25, 0.5, 0.75, 0.95]):
@@ -274,15 +279,14 @@ class TailModule(object):
             cmds.parent(trn, aimers_trn)
             cmds.setAttr(f"{trn}.inheritsTransform", 0)
 
-            if i == 3:
-                cmds.connectAttr(f"{mpa}.allCoordinates", f"{aim_helper}.translate")
+            
 
         # Create the aim setup
         for i, jnt in enumerate(twist_joints):
             if "04_JNT" not in jnt:
-                aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[0, 0, 1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
+                aim = cmds.aimConstraint(twist_joints[i+1], jnt, aim=[0, 0, -1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
             else:
-                aim = cmds.aimConstraint(aim_helper, jnt, aim=[0, 0, -1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
+                aim = cmds.aimConstraint(aim_helper, jnt, aim=[0, 0, 1], u=[0, 1, 0], wut="object", wuo=aim_trns[i], mo=False)
 
 
     def wave(self):
