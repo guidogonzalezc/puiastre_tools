@@ -10,7 +10,7 @@ def get_offset_matrix(child, parent):
     Returns:
         om.MMatrix: The offset matrix that transforms the child into the parent's space.
     """
-
+    print(f"Calculating offset matrix for child: {child}, parent: {parent}")
     child_dag = om.MSelectionList().add(child).getDagPath(0)
     parent_dag = om.MSelectionList().add(parent).getDagPath(0)
     

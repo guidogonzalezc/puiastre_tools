@@ -206,3 +206,37 @@ def guide_import(joint_name, all_descendents=True):
         cmds.select(clear=True)
         if joints_chain:
                 return joints_chain
+        
+
+def fk_chain_import():
+        """
+        Finds all guide names containing 'FK' that either have no parent or their parent is 'C_guides_GRP'.
+        Returns:
+                list: List of FK guide names matching the criteria.
+        """
+        if not TEMPLATE_FILE:
+                complete_path = os.path.realpath(__file__)
+                relative_path = complete_path.split("\scripts")[0]
+                guides_path = os.path.join(relative_path, "guides")
+                # Find the first .guides file in the directory
+                guide_files = [f for f in os.listdir(guides_path) if f.endswith('.guides')]
+                if not guide_files:
+                        om.MGlobal.displayError("No .guides files found in guides directory.")
+                        return []
+                file_path = os.path.join(guides_path, guide_files[0])
+        else:
+                file_path = os.path.normpath(TEMPLATE_FILE)
+
+        with open(file_path, "r") as infile:
+                guides_data = json.load(infile)
+
+        # Get the main key (guide set name)
+        guide_set_name = next(iter(guides_data))
+        fk_guides = []
+        for guide_name, data in guides_data[guide_set_name].items():
+                if "FK" in guide_name:
+                        parent = data.get("parent")
+                        if not parent or parent == "C_guides_GRP":
+                                fk_guides.append(guide_name)
+        return fk_guides
+                
