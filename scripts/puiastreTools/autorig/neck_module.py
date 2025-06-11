@@ -198,7 +198,7 @@ class NeckModule:
             cmds.parent(skin_joint, self.skinning_trn)
             skinning_jnts.append(skin_joint)
         
-        cmds.connectAttr(f"{self.neck_chain[-1]}.worldMatrix[0]", f"{self.head_grp[0]}.offsetParentMatrix")
+        cmds.connectAttr(f"{self.head_neck_end_jnt}.worldMatrix[0]", f"{self.head_grp[0]}.offsetParentMatrix")
         cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{skinning_jnts[-1]}.offsetParentMatrix", force=True)
         cmds.select(clear=True)
 
