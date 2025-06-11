@@ -239,7 +239,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_OFF|C_head_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_CTL": {
         "transform": {
             "name": "C_head_CTL",
             "overrideEnabled": true,
@@ -955,7 +955,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape7",
+                "name": "C_localHip_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1037,7 +1037,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape8",
+                "name": "C_localHip_CTLShape11",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1119,7 +1119,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape9",
+                "name": "C_localHip_CTLShape12",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1383,7 +1383,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape5",
+                "name": "C_movablePivot_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -1465,7 +1465,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape6",
+                "name": "C_movablePivot_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -1702,7 +1702,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neck_GRP|C_neck_OFF|C_neck_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neck_GRP|C_neck_CTL": {
         "transform": {
             "name": "C_neck_CTL",
             "overrideEnabled": true,
@@ -3358,7 +3358,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00Bendy_GRP|C_tail00Bendy_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Bendy_GRP|C_tail00Bendy_CTL": {
         "transform": {
             "name": "C_tail00Bendy_CTL",
             "overrideEnabled": false,
@@ -3449,7 +3449,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00FkControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL": {
         "transform": {
             "name": "C_tail00_CTL",
             "overrideEnabled": true,
@@ -3588,7 +3588,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail01Controllers_GRP|C_tail01Bendy_GRP|C_tail01Bendy_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail01Bendy_GRP|C_tail01Bendy_CTL": {
         "transform": {
             "name": "C_tail01Bendy_CTL",
             "overrideEnabled": false,
@@ -3679,7 +3679,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00FkControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL": {
         "transform": {
             "name": "C_tail01_CTL",
             "overrideEnabled": true,
@@ -3818,7 +3818,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail02Controllers_GRP|C_tail02Bendy_GRP|C_tail02Bendy_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail02Bendy_GRP|C_tail02Bendy_CTL": {
         "transform": {
             "name": "C_tail02Bendy_CTL",
             "overrideEnabled": false,
@@ -3909,7 +3909,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00FkControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL": {
         "transform": {
             "name": "C_tail02_CTL",
             "overrideEnabled": true,
@@ -4048,7 +4048,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail03Controllers_GRP|C_tail03Bendy_GRP|C_tail03Bendy_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail03Bendy_GRP|C_tail03Bendy_CTL": {
         "transform": {
             "name": "C_tail03Bendy_CTL",
             "overrideEnabled": false,
@@ -4139,7 +4139,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL|C_tail03_GRP|C_tail03_SDK|C_tail03_OFF|C_tail03_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00FkControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL|C_tail03_GRP|C_tail03_SDK|C_tail03_OFF|C_tail03_CTL": {
         "transform": {
             "name": "C_tail03_CTL",
             "overrideEnabled": true,
@@ -4278,7 +4278,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail04Controllers_GRP|C_tail04Bendy_GRP|C_tail04Bendy_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail04Bendy_GRP|C_tail04Bendy_CTL": {
         "transform": {
             "name": "C_tail04Bendy_CTL",
             "overrideEnabled": false,
@@ -4369,7 +4369,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL|C_tail03_GRP|C_tail03_SDK|C_tail03_OFF|C_tail03_CTL|C_tail04_GRP|C_tail04_SDK|C_tail04_OFF|C_tail04_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00FkControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL|C_tail03_GRP|C_tail03_SDK|C_tail03_OFF|C_tail03_CTL|C_tail04_GRP|C_tail04_SDK|C_tail04_OFF|C_tail04_CTL": {
         "transform": {
             "name": "C_tail04_CTL",
             "overrideEnabled": true,
@@ -4508,7 +4508,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail05Controllers_GRP|C_tail05Bendy_GRP|C_tail05Bendy_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail05Bendy_GRP|C_tail05Bendy_CTL": {
         "transform": {
             "name": "C_tail05Bendy_CTL",
             "overrideEnabled": false,
@@ -4599,7 +4599,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL|C_tail03_GRP|C_tail03_SDK|C_tail03_OFF|C_tail03_CTL|C_tail04_GRP|C_tail04_SDK|C_tail04_OFF|C_tail04_CTL|C_tail05_GRP|C_tail05_SDK|C_tail05_OFF|C_tail05_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tail00FkControllers_GRP|C_tail00Controllers_GRP|C_tail00_GRP|C_tail00_SDK|C_tail00_OFF|C_tail00_CTL|C_tail01_GRP|C_tail01_SDK|C_tail01_OFF|C_tail01_CTL|C_tail02_GRP|C_tail02_SDK|C_tail02_OFF|C_tail02_CTL|C_tail03_GRP|C_tail03_SDK|C_tail03_OFF|C_tail03_CTL|C_tail04_GRP|C_tail04_SDK|C_tail04_OFF|C_tail04_CTL|C_tail05_GRP|C_tail05_SDK|C_tail05_OFF|C_tail05_CTL": {
         "transform": {
             "name": "C_tail05_CTL",
             "overrideEnabled": true,
@@ -4734,6 +4734,722 @@
                         18.0
                     ],
                     "degree": 3
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tailIkControllers_GRP|C_tailIkEnd_GRP|C_tailIkEnd_CTL": {
+        "transform": {
+            "name": "C_tailIkEnd_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_tailIkEnd_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            -27.403248554081635,
+                            47.463769928801334,
+                            -99.95823597250212
+                        ],
+                        [
+                            27.403243336777038,
+                            47.46376994633946,
+                            -99.95823597404305
+                        ],
+                        [
+                            3.951579048972058e-08,
+                            3.3584510317969794e-07,
+                            -1.4602126458362215e-06
+                        ],
+                        [
+                            -27.403248554081635,
+                            47.463769928801334,
+                            -99.95823597250212
+                        ],
+                        [
+                            -54.8064945036036,
+                            -2.2223200316873936e-05,
+                            -99.95823596627191
+                        ],
+                        [
+                            3.951579048972058e-08,
+                            3.3584510317969794e-07,
+                            -1.4602126458362215e-06
+                        ],
+                        [
+                            -27.403248562266306,
+                            -47.46381435766417,
+                            -99.95823596158209
+                        ],
+                        [
+                            -54.8064945036036,
+                            -2.2223200316873936e-05,
+                            -99.95823596627191
+                        ],
+                        [
+                            3.951579048972058e-08,
+                            3.3584510317969794e-07,
+                            -1.4602126458362215e-06
+                        ],
+                        [
+                            27.403243328592215,
+                            -47.46386914661813,
+                            -99.95823596312377
+                        ],
+                        [
+                            -27.403248562266306,
+                            -47.46381435766417,
+                            -99.95823596158209
+                        ],
+                        [
+                            3.951579048972058e-08,
+                            3.3584510317969794e-07,
+                            -1.4602126458362215e-06
+                        ],
+                        [
+                            54.80648927811404,
+                            -3.089413536821991e-05,
+                            -99.95823596935399
+                        ],
+                        [
+                            27.403243328592215,
+                            -47.46386914661813,
+                            -99.95823596312377
+                        ],
+                        [
+                            3.951579048972058e-08,
+                            3.3584510317969794e-07,
+                            -1.4602126458362215e-06
+                        ],
+                        [
+                            27.403243336777038,
+                            47.46376994633946,
+                            -99.95823597404305
+                        ],
+                        [
+                            54.80648927811404,
+                            -3.089413536821991e-05,
+                            -99.95823596935399
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0,
+                        16.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tailIkControllers_GRP|C_tailIkMid_GRP|C_tailIkMid_CTL": {
+        "transform": {
+            "name": "C_tailIkMid_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_tailIkMid_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            49.26591996473129,
+                            61.67142338376885,
+                            -3.0052726508201113
+                        ],
+                        [
+                            49.26591996473129,
+                            -56.674130327108216,
+                            -3.0052726508201038
+                        ],
+                        [
+                            -49.26591996473129,
+                            -56.674130327108216,
+                            -3.0052726508201038
+                        ],
+                        [
+                            -49.26591996473129,
+                            61.67142338376885,
+                            -3.0052726508201113
+                        ],
+                        [
+                            49.26591996473129,
+                            61.67142338376885,
+                            -3.0052726508201113
+                        ],
+                        [
+                            49.26591996473129,
+                            61.67142338376885,
+                            3.0052726508201566
+                        ],
+                        [
+                            -49.26591996473129,
+                            61.67142338376885,
+                            3.0052726508201566
+                        ],
+                        [
+                            -49.26591996473129,
+                            61.67142338376885,
+                            -3.0052726508201113
+                        ],
+                        [
+                            -49.26591996473129,
+                            -56.674130327108216,
+                            -3.0052726508201038
+                        ],
+                        [
+                            -49.26591996473129,
+                            -56.674130327108216,
+                            3.0052726508201624
+                        ],
+                        [
+                            -49.26591996473129,
+                            61.67142338376885,
+                            3.0052726508201566
+                        ],
+                        [
+                            49.26591996473129,
+                            61.67142338376885,
+                            3.0052726508201566
+                        ],
+                        [
+                            49.26591996473129,
+                            -56.674130327108216,
+                            3.0052726508201624
+                        ],
+                        [
+                            -49.26591996473129,
+                            -56.674130327108216,
+                            3.0052726508201624
+                        ],
+                        [
+                            49.26591996473129,
+                            -56.674130327108216,
+                            3.0052726508201624
+                        ],
+                        [
+                            49.26591996473129,
+                            -56.674130327108216,
+                            -3.0052726508201038
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tailIkControllers_GRP|C_tailIkRoot_GRP|C_tailIkRoot_CTL": {
+        "transform": {
+            "name": "C_tailIkRoot_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_tailIkRoot_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            61.67542120672674,
+                            77.20572388245793,
+                            -3.762265207126483
+                        ],
+                        [
+                            61.67542120672674,
+                            -70.94967194262544,
+                            -3.762265207126475
+                        ],
+                        [
+                            -61.67542120672674,
+                            -70.94967194262544,
+                            -3.762265207126475
+                        ],
+                        [
+                            -61.67542120672674,
+                            77.20572388245793,
+                            -3.762265207126483
+                        ],
+                        [
+                            61.67542120672674,
+                            77.20572388245793,
+                            -3.762265207126483
+                        ],
+                        [
+                            61.67542120672674,
+                            77.20572388245793,
+                            3.7622652071265392
+                        ],
+                        [
+                            -61.67542120672674,
+                            77.20572388245793,
+                            3.7622652071265392
+                        ],
+                        [
+                            -61.67542120672674,
+                            77.20572388245793,
+                            -3.762265207126483
+                        ],
+                        [
+                            -61.67542120672674,
+                            -70.94967194262544,
+                            -3.762265207126475
+                        ],
+                        [
+                            -61.67542120672674,
+                            -70.94967194262544,
+                            3.7622652071265477
+                        ],
+                        [
+                            -61.67542120672674,
+                            77.20572388245793,
+                            3.7622652071265392
+                        ],
+                        [
+                            61.67542120672674,
+                            77.20572388245793,
+                            3.7622652071265392
+                        ],
+                        [
+                            61.67542120672674,
+                            -70.94967194262544,
+                            3.7622652071265477
+                        ],
+                        [
+                            -61.67542120672674,
+                            -70.94967194262544,
+                            3.7622652071265477
+                        ],
+                        [
+                            61.67542120672674,
+                            -70.94967194262544,
+                            3.7622652071265477
+                        ],
+                        [
+                            61.67542120672674,
+                            -70.94967194262544,
+                            -3.762265207126475
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tailControllers_GRP|C_tailSettings_GRP|C_tailSettings_CTL": {
+        "transform": {
+            "name": "C_tailSettings_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_tailSettings_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "curve": {
+                    "cvs": [
+                        [
+                            -47.58698185712412,
+                            23.344592495199812,
+                            4.910400240051393e-06
+                        ],
+                        [
+                            -47.5908264504797,
+                            5.8351794912607176,
+                            4.379198616093108e-06
+                        ],
+                        [
+                            -65.00916250782419,
+                            5.831334897905135,
+                            1.698554555717103e-05
+                        ],
+                        [
+                            -65.01172557006126,
+                            -5.841607104720934,
+                            1.6631411141198832e-05
+                        ],
+                        [
+                            -47.593389512716776,
+                            -5.83776251136535,
+                            4.025064200120921e-06
+                        ],
+                        [
+                            -47.59723410607235,
+                            -23.34717551530457,
+                            3.4938625761626285e-06
+                        ],
+                        [
+                            -35.98501006784271,
+                            -23.344612453067526,
+                            -4.910368717889299e-06
+                        ],
+                        [
+                            -35.981165474487156,
+                            -5.835199449128297,
+                            -4.3791670939310115e-06
+                        ],
+                        [
+                            -18.562829417142574,
+                            -5.8313548557727195,
+                            -1.6985514035008997e-05
+                        ],
+                        [
+                            -18.560266354905522,
+                            5.841587146853346,
+                            -1.663137961903683e-05
+                        ],
+                        [
+                            -35.9786024122501,
+                            5.837742553497764,
+                            -4.025032677958818e-06
+                        ],
+                        [
+                            -35.974757818894524,
+                            23.34715555743686,
+                            -3.4938310540005346e-06
+                        ],
+                        [
+                            -47.58698185712412,
+                            23.344592495199812,
+                            4.910400240051393e-06
+                        ],
+                        [
+                            -47.58697902395382,
+                            23.344592375816724,
+                            4.910398181956983e-06
+                        ],
+                        [
+                            -35.97475498572419,
+                            23.3471554380538,
+                            -3.493833112094948e-06
+                        ],
+                        [
+                            -35.974757818894524,
+                            23.34715555743686,
+                            -3.4938310540005346e-06
+                        ],
+                        [
+                            -35.97475498572419,
+                            23.3471554380538,
+                            -3.493833112094948e-06
+                        ],
+                        [
+                            -35.97859957907979,
+                            5.837742434114677,
+                            -4.025034736053232e-06
+                        ],
+                        [
+                            -18.56026352173522,
+                            5.841587027470255,
+                            -1.663138167713124e-05
+                        ],
+                        [
+                            -18.560266354905522,
+                            5.841587146853346,
+                            -1.663137961903683e-05
+                        ],
+                        [
+                            -18.562829417142574,
+                            -5.8313548557727195,
+                            -1.6985514035008997e-05
+                        ],
+                        [
+                            -18.562826583972264,
+                            -5.831354975155805,
+                            -1.698551609310343e-05
+                        ],
+                        [
+                            -18.56026352173522,
+                            5.841587027470255,
+                            -1.663138167713124e-05
+                        ],
+                        [
+                            -18.562826583972264,
+                            -5.831354975155805,
+                            -1.698551609310343e-05
+                        ],
+                        [
+                            -35.98116264131683,
+                            -5.835199568511387,
+                            -4.37916915202543e-06
+                        ],
+                        [
+                            -35.98500723467242,
+                            -23.344612572450615,
+                            -4.910370775983719e-06
+                        ],
+                        [
+                            -35.98501006784271,
+                            -23.344612453067526,
+                            -4.910368717889299e-06
+                        ],
+                        [
+                            -35.981165474487156,
+                            -5.835199449128297,
+                            -4.3791670939310115e-06
+                        ],
+                        [
+                            -35.98116264131683,
+                            -5.835199568511387,
+                            -4.37916915202543e-06
+                        ],
+                        [
+                            -35.98500723467242,
+                            -23.344612572450615,
+                            -4.910370775983719e-06
+                        ],
+                        [
+                            -47.59723127290205,
+                            -23.347175634687666,
+                            3.49386051806821e-06
+                        ],
+                        [
+                            -47.59723410607235,
+                            -23.34717551530457,
+                            3.4938625761626285e-06
+                        ],
+                        [
+                            -35.98501006784271,
+                            -23.344612453067526,
+                            -4.910368717889299e-06
+                        ],
+                        [
+                            -35.98500723467242,
+                            -23.344612572450615,
+                            -4.910370775983719e-06
+                        ],
+                        [
+                            -47.59723127290205,
+                            -23.347175634687666,
+                            3.49386051806821e-06
+                        ],
+                        [
+                            -47.59338667954645,
+                            -5.837762630748443,
+                            4.025062142026501e-06
+                        ],
+                        [
+                            -65.01172273689093,
+                            -5.84160722410402,
+                            1.6631409083104424e-05
+                        ],
+                        [
+                            -65.01172557006126,
+                            -5.841607104720934,
+                            1.6631411141198832e-05
+                        ],
+                        [
+                            -47.593389512716776,
+                            -5.83776251136535,
+                            4.025064200120921e-06
+                        ],
+                        [
+                            -47.59338667954645,
+                            -5.837762630748443,
+                            4.025062142026501e-06
+                        ],
+                        [
+                            -65.01172273689093,
+                            -5.84160722410402,
+                            1.6631409083104424e-05
+                        ],
+                        [
+                            -65.00915967465389,
+                            5.831334778522042,
+                            1.6985543499076644e-05
+                        ],
+                        [
+                            -47.590823617309404,
+                            5.835179371877621,
+                            4.3791965579986955e-06
+                        ],
+                        [
+                            -47.5908264504797,
+                            5.8351794912607176,
+                            4.379198616093108e-06
+                        ],
+                        [
+                            -65.00916250782419,
+                            5.831334897905135,
+                            1.698554555717103e-05
+                        ],
+                        [
+                            -65.00915967465389,
+                            5.831334778522042,
+                            1.6985543499076644e-05
+                        ],
+                        [
+                            -47.590823617309404,
+                            5.835179371877621,
+                            4.3791965579986955e-06
+                        ],
+                        [
+                            -47.58697902395382,
+                            23.344592375816724,
+                            4.910398181956983e-06
+                        ],
+                        [
+                            -47.58698185712412,
+                            23.344592495199812,
+                            4.910400240051393e-06
+                        ],
+                        [
+                            -35.974757818894524,
+                            23.34715555743686,
+                            -3.4938310540005346e-06
+                        ],
+                        [
+                            -35.97475498572419,
+                            23.3471554380538,
+                            -3.493833112094948e-06
+                        ],
+                        [
+                            -35.97859957907979,
+                            5.837742434114677,
+                            -4.025034736053232e-06
+                        ],
+                        [
+                            -35.9786024122501,
+                            5.837742553497764,
+                            -4.025032677958818e-06
+                        ],
+                        [
+                            -18.560266354905522,
+                            5.841587146853346,
+                            -1.663137961903683e-05
+                        ],
+                        [
+                            -18.56026352173522,
+                            5.841587027470255,
+                            -1.663138167713124e-05
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        14.0,
+                        15.0,
+                        16.0,
+                        17.0,
+                        18.0,
+                        19.0,
+                        20.0,
+                        21.0,
+                        22.0,
+                        23.0,
+                        24.0,
+                        25.0,
+                        26.0,
+                        27.0,
+                        28.0,
+                        29.0,
+                        30.0,
+                        31.0,
+                        32.0,
+                        33.0,
+                        34.0,
+                        35.0,
+                        36.0,
+                        37.0,
+                        38.0,
+                        39.0,
+                        40.0,
+                        41.0,
+                        42.0,
+                        43.0,
+                        44.0,
+                        45.0,
+                        46.0,
+                        47.0,
+                        48.0,
+                        49.0,
+                        50.0,
+                        51.0,
+                        52.0,
+                        53.0,
+                        54.0
+                    ],
+                    "degree": 1
                 }
             }
         ]
@@ -7823,7 +8539,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape22",
+                "name": "L_fingerAttr_CTLShape29",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -8083,7 +8799,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape23",
+                "name": "L_fingerAttr_CTLShape30",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -8391,7 +9107,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape24",
+                "name": "L_fingerAttr_CTLShape31",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -8747,7 +9463,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape25",
+                "name": "L_fingerAttr_CTLShape32",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -9631,7 +10347,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape26",
+                "name": "L_fingerAttr_CTLShape33",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -9891,7 +10607,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape27",
+                "name": "L_fingerAttr_CTLShape34",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10151,7 +10867,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape28",
+                "name": "L_fingerAttr_CTLShape35",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10872,7 +11588,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIndex01Ik_GRP|L_fingerIndex01Ik_SDK|L_fingerIndex01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerIndex01Ik_GRP|L_fingerIndex01Ik_SDK|L_fingerIndex01Ik_CTL": {
         "transform": {
             "name": "L_fingerIndex01Ik_CTL",
             "overrideEnabled": true,
@@ -10997,7 +11713,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIndex01PoleVector_GRP|L_fingerIndex01PoleVector_SDK|L_fingerIndex01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerIndex01PoleVector_GRP|L_fingerIndex01PoleVector_SDK|L_fingerIndex01PoleVector_CTL": {
         "transform": {
             "name": "L_fingerIndex01PoleVector_CTL",
             "overrideEnabled": true,
@@ -12022,7 +12738,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerMiddle01Ik_GRP|L_fingerMiddle01Ik_SDK|L_fingerMiddle01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerMiddle01Ik_GRP|L_fingerMiddle01Ik_SDK|L_fingerMiddle01Ik_CTL": {
         "transform": {
             "name": "L_fingerMiddle01Ik_CTL",
             "overrideEnabled": true,
@@ -12147,7 +12863,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerMiddle01PoleVector_GRP|L_fingerMiddle01PoleVector_SDK|L_fingerMiddle01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerMiddle01PoleVector_GRP|L_fingerMiddle01PoleVector_SDK|L_fingerMiddle01PoleVector_CTL": {
         "transform": {
             "name": "L_fingerMiddle01PoleVector_CTL",
             "overrideEnabled": true,
@@ -13172,7 +13888,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerRing01Ik_GRP|L_fingerRing01Ik_SDK|L_fingerRing01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerRing01Ik_GRP|L_fingerRing01Ik_SDK|L_fingerRing01Ik_CTL": {
         "transform": {
             "name": "L_fingerRing01Ik_CTL",
             "overrideEnabled": true,
@@ -13297,7 +14013,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerRing01PoleVector_GRP|L_fingerRing01PoleVector_SDK|L_fingerRing01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerRing01PoleVector_GRP|L_fingerRing01PoleVector_SDK|L_fingerRing01PoleVector_CTL": {
         "transform": {
             "name": "L_fingerRing01PoleVector_CTL",
             "overrideEnabled": true,
@@ -14322,7 +15038,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerThumb01Ik_GRP|L_fingerThumb01Ik_SDK|L_fingerThumb01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerThumb01Ik_GRP|L_fingerThumb01Ik_SDK|L_fingerThumb01Ik_CTL": {
         "transform": {
             "name": "L_fingerThumb01Ik_CTL",
             "overrideEnabled": true,
@@ -14447,7 +15163,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerThumb01PoleVector_GRP|L_fingerThumb01PoleVector_SDK|L_fingerThumb01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerControllers_GRP|L_fingerIkControllers_GRP|L_fingerThumb01PoleVector_GRP|L_fingerThumb01PoleVector_SDK|L_fingerThumb01PoleVector_CTL": {
         "transform": {
             "name": "L_fingerThumb01PoleVector_CTL",
             "overrideEnabled": true,
@@ -16189,7 +16905,7 @@
                 }
             },
             {
-                "name": "L_legIk_CTLShape7",
+                "name": "L_legIk_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16271,7 +16987,7 @@
                 }
             },
             {
-                "name": "L_legIk_CTLShape8",
+                "name": "L_legIk_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21680,7 +22396,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape8",
+                "name": "R_fingerAttr_CTLShape15",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21940,7 +22656,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape9",
+                "name": "R_fingerAttr_CTLShape16",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22248,7 +22964,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape10",
+                "name": "R_fingerAttr_CTLShape17",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22604,7 +23320,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape11",
+                "name": "R_fingerAttr_CTLShape18",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23488,7 +24204,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape12",
+                "name": "R_fingerAttr_CTLShape19",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23748,7 +24464,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape13",
+                "name": "R_fingerAttr_CTLShape20",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -24008,7 +24724,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape14",
+                "name": "R_fingerAttr_CTLShape21",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -24729,7 +25445,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIndex01Ik_GRP|R_fingerIndex01Ik_SDK|R_fingerIndex01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerIndex01Ik_GRP|R_fingerIndex01Ik_SDK|R_fingerIndex01Ik_CTL": {
         "transform": {
             "name": "R_fingerIndex01Ik_CTL",
             "overrideEnabled": true,
@@ -24854,7 +25570,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIndex01PoleVector_GRP|R_fingerIndex01PoleVector_SDK|R_fingerIndex01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerIndex01PoleVector_GRP|R_fingerIndex01PoleVector_SDK|R_fingerIndex01PoleVector_CTL": {
         "transform": {
             "name": "R_fingerIndex01PoleVector_CTL",
             "overrideEnabled": true,
@@ -25879,7 +26595,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerMiddle01Ik_GRP|R_fingerMiddle01Ik_SDK|R_fingerMiddle01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerMiddle01Ik_GRP|R_fingerMiddle01Ik_SDK|R_fingerMiddle01Ik_CTL": {
         "transform": {
             "name": "R_fingerMiddle01Ik_CTL",
             "overrideEnabled": true,
@@ -26004,7 +26720,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerMiddle01PoleVector_GRP|R_fingerMiddle01PoleVector_SDK|R_fingerMiddle01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerMiddle01PoleVector_GRP|R_fingerMiddle01PoleVector_SDK|R_fingerMiddle01PoleVector_CTL": {
         "transform": {
             "name": "R_fingerMiddle01PoleVector_CTL",
             "overrideEnabled": true,
@@ -27029,7 +27745,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerRing01Ik_GRP|R_fingerRing01Ik_SDK|R_fingerRing01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerRing01Ik_GRP|R_fingerRing01Ik_SDK|R_fingerRing01Ik_CTL": {
         "transform": {
             "name": "R_fingerRing01Ik_CTL",
             "overrideEnabled": true,
@@ -27154,7 +27870,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerRing01PoleVector_GRP|R_fingerRing01PoleVector_SDK|R_fingerRing01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerRing01PoleVector_GRP|R_fingerRing01PoleVector_SDK|R_fingerRing01PoleVector_CTL": {
         "transform": {
             "name": "R_fingerRing01PoleVector_CTL",
             "overrideEnabled": true,
@@ -28179,7 +28895,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerThumb01Ik_GRP|R_fingerThumb01Ik_SDK|R_fingerThumb01Ik_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerThumb01Ik_GRP|R_fingerThumb01Ik_SDK|R_fingerThumb01Ik_CTL": {
         "transform": {
             "name": "R_fingerThumb01Ik_CTL",
             "overrideEnabled": true,
@@ -28304,7 +29020,7 @@
             }
         ]
     },
-    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerThumb01PoleVector_GRP|R_fingerThumb01PoleVector_SDK|R_fingerThumb01PoleVector_CTL": {
+    "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerControllers_GRP|R_fingerIkControllers_GRP|R_fingerThumb01PoleVector_GRP|R_fingerThumb01PoleVector_SDK|R_fingerThumb01PoleVector_CTL": {
         "transform": {
             "name": "R_fingerThumb01PoleVector_CTL",
             "overrideEnabled": true,
@@ -30046,7 +30762,7 @@
                 }
             },
             {
-                "name": "R_legIk_CTLShape3",
+                "name": "R_legIk_CTLShape5",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -30128,7 +30844,7 @@
                 }
             },
             {
-                "name": "R_legIk_CTLShape4",
+                "name": "R_legIk_CTLShape6",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
