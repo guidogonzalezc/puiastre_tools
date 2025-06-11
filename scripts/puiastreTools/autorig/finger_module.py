@@ -421,6 +421,9 @@ class Bendys(object):
         duplicated_twist_joints.append(cmds.duplicate(self.lower_joint, renameChildren=True)[0])
         self.twist_joints = cmds.rename(duplicated_twist_joints[0], f"{self.side}_{self.name}{self.part}Roll_JNT")
         twist_end_joints = cmds.rename(duplicated_twist_joints[1], f"{self.side}_{self.part}LowerRollEnd_JNT")
+
+        for joint in [twist_end_joints, self.twist_joints]:
+            cmds.setAttr(f"{joint}.offsetParentMatrix", type="matrix", *([0] * 16))
         cmds.parent(twist_end_joints, self.twist_joints)
 
 
