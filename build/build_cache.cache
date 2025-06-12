@@ -256,7 +256,8 @@
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "C_neckModule": {
-        "neck00_ctl": "C_neck_CTL"
+        "neck00_ctl": "C_neck_CTL",
+        "head_ctl": "C_head_CTL"
     },
     "C_tailModule": {
         "tail00_ctl": "C_tail00_CTL"

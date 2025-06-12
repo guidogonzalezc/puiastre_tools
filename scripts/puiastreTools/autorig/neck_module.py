@@ -44,9 +44,8 @@ class NeckModule:
         self.out_skinning_jnts()
         # self.space_switch()
 
-        self.data_exporter.append_data("C_neckModule",
-        {"neck00_ctl": self.neck_ctl}  
-        )
+        self.data_exporter.append_data("C_neckModule", {"neck00_ctl": self.neck_ctl})
+        self.data_exporter.append_data("C_neckModule",{"head_ctl": self.head_ctl})
 
     def lock_attrs(self, ctl, attrs):
 
