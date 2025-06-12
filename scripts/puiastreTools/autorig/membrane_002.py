@@ -185,7 +185,6 @@ class MembraneModule():
             for j in range(3):
                 aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_membraneAimMatrix{index}{i}{j}_AM", ss=True)
                 cmds.connectAttr(f"{compose_matrices[i][j]}.outputMatrix", f"{aim_matrix}.inputMatrix")
-                print(j)
                 if j != 2:
                     cmds.connectAttr(f"{compose_matrices[i][j+1]}.outputMatrix", f"{aim_matrix}.primaryTargetMatrix")
                     cmds.setAttr(f"{aim_matrix}.primaryInputAxisX", 1)

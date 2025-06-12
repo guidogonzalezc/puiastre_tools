@@ -8,6 +8,7 @@ from puiastreTools.autorig import tail_module
 from puiastreTools.autorig import clavicle_module
 from puiastreTools.autorig import spikes_module
 from puiastreTools.autorig import membrane_002
+from puiastreTools.autorig import fk_chain_modules
 
 # Tools / utils import
 from puiastreTools.utils import basic_structure
@@ -22,6 +23,7 @@ import os
 from importlib import reload
 
 reload(leg_module)
+reload(fk_chain_modules)
 reload(wing_arm_module)
 reload(membrane_002)
 reload(neck_module)
@@ -105,6 +107,7 @@ def make():
     clavicle = clavicle_module.ClavicleModule()
     # spikes = spikes_module.SpikesModule()
     membrane = membrane_002.MembraneModule()
+    fk_module = fk_chain_modules.FKModule()
 
 
     spinemodule.make()
@@ -125,10 +128,8 @@ def make():
     tail.make()
     # spikes.make()
 
-
-    
-    for joint in cmds.ls(type="joint"):
-        cmds.setAttr(f"{joint}.radius", 10)
+    fk_chain = guides_manager.fk_chain_import()
+   
 
     data_exporter = data_export.DataExport()
     localHip = data_exporter.get_data("C_spineModule", "localHip")    
@@ -189,7 +190,20 @@ def make():
     for child, (parents, default_value) in spaceSwitches.items():
         matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
-        
+    for name in fk_chain:
+        side = name.split("_")[0]              
+
+        if "Toe" in name:
+            hook = data_exporter.get_data(f"{side}_legModule", "tip_joint")  
+
+        if "Thumb" in name:
+            hook = data_exporter.get_data(f"{side}_fingerThumb", "settingsAttr") 
+            
+        ctl = fk_module.make(name)
+        matrix_spaceSwitch.switch_matrix_space(ctl, [hook], 1)
+
+    for joint in cmds.ls(type="joint"):
+        cmds.setAttr(f"{joint}.radius", 10)
 
 
     disable_inherits()

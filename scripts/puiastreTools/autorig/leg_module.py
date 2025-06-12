@@ -60,6 +60,8 @@ class LegModule():
                 "fk_ctl": self.fk_ctl_list[0],
                 "pv_ctl": self.ik_pv_ctl,
                 "root_ctl": self.ik_root_ctl,
+                "tip_joint": self.ik_chain[4],
+
             }
         )
 
