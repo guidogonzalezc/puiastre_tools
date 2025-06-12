@@ -27,6 +27,12 @@ class TailModule(object):
 
         self.fk_controllers = []
         self.fk_grps = []
+        self.fk_jnts = []
+        self.first_twist = []
+        self.bendy_beziers = []
+        self.bendy_skin_clusters = []
+        self.bendy_offset_beziers = []
+        self.bendy_offset_skin_clusters = []
 
     def make(self):
 
@@ -38,13 +44,10 @@ class TailModule(object):
         self.module_trn = cmds.createNode("transform", n=f"{self.side}_tailModule_GRP", p=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", n=f"{self.side}_tailControllers_GRP", p=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", n=f"{self.side}_tailSkinningJoints_GRP", p=self.skel_grp)
+        self.localHip = self.data_exporter.get_data("C_spineModule", "localHip")
         self.import_guides()
         self.create_ik_fk_setup()
 
-        self.first_twist = []
-        self.bendy_beziers = []
-        self.bendy_beziers_dup = []
-        self.bendy_offset_beziers = []
 
         for i, jnt in enumerate(self.fk_chain):
             if i != len(self.fk_chain) - 1:
@@ -67,7 +70,7 @@ class TailModule(object):
                 cmds.parent(grp, self.fk_controllers[i-1])
 
         self.ik_setup()
-        # self.wave()
+        self.wave(self.bendy_beziers, self.bendy_skin_clusters, self.bendy_offset_beziers, self.bendy_offset_skin_clusters)
 
     def lock_attrs(self, ctl, attrs):
 
@@ -91,6 +94,8 @@ class TailModule(object):
         self.tail_chain = guides_manager.guide_import(joint_name=f"{self.side}_tail00_JNT", all_descendents=True)
         cmds.parent(self.tail_chain[0], self.module_trn)
 
+
+
     def create_ik_fk_setup(self):
         
         """
@@ -99,12 +104,14 @@ class TailModule(object):
         """
 
         #Create the tail settings controller and group
-        self.tail_settings_ctl, self.tail_settings_grp = curve_tool.controller_creator(f"{self.side}_tailSettings", suffixes=["GRP"])
-        self.lock_attrs(self.tail_settings_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
-        cmds.addAttr(self.tail_settings_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", at="float", dv=1, minValue=0, maxValue=1, keyable=True)
-        cmds.parent(self.tail_settings_grp, self.controllers_trn)
-        cmds.matchTransform(self.tail_settings_grp, self.tail_chain[len(self.tail_chain)//2], pos=True, rot=True)
-        cmds.move(0, 150, 0, self.tail_settings_grp, r=True)
+        
+        cmds.addAttr(self.localHip, longName="tailSettings", niceName="TAIL SETTINGS___", at="enum", enumName="____", keyable=True)
+        cmds.setAttr(f"{self.localHip}.tailSettings", lock=True, keyable=False, channelBox=True)
+        cmds.addAttr(self.localHip, shortName="switchIkFk", niceName="Switch IK --> FK", at="float", dv=1, minValue=0, maxValue=1, keyable=True)
+        cmds.addAttr(self.localHip, shortName="Amplitude", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.localHip, shortName="Wavelength", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.localHip, shortName="Offset", at="float", dv=0, keyable=True)
+        cmds.addAttr(self.localHip, shortName="Dropoff", at="float", dv=0, keyable=True)
         
         # Create the IK and FK chains
         self.ik_chain = []
@@ -124,6 +131,7 @@ class TailModule(object):
                         cmds.parent(ik_jnt, self.ik_chain[-1])
                     self.ik_chain.append(ik_jnt)
                 else:
+                    cmds.select(clear=True)
                     fk_jnt = cmds.joint(n=jnt.replace("_JNT", "Fk_JNT"))
                     cmds.matchTransform(fk_jnt, jnt, pos=True, rot=True)
                     cmds.connectAttr(f"{fk_jnt}.translate", f"{pair_blend}.inTranslate2")
@@ -133,13 +141,31 @@ class TailModule(object):
                     self.fk_chain.append(fk_jnt)
                     cmds.connectAttr(f"{pair_blend}.outTranslate", f"{jnt}.translate")
             cmds.connectAttr(f"{pair_blend}.outRotate", f"{jnt}.rotate")
-            cmds.connectAttr(f"{self.tail_settings_ctl}.switchIkFk", f"{pair_blend}.weight")
+            cmds.connectAttr(f"{self.localHip}.switchIkFk", f"{pair_blend}.weight")
 
         cmds.parent(self.ik_chain[0], self.fk_chain[0], self.module_trn)
 
 
         
+    def fk_constraint(self, previous_jnt, jnt, grp):
 
+        """
+        Creates a parent with matrixes constraint between a controller and a joint.
+        Args:
+            ctl (str): The name of the controller to constrain.
+            jnt (str): The name of the joint to constrain.
+        """
+
+        if len(self.fk_controllers) == 0:
+            cmds.connectAttr(f"{jnt}.worldMatrix[0]", f"{grp}.offsetParentMatrix")
+        else:
+            ctl = grp.replace("GRP", "CTL")
+            mult_matrix = cmds.createNode("multMatrix", n=jnt.replace("JNT", "MMX"), ss=True)
+            cmds.connectAttr(f"{jnt}.worldMatrix[0]", f"{mult_matrix}.matrixIn[0]")
+            cmds.connectAttr(f"{previous_jnt}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
+            cmds.connectAttr(f"{self.fk_controllers[-1]}.worldMatrix[0]", f"{mult_matrix}.matrixIn[2]")
+            cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{grp}.offsetParentMatrix")
+            cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{jnt}.offsetParentMatrix")
 
     def bendy_setup(self, start_joint, end_joint, blend_start, blend_end, name):
 
@@ -155,16 +181,19 @@ class TailModule(object):
         skinning_module = cmds.createNode("transform", n=f"{self.side}_{name}SkinningJoints_GRP", ss=True, p=self.skinning_trn)
         fk_controllers = cmds.createNode("transform", n=f"{self.side}_{name}FkControllers_GRP", ss=True, p=self.controllers_trn)
         controllers = cmds.createNode("transform", n=f"{self.side}_{name}Controllers_GRP", ss=True, p=fk_controllers)
-
-        cmds.connectAttr(f"{self.tail_settings_ctl}.switchIkFk", f"{fk_controllers}.visibility")
-
         
+        cmds.connectAttr(f"{self.localHip}.switchIkFk", f"{fk_controllers}.visibility")
+
+        index = len(self.fk_controllers)
         
         ctl, grp = curve_tool.controller_creator(f"{self.side}_{name}", suffixes=["GRP", "SDK", "OFF"])
         self.lock_attrs(ctl, ["tx", "ty", "tz", "sx", "sy", "sz", "v"])
         cmds.matchTransform(grp[0], start_joint, pos=True, rot=True)
         cmds.parent(grp[0], controllers)
-        cmds.parentConstraint(ctl, start_joint, mo=True)
+        cmds.parentConstraint(ctl, start_joint)
+        # self.fk_constraint(self.tail_chain[index-1], self.tail_chain[index], grp[0])
+        # if index != 0:
+        #     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{start_joint}.offsetParentMatrix")
         self.fk_controllers.append(ctl)
         self.fk_grps.append(grp[0])
 
@@ -259,8 +288,9 @@ class TailModule(object):
         cmds.bezierAnchorPreset(p=1)
 
         cmds.parent(bezier_curve, bendy_module)
-        self.bendy_beziers.append(bezier_curve)
+        self.bendy_beziers.append(bezier_curve[0])
         bendy_skin_cluster = cmds.skinCluster(bendy_joints[0], bendy_joint, bendy_joints[2], bezier_curve[0], tsb=True, n=f"{self.side}_{name}Bendy_SKIN")
+        self.bendy_skin_clusters.append(bendy_skin_cluster)
 
         cmds.skinPercent(bendy_skin_cluster[0], f"{bezier_curve[0]}.cv[0]", transformValue=[(bendy_joints[0], 1)])
         cmds.skinPercent(bendy_skin_cluster[0], f"{bezier_curve[0]}.cv[2]", transformValue=[(bendy_joint, 1)])
@@ -288,8 +318,12 @@ class TailModule(object):
             cmds.parent(twist_jnt, skinning_module)
             twist_joints.append(twist_jnt)
             cmds.connectAttr(f"{mpa}.allCoordinates", f"{twist_jnt}.translate")
+            if i == 0:
+                self.first_twist.append(twist_jnt)
+            if i == 3:
+                cmds.connectAttr(f"{mpa}.allCoordinates", f"{aim_helper}.translate")
 
-        # for i, twist_jnt in enumerate(twist_joints):
+    # for i, twist_jnt in enumerate(twist_joints):
 
         #     aim_matrix = cmds.createNode("aimMatrix", n=f"{self.side}_{name}Twist0{i}_AMT", ss=True)
         #     cmds.setAttr(f"{aim_matrix}.primaryMode", 1)
@@ -303,18 +337,11 @@ class TailModule(object):
         #     cmds.connectAttr(f"{mpa}.allCoordinates", f"{compose_matrix}.inputTranslate")
         #     cmds.connectAttr(f"{compose_matrix}.outputMatrix", f"{aim_matrix}.inputMatrix")
         #     cmds.connectAttr(f"{twist_jnt[i+1]}.worldMatrix[0]", f"{aim_matrix}.primaryTargetMatrix")     
-            
-
-        #     if i == 0:
-        #         self.first_twist.append(twist_jnt)
-        #     if i == 3:
-        #         cmds.connectAttr(f"{mpa}.allCoordinates", f"{aim_helper}.translate")
 
 
 
         # Create the offset setup
         duplicate_bezier_curve = cmds.duplicate(bezier_curve, n=f"{self.side}_{name}BezierDuplicated_CRV")[0]
-        self.bendy_beziers_dup.append(duplicate_bezier_curve)
         bezier_off_curve = cmds.offsetCurve(duplicate_bezier_curve, ch=True, rn=False, cb=2, st=True, cl=True, cr=0, d=10, tol=0.01, sd=0, ugn=False, name=f"{self.side}_{name}BezierOffset_CRV")
         self.bendy_offset_beziers.append(bezier_off_curve[0])
         upper_bendy_shape_org = cmds.listRelatives(duplicate_bezier_curve, allDescendents=True)[-1]
@@ -327,6 +354,7 @@ class TailModule(object):
         
 
         upper_bendy_off_skin_cluster = cmds.skinCluster(bendy_joints[0], bendy_joint, bendy_joints[2], bezier_off_curve[0], tsb=True, n=f"{self.side}_{name}BendyBezierOffset_SKIN")
+        self.bendy_offset_skin_clusters.append(upper_bendy_off_skin_cluster)
 
         cmds.skinPercent(upper_bendy_off_skin_cluster[0], f"{bezier_off_curve[0]}.cv[0]", transformValue=[bendy_joints[0], 1])
         cmds.skinPercent(upper_bendy_off_skin_cluster[0], f"{bezier_off_curve[0]}.cv[2]", transformValue=[bendy_joint, 1])
@@ -365,10 +393,13 @@ class TailModule(object):
 
         """
         Set up the IK tail system, creating IK handles and constraints.
+
         """
+        
+
         controllers = cmds.createNode("transform", n=f"{self.side}_tailIkControllers_GRP", ss=True, p=self.controllers_trn)
         reverse = cmds.createNode("reverse", n=f"{self.side}_tailIkReverse_RVS", ss=True)
-        cmds.connectAttr(f"{self.tail_settings_ctl}.switchIkFk", f"{reverse}.inputX")
+        cmds.connectAttr(f"{self.localHip}.switchIkFk", f"{reverse}.inputX")
         cmds.connectAttr(f"{reverse}.outputX", f"{controllers}.visibility")
 
         self.tail_ctl, self.tail_grp = curve_tool.controller_creator(f"{self.side}_tailIkRoot", suffixes=["GRP"])
@@ -413,53 +444,60 @@ class TailModule(object):
         cmds.parentConstraint(self.tail_ctl_end, self.tail_end_jnt, mo=False)
 
 
-
-
-    def wave(self):
+    def wave(self, beziers= [], skin = [], offset_bezier=[], offset_skin=[]):
 
         #Create a controller to drive the wave effect on the tail.
-
-        self.wave_ctl, self.wave_grp = curve_tool.controller_creator(f"{self.side}_tailWave", suffixes=["GRP"])
-        self.lock_attrs(self.wave_ctl, ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v"])
-        cmds.addAttr(self.wave_ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
-        cmds.addAttr(self.wave_ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
-        cmds.addAttr(self.wave_ctl, ln="Wave", at="float", dv=0, keyable=True)
-        cmds.addAttr(self.wave_ctl, ln="Dropoff", at="float", dv=0, keyable=True)
         
-        cmds.parent(self.wave_grp, self.controllers_trn)
-        cmds.matchTransform(self.wave_grp, self.first_twist[0], pos=True, rot=True)
-        cmds.move(0, 200, 0, self.wave_grp,r =True)
+        duplicated_beziers = []
+        duplicated_offset_beziers = []
+        bezier_shapes = []
 
-        wave_hdl = cmds.nonLinear(self.bendy_beziers, type="wave", n=f"{self.side}_tailWave_HDL")
-        cmds.parent(wave_hdl[1], self.module_trn)
-        cmds.rotate(180, 90, 0, wave_hdl[1], ws=True)
+        for i, bezier in enumerate(beziers):
+            print(bezier, offset_bezier[i])
 
-        plus = len(self.bendy_beziers)
-
-        for i, (bezier, offset) in zip(enumerate(self.bendy_beziers, self.bendy_offset_beziers)):
-
-            cmds.connectAttr(f"{bezier}.worldSpace[0]", f"{wave_hdl[0]}.input[{i}].inputGeometry")
-            cmds.connectAttr(f"{offset}.worldSpace[0]", f"{wave_hdl[0]}.input[{i+plus}].inputGeometry")
-        
-        for i, bezier in enumerate(self.bendy_offset_beziers):
-            cmds.connectAttr(f"{wave_hdl[0]}.outputGeometry[{i}]", f"{bezier}.create")
-
-        
-
-        cmds.connectAttr(f"{self.wave_ctl}.Envelope", f"{wave_hdl[0]}.envelope")
-        cmds.connectAttr(f"{self.wave_ctl}.Amplitude", f"{wave_hdl[0]}.amplitude")
-        cmds.connectAttr(f"{self.wave_ctl}.Wave", f"{wave_hdl[0]}.wavelength")
-        cmds.connectAttr(f"{self.wave_ctl}.Dropoff", f"{wave_hdl[0]}.dropoff")
-
-
-
-
-
-
-
-
+            dup_bezier = cmds.duplicate(bezier, n=bezier.replace("_CRV", "Dup_CRV"))
+            dup_offset_bezier = cmds.duplicate(offset_bezier[i], n=offset_bezier[i].replace("_CRV", "Dup_CRV"))
+            bezier_shapes.append(cmds.listRelatives(dup_bezier[0], s=True)[0])
             
+            cmds.delete(dup_bezier[0], ch=True)
+            cmds.delete(dup_offset_bezier[0], ch=True)
+            duplicated_beziers.append(dup_bezier[0])
+            duplicated_offset_beziers.append(dup_offset_bezier[0])
 
+            cmds.parent(dup_bezier, dup_offset_bezier, self.module_trn)
 
+        dupe_parent = cmds.listRelatives(duplicated_beziers, p=True, fullPath=True)
+        wave = cmds.nonLinear(duplicated_beziers, duplicated_offset_beziers, type="wave", n=f"{self.side}_tailWave_HDL")
+        cmds.parent(wave[1], dupe_parent)
+        cmds.matchTransform(wave[1], self.tail_chain[len(self.tail_chain)//2], pos=True, rot=True)
+        cmds.rotate(0, 90, 0, wave[1], r=True, os=True, fo=True)
 
+        blendshape00 = cmds.blendShape(duplicated_beziers[0], beziers[0], n=f"{self.side}_tailWave00_BS")[0]
+        blendshape01 = cmds.blendShape(duplicated_beziers[1], beziers[1], n=f"{self.side}_tailWave01_BS")[0]
+        blendshape02 = cmds.blendShape(duplicated_beziers[2], beziers[2], n=f"{self.side}_tailWave02_BS")[0]
+        blendshape03 = cmds.blendShape(duplicated_beziers[3], beziers[3], n=f"{self.side}_tailWave03_BS")[0]
+        blendshape04 = cmds.blendShape(duplicated_beziers[4], beziers[4], n=f"{self.side}_tailWave04_BS")[0]
+        blendshape05 = cmds.blendShape(duplicated_beziers[5], beziers[5], n=f"{self.side}_tailWave05_BS")[0]
 
+        blendshape00_offset = cmds.blendShape(duplicated_offset_beziers[0], offset_bezier[0], n=f"{self.side}_tailWave00Offset_BS")[0]
+        blendshape01_offset = cmds.blendShape(duplicated_offset_beziers[1], offset_bezier[1], n=f"{self.side}_tailWave01Offset_BS")[0]
+        blendshape02_offset = cmds.blendShape(duplicated_offset_beziers[2], offset_bezier[2], n=f"{self.side}_tailWave02Offset_BS")[0]
+        blendshape03_offset = cmds.blendShape(duplicated_offset_beziers[3], offset_bezier[3], n=f"{self.side}_tailWave03Offset_BS")[0]
+        blendshape04_offset = cmds.blendShape(duplicated_offset_beziers[4], offset_bezier[4], n=f"{self.side}_tailWave04Offset_BS")[0]
+        blendshape05_offset = cmds.blendShape(duplicated_offset_beziers[5], offset_bezier[5], n=f"{self.side}_tailWave05Offset_BS")[0]
+
+        bl_beziers = [blendshape00, blendshape01, blendshape02, blendshape03, blendshape04, blendshape05]
+        bl_offset_beziers = [blendshape00_offset, blendshape01_offset, blendshape02_offset, blendshape03_offset, blendshape04_offset, blendshape05_offset]
+
+        for i, (bezier, offset_bez) in enumerate(zip(bl_beziers, bl_offset_beziers)):
+
+            cmds.connectAttr(f"{self.localHip}.Wavelength", f"{bezier}.{duplicated_beziers[i]}", f=True)
+            cmds.connectAttr(f"{self.localHip}.Wavelength", f"{offset_bez}.{duplicated_offset_beziers[i]}", f=True)
+
+        for attr in ["Amplitude", "Offset", "Dropoff"]:
+            cmds.connectAttr(f"{self.localHip}.{attr}", f"{wave[0]}.{attr.lower()}", f=True)
+
+        for i, (bls, off_bls) in enumerate(zip(bl_beziers, bl_offset_beziers)):
+
+            cmds.reorderDeformers(skin[i][0], bls, beziers[i])
+            cmds.reorderDeformers(offset_skin[i][0], off_bls, offset_bezier[i])  
