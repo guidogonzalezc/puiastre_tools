@@ -58,6 +58,7 @@ def create_basic_structure(asset_name = "assetName"):
                 "skeletonHirearchy_GRP"
             },
             "model_GRP": {
+                "SKELETON",
                 "PROXY",
                 "LOD_100",
                 "LOD_200"
@@ -102,10 +103,10 @@ def create_basic_structure(asset_name = "assetName"):
     cmds.setAttr(ctls[2]+".reference", channelBox=True)
 
     cmds.addAttr(ctls[2], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=False)
-    cmds.addAttr(ctls[2], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
+    cmds.addAttr(ctls[2], shortName="showJoints", niceName="Show Joints",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="SKELETON:PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
     cmds.setAttr(ctls[2]+".showModules", channelBox=True)
-    cmds.setAttr(ctls[2]+".showSkeleton", channelBox=True)
+    cmds.setAttr(ctls[2]+".showJoints", channelBox=True)
     cmds.setAttr(ctls[2]+".meshLods", channelBox=True)
 
     cmds.setAttr(secondary_transforms[2]+".overrideDisplayType", 2)
@@ -118,12 +119,13 @@ def create_basic_structure(asset_name = "assetName"):
     cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleY", force=True)
     cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleZ", force=True)
 
-    condition(f"{ctls[2]}.meshLods", rig_transforms[6], 0)
-    condition(f"{ctls[2]}.meshLods", rig_transforms[4], 1)
-    condition(f"{ctls[2]}.meshLods", rig_transforms[5], 2)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[7], 0)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[6], 1)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[4], 2)
+    condition(f"{ctls[2]}.meshLods", rig_transforms[5], 3)
 
     cmds.connectAttr(f"{ctls[2]}.showModules", rig_transforms[1]+ ".visibility")
-    cmds.connectAttr(f"{ctls[2]}.showSkeleton", rig_transforms[2] + ".visibility")
+    cmds.connectAttr(f"{ctls[2]}.showJoints", rig_transforms[2] + ".visibility")
 
     lock_attr(ctls[2], ["tx", "tz", "ty", "rx", "ry", "rz", "scaleX", "scaleY", "scaleZ", "visibility"])
     lock_attr(ctls[0])
