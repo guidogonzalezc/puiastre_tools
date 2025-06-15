@@ -9,6 +9,7 @@ from puiastreTools.autorig import clavicle_module
 from puiastreTools.autorig import spikes_module
 from puiastreTools.autorig import membrane_002
 from puiastreTools.autorig import fk_chain_modules
+from puiastreTools.autorig import jaw_module
 
 # Tools / utils import
 from puiastreTools.utils import basic_structure
@@ -32,6 +33,7 @@ reload(spine_module)
 reload(tail_module)
 reload(clavicle_module)
 reload(spikes_module)
+reload(jaw_module)
 reload(data_export)
 reload(matrix_spaceSwitch)
 reload(guides_manager)
@@ -108,6 +110,7 @@ def make():
     # spikes = spikes_module.SpikesModule()
     membrane = membrane_002.MembraneModule()
     fk_module = fk_chain_modules.FKModule()
+    jaw = jaw_module.jawModule()
 
 
     spinemodule.make()
@@ -126,6 +129,7 @@ def make():
 
     neck.make()
     tail.make()
+    # jaw.make()
     # spikes.make()
 
     fk_chain = guides_manager.fk_chain_import()
