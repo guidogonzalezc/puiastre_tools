@@ -39,23 +39,19 @@ class MembraneModule():
 
         cmds.addAttr(self.attr_ctl, longName='Dynamics______', attributeType='enum', enumName='_______')
 
-        cmds.addAttr(self.attr_ctl, longName='enable_dynamics', attributeType='bool', keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='enableDynamics', attributeType='bool', keyable=True)
 
-        cmds.addAttr(self.attr_ctl, longName='display_sim_curves', attributeType='bool', keyable=True)
-
-        cmds.addAttr(self.attr_ctl, longName='sim_space', attributeType='enum', enumName='Local:World', keyable=True)
-
-        cmds.addAttr(self.attr_ctl, longName='point_lock', attributeType='enum', enumName='No Attach:Base:Tip:BothEnds', keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='pointLock', attributeType='enum', enumName='No Attach:Base:Tip:BothEnds', keyable=True)
 
         cmds.addAttr(self.attr_ctl, longName='Values_______', attributeType='enum', enumName='_______')
 
-        cmds.addAttr(self.attr_ctl, longName='start_frame', attributeType='float', defaultValue=1.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='startFrame', attributeType='float', defaultValue=1.0, keyable=True)
 
-        cmds.addAttr(self.attr_ctl, longName='anim_follow_base', attributeType='float', defaultValue=1.0, minValue=0.0, maxValue=1.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='animFollowBase', attributeType='float', defaultValue=1.0, minValue=0.0, maxValue=1.0, keyable=True)
 
-        cmds.addAttr(self.attr_ctl, longName='anim_follow_tip', attributeType='float', defaultValue=0.2, minValue=0.0, maxValue=1.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='animFollowTip', attributeType='float', defaultValue=0.2, minValue=0.0, maxValue=1.0, keyable=True)
 
-        cmds.addAttr(self.attr_ctl, longName='anim_follow_damp', attributeType='float', defaultValue=0.2, minValue=0.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='animFollowDamp', attributeType='float', defaultValue=0.2, minValue=0.0, keyable=True)
 
         cmds.addAttr(self.attr_ctl, longName='mass', attributeType='float', defaultValue=1.0, minValue=0.0, keyable=True)
 
@@ -67,11 +63,11 @@ class MembraneModule():
 
         cmds.addAttr(self.attr_ctl, longName='Turbulence_______', attributeType='enum', enumName='_______')
 
-        cmds.addAttr(self.attr_ctl, longName='turbulence_intensity', attributeType='float', defaultValue=0.0, minValue=0.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='turbulenceIntensity', attributeType='float', defaultValue=0.0, minValue=0.0, keyable=True)
 
-        cmds.addAttr(self.attr_ctl, longName='turbulence_frequency', attributeType='float', defaultValue=0.2, minValue=0.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='turbulenceFrequency', attributeType='float', defaultValue=0.2, minValue=0.0, keyable=True)
 
-        cmds.addAttr(self.attr_ctl, longName='turbulence_speed', attributeType='float', defaultValue=0.2, minValue=0.0, keyable=True)
+        cmds.addAttr(self.attr_ctl, longName='turbulenceSpeed', attributeType='float', defaultValue=0.2, minValue=0.0, keyable=True)
 
         for enum in ["Dynamics______", "Values_______", "Turbulence_______"]:
             cmds.setAttr(f"{self.attr_ctl}.{enum}", channelBox=True, lock=True)
@@ -126,6 +122,29 @@ class MembraneModule():
         cmds.connectAttr(f"{follicle}.outHair", f"{hairSystem}.inputHair[0]")
         cmds.connectAttr(f"{follicle}.outCurve", f"{dupe[0]}.create")
 
+        remap_value = cmds.createNode("remapValue", name=f"{self.side}_membrane{result}_RMV", ss=True)
+        cmds.connectAttr(f"{self.attr_ctl}.enableDynamics", f"{remap_value}.inputValue")
+        cmds.setAttr(f"{remap_value}.inputMin", 0)
+        cmds.setAttr(f"{remap_value}.inputMax", 1)
+        cmds.setAttr(f"{remap_value}.outputMin", 1)
+        cmds.setAttr(f"{remap_value}.outputMax", 2)
+
+        cmds.connectAttr(f"{remap_value}.outValue", f"{hairSystem}.simulationMethod")
+        cmds.connectAttr(f"{self.attr_ctl}.pointLock", f"{follicle}.pointLock")
+
+        cmds.connectAttr(f"{self.attr_ctl}.startFrame", f"{hairSystem}.startFrame")
+        cmds.connectAttr(f"{self.attr_ctl}.animFollowDamp", f"{follicle}.attractionDamp")
+        cmds.connectAttr(f"{self.attr_ctl}.animFollowBase", f"{hairSystem}.attractionScale.attractionScale_FloatValue")
+        cmds.connectAttr(f"{self.attr_ctl}.animFollowTip", f"{hairSystem}.attractionScale.attractionScale_FloatValue")
+        cmds.connectAttr(f"{self.attr_ctl}.damp", f"{hairSystem}.damp")
+        cmds.connectAttr(f"{self.attr_ctl}.drag", f"{hairSystem}.drag")
+        cmds.connectAttr(f"{self.attr_ctl}.mass", f"{hairSystem}.mass")
+        cmds.connectAttr(f"{self.attr_ctl}.stiffness", f"{hairSystem}.stiffness")
+        cmds.connectAttr(f"{self.attr_ctl}.turbulenceFrequency", f"{hairSystem}.turbulenceFrequency")
+        cmds.connectAttr(f"{self.attr_ctl}.turbulenceIntensity", f"{hairSystem}.turbulenceStrength")
+        cmds.connectAttr(f"{self.attr_ctl}.turbulenceSpeed", f"{hairSystem}.turbulenceSpeed")
+
+
 
         nurbs_joints = []
         for i in range(1, len(joint01), 2):
@@ -147,3 +166,5 @@ class MembraneModule():
         dupe_skinning = cmds.duplicate(dupe[0], name=f"{self.side}_membrane{result}_SkinningShape", rr=True)
 
         skincluster = cmds.skinCluster(nurbs_joints , dupe_skinning[0], tsb=True, name=f"{self.side}_membrane{result}_SKIN", maximumInfluences=1, normalizeWeights=1)
+
+        
