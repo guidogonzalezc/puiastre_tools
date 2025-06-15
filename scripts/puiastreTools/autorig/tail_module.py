@@ -453,7 +453,6 @@ class TailModule(object):
         bezier_shapes = []
 
         for i, bezier in enumerate(beziers):
-            print(bezier, offset_bezier[i])
 
             dup_bezier = cmds.duplicate(bezier, n=bezier.replace("_CRV", "Dup_CRV"))
             dup_offset_bezier = cmds.duplicate(offset_bezier[i], n=offset_bezier[i].replace("_CRV", "Dup_CRV"))
