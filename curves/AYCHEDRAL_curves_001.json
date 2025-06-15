@@ -1027,11 +1027,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "C_localHip_CTLShape13",
-=======
-                "name": "C_localHip_CTLShape16",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1113,11 +1109,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "C_localHip_CTLShape14",
-=======
-                "name": "C_localHip_CTLShape17",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1199,11 +1191,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "C_localHip_CTLShape15",
-=======
-                "name": "C_localHip_CTLShape18",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1467,11 +1455,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "C_movablePivot_CTLShape9",
-=======
-                "name": "C_movablePivot_CTLShape11",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -1553,11 +1537,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "C_movablePivot_CTLShape10",
-=======
-                "name": "C_movablePivot_CTLShape12",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -8537,11 +8517,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape36",
-=======
-                "name": "L_fingerAttr_CTLShape43",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -8801,11 +8777,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape37",
-=======
-                "name": "L_fingerAttr_CTLShape44",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -9113,11 +9085,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape38",
-=======
-                "name": "L_fingerAttr_CTLShape45",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -9473,11 +9441,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape39",
-=======
-                "name": "L_fingerAttr_CTLShape46",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10361,11 +10325,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape40",
-=======
-                "name": "L_fingerAttr_CTLShape47",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10625,11 +10585,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape41",
-=======
-                "name": "L_fingerAttr_CTLShape48",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10889,11 +10845,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_fingerAttr_CTLShape42",
-=======
-                "name": "L_fingerAttr_CTLShape49",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -15805,13 +15757,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerThumbFK01Controllers_GRP|L_fingerThumbFK01_GRP|L_fingerThumbFK01_CTL": {
         "transform": {
             "name": "L_fingerThumbFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 6
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -15822,7 +15769,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -0.0004015464191178479,
                             15.753751539568754,
                             -3.300664355544781e-05
@@ -16066,61 +16012,6 @@
                             -0.0003726599032943845,
                             23.058355468451083,
                             3.2089725214261176
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -16147,13 +16038,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_fingerThumbFK01Controllers_GRP|L_fingerThumbFK01_GRP|L_fingerThumbFK01_CTL|L_fingerThumbFK02_GRP|L_fingerThumbFK02_CTL": {
         "transform": {
             "name": "L_fingerThumbFK02_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 6
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -16164,7 +16050,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             9.068719254312305e-05,
                             14.348828212768941,
                             -4.18985803352266e-06
@@ -16408,61 +16293,6 @@
                             2.922885074564695,
                             21.001934659163634,
                             -3.0499986070669136e-05
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -17402,13 +17232,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_indexToeFK01Controllers_GRP|L_indexToeFK01_GRP|L_indexToeFK01_CTL": {
         "transform": {
             "name": "L_indexToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 18
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -17419,7 +17244,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.12000283979886e-13,
                             16.99788705731954,
                             3.7591105704249443e-13
@@ -17663,61 +17487,6 @@
                             3.116728289440327e-05,
                             24.879234245161904,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -17756,7 +17525,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.078749968061076e-13,
                             16.99788705731954,
                             3.901219117576966e-13
@@ -18000,61 +17768,6 @@
                             3.116728289698281e-05,
                             24.879234245161904,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -18294,11 +18007,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_legIk_CTLShape11",
-=======
-                "name": "L_legIk_CTLShape13",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -18380,11 +18089,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "L_legIk_CTLShape12",
-=======
-                "name": "L_legIk_CTLShape14",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -18637,13 +18342,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_middleToeFK01Controllers_GRP|L_middleToeFK01_GRP|L_middleToeFK01_CTL": {
         "transform": {
             "name": "L_middleToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 18
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -18654,7 +18354,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.0601870507882315e-13,
                             16.99788705731954,
                             3.738067640939872e-13
@@ -18898,61 +18597,6 @@
                             3.116728289883911e-05,
                             24.879234245161904,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -18991,7 +18635,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.088542300078822e-13,
                             16.997887057319545,
                             3.759110570424949e-13
@@ -19235,61 +18878,6 @@
                             3.116728289754933e-05,
                             24.879234245161904,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -19316,13 +18904,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_ringToeFK01Controllers_GRP|L_ringToeFK01_GRP|L_ringToeFK01_CTL": {
         "transform": {
             "name": "L_ringToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 18
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -19333,7 +18916,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.0694828970058217e-13,
                             16.997887057319538,
                             3.6064805585304e-13
@@ -19577,61 +19159,6 @@
                             3.1167282894045085e-05,
                             24.879234245161907,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -19670,7 +19197,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.088542300078822e-13,
                             16.997887057319545,
                             3.7591105704249463e-13
@@ -19914,61 +19440,6 @@
                             3.116728289754933e-05,
                             24.879234245161904,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -20206,13 +19677,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_thumbToeFK01Controllers_GRP|L_thumbToeFK01_GRP|L_thumbToeFK01_CTL": {
         "transform": {
             "name": "L_thumbToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 18
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -20223,7 +19689,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.0582534463923606e-13,
                             16.997887057319538,
                             3.6880562968489287e-13
@@ -20467,61 +19932,6 @@
                             3.11672829005782e-05,
                             24.879234245161896,
                             -3.4623761863963893
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -20560,7 +19970,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.0634818046770857e-13,
                             16.997887057319545,
                             3.901219117576966e-13
@@ -20804,61 +20213,6 @@
                             3.116728289850959e-05,
                             24.879234245161907,
                             -3.4623761863963867
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -25830,11 +25184,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape22",
-=======
-                "name": "R_fingerAttr_CTLShape29",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26094,11 +25444,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape23",
-=======
-                "name": "R_fingerAttr_CTLShape30",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26406,11 +25752,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape24",
-=======
-                "name": "R_fingerAttr_CTLShape31",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26766,11 +26108,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape25",
-=======
-                "name": "R_fingerAttr_CTLShape32",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -27654,11 +26992,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape26",
-=======
-                "name": "R_fingerAttr_CTLShape33",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -27918,11 +27252,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape27",
-=======
-                "name": "R_fingerAttr_CTLShape34",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -28182,11 +27512,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_fingerAttr_CTLShape28",
-=======
-                "name": "R_fingerAttr_CTLShape35",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33098,13 +32424,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerThumbFK01Controllers_GRP|R_fingerThumbFK01_GRP|R_fingerThumbFK01_CTL": {
         "transform": {
             "name": "R_fingerThumbFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 13
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -33115,7 +32436,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             3.7654006455877945e-13,
                             -15.754011290496836,
                             5.757762161178336e-13
@@ -33359,61 +32679,6 @@
                             -2.8886515446028793e-05,
                             -23.058615219379167,
                             -3.2090055280690972
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -33440,13 +32705,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_fingerThumbFK01Controllers_GRP|R_fingerThumbFK01_GRP|R_fingerThumbFK01_CTL|R_fingerThumbFK02_GRP|R_fingerThumbFK02_CTL": {
         "transform": {
             "name": "R_fingerThumbFK02_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 13
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -33457,7 +32717,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             3.1732852484133367e-13,
                             -14.348911329599575,
                             -3.3961546266648255e-13
@@ -33701,61 +32960,6 @@
                             -2.922794387372134,
                             -21.002017775994137,
                             2.6310127697531017e-05
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -34695,13 +33899,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_indexToeFK01Controllers_GRP|R_indexToeFK01_GRP|R_indexToeFK01_CTL": {
         "transform": {
             "name": "R_indexToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 4
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -34712,7 +33911,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.928598805495083e-06,
                             -16.997843749683128,
                             3.0883307082889786e-06
@@ -34956,61 +34154,6 @@
                             -3.609588211636387e-05,
                             -24.879190937525486,
                             3.462379274727475
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -35049,7 +34192,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -4.980340643129128e-05,
                             -16.997873167231543,
                             1.816299631476307e-05
@@ -35293,61 +34435,6 @@
                             -8.097068971418379e-05,
                             -24.87922022869633,
                             3.4623946370641674
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -35587,11 +34674,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_legIk_CTLShape7",
-=======
-                "name": "R_legIk_CTLShape9",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35673,11 +34756,7 @@
                 }
             },
             {
-<<<<<<< HEAD
                 "name": "R_legIk_CTLShape8",
-=======
-                "name": "R_legIk_CTLShape10",
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35930,13 +35009,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_middleToeFK01Controllers_GRP|R_middleToeFK01_GRP|R_middleToeFK01_CTL": {
         "transform": {
             "name": "R_middleToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 4
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -35947,7 +35021,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             2.3887035698712672e-06,
                             -16.997845571008508,
                             -9.901265319517628e-06
@@ -36191,61 +35264,6 @@
                             -2.8778579735951737e-05,
                             -24.879192758850873,
                             3.4623662851314445
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -36284,7 +35302,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -2.0081312885140497,
                             -16.878901778280735,
                             -3.714869377023986e-05
@@ -36528,61 +35545,6 @@
                             -2.9392591739266676,
                             -24.70505245133125,
                             3.4623390377029963
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -36609,13 +35571,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_ringToeFK01Controllers_GRP|R_ringToeFK01_GRP|R_ringToeFK01_CTL": {
         "transform": {
             "name": "R_ringToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 4
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -36626,7 +35583,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -0.0001454338548074514,
                             -16.997937551397122,
                             0.000316143592266679
@@ -36870,61 +35826,6 @@
                             -0.0001766011381074796,
                             -24.879284739239488,
                             3.4626923299890158
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -36963,7 +35864,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             -0.00020685004724704003,
                             -16.997952415108536,
                             0.00041112882731720804
@@ -37207,61 +36107,6 @@
                             -0.00023801733052797826,
                             -24.879299602950898,
                             3.4627873152240833
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -37499,13 +36344,8 @@
     "|Varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_thumbToeFK01Controllers_GRP|R_thumbToeFK01_GRP|R_thumbToeFK01_CTL": {
         "transform": {
             "name": "R_thumbToeFK01_CTL",
-<<<<<<< HEAD
             "overrideEnabled": true,
             "overrideColor": 4
-=======
-            "overrideEnabled": false,
-            "overrideColor": null
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
         },
         "shapes": [
             {
@@ -37516,7 +36356,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             3.973652417073131e-05,
                             -16.997856494018006,
                             2.2028526658567827e-05
@@ -37760,61 +36599,6 @@
                             8.569240859862564e-06,
                             -24.879203681860364,
                             3.4623982149234154
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
@@ -37853,7 +36637,6 @@
                 "curve": {
                     "cvs": [
                         [
-<<<<<<< HEAD
                             1.1607536568962143e-05,
                             -16.997928199367898,
                             -1.5718498288953086e-05
@@ -38097,61 +36880,6 @@
                             -1.955974674736088e-05,
                             -24.879275387210257,
                             3.462360467898486
-=======
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            -1.1081941875543881,
-                            5.74489823752483e-17,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            -0.7836116248912245,
-                            0.0
-                        ],
-                        [
-                            -1.1100856969603225e-16,
-                            -1.1081941875543884,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            -0.7836116248912244,
-                            0.0
-                        ],
-                        [
-                            1.1081941875543881,
-                            -1.511240500779959e-16,
-                            0.0
-                        ],
-                        [
-                            0.7836116248912245,
-                            0.7836116248912246,
-                            0.0
-                        ],
-                        [
-                            6.785732323110912e-17,
-                            1.1081941875543877,
-                            0.0
-                        ],
-                        [
-                            -0.7836116248912245,
-                            0.7836116248912244,
-                            0.0
->>>>>>> bfbfa0fab1d359827be203bf7773e26734b2a9cf
                         ]
                     ],
                     "form": "periodic",
