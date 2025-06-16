@@ -1,4 +1,4 @@
-# Module imporrt
+# Module import
 from puiastreTools.autorig import finger_module
 from puiastreTools.autorig import leg_module
 from puiastreTools.autorig import neck_module
@@ -10,6 +10,7 @@ from puiastreTools.autorig import spikes_module
 from puiastreTools.autorig import membrane_003
 from puiastreTools.autorig import fk_chain_modules
 from puiastreTools.autorig import jaw_module
+from puiastreTools.autorig import eyebrow_module
 
 # Tools / utils import
 from puiastreTools.utils import basic_structure
@@ -35,6 +36,7 @@ reload(tail_module)
 reload(clavicle_module)
 reload(spikes_module)
 reload(jaw_module)
+reload(eyebrow_module)
 reload(data_export)
 reload(matrix_spaceSwitch)
 reload(guides_manager)
@@ -91,7 +93,7 @@ def make():
 
     complete_path = os.path.realpath(__file__)
     relative_path = complete_path.split("\scripts")[0]
-    guides_path = os.path.join(relative_path, "guides", "aychedral_GUIDES_002.guides")
+    guides_path = os.path.join(relative_path, "guides", "aychedral_GUIDES_001.guides")
     curves_path = os.path.join(relative_path, "curves", "AYCHEDRAL_curves_001.json") 
     guides_manager.init_template_file(guides_path)
     curve_tool.init_template_file(curves_path)
@@ -112,6 +114,7 @@ def make():
     membrane = membrane_003.MembraneModule()
     fk_module = fk_chain_modules.FKModule()
     jaw = jaw_module.jawModule()
+    eyebrow = eyebrow_module.EyebrowModule()
 
 
     spinemodule.make()
@@ -131,6 +134,9 @@ def make():
     neck.make()
     tail.make()
     jaw.make()
+
+    for side in ["L", "R"]:
+        eyebrow.make(side = side)
     # spikes.make()
 
     fk_chain = guides_manager.fk_chain_import()
@@ -188,6 +194,7 @@ def make():
 
     tail00 = data_exporter.get_data("C_tailModule", "tail00_ctl")
     neck00 = data_exporter.get_data("C_neckModule", "neck00_ctl")
+    head = data_exporter.get_data("C_neckModule", "head_ctl")
     spaceSwitches = {
                 tail00: [[localHip], 1],
                 neck00: [[localChest], 1]

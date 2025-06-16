@@ -47,6 +47,8 @@ class jawModule():
 
         self.module_trn = cmds.createNode("transform", n=f"{side}_jawModule_GRP", p=self.modules_grp)
         self.skinning_trn = cmds.createNode("transform", n=f"{side}_jawSkinningJoints_GRP", p=self.skel_grp)
+        self.controllers_trn = cmds.createNode("transform", n=f"{side}_jawControllers_GRP")
+        cmds.parent(self.controllers_trn, "C_head_CTL")
 
 
         jaw_jnts = guides_manager.guide_import(joint_name=f"{side}_jaw_JNT", all_descendents=True)
@@ -63,6 +65,7 @@ class jawModule():
         chin_skinning_jnt = cmds.createNode("joint", n=f"{side}_chinSkinning_JNT", p=self.skinning_trn)
 
         jaw_curve_ctl, jaw_curve_grp = ctl(side+"_jaw", ["GRP"])
+        cmds.parent(jaw_curve_grp[0], self.controllers_trn)
         self.lock_attrs(jaw_curve_ctl)
         cmds.matchTransform(jaw_curve_grp[0], jaw_jnt, pos=True, rot=True)
         jaw_local_trn = self.local(jaw_curve_ctl, jaw_curve_grp[0], jaw_skinning_jnt)
@@ -71,8 +74,9 @@ class jawModule():
         cmds.addAttr(jaw_curve_ctl, ln="Collision", min=0, max=1, dv=1, k=True, at="float")
 
         upper_jaw_curve_ctl, upper_jaw_curve_grp = ctl(f"{side}_upperJaw", ["GRP", "OFF"])
+        cmds.parent(upper_jaw_curve_grp[0], self.controllers_trn)
         self.lock_attrs(upper_jaw_curve_ctl)
-        cmds.matchTransform(upper_jaw_curve_grp, upper_jnt, pos=True, rot=True)
+        cmds.matchTransform(upper_jaw_curve_grp, jaw_jnt, pos=True, rot=True)
         upper_jaw_trn = self.local(upper_jaw_curve_ctl, upper_jaw_curve_grp[0], upper_jaw_skinning_jnt)
 
         chin_curve_ctl, chin_curve_grp = ctl(f"{side}_chin", ["GRP"])
@@ -112,11 +116,7 @@ class jawModule():
         cmds.connectAttr(f"{jaw_curve_ctl}.Collision", f"{blend_attrs}.attributesBlender")
         cmds.connectAttr(f"{blend_attrs}.output", f"{upper_jaw_curve_grp[0]}.rotateX")
 
-        if "C_head_CTL" in cmds.ls():
-            cmds.parent(jaw_curve_grp[0], "C_head_CTL")
-            cmds.parent(upper_jaw_curve_grp[0], "C_head_CTL")
-        elif "C_masterWalk_CTL" in cmds.ls():
-            cmds.parent(jaw_curve_grp[0], "C_masterWalk_CTL")
-            cmds.parent(upper_jaw_curve_grp[0], "C_masterWalk_CTL")
+  
+
 
 
