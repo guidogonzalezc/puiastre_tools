@@ -162,8 +162,10 @@ class MembraneModule():
 
 
         nurbs_joints = []
+        wtas=[]
         for i in range(1, len(joint01), 2):
             wta = cmds.createNode("wtAddMatrix", name=f"{self.side}_membran{result}0{i}_WTA", ss=True)
+            wtas.append(wta)
             cmds.connectAttr(f"{joint01[i]}.worldMatrix", f"{wta}.wtMatrix[0].matrixIn")
             cmds.connectAttr(f"{joint02[i]}.worldMatrix", f"{wta}.wtMatrix[1].matrixIn")
             cmds.setAttr(f"{wta}.wtMatrix[0].weightIn", 0.5)
@@ -173,13 +175,18 @@ class MembraneModule():
 
             cmds.connectAttr(f"{dcp}.outputTranslate", f"{curve}.controlPoints[{i//2}]")
 
+            cmds.disconnectAttr(f"{dcp}.outputTranslate", f"{curve}.controlPoints[{i//2}]")
+
             cmds.select(clear=True)
-            joint = cmds.joint(name=f"{self.side}_membrane{result}0{i}_JNT")
+            joint = cmds.joint(name=f"{self.side}_membrane{result}0{i}NurbsSkin_JNT")
             cmds.connectAttr(f"{wta}.matrixSum", f"{joint}.offsetParentMatrix")
             cmds.parent(joint, self.module_indiv_grp)
             nurbs_joints.append(joint)
 
+        
+
         dupe_skinning = cmds.duplicate(dupe[0], name=f"{self.side}_membrane{result}_SkinningShape", rr=True)
+        
 
 
         blendShape = cmds.blendShape(dupe[0], dupe_skinning[0], name=f"{self.side}_membrane{result}_BS", origin="world")[0]
@@ -189,17 +196,20 @@ class MembraneModule():
 
         composes = []
 
-        for value in range(1, 4):
-            parameter = 0.25 * value
+        for value in range(0, 3):
+            parameter = 0.5 * value
 
             mpa = cmds.createNode("motionPath", name=f"{self.side}_membrane{result}0{value}_MPA", ss=True)
             cmds.connectAttr(f"{dupe_skinning[0]}.worldSpace", f"{mpa}.geometryPath")
             cmds.setAttr(f"{mpa}.uValue", parameter)
             cmp = cmds.createNode("composeMatrix", name=f"{self.side}_membrane{result}0{value}_CMP", ss=True)
             cmds.connectAttr(f"{mpa}.allCoordinates", f"{cmp}.inputTranslate")
+
+
             composes.append(cmp)
 
 
+        skinning_joints = []
 
         for i, compoes in enumerate(composes):
 
@@ -217,13 +227,51 @@ class MembraneModule():
                 cmds.connectAttr(f"{composes[i+1]}.outputMatrix", f"{aimmatrix}.primary.primaryTargetMatrix")
                 cmds.setAttr(f"{aimmatrix}.primaryInputAxis", 1, 0, 0, type="double3")
 
+            if i == 0:
+                z = 0
+            elif i == 1:
+                z = int(len(wtas) / 2)
+            elif i == 2:
+                z = -1
+
+            cmds.connectAttr(f"{wtas[z]}.matrixSum", f"{aimmatrix}.secondary.secondaryTargetMatrix")
+            cmds.setAttr(f"{aimmatrix}.secondaryInputAxis", 0, 0, 1, type="double3")
+            cmds.setAttr(f"{aimmatrix}.secondaryMode", 2)
+            cmds.setAttr(f"{aimmatrix}.secondaryTargetVector", 0, 0, 1, type="double3")
 
 
+            ctl, grp = curve_tool.controller_creator(f"{self.side}_membrane{result}0{i}", suffixes=["GRP"])
+            cmds.connectAttr(f"{aimmatrix}.outputMatrix", f"{grp[0]}.offsetParentMatrix")
 
+            cmds.parent(grp[0], self.controllers_trn)
+            
 
             cmds.select(clear=True)
-            skinning_joint = cmds.joint(name=f"{self.side}_membrane{result}0{value}_JNT")
-            cmds.connectAttr(f"{aimmatrix}.outputMatrix", f"{skinning_joint}.offsetParentMatrix")
+            skinning_joint = cmds.joint(name=f"{self.side}_membrane{result}0{i}_JNT")
+            skinning_joints.append(skinning_joint)
+            cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{skinning_joint}.offsetParentMatrix")
+            cmds.parent(skinning_joint, self.skinning_trn)  
+
+        for i in range(1, len(joint01), 5):
+            distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_membrane{result}0{i}_DB", ss=True)
+            cmds.connectAttr(f"{joint01[i]}.worldMatrix[0]", f"{distance_between}.inMatrix1")
+            cmds.connectAttr(f"{joint02[i]}.worldMatrix[0]", f"{distance_between}.inMatrix2")
+        
+            float_math = cmds.createNode("floatMath", name=f"{self.side}_membrane{result}0{i}_FLM", ss=True)
+            cmds.connectAttr(f"{distance_between}.distance", f"{float_math}.floatA")
+            cmds.setAttr(f"{float_math}.floatB", cmds.getAttr(f"{distance_between}.distance"))
+            cmds.setAttr(f"{float_math}.operation", 3)
+
+            cond = cmds.createNode("condition", name=f"{self.side}_membrane{result}0{i}_COND", ss=True)
+            cmds.connectAttr(f"{distance_between}.distance", f"{cond}.firstTerm")
+            cmds.connectAttr(f"{float_math}.outFloat", f"{cond}.colorIfTrueR")
+            cmds.setAttr(f"{cond}.secondTerm", cmds.getAttr(f"{distance_between}.distance"))
+            cmds.setAttr(f"{cond}.operation", 4)
+            cmds.setAttr(f"{cond}.colorIfFalseR", 1)
+
+            index = (i - 1) // 4
+
+            cmds.connectAttr(f"{cond}.outColorR", f"{skinning_joints[index]}.scaleZ")    
 
 
         # # cmds.reorderDeformers(skincluster, blendShape)
