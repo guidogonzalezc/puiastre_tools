@@ -17,6 +17,23 @@ class MembraneModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
 
 
+    def lock_attr(self, ctl, attrs = ["visibility"], ro=True):
+        """
+        Lock specified attributes of a controller, added rotate order attribute if ro is True.
+        
+        Args:
+            ctl (str): The name of the controller to lock attributes on.
+            attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+            ro (bool): If True, adds a rotate order attribute. Default is True.
+        """
+
+        for attr in attrs:
+            cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+        
+        if ro:
+            cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+            cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
+
     def make(self, side):
 
         self.side = side   
@@ -30,11 +47,10 @@ class MembraneModule():
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_membraneModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_membraneControllers_GRP", ss=True, parent=self.masterWalk_ctl)
+        cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_membraneSkinning_GRP", ss=True, p=self.skel_grp)
 
         fingers_chains = []
-
-        print(self.attr_ctl)
 
         cmds.addAttr(self.attr_ctl, longName='Dynamics______', attributeType='enum', enumName='_______')
 
@@ -227,20 +243,21 @@ class MembraneModule():
                 cmds.connectAttr(f"{composes[i+1]}.outputMatrix", f"{aimmatrix}.primary.primaryTargetMatrix")
                 cmds.setAttr(f"{aimmatrix}.primaryInputAxis", 1, 0, 0, type="double3")
 
-            if i == 0:
-                z = 0
-            elif i == 1:
-                z = int(len(wtas) / 2)
-            elif i == 2:
-                z = -1
+            # if i == 0:
+            #     z = 0
+            # elif i == 1:
+            #     z = int(len(wtas) / 2)
+            # elif i == 2:
+            #     z = -1
 
-            cmds.connectAttr(f"{wtas[z]}.matrixSum", f"{aimmatrix}.secondary.secondaryTargetMatrix")
-            cmds.setAttr(f"{aimmatrix}.secondaryInputAxis", 0, 0, 1, type="double3")
-            cmds.setAttr(f"{aimmatrix}.secondaryMode", 2)
-            cmds.setAttr(f"{aimmatrix}.secondaryTargetVector", 0, 0, 1, type="double3")
+            # cmds.connectAttr(f"{wtas[z]}.matrixSum", f"{aimmatrix}.secondary.secondaryTargetMatrix")
+            # cmds.setAttr(f"{aimmatrix}.secondaryInputAxis", 0, 0, 1, type="double3")
+            # cmds.setAttr(f"{aimmatrix}.secondaryMode", 2)
+            # cmds.setAttr(f"{aimmatrix}.secondaryTargetVector", 0, 0, 1, type="double3")
 
 
             ctl, grp = curve_tool.controller_creator(f"{self.side}_membrane{result}0{i}", suffixes=["GRP"])
+            self.lock_attr(ctl)
             cmds.connectAttr(f"{aimmatrix}.outputMatrix", f"{grp[0]}.offsetParentMatrix")
 
             cmds.parent(grp[0], self.controllers_trn)
