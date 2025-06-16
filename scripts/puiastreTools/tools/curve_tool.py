@@ -87,6 +87,13 @@ def get_all_ctl_curves_data():
                 om.MFnNurbsCurve.kPeriodic: "periodic"
             }
 
+            line_width = None
+            if cmds.attributeQuery("lineWidth", node=shape, exists=True):
+                try:
+                    line_width = cmds.getAttr(shape + ".lineWidth")
+                except:
+                    pass 
+
             form = form_types.get(curve_fn.form, "unknown")
             if form == "unknown":
                 om.MGlobal.displayWarning(f"Curve form unknown for {shape}")
@@ -99,6 +106,7 @@ def get_all_ctl_curves_data():
                 "overrideEnabled": shape_override_enabled,
                 "overrideColor": shape_override_color,
                 "alwaysDrawOnTop": always_on_top,
+                "lineWidth": line_width,
                 "curve": {
                     "cvs": cvs,
                     "form": form,
@@ -205,6 +213,14 @@ def build_curves_from_template(target_transform_name=None):
             if shape_data.get("alwaysDrawOnTop", False):
                 fn_dep = om.MFnDependencyNode(shape_obj)
                 fn_dep.findPlug('alwaysDrawOnTop', False).setBool(True)
+
+            line_width = shape_data.get("lineWidth", None)
+            if line_width is not None:
+                if cmds.attributeQuery("lineWidth", node=shape_fn.name(), exists=True):
+                    try:
+                        cmds.setAttr(shape_fn.name() + ".lineWidth", line_width)
+                    except:
+                        om.MGlobal.displayWarning(f"Could not set lineWidth for {shape_fn.name()}")
 
             created_shapes.append(shape_obj)
 

@@ -7,7 +7,7 @@ from puiastreTools.autorig import spine_module
 from puiastreTools.autorig import tail_module
 from puiastreTools.autorig import clavicle_module
 from puiastreTools.autorig import spikes_module
-from puiastreTools.autorig import membrane_002
+from puiastreTools.autorig import membrane_003
 from puiastreTools.autorig import fk_chain_modules
 from puiastreTools.autorig import jaw_module
 
@@ -24,9 +24,10 @@ import os
 from importlib import reload
 
 reload(leg_module)
+reload(basic_structure)
 reload(fk_chain_modules)
 reload(wing_arm_module)
-reload(membrane_002)
+reload(membrane_003)
 reload(neck_module)
 reload(finger_module)
 reload(spine_module)
@@ -90,7 +91,7 @@ def make():
 
     complete_path = os.path.realpath(__file__)
     relative_path = complete_path.split("\scripts")[0]
-    guides_path = os.path.join(relative_path, "guides", "aychedral_GUIDES_001.guides")
+    guides_path = os.path.join(relative_path, "guides", "aychedral_GUIDES_002.guides")
     curves_path = os.path.join(relative_path, "curves", "AYCHEDRAL_curves_001.json") 
     guides_manager.init_template_file(guides_path)
     curve_tool.init_template_file(curves_path)
@@ -108,7 +109,7 @@ def make():
     leg_Module = leg_module.LegModule()
     clavicle = clavicle_module.ClavicleModule()
     # spikes = spikes_module.SpikesModule()
-    membrane = membrane_002.MembraneModule()
+    membrane = membrane_003.MembraneModule()
     fk_module = fk_chain_modules.FKModule()
     jaw = jaw_module.jawModule()
 
@@ -219,5 +220,7 @@ def make():
     pos='midCenter',
     fade=True,
     alpha=0.8)
+
+    cmds.select(clear=True)
 
 
