@@ -129,7 +129,7 @@ def make():
 
     neck.make()
     tail.make()
-    # jaw.make()
+    jaw.make()
     # spikes.make()
 
     fk_chain = guides_manager.fk_chain_import()

@@ -25,11 +25,15 @@ class jawModule():
         mult_matrix = cmds.createNode("multMatrix", n=ctl.replace("CTL", "MMX"), ss=True)
         cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{mult_matrix}.matrixIn[0]")
         cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
+        grp_local = cmds.createNode("transform", n=ctl.replace("_CTL", "Local_GRP"), ss=True)
         trn_local = cmds.createNode("transform", n=ctl.replace("_CTL", "Local_TRN"), ss=True)
-        cmds.matchTransform(trn_local, grp, pos=True, rot=True, scl=True)
-        cmds.parent(trn_local, self.module_trn)
+        cmds.parent(trn_local, grp_local)
+        cmds.matchTransform(grp_local, grp, pos=True, rot=True, scl=True)
+        cmds.parent(grp_local, self.module_trn)
         cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{trn_local}.offsetParentMatrix")
         cmds.connectAttr(f"{trn_local}.worldMatrix[0]", f"{jnt_skinning}.offsetParentMatrix")
+
+        return trn_local
     
     def lock_attrs(self, ctl):
 
@@ -46,10 +50,12 @@ class jawModule():
 
 
         jaw_jnts = guides_manager.guide_import(joint_name=f"{side}_jaw_JNT", all_descendents=True)
-        cmds.parent(jaw_jnts, self.module_trn)
+        upper_jnt = guides_manager.guide_import(joint_name=f"{side}_upperJaw_JNT", all_descendents=True)
+        
 
         jaw_jnt = jaw_jnts[0]
         jaw_jnt_end = jaw_jnts[-1]
+        cmds.parent(jaw_jnt, upper_jnt, self.module_trn)
         ctl = curve_tool.controller_creator
 
         jaw_skinning_jnt = cmds.createNode("joint", n=f"{side}_jawSkinning_JNT", p=self.skinning_trn)
@@ -58,20 +64,20 @@ class jawModule():
 
         jaw_curve_ctl, jaw_curve_grp = ctl(side+"_jaw", ["GRP"])
         self.lock_attrs(jaw_curve_ctl)
-        cmds.matchTransform(jaw_curve_grp[0], jaw_jnt, pos=True)
-        self.local(jaw_curve_ctl, jaw_curve_grp[0], jaw_skinning_jnt)
+        cmds.matchTransform(jaw_curve_grp[0], jaw_jnt, pos=True, rot=True)
+        jaw_local_trn = self.local(jaw_curve_ctl, jaw_curve_grp[0], jaw_skinning_jnt)
         cmds.addAttr(jaw_curve_ctl, ln="EXTRA_ATTRIBUTES", at="enum", en="___:", k=True)
         cmds.setAttr(f"{jaw_curve_ctl}.EXTRA_ATTRIBUTES", lock=True)
         cmds.addAttr(jaw_curve_ctl, ln="Collision", min=0, max=1, dv=1, k=True, at="float")
 
         upper_jaw_curve_ctl, upper_jaw_curve_grp = ctl(f"{side}_upperJaw", ["GRP", "OFF"])
         self.lock_attrs(upper_jaw_curve_ctl)
-        cmds.matchTransform(upper_jaw_curve_grp, jaw_jnt, pos=True)
-        self.local(upper_jaw_curve_ctl, upper_jaw_curve_grp[0], upper_jaw_skinning_jnt)
+        cmds.matchTransform(upper_jaw_curve_grp, upper_jnt, pos=True, rot=True)
+        upper_jaw_trn = self.local(upper_jaw_curve_ctl, upper_jaw_curve_grp[0], upper_jaw_skinning_jnt)
 
         chin_curve_ctl, chin_curve_grp = ctl(f"{side}_chin", ["GRP"])
         self.lock_attrs(chin_curve_ctl)
-        cmds.matchTransform(chin_curve_grp[0], jaw_jnt_end, pos=True)
+        cmds.matchTransform(chin_curve_grp[0], jaw_jnt_end, pos=True, rot=True)
         self.local(chin_curve_ctl, chin_curve_grp[0], chin_skinning_jnt)
         cmds.parent(chin_curve_grp[0], jaw_curve_ctl)
 
@@ -80,13 +86,13 @@ class jawModule():
         cmds.connectAttr(f"{upper_jaw_curve_ctl}.matrix", f"{upper_jaw_mmx}.matrixIn[0]")
         cmds.connectAttr(f"{upper_jaw_curve_grp[-1]}.matrix", f"{upper_jaw_mmx}.matrixIn[1]")
         upper_jaw_dcm = cmds.createNode("decomposeMatrix", n=f"{side}upperJaw_DCM", ss=True)
-        cmds.connectAttr(f"{upper_jaw_mmx}.matrixSum", f"{upper_jaw_dcm}.inputMatrix")
+        cmds.connectAttr(f"{upper_jaw_trn}.worldMatrix[0]", f"{upper_jaw_dcm}.inputMatrix")
 
         jaw_mmx = cmds.createNode("multMatrix", n=f"{side}jaw_MMX", ss=True)
         cmds.connectAttr(f"{jaw_curve_ctl}.matrix", f"{jaw_mmx}.matrixIn[0]")
         cmds.connectAttr(f"{jaw_curve_grp[-1]}.matrix", f"{jaw_mmx}.matrixIn[1]")
         jaw_dcm = cmds.createNode("decomposeMatrix", n=f"{side}jaw_DCM", ss=True)
-        cmds.connectAttr(f"{jaw_mmx}.matrixSum", f"{jaw_dcm}.inputMatrix")
+        cmds.connectAttr(f"{jaw_local_trn}.worldMatrix[0]", f"{jaw_dcm}.inputMatrix")
 
         
 
@@ -104,7 +110,7 @@ class jawModule():
         cmds.connectAttr(f"{floatC}.outFloat", f"{blend_attrs}.input[0]")
         cmds.connectAttr(f"{clamp}.outputR", f"{blend_attrs}.input[1]")
         cmds.connectAttr(f"{jaw_curve_ctl}.Collision", f"{blend_attrs}.attributesBlender")
-        cmds.connectAttr(f"{blend_attrs}.output", f"{upper_jaw_curve_grp[-1]}.rotateX")
+        cmds.connectAttr(f"{blend_attrs}.output", f"{upper_jaw_curve_grp[0]}.rotateX")
 
         if "C_head_CTL" in cmds.ls():
             cmds.parent(jaw_curve_grp[0], "C_head_CTL")

@@ -42,7 +42,7 @@ class NeckModule:
         self.controllers()
         self.ik_setup()
         self.out_skinning_jnts()
-        # self.space_switch()
+        self.space_switch()
 
         self.data_exporter.append_data("C_neckModule", {"neck00_ctl": self.neck_ctl})
         self.data_exporter.append_data("C_neckModule",{"head_ctl": self.head_ctl})
@@ -131,27 +131,35 @@ class NeckModule:
         This function creates an IK spline handle, a curve for the IK, and additional joints for the neck and head.
         """
 
-        self.ik_spring_hdl = cmds.ikHandle(sj=self.neck_chain[0], ee=self.neck_chain[-1], sol="ikSplineSolver", n=f"{self.side}_neckIkSpline_HDL", createCurve=True,  ns=3)
-        cmds.parent(self.ik_spring_hdl[0], self.module_trn)
-        self.ik_curve = self.ik_spring_hdl[2]
-        self.ik_curve = cmds.rename(self.ik_curve, f"{self.side}_neckIkCurve_CRV")
+        self.ik_curve = cmds.curve(d=2, n=f"{self.side}_neckIkCurve_CRV", p=(cmds.xform(self.neck_chain[0], q=True, ws=True, t=True), cmds.xform(self.neck_chain[len(self.neck_chain)//2], q=True, ws=True, t=True), cmds.xform(self.neck_chain[-1], q=True, ws=True, t=True)))
+        # self.ik_curve = cmds.rebuildCurve(self.ik_curve, ch=True, rpo=True, rt=0, d=1, tol=0.01, s=4 , n=f"{self.side}_neckIkCurve_CRV")[0]
+        self.ik_spring_hdl = cmds.ikHandle(sj=self.neck_chain[0], ee=self.neck_chain[-1], sol="ikSplineSolver", n=f"{self.side}_neckIkSpline_HDL", parentCurve=False, curve=self.ik_curve, createCurve=False)
+        cmds.parent(self.ik_curve, self.ik_spring_hdl[0], self.module_trn)
+        
 
-        self.neck_start_jnt_offset = cmds.createNode("transform", n=f"{self.side}_neckStart_OFFSET", p=self.module_trn)
-        self.neck_start_jnt = cmds.createNode("joint", n=f"{self.side}_neckStart_JNT", p=self.neck_start_jnt_offset)
-        cmds.matchTransform(self.neck_start_jnt_offset, self.neck_chain[0], pos=True, rot=True, scl=False)
-        cmds.parentConstraint(self.neck_ctl, self.neck_start_jnt_offset, mo=True)
+        # self.neck_start_jnt_offset = cmds.createNode("transform", n=f"{self.side}_neckStart_OFFSET", p=self.module_trn)
+        # self.neck_start_jnt = cmds.createNode("joint", n=f"{self.side}_neckStart_JNT", p=self.neck_start_jnt_offset)
+        # cmds.matchTransform(self.neck_start_jnt_offset, self.neck_chain[0], pos=True, rot=True, scl=False)
+        # cmds.parentConstraint(self.neck_ctl, self.neck_start_jnt_offset, mo=True)
 
-        self.neck_mid_jnt_offset = cmds.createNode("transform", n=f"{self.side}_neckMid_OFFSET", p=self.module_trn)
-        self.neck_mid_jnt = cmds.createNode("joint", n=f"{self.side}_neckMid_JNT", p=self.neck_mid_jnt_offset)
-        cmds.matchTransform(self.neck_mid_jnt_offset, self.neck_chain[5], pos=True, rot=True, scl=False)
-        cmds.parentConstraint(self.neck_ctl_mid, self.neck_mid_jnt_offset, mo=True)
+        # self.neck_mid_jnt_offset = cmds.createNode("transform", n=f"{self.side}_neckMid_OFFSET", p=self.module_trn)
+        # self.neck_mid_jnt = cmds.createNode("joint", n=f"{self.side}_neckMid_JNT", p=self.neck_mid_jnt_offset)
+        # cmds.matchTransform(self.neck_mid_jnt_offset, self.neck_chain[5], pos=True, rot=True, scl=False)
+        # cmds.parentConstraint(self.neck_ctl_mid, self.neck_mid_jnt_offset, mo=True)
 
-        self.head_neck_end_jnt_offset = cmds.createNode("transform", n=f"{self.side}_headNeckEnd_OFFSET", p=self.module_trn)
-        self.head_neck_end_jnt = cmds.createNode("joint", n=f"{self.side}_headNeckEnd_JNT", p=self.head_neck_end_jnt_offset)
-        cmds.matchTransform(self.head_neck_end_jnt_offset, self.neck_chain[-1], pos=True, rot=True, scl=False)
+        # self.head_neck_end_jnt_offset = cmds.createNode("transform", n=f"{self.side}_headNeckEnd_OFFSET", p=self.module_trn)
+        # self.head_neck_end_jnt = cmds.createNode("joint", n=f"{self.side}_headNeckEnd_JNT", p=self.head_neck_end_jnt_offset)
+        # cmds.matchTransform(self.head_neck_end_jnt_offset, self.neck_chain[-1], pos=True, rot=True, scl=False)
+
+        for i, ctl in enumerate([self.neck_ctl, self.neck_ctl_mid, self.neck_end_ctl]):
+            decompose_matrix = cmds.createNode("decomposeMatrix", n=ctl.replace("CTL", "DCM"), ss=True)
+            cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{decompose_matrix}.inputMatrix")
+            cmds.connectAttr(f"{decompose_matrix}.outputTranslate", f"{self.ik_curve}.controlPoints[{i}]")
+
+
         
         # Skin the curve to the joints
-        self.curve_skin_cluster = cmds.skinCluster(self.neck_start_jnt, self.neck_mid_jnt, self.head_neck_end_jnt, self.ik_curve, tsb=True, n=f"{self.side}_neckSkinCluster_SKIN", mi=5)
+        # self.curve_skin_cluster = cmds.skinCluster(self.neck_start_jnt, self.neck_mid_jnt, self.head_neck_end_jnt, self.ik_curve, tsb=True, n=f"{self.side}_neckSkinCluster_SKIN", mi=5)
 
         # Set the spline with the correct settings
         cmds.setAttr(f"{self.ik_spring_hdl[0]}.dTwistControlEnable", 1)
@@ -159,7 +167,7 @@ class NeckModule:
         cmds.setAttr(f"{self.ik_spring_hdl[0]}.dForwardAxis", 4)
         cmds.connectAttr(f"{self.neck_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrix")
         cmds.connectAttr(f"{self.neck_end_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrixEnd")
-        cmds.parentConstraint(self.neck_end_ctl, self.head_neck_end_jnt, mo=True)
+        # cmds.parentConstraint(self.neck_end_ctl, self.head_neck_end_jnt, mo=True)
 
         parent = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.neck_grp_mid[1], mo=True)[0]
         rev_00 = cmds.createNode("reverse", n=f"{self.side}_neckMidReverse_REV", ss=True)
@@ -197,7 +205,7 @@ class NeckModule:
             cmds.parent(skin_joint, self.skinning_trn)
             skinning_jnts.append(skin_joint)
         
-        cmds.connectAttr(f"{self.head_neck_end_jnt}.worldMatrix[0]", f"{self.head_grp[0]}.offsetParentMatrix")
+        cmds.connectAttr(f"{self.neck_chain[-1]}.worldMatrix[0]", f"{self.head_grp[0]}.offsetParentMatrix")
         cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{skinning_jnts[-1]}.offsetParentMatrix", force=True)
         cmds.select(clear=True)
 
