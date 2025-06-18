@@ -43,8 +43,11 @@ class NeckModule:
         self.ik_setup()
         self.out_skinning_jnts()
         self.space_switch()
-        print(self.head_ctl)
-        self.data_exporter.append_data(f"{side}_neckModule", {"neck00_ctl": self.neck_ctl, "head_ctl": self.head_ctl})
+        self.data_exporter.append_data(f"{side}_neckModule", {
+                                                            "neck_main_ctl": self.neck_main_ctl,
+                                                            "neck00_ctl": self.neck_ctl, 
+                                                            "head_ctl": self.head_ctl,
+                                                            })
 
     def lock_attrs(self, ctl, attrs):
 
@@ -95,7 +98,13 @@ class NeckModule:
         Create controllers for the neck chain and head.
         This function creates controllers for the neck chain, including a mid-neck controller, an end-neck controller, and a head controller.
         It also sets up the necessary attributes and constraints for these controllers.
+
         """
+
+        self.neck_main_ctl, self.neck_main_grp = curve_tool.controller_creator(f"{self.side}_neckMain", ["GRP"])
+        cmds.matchTransform(self.neck_main_grp[0], self.neck_chain[0], pos=True, rot=True, scl=False)
+        self.lock_attrs(self.neck_main_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
+        cmds.parent(self.neck_main_grp[0], self.controllers_trn)
 
         self.neck_ctl, self.neck_grp = curve_tool.controller_creator("C_neck", ["GRP"])
         cmds.matchTransform(self.neck_grp[0], self.neck_chain[0], pos=True, rot=True, scl=False)
@@ -103,12 +112,11 @@ class NeckModule:
        
 
         self.neck_ctl_mid, self.neck_grp_mid = curve_tool.controller_creator("C_neckMid", ["GRP", "OFF"])
-        cmds.addAttr(self.neck_ctl_mid, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
-        cmds.setAttr(f"{self.neck_ctl_mid}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
-        cmds.addAttr(self.neck_ctl_mid, ln="Follow_Neck", at="float", dv=1, min=0, max=1, keyable=True)
+        # cmds.addAttr(self.neck_ctl_mid, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
+        # cmds.setAttr(f"{self.neck_ctl_mid}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
+        # cmds.addAttr(self.neck_ctl_mid, ln="Follow_Neck", at="float", dv=1, min=0, max=1, keyable=True)
         cmds.matchTransform(self.neck_grp_mid[0], self.neck_chain[5], pos=True, rot=True, scl=False)
         self.lock_attrs(self.neck_ctl_mid, ["scaleX", "scaleY", "scaleZ", "visibility"])
-
 
 
         self.neck_end_ctl, self.neck_end_grp = curve_tool.controller_creator("C_neckEnd", ["GRP", "OFF"])
@@ -116,12 +124,13 @@ class NeckModule:
         cmds.addAttr(self.neck_end_ctl, ln="EXTRA_ATTRIBUTES___", at="enum", en="___")
         cmds.setAttr(f"{self.neck_end_ctl}.EXTRA_ATTRIBUTES___", lock=True, keyable=False, channelBox=True)
         cmds.addAttr(self.neck_end_ctl, ln="Follow_Neck", at="float", dv=1, min=0, max=1, keyable=True)
+        cmds.parent(self.neck_grp_mid[0], self.neck_end_ctl)
         self.lock_attrs(self.neck_end_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
 
         self.head_ctl, self.head_grp = curve_tool.controller_creator("C_head", ["GRP"])
         cmds.matchTransform(self.head_grp[0], self.neck_chain[-1], rot=True, scl=False)
         self.lock_attrs(self.head_ctl, ["scaleX", "scaleY", "scaleZ", "visibility"])
-        cmds.parent(self.neck_grp[0], self.neck_grp_mid[0], self.neck_end_grp[0], self.head_grp[0], self.controllers_trn)
+        cmds.parent(self.neck_grp[0], self.neck_end_grp[0], self.head_grp[0], self.neck_main_ctl)
 
     def ik_setup(self):
 
@@ -154,11 +163,11 @@ class NeckModule:
         cmds.connectAttr(f"{self.neck_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrix")
         cmds.connectAttr(f"{self.neck_end_ctl}.worldMatrix[0]", f"{self.ik_spring_hdl[0]}.dWorldUpMatrixEnd")
 
-        parent = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.neck_grp_mid[1], mo=True)[0]
-        rev_00 = cmds.createNode("reverse", n=f"{self.side}_neckMidReverse_REV", ss=True)
-        cmds.connectAttr(f"{self.neck_ctl_mid}.Follow_Neck", f"{parent}.w0")
-        cmds.connectAttr(f"{self.neck_ctl_mid}.Follow_Neck", f"{rev_00}.inputX")
-        cmds.connectAttr(f"{rev_00}.outputX", f"{parent}.w1")
+        # parent = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.neck_grp_mid[1], mo=True)[0]
+        # rev_00 = cmds.createNode("reverse", n=f"{self.side}_neckMidReverse_REV", ss=True)
+        # cmds.connectAttr(f"{self.neck_ctl_mid}.Follow_Neck", f"{parent}.w0")
+        # cmds.connectAttr(f"{self.neck_ctl_mid}.Follow_Neck", f"{rev_00}.inputX")
+        # cmds.connectAttr(f"{rev_00}.outputX", f"{parent}.w1")
 
         parent_02 = cmds.parentConstraint(self.neck_ctl, self.masterWalk_ctl, self.neck_end_grp[1], mo=True)[0]
         rev_01 = cmds.createNode("reverse", n=f"{self.side}_headReverse_REV")

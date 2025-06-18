@@ -53,7 +53,8 @@ class SpineModule():
                                     "localChest": self.localChest_ctl,
                                     "localHip": self.spine_hip_ctl,
                                     "body" : self.body_ctl,
-                                    "body_grp" : self.body_ctl_grp
+                                    "body_grp" : self.body_ctl_grp,
+                                    "spine_ctl" : self.spine_ctl,
                                     }
                                   )
 
@@ -164,7 +165,7 @@ class SpineModule():
         self.body_ctl, self.body_ctl_grp = curve_tool.controller_creator(f"C_body", suffixes = ["GRP"])
         cmds.matchTransform(self.body_ctl_grp[0], self.spine_grp[0][0])
 
-        cmds.parent(self.spine_grp[0][0], self.body_ctl) 
+        cmds.parent(self.spine_grp[0][0], self.spine_grp[2][0], self.body_ctl) 
 
         self.lock_attr(self.body_ctl)
         

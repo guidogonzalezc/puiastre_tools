@@ -241,7 +241,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_CTL|C_jawControllers_GRP|C_jaw_GRP|C_jaw_CTL|C_chin_GRP|C_chin_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_head_GRP|C_head_CTL|C_jawControllers_GRP|C_jaw_GRP|C_jaw_CTL|C_chin_GRP|C_chin_CTL": {
         "transform": {
             "name": "C_chin_CTL",
             "overrideEnabled": false,
@@ -333,7 +333,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_head_GRP|C_head_CTL": {
         "transform": {
             "name": "C_head_CTL",
             "overrideEnabled": true,
@@ -471,7 +471,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_CTL|C_jawControllers_GRP|C_jaw_GRP|C_jaw_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_head_GRP|C_head_CTL|C_jawControllers_GRP|C_jaw_GRP|C_jaw_CTL": {
         "transform": {
             "name": "C_jaw_CTL",
             "overrideEnabled": false,
@@ -1034,7 +1034,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape16",
+                "name": "C_localHip_CTLShape19",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1117,7 +1117,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape17",
+                "name": "C_localHip_CTLShape20",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1200,7 +1200,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape18",
+                "name": "C_localHip_CTLShape21",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1467,7 +1467,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape11",
+                "name": "C_movablePivot_CTLShape13",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -1550,7 +1550,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape12",
+                "name": "C_movablePivot_CTLShape14",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -1634,7 +1634,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckEnd_GRP|C_neckEnd_OFF|C_neckEnd_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_neckEnd_GRP|C_neckEnd_OFF|C_neckEnd_CTL": {
         "transform": {
             "name": "C_neckEnd_CTL",
             "overrideEnabled": true,
@@ -1712,7 +1712,543 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMid_GRP|C_neckMid_OFF|C_neckMid_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL": {
+        "transform": {
+            "name": "C_neckMain_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 17
+        },
+        "shapes": [
+            {
+                "name": "C_neckMain_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            27.442646567333547,
+                            119.96133796788659,
+                            -15.477121404849006
+                        ],
+                        [
+                            37.50585042845292,
+                            119.06994106130698,
+                            -15.478715217429489
+                        ],
+                        [
+                            41.52927934353365,
+                            118.53965313524327,
+                            -15.479143719090043
+                        ],
+                        [
+                            41.528097215818306,
+                            117.94568103565005,
+                            -19.94437098457866
+                        ],
+                        [
+                            44.12578748811079,
+                            116.6246707198425,
+                            -22.17644322608424
+                        ],
+                        [
+                            46.724659882583644,
+                            116.00648444710357,
+                            -19.943418860758023
+                        ],
+                        [
+                            60.88488901862133,
+                            110.25151789609431,
+                            -4.205472415293172
+                        ],
+                        [
+                            63.32938111728806,
+                            108.3399710829713,
+                            -2.103499463866745
+                        ],
+                        [
+                            63.3304930514291,
+                            108.34501324596006,
+                            2.0971452457125666
+                        ],
+                        [
+                            60.88711288690308,
+                            110.26160301065045,
+                            4.195817002921283
+                        ],
+                        [
+                            46.73521210718819,
+                            116.0543446687307,
+                            19.929109502552613
+                        ],
+                        [
+                            44.1375218703605,
+                            116.67789111991362,
+                            22.162018933430897
+                        ],
+                        [
+                            41.53864944042289,
+                            117.99354020930218,
+                            19.928157379990076
+                        ],
+                        [
+                            41.53746725284772,
+                            118.57679090402807,
+                            15.461517054328343
+                        ],
+                        [
+                            37.51403833776701,
+                            119.10707903968932,
+                            15.46194555573775
+                        ],
+                        [
+                            27.450829086834066,
+                            119.99844457412813,
+                            15.434652938972368
+                        ],
+                        [
+                            25.063733294471188,
+                            120.18131816978048,
+                            15.435065307236144
+                        ],
+                        [
+                            20.21431476103645,
+                            120.55284421861455,
+                            15.435903020198907
+                        ],
+                        [
+                            15.364896240361114,
+                            120.67343914260525,
+                            15.437041934243561
+                        ],
+                        [
+                            15.366187861524553,
+                            120.53740293992108,
+                            20.316648093894727
+                        ],
+                        [
+                            15.36747949448053,
+                            120.16945115157189,
+                            25.19653262963577
+                        ],
+                        [
+                            15.368070315409943,
+                            120.00114216196013,
+                            27.428697660235166
+                        ],
+                        [
+                            15.370669321618882,
+                            119.14537198250062,
+                            37.24805106689581
+                        ],
+                        [
+                            15.371799195879055,
+                            118.5879312925345,
+                            41.51703683465593
+                        ],
+                        [
+                            19.810259478278386,
+                            118.00294669672665,
+                            41.51656412612638
+                        ],
+                        [
+                            22.030177450706677,
+                            116.68814868744637,
+                            44.11583803533698
+                        ],
+                        [
+                            19.81163513495503,
+                            116.07201859347511,
+                            46.71544819515849
+                        ],
+                        [
+                            4.177416687014199,
+                            110.32134945264517,
+                            60.88256433264341
+                        ],
+                        [
+                            2.090662120949047,
+                            108.41315674454435,
+                            63.32934514201252
+                        ],
+                        [
+                            -2.084141051675395,
+                            108.41328132711445,
+                            63.33045008621459
+                        ],
+                        [
+                            -4.1721896582270155,
+                            110.32144803782242,
+                            60.884774401791006
+                        ],
+                        [
+                            -19.815605305504988,
+                            116.07206563624959,
+                            46.72593543420706
+                        ],
+                        [
+                            -22.035523242407322,
+                            116.68819775316159,
+                            44.127500157201546
+                        ],
+                        [
+                            -19.816980962181237,
+                            118.00298388853393,
+                            41.52705137699818
+                        ],
+                        [
+                            -15.378520739272608,
+                            118.5879661152183,
+                            41.52517431788304
+                        ],
+                        [
+                            -15.379650613532794,
+                            119.14540701478045,
+                            37.25618854987187
+                        ],
+                        [
+                            -15.353540897940647,
+                            120.00116932947093,
+                            27.4368298098791
+                        ],
+                        [
+                            -15.354131718870095,
+                            120.16947831908342,
+                            25.204664779277852
+                        ],
+                        [
+                            -15.35542335182607,
+                            120.53743012053168,
+                            20.324780243522657
+                        ],
+                        [
+                            -15.356714972988604,
+                            120.67344734176149,
+                            15.445174106655802
+                        ],
+                        [
+                            -20.20613348139986,
+                            120.55285249111058,
+                            15.446602528911367
+                        ],
+                        [
+                            -25.05555197705301,
+                            120.1813537105771,
+                            15.448332119604574
+                        ],
+                        [
+                            -27.442647750818363,
+                            119.9984810222951,
+                            15.449183505453988
+                        ],
+                        [
+                            -37.783150963968424,
+                            119.07054587425067,
+                            15.453034526295953
+                        ],
+                        [
+                            -41.52928038243732,
+                            118.57677965765453,
+                            15.454618831925728
+                        ],
+                        [
+                            -41.52809819486218,
+                            117.99352875333288,
+                            19.921259157841
+                        ],
+                        [
+                            -44.12578833308516,
+                            116.6778804220475,
+                            22.15649626953463
+                        ],
+                        [
+                            -46.72466066441817,
+                            116.0543349385627,
+                            19.924962396663844
+                        ],
+                        [
+                            -60.884889213275514,
+                            110.26160210390123,
+                            4.200877043752216
+                        ],
+                        [
+                            -63.32938111728813,
+                            108.3450144322927,
+                            2.1034991310972355
+                        ],
+                        [
+                            -63.33049305142898,
+                            108.3399722693047,
+                            -2.0971455784835635
+                        ],
+                        [
+                            -60.88711308155733,
+                            110.2515185665013,
+                            -4.200412376355023
+                        ],
+                        [
+                            -46.73521288902268,
+                            116.00647471693534,
+                            -19.947565966649677
+                        ],
+                        [
+                            -44.13752271533479,
+                            116.62465918359459,
+                            -22.18196588897297
+                        ],
+                        [
+                            -41.53865041946654,
+                            117.94566748373151,
+                            -19.95126920421298
+                        ],
+                        [
+                            -41.53746829175108,
+                            118.5396393737272,
+                            -15.486041938474658
+                        ],
+                        [
+                            -37.79133887328234,
+                            119.03340517113156,
+                            -15.487626243600628
+                        ],
+                        [
+                            -27.45083027031924,
+                            119.96137918434326,
+                            -15.462590844091913
+                        ],
+                        [
+                            -25.06373449655378,
+                            120.1442515582337,
+                            -15.463442229562176
+                        ],
+                        [
+                            -20.214316000900606,
+                            120.5157506531577,
+                            -15.465171820633719
+                        ],
+                        [
+                            -15.36489749248919,
+                            120.63634298866732,
+                            -15.466600239871372
+                        ],
+                        [
+                            -15.366189099223392,
+                            120.48860876290773,
+                            -20.34586578031815
+                        ],
+                        [
+                            -15.367480694164339,
+                            120.1089430746572,
+                            -25.2248529256181
+                        ],
+                        [
+                            -15.3680714977048,
+                            119.93527553834844,
+                            -27.456607470274992
+                        ],
+                        [
+                            -15.370551021346948,
+                            119.11593683088684,
+                            -36.822892337468275
+                        ],
+                        [
+                            -15.371800232736161,
+                            118.48825861760527,
+                            -41.54151341693188
+                        ],
+                        [
+                            -19.810260455644766,
+                            117.9032763909178,
+                            -41.53963635781658
+                        ],
+                        [
+                            -22.030178294046078,
+                            116.58225266623076,
+                            -44.13574640141289
+                        ],
+                        [
+                            -19.811635915318963,
+                            115.95988295999997,
+                            -46.73386994820465
+                        ],
+                        [
+                            -4.177416880829624,
+                            110.17528146671212,
+                            -60.88713991178577
+                        ],
+                        [
+                            -2.0906621204109053,
+                            108.26124769711852,
+                            -63.329332773964985
+                        ],
+                        [
+                            2.0841410522135364,
+                            108.26112311454712,
+                            -63.33043771816551
+                        ],
+                        [
+                            4.1721894644115896,
+                            110.17518288153772,
+                            -60.88934998093381
+                        ],
+                        [
+                            19.81560452514114,
+                            115.95983591722505,
+                            -46.744357187253286
+                        ],
+                        [
+                            22.035522399067922,
+                            116.58220360051469,
+                            -44.147408523276845
+                        ],
+                        [
+                            19.81697998481485,
+                            117.90323919911278,
+                            -41.5501236086888
+                        ],
+                        [
+                            15.37851970241553,
+                            118.48822379492056,
+                            -41.54965090016127
+                        ],
+                        [
+                            15.379768913804698,
+                            119.11590200820127,
+                            -36.831029820695704
+                        ],
+                        [
+                            15.35353971564544,
+                            119.93525507787892,
+                            -27.464739627968694
+                        ],
+                        [
+                            15.354130519185961,
+                            120.10892193300424,
+                            -25.23298508249433
+                        ],
+                        [
+                            15.35542211412688,
+                            120.48858792254919,
+                            -20.35399793755527
+                        ],
+                        [
+                            15.3567137208605,
+                            120.63633478951344,
+                            -15.474732412282297
+                        ],
+                        [
+                            20.2061322415358,
+                            120.51573986552074,
+                            -15.475871326327734
+                        ],
+                        [
+                            25.055550774970577,
+                            120.14421381668801,
+                            -15.47670903929012
+                        ],
+                        [
+                            27.442646567333547,
+                            119.96133796788659,
+                            -15.477121404849006
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        10.0,
+                        11.0,
+                        12.0,
+                        13.0,
+                        15.0,
+                        16.0,
+                        17.0,
+                        18.0,
+                        19.0,
+                        20.0,
+                        21.0,
+                        22.0,
+                        23.0,
+                        24.0,
+                        25.0,
+                        26.0,
+                        27.0,
+                        29.0,
+                        30.0,
+                        31.0,
+                        32.0,
+                        34.0,
+                        35.0,
+                        36.0,
+                        37.0,
+                        39.0,
+                        40.0,
+                        41.0,
+                        42.0,
+                        43.0,
+                        44.0,
+                        45.0,
+                        46.0,
+                        47.0,
+                        48.0,
+                        49.0,
+                        50.0,
+                        51.0,
+                        53.0,
+                        54.0,
+                        55.0,
+                        56.0,
+                        58.0,
+                        59.0,
+                        60.0,
+                        61.0,
+                        63.0,
+                        64.0,
+                        65.0,
+                        66.0,
+                        67.0,
+                        68.0,
+                        69.0,
+                        70.0,
+                        71.0,
+                        72.0,
+                        73.0,
+                        74.0,
+                        75.0,
+                        77.0,
+                        78.0,
+                        79.0,
+                        80.0,
+                        82.0,
+                        83.0,
+                        84.0,
+                        85.0,
+                        87.0,
+                        88.0,
+                        89.0,
+                        90.0,
+                        91.0,
+                        92.0,
+                        93.0,
+                        94.0,
+                        94.0,
+                        94.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_neckEnd_GRP|C_neckEnd_OFF|C_neckEnd_CTL|C_neckMid_GRP|C_neckMid_OFF|C_neckMid_CTL": {
         "transform": {
             "name": "C_neckMid_CTL",
             "overrideEnabled": true,
@@ -1790,7 +2326,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neck_GRP|C_neck_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_neck_GRP|C_neck_CTL": {
         "transform": {
             "name": "C_neck_CTL",
             "overrideEnabled": true,
@@ -5216,7 +5752,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_head_GRP|C_head_CTL|C_jawControllers_GRP|C_upperJaw_GRP|C_upperJaw_OFF|C_upperJaw_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_neckControllers_GRP|C_neckMain_GRP|C_neckMain_CTL|C_head_GRP|C_head_CTL|C_jawControllers_GRP|C_upperJaw_GRP|C_upperJaw_OFF|C_upperJaw_CTL": {
         "transform": {
             "name": "C_upperJaw_CTL",
             "overrideEnabled": false,
@@ -8572,7 +9108,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape43",
+                "name": "L_fingerAttr_CTLShape50",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -8833,7 +9369,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape44",
+                "name": "L_fingerAttr_CTLShape51",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -9142,7 +9678,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape45",
+                "name": "L_fingerAttr_CTLShape52",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -9499,7 +10035,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape46",
+                "name": "L_fingerAttr_CTLShape53",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10384,7 +10920,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape47",
+                "name": "L_fingerAttr_CTLShape54",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10645,7 +11181,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape48",
+                "name": "L_fingerAttr_CTLShape55",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -10906,7 +11442,7 @@
                 }
             },
             {
-                "name": "L_fingerAttr_CTLShape49",
+                "name": "L_fingerAttr_CTLShape56",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -15891,7 +16427,7 @@
                 }
             },
             {
-                "name": "L_fingerThumbFK01_CTLShape4",
+                "name": "L_fingerThumbFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -15974,7 +16510,7 @@
                 }
             },
             {
-                "name": "L_fingerThumbFK01_CTLShape5",
+                "name": "L_fingerThumbFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16057,7 +16593,7 @@
                 }
             },
             {
-                "name": "L_fingerThumbFK01_CTLShape6",
+                "name": "L_fingerThumbFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16176,7 +16712,7 @@
                 }
             },
             {
-                "name": "L_fingerThumbFK02_CTLShape4",
+                "name": "L_fingerThumbFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16259,7 +16795,7 @@
                 }
             },
             {
-                "name": "L_fingerThumbFK02_CTLShape5",
+                "name": "L_fingerThumbFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16342,7 +16878,7 @@
                 }
             },
             {
-                "name": "L_fingerThumbFK02_CTLShape6",
+                "name": "L_fingerThumbFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -17377,7 +17913,7 @@
                 }
             },
             {
-                "name": "L_indexToeFK01_CTLShape4",
+                "name": "L_indexToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -17460,7 +17996,7 @@
                 }
             },
             {
-                "name": "L_indexToeFK01_CTLShape5",
+                "name": "L_indexToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -17543,7 +18079,7 @@
                 }
             },
             {
-                "name": "L_indexToeFK01_CTLShape6",
+                "name": "L_indexToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -17662,7 +18198,7 @@
                 }
             },
             {
-                "name": "L_indexToeFK02_CTLShape4",
+                "name": "L_indexToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -17745,7 +18281,7 @@
                 }
             },
             {
-                "name": "L_indexToeFK02_CTLShape5",
+                "name": "L_indexToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -17828,7 +18364,7 @@
                 }
             },
             {
-                "name": "L_indexToeFK02_CTLShape6",
+                "name": "L_indexToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -18022,7 +18558,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_innerMembran01_GRP|L_innerMembran01_CTL|L_innerMembran02_GRP|L_innerMembran02_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_innerMembran02_GRP|L_innerMembran02_CTL": {
         "transform": {
             "name": "L_innerMembran02_CTL",
             "overrideEnabled": true,
@@ -18351,7 +18887,7 @@
                 }
             },
             {
-                "name": "L_legIk_CTLShape13",
+                "name": "L_legIk_CTLShape15",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -18434,7 +18970,7 @@
                 }
             },
             {
-                "name": "L_legIk_CTLShape14",
+                "name": "L_legIk_CTLShape16",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19016,6 +19552,98 @@
             }
         ]
     },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_membraneIndexMiddle03_GRP|L_membraneIndexMiddle03_CTL": {
+        "transform": {
+            "name": "L_membraneIndexMiddle03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_membraneIndexMiddle03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_membraneMiddleRing00_GRP|L_membraneMiddleRing00_CTL": {
         "transform": {
             "name": "L_membraneMiddleRing00_CTL",
@@ -19340,6 +19968,98 @@
                         11.0,
                         11.0,
                         11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_membraneMiddleRing03_GRP|L_membraneMiddleRing03_CTL": {
+        "transform": {
+            "name": "L_membraneMiddleRing03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_membraneMiddleRing03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
                     ],
                     "degree": 3
                 }
@@ -19676,6 +20396,98 @@
             }
         ]
     },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_membraneThumbIndex03_GRP|L_membraneThumbIndex03_CTL": {
+        "transform": {
+            "name": "L_membraneThumbIndex03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "L_membraneThumbIndex03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_middleToeFK01Controllers_GRP|L_middleToeFK01_GRP|L_middleToeFK01_CTL": {
         "transform": {
             "name": "L_middleToeFK01_CTL",
@@ -19711,7 +20523,7 @@
                 }
             },
             {
-                "name": "L_middleToeFK01_CTLShape4",
+                "name": "L_middleToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19794,7 +20606,7 @@
                 }
             },
             {
-                "name": "L_middleToeFK01_CTLShape5",
+                "name": "L_middleToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19877,7 +20689,7 @@
                 }
             },
             {
-                "name": "L_middleToeFK01_CTLShape6",
+                "name": "L_middleToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19996,7 +20808,7 @@
                 }
             },
             {
-                "name": "L_middleToeFK02_CTLShape4",
+                "name": "L_middleToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20079,7 +20891,7 @@
                 }
             },
             {
-                "name": "L_middleToeFK02_CTLShape5",
+                "name": "L_middleToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20162,7 +20974,7 @@
                 }
             },
             {
-                "name": "L_middleToeFK02_CTLShape6",
+                "name": "L_middleToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20356,7 +21168,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_outerMembran01_GRP|L_outerMembran01_CTL|L_outerMembran02_GRP|L_outerMembran02_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_outerMembran02_GRP|L_outerMembran02_CTL": {
         "transform": {
             "name": "L_outerMembran02_CTL",
             "overrideEnabled": true,
@@ -20501,7 +21313,7 @@
                 }
             },
             {
-                "name": "L_ringToeFK01_CTLShape4",
+                "name": "L_ringToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20584,7 +21396,7 @@
                 }
             },
             {
-                "name": "L_ringToeFK01_CTLShape5",
+                "name": "L_ringToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20667,7 +21479,7 @@
                 }
             },
             {
-                "name": "L_ringToeFK01_CTLShape6",
+                "name": "L_ringToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20786,7 +21598,7 @@
                 }
             },
             {
-                "name": "L_ringToeFK02_CTLShape4",
+                "name": "L_ringToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20869,7 +21681,7 @@
                 }
             },
             {
-                "name": "L_ringToeFK02_CTLShape5",
+                "name": "L_ringToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20952,7 +21764,7 @@
                 }
             },
             {
-                "name": "L_ringToeFK02_CTLShape6",
+                "name": "L_ringToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21283,7 +22095,7 @@
                 }
             },
             {
-                "name": "L_thumbToeFK01_CTLShape4",
+                "name": "L_thumbToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21366,7 +22178,7 @@
                 }
             },
             {
-                "name": "L_thumbToeFK01_CTLShape5",
+                "name": "L_thumbToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21449,7 +22261,7 @@
                 }
             },
             {
-                "name": "L_thumbToeFK01_CTLShape6",
+                "name": "L_thumbToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21568,7 +22380,7 @@
                 }
             },
             {
-                "name": "L_thumbToeFK02_CTLShape4",
+                "name": "L_thumbToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21651,7 +22463,7 @@
                 }
             },
             {
-                "name": "L_thumbToeFK02_CTLShape5",
+                "name": "L_thumbToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21734,7 +22546,7 @@
                 }
             },
             {
-                "name": "L_thumbToeFK02_CTLShape6",
+                "name": "L_thumbToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26786,7 +27598,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape29",
+                "name": "R_fingerAttr_CTLShape36",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -27047,7 +27859,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape30",
+                "name": "R_fingerAttr_CTLShape37",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -27356,7 +28168,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape31",
+                "name": "R_fingerAttr_CTLShape38",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -27713,7 +28525,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape32",
+                "name": "R_fingerAttr_CTLShape39",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -28598,7 +29410,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape33",
+                "name": "R_fingerAttr_CTLShape40",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -28859,7 +29671,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape34",
+                "name": "R_fingerAttr_CTLShape41",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -29120,7 +29932,7 @@
                 }
             },
             {
-                "name": "R_fingerAttr_CTLShape35",
+                "name": "R_fingerAttr_CTLShape42",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34105,7 +34917,7 @@
                 }
             },
             {
-                "name": "R_fingerThumbFK01_CTLShape4",
+                "name": "R_fingerThumbFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34188,7 +35000,7 @@
                 }
             },
             {
-                "name": "R_fingerThumbFK01_CTLShape5",
+                "name": "R_fingerThumbFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34271,7 +35083,7 @@
                 }
             },
             {
-                "name": "R_fingerThumbFK01_CTLShape6",
+                "name": "R_fingerThumbFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34390,7 +35202,7 @@
                 }
             },
             {
-                "name": "R_fingerThumbFK02_CTLShape4",
+                "name": "R_fingerThumbFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34473,7 +35285,7 @@
                 }
             },
             {
-                "name": "R_fingerThumbFK02_CTLShape5",
+                "name": "R_fingerThumbFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34556,7 +35368,7 @@
                 }
             },
             {
-                "name": "R_fingerThumbFK02_CTLShape6",
+                "name": "R_fingerThumbFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35591,7 +36403,7 @@
                 }
             },
             {
-                "name": "R_indexToeFK01_CTLShape4",
+                "name": "R_indexToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35674,7 +36486,7 @@
                 }
             },
             {
-                "name": "R_indexToeFK01_CTLShape5",
+                "name": "R_indexToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35757,7 +36569,7 @@
                 }
             },
             {
-                "name": "R_indexToeFK01_CTLShape6",
+                "name": "R_indexToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35876,7 +36688,7 @@
                 }
             },
             {
-                "name": "R_indexToeFK02_CTLShape4",
+                "name": "R_indexToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35959,7 +36771,7 @@
                 }
             },
             {
-                "name": "R_indexToeFK02_CTLShape5",
+                "name": "R_indexToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -36042,7 +36854,7 @@
                 }
             },
             {
-                "name": "R_indexToeFK02_CTLShape6",
+                "name": "R_indexToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -36236,7 +37048,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_innerMembran01_GRP|R_innerMembran01_CTL|R_innerMembran02_GRP|R_innerMembran02_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_innerMembran02_GRP|R_innerMembran02_CTL": {
         "transform": {
             "name": "R_innerMembran02_CTL",
             "overrideEnabled": true,
@@ -36565,7 +37377,7 @@
                 }
             },
             {
-                "name": "R_legIk_CTLShape9",
+                "name": "R_legIk_CTLShape11",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -36648,7 +37460,7 @@
                 }
             },
             {
-                "name": "R_legIk_CTLShape10",
+                "name": "R_legIk_CTLShape12",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37230,6 +38042,98 @@
             }
         ]
     },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_membraneIndexMiddle03_GRP|R_membraneIndexMiddle03_CTL": {
+        "transform": {
+            "name": "R_membraneIndexMiddle03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_membraneIndexMiddle03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_membraneMiddleRing00_GRP|R_membraneMiddleRing00_CTL": {
         "transform": {
             "name": "R_membraneMiddleRing00_CTL",
@@ -37554,6 +38458,98 @@
                         11.0,
                         11.0,
                         11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_membraneMiddleRing03_GRP|R_membraneMiddleRing03_CTL": {
+        "transform": {
+            "name": "R_membraneMiddleRing03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_membraneMiddleRing03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
                     ],
                     "degree": 3
                 }
@@ -37890,6 +38886,98 @@
             }
         ]
     },
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_membraneThumbIndex03_GRP|R_membraneThumbIndex03_CTL": {
+        "transform": {
+            "name": "R_membraneThumbIndex03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "R_membraneThumbIndex03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            -1.1081941875543881,
+                            5.74489823752483e-17,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            -0.7836116248912245,
+                            0.0
+                        ],
+                        [
+                            -1.1100856969603225e-16,
+                            -1.1081941875543884,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            -0.7836116248912244,
+                            0.0
+                        ],
+                        [
+                            1.1081941875543881,
+                            -1.511240500779959e-16,
+                            0.0
+                        ],
+                        [
+                            0.7836116248912245,
+                            0.7836116248912246,
+                            0.0
+                        ],
+                        [
+                            6.785732323110912e-17,
+                            1.1081941875543877,
+                            0.0
+                        ],
+                        [
+                            -0.7836116248912245,
+                            0.7836116248912244,
+                            0.0
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_middleToeFK01Controllers_GRP|R_middleToeFK01_GRP|R_middleToeFK01_CTL": {
         "transform": {
             "name": "R_middleToeFK01_CTL",
@@ -37925,7 +39013,7 @@
                 }
             },
             {
-                "name": "R_middleToeFK01_CTLShape4",
+                "name": "R_middleToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38008,7 +39096,7 @@
                 }
             },
             {
-                "name": "R_middleToeFK01_CTLShape5",
+                "name": "R_middleToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38091,7 +39179,7 @@
                 }
             },
             {
-                "name": "R_middleToeFK01_CTLShape6",
+                "name": "R_middleToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38210,7 +39298,7 @@
                 }
             },
             {
-                "name": "R_middleToeFK02_CTLShape4",
+                "name": "R_middleToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38293,7 +39381,7 @@
                 }
             },
             {
-                "name": "R_middleToeFK02_CTLShape5",
+                "name": "R_middleToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38376,7 +39464,7 @@
                 }
             },
             {
-                "name": "R_middleToeFK02_CTLShape6",
+                "name": "R_middleToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38570,7 +39658,7 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_outerMembran01_GRP|R_outerMembran01_CTL|R_outerMembran02_GRP|R_outerMembran02_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_outerMembran02_GRP|R_outerMembran02_CTL": {
         "transform": {
             "name": "R_outerMembran02_CTL",
             "overrideEnabled": true,
@@ -38715,7 +39803,7 @@
                 }
             },
             {
-                "name": "R_ringToeFK01_CTLShape4",
+                "name": "R_ringToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38798,7 +39886,7 @@
                 }
             },
             {
-                "name": "R_ringToeFK01_CTLShape5",
+                "name": "R_ringToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38881,7 +39969,7 @@
                 }
             },
             {
-                "name": "R_ringToeFK01_CTLShape6",
+                "name": "R_ringToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39000,7 +40088,7 @@
                 }
             },
             {
-                "name": "R_ringToeFK02_CTLShape4",
+                "name": "R_ringToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39083,7 +40171,7 @@
                 }
             },
             {
-                "name": "R_ringToeFK02_CTLShape5",
+                "name": "R_ringToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39166,7 +40254,7 @@
                 }
             },
             {
-                "name": "R_ringToeFK02_CTLShape6",
+                "name": "R_ringToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39497,7 +40585,7 @@
                 }
             },
             {
-                "name": "R_thumbToeFK01_CTLShape4",
+                "name": "R_thumbToeFK01_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39580,7 +40668,7 @@
                 }
             },
             {
-                "name": "R_thumbToeFK01_CTLShape5",
+                "name": "R_thumbToeFK01_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39663,7 +40751,7 @@
                 }
             },
             {
-                "name": "R_thumbToeFK01_CTLShape6",
+                "name": "R_thumbToeFK01_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39782,7 +40870,7 @@
                 }
             },
             {
-                "name": "R_thumbToeFK02_CTLShape4",
+                "name": "R_thumbToeFK02_CTLShape7",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39865,7 +40953,7 @@
                 }
             },
             {
-                "name": "R_thumbToeFK02_CTLShape5",
+                "name": "R_thumbToeFK02_CTLShape8",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39948,7 +41036,7 @@
                 }
             },
             {
-                "name": "R_thumbToeFK02_CTLShape6",
+                "name": "R_thumbToeFK02_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,

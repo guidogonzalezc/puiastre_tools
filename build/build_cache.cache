@@ -11,6 +11,11 @@
         "body": "C_body_CTL",
         "body_grp": [
             "C_body_GRP"
+        ],
+        "spine_ctl": [
+            "C_spine01_CTL",
+            "C_spineTan_CTL",
+            "C_spine03_CTL"
         ]
     },
     "C_tailModule": {
@@ -263,6 +268,7 @@
         "settingsAttr": "R_fingerAttr_CTL"
     },
     "C_neckModule": {
+        "neck_main_ctl": "C_neckMain_CTL",
         "neck00_ctl": "C_neck_CTL",
         "head_ctl": "C_head_CTL"
     }

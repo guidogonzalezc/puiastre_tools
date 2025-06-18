@@ -353,6 +353,9 @@ class MembraneModule():
             parent = cmds.parentConstraint(parent, grp01[0], maintainOffset=True)[0]
             parent02 = cmds.parentConstraint(secondary_parents[i],ctl01, grp02[0], maintainOffset=True)[0]
 
+            cmds.setAttr(f"{parent}.interpType", 2)
+            cmds.setAttr(f"{parent02}.interpType", 2)
+
             if name == "outer":
                 cmds.setAttr(f"{parent}.{parent[0]}W0", 0.4)
                 cmds.setAttr(f"{parent}.{parent[1]}W0", 0.6)
