@@ -52,8 +52,8 @@ class WingArmModule(object):
         print(self.skinning_joints[2])
         print(self.skinning_joints[7])
 
-        joint01 = self.skinning_joints[2]
-        joint02 = self.skinning_joints[7]
+        joint01 = self.skinning_joints[0]
+        joint02 = self.skinning_joints[5]
         data_exporter.append_data(
             f"{self.side}_armModule",
             {

@@ -13,6 +13,9 @@
             "C_body_GRP"
         ]
     },
+    "C_tailModule": {
+        "tail00_ctl": "C_tail00_CTL"
+    },
     "L_legModule": {
         "ik_ctl": "L_legIk_CTL",
         "fk_ctl": "L_hipFk_CTL",
@@ -39,8 +42,8 @@
         "armPV": "L_wingArmPV_CTL",
         "shoulderFK": "L_wingArm1Fk_CTL",
         "armRoot": "L_wingArmRoot_CTL",
-        "armUpperTwist": "L_wingArmUpperTwist02_JNT",
-        "armLowerTwist": "L_wingArmLowerTwist02_JNT"
+        "armUpperTwist": "L_wingArmUpperTwist00_JNT",
+        "armLowerTwist": "L_wingArmLowerTwist00_JNT"
     },
     "R_legModule": {
         "ik_ctl": "R_legIk_CTL",
@@ -68,8 +71,8 @@
         "armPV": "R_wingArmPV_CTL",
         "shoulderFK": "R_wingArm1Fk_CTL",
         "armRoot": "R_wingArmRoot_CTL",
-        "armUpperTwist": "R_wingArmUpperTwist02_JNT",
-        "armLowerTwist": "R_wingArmLowerTwist02_JNT"
+        "armUpperTwist": "R_wingArmUpperTwist00_JNT",
+        "armLowerTwist": "R_wingArmLowerTwist00_JNT"
     },
     "L_clavicleModule": {
         "clavicle_ctl": "L_clavicle_CTL"
@@ -262,8 +265,5 @@
     "C_neckModule": {
         "neck00_ctl": "C_neck_CTL",
         "head_ctl": "C_head_CTL"
-    },
-    "C_tailModule": {
-        "tail00_ctl": "C_tail00_CTL"
     }
 }

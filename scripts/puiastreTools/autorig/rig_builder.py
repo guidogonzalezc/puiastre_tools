@@ -118,6 +118,8 @@ def make():
 
 
     spinemodule.make()
+    tail.make()
+
 
 
     for side in ["L", "R"]:
@@ -132,7 +134,6 @@ def make():
 
 
     neck.make()
-    tail.make()
     jaw.make()
 
     for side in ["L", "R"]:
