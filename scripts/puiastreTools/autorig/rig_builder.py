@@ -101,7 +101,7 @@ def make():
     data_exporter = data_export.DataExport()
     data_exporter.new_build()
 
-    basic_structure.create_basic_structure(asset_name = "Varyndor")
+    basic_structure.create_basic_structure(asset_name = "AYCHEDRAL")
     
     fingermodule = finger_module.FingerModule()
     wingmodule = wing_arm_module.WingArmModule()

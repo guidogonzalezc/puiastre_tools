@@ -38,7 +38,9 @@
         "armSettings": "L_ArmSettings_CTL",
         "armPV": "L_wingArmPV_CTL",
         "shoulderFK": "L_wingArm1Fk_CTL",
-        "armRoot": "L_wingArmRoot_CTL"
+        "armRoot": "L_wingArmRoot_CTL",
+        "armUpperTwist": "L_wingArmUpperTwist02_JNT",
+        "armLowerTwist": "L_wingArmLowerTwist02_JNT"
     },
     "R_legModule": {
         "ik_ctl": "R_legIk_CTL",
@@ -65,7 +67,9 @@
         "armSettings": "R_ArmSettings_CTL",
         "armPV": "R_wingArmPV_CTL",
         "shoulderFK": "R_wingArm1Fk_CTL",
-        "armRoot": "R_wingArmRoot_CTL"
+        "armRoot": "R_wingArmRoot_CTL",
+        "armUpperTwist": "R_wingArmUpperTwist02_JNT",
+        "armLowerTwist": "R_wingArmLowerTwist02_JNT"
     },
     "L_clavicleModule": {
         "clavicle_ctl": "L_clavicle_CTL"

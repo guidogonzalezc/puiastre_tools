@@ -4,6 +4,7 @@ Finger module for dragon rigging system
 import maya.cmds as cmds
 import puiastreTools.tools.curve_tool as curve_tool
 import re
+from puiastreTools.utils import guides_manager
 from puiastreTools.utils import data_export
 from importlib import reload
 reload(data_export)    
@@ -102,10 +103,11 @@ class MembraneModule():
 
                 self.create_nurbs_curve(joint01, joint02)
 
+        self.main_membrans()
+
 
     def create_nurbs_curve(self, joint01, joint02):
-
-        
+            
         def build_finger_string(joint_names):
             return ''.join(re.search(r'finger([A-Za-z]+)\d', name).group(1) for name in joint_names if re.search(r'finger([A-Za-z]+)\d', name))
 
@@ -212,8 +214,8 @@ class MembraneModule():
 
         composes = []
 
-        for value in range(0, 3):
-            parameter = 0.5 * value
+        for value in range(1, 4):
+            parameter = 0.25 * value
 
             mpa = cmds.createNode("motionPath", name=f"{self.side}_membrane{result}0{value}_MPA", ss=True)
             cmds.connectAttr(f"{dupe_skinning[0]}.worldSpace", f"{mpa}.geometryPath")
@@ -243,17 +245,17 @@ class MembraneModule():
                 cmds.connectAttr(f"{composes[i+1]}.outputMatrix", f"{aimmatrix}.primary.primaryTargetMatrix")
                 cmds.setAttr(f"{aimmatrix}.primaryInputAxis", 1, 0, 0, type="double3")
 
-            # if i == 0:
-            #     z = 0
-            # elif i == 1:
-            #     z = int(len(wtas) / 2)
-            # elif i == 2:
-            #     z = -1
+            if i == 0:
+                z = 0
+            elif i == 1:
+                z = int(len(wtas) / 2)
+            elif i == 2:
+                z = -1
 
-            # cmds.connectAttr(f"{wtas[z]}.matrixSum", f"{aimmatrix}.secondary.secondaryTargetMatrix")
-            # cmds.setAttr(f"{aimmatrix}.secondaryInputAxis", 0, 0, 1, type="double3")
-            # cmds.setAttr(f"{aimmatrix}.secondaryMode", 2)
-            # cmds.setAttr(f"{aimmatrix}.secondaryTargetVector", 0, 0, 1, type="double3")
+            cmds.connectAttr(f"{wtas[z]}.matrixSum", f"{aimmatrix}.secondary.secondaryTargetMatrix")
+            cmds.setAttr(f"{aimmatrix}.secondaryInputAxis", 0, 0, 1, type="double3")
+            cmds.setAttr(f"{aimmatrix}.secondaryMode", 2)
+            cmds.setAttr(f"{aimmatrix}.secondaryTargetVector", 0, 0, 1, type="double3")
 
 
             ctl, grp = curve_tool.controller_creator(f"{self.side}_membrane{result}0{i}", suffixes=["GRP"])
@@ -292,3 +294,45 @@ class MembraneModule():
 
 
         # # cmds.reorderDeformers(skincluster, blendShape)
+
+
+    def main_membrans(self):
+
+        self.upper = self.data_exporter.get_data( f"{self.side}_armModule", "armUpperTwist")
+        self.lower = self.data_exporter.get_data( f"{self.side}_armModule", "armLowerTwist")
+        self.thumb_01 = self.data_exporter.get_data(f"{self.side}_fingerThumb", "bendy_joints")[0]
+
+        name = ["inner", "outer"]
+
+        for i, parent in enumerate([self.upper, [self.lower, self.thumb_01]]):
+
+            pos01, rot01 = guides_manager.guide_import(joint_name=f"{self.side}_{name[i]}Membran01")
+            pos02, rot02 = guides_manager.guide_import(joint_name=f"{self.side}_{name[i]}Membran02")
+
+            print(pos01, rot01, pos02, rot02)
+
+
+            ctl01, grp01 = curve_tool.controller_creator(f"{self.side}_{name[i]}Membran01", suffixes=["GRP"])
+            cmds.xform(grp01[0], ws=True, translation=pos01)
+            cmds.xform(grp01[0], ws=True, rotation=rot01)
+            
+            ctl02, grp02 = curve_tool.controller_creator(f"{self.side}_{name[i]}Membran02", suffixes=["GRP"])
+            cmds.xform(grp02[0], ws=True, translation=pos02)
+            cmds.xform(grp02[0], ws=True, rotation=rot02)
+
+            # cmds.parent(grp02[0], ctl01)
+            # cmds.parent(grp01[0], self.controllers_trn)
+            parent = cmds.parentConstraint(parent, grp01[0], maintainOffset=True)[0]
+
+            if name == "outer":
+                cmds.setAttr(f"{parent}.{parent[0]}W0", 0.4)
+                cmds.setAttr(f"{parent}.{parent[1]}W0", 0.6)
+
+            for z, ctl in enumerate([ctl01, ctl02]):
+                cmds.select(clear=True)
+                joint = cmds.joint(name=f"{self.side}_{name[i]}Membran0{z}_JNT")
+                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+                cmds.parent(joint, self.skinning_trn)
+                
+
+
