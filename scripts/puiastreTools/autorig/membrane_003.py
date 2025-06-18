@@ -7,6 +7,8 @@ import re
 from puiastreTools.utils import guides_manager
 from puiastreTools.utils import data_export
 from importlib import reload
+import maya.api.OpenMaya as om 
+from puiastreTools.autorig.matrix_spaceSwitch import get_offset_matrix
 reload(data_export)    
 
 class MembraneModule():
@@ -105,6 +107,21 @@ class MembraneModule():
 
         self.main_membrans()
 
+    def get_closest_joint(self, target_joint, joint_list):
+        target_pos = om.MVector(*cmds.xform(target_joint, q=True, ws=True, t=True))
+        
+        closest_joint = None
+        min_distance = float('inf')
+
+        for joint in joint_list:            
+            joint_pos = om.MVector(*cmds.xform(joint, q=True, ws=True, t=True))
+            distance = (target_pos - joint_pos).length()
+            
+            if distance < min_distance:
+                min_distance = distance
+                closest_joint = joint
+
+        return closest_joint
 
     def create_nurbs_curve(self, joint01, joint02):
             
@@ -214,7 +231,7 @@ class MembraneModule():
 
         composes = []
 
-        for value in range(1, 4):
+        for value in range(0, 4):
             parameter = 0.25 * value
 
             mpa = cmds.createNode("motionPath", name=f"{self.side}_membrane{result}0{value}_MPA", ss=True)
@@ -271,10 +288,14 @@ class MembraneModule():
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{skinning_joint}.offsetParentMatrix")
             cmds.parent(skinning_joint, self.skinning_trn)  
 
-        for i in range(1, len(joint01), 5):
+        for i, end_joint in enumerate(skinning_joints):
+            closest01 = self.get_closest_joint(skinning_joints[i], joint01)
+            closest02 = self.get_closest_joint(skinning_joints[i], joint02)
+
+
             distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_membrane{result}0{i}_DB", ss=True)
-            cmds.connectAttr(f"{joint01[i]}.worldMatrix[0]", f"{distance_between}.inMatrix1")
-            cmds.connectAttr(f"{joint02[i]}.worldMatrix[0]", f"{distance_between}.inMatrix2")
+            cmds.connectAttr(f"{closest01}.worldMatrix[0]", f"{distance_between}.inMatrix1")
+            cmds.connectAttr(f"{closest02}.worldMatrix[0]", f"{distance_between}.inMatrix2")
         
             float_math = cmds.createNode("floatMath", name=f"{self.side}_membrane{result}0{i}_FLM", ss=True)
             cmds.connectAttr(f"{distance_between}.distance", f"{float_math}.floatA")
@@ -288,12 +309,7 @@ class MembraneModule():
             cmds.setAttr(f"{cond}.operation", 4)
             cmds.setAttr(f"{cond}.colorIfFalseR", 1)
 
-            index = (i - 1) // 4
-
-            cmds.connectAttr(f"{cond}.outColorR", f"{skinning_joints[index]}.scaleZ")    
-
-
-        # # cmds.reorderDeformers(skincluster, blendShape)
+            cmds.connectAttr(f"{cond}.outColorR", f"{end_joint}.scaleZ")    
 
 
     def main_membrans(self):
@@ -302,27 +318,43 @@ class MembraneModule():
         self.lower = self.data_exporter.get_data( f"{self.side}_armModule", "armLowerTwist")
         self.thumb_01 = self.data_exporter.get_data(f"{self.side}_fingerThumb", "bendy_joints")[0]
 
-        name = ["inner", "outer"]
+        tail00 = self.data_exporter.get_data("C_tailModule", "tail00_ctl")
 
-        for i, parent in enumerate([self.upper, [self.lower, self.thumb_01]]):
+        
+        pos01, rot01 = guides_manager.guide_import(joint_name=f"{self.side}_outerMembran02")
+        cmds.select(clear=True)
+        temp_joint = cmds.joint(name=f"{self.side}_tempMembran01_JNT")
+        cmds.xform(temp_joint, ws=True, translation=pos01)
+        cmds.xform(temp_joint, ws=True, rotation=rot01)
+        
+        closest = self.get_closest_joint(temp_joint, self.thumb_joints)
+        cmds.delete(temp_joint)
+
+        name = ["inner", "outer"]
+        secondary_parents = [tail00, closest]
+
+        for i, parent in enumerate([self.upper, [self.lower]]):
 
             pos01, rot01 = guides_manager.guide_import(joint_name=f"{self.side}_{name[i]}Membran01")
             pos02, rot02 = guides_manager.guide_import(joint_name=f"{self.side}_{name[i]}Membran02")
 
-            print(pos01, rot01, pos02, rot02)
-
-
             ctl01, grp01 = curve_tool.controller_creator(f"{self.side}_{name[i]}Membran01", suffixes=["GRP"])
             cmds.xform(grp01[0], ws=True, translation=pos01)
             cmds.xform(grp01[0], ws=True, rotation=rot01)
+
+            
+
             
             ctl02, grp02 = curve_tool.controller_creator(f"{self.side}_{name[i]}Membran02", suffixes=["GRP"])
             cmds.xform(grp02[0], ws=True, translation=pos02)
             cmds.xform(grp02[0], ws=True, rotation=rot02)
 
-            # cmds.parent(grp02[0], ctl01)
-            # cmds.parent(grp01[0], self.controllers_trn)
+            cmds.parent(grp01[0], grp02[0], self.controllers_trn)
             parent = cmds.parentConstraint(parent, grp01[0], maintainOffset=True)[0]
+            parent02 = cmds.parentConstraint(secondary_parents[i],ctl01, grp02[0], maintainOffset=True)[0]
+
+            cmds.setAttr(f"{parent}.interpType", 2)
+            cmds.setAttr(f"{parent02}.interpType", 2)
 
             if name == "outer":
                 cmds.setAttr(f"{parent}.{parent[0]}W0", 0.4)

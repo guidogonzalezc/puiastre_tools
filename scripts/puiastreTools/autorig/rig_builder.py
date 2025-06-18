@@ -118,6 +118,8 @@ def make():
 
 
     spinemodule.make()
+    tail.make()
+
 
 
     for side in ["L", "R"]:
@@ -132,7 +134,6 @@ def make():
 
 
     neck.make()
-    tail.make()
     jaw.make()
 
     for side in ["L", "R"]:
@@ -193,13 +194,19 @@ def make():
             matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
     tail00 = data_exporter.get_data("C_tailModule", "tail00_ctl")
+    neck_main = data_exporter.get_data("C_neckModule", "neck_main_ctl")
     neck00 = data_exporter.get_data("C_neckModule", "neck00_ctl")
     head = data_exporter.get_data("C_neckModule", "head_ctl")
+    spine = data_exporter.get_data("C_spineModule", "spine_ctl")
+    print(spine)
     spaceSwitches = {
-                tail00: [[localHip], 1],
-                neck00: [[localChest], 1]
+                neck_main: [[localChest], 1],
+                tail00: [ [localHip], 1],
+                neck00: [[neck_main, localChest], 1],
+                spine[2]: [[spine[0]], 1],
             }
     for child, (parents, default_value) in spaceSwitches.items():
+        print(f"Switching matrix space for {child} with parents {parents} and default value {default_value}")
         matrix_spaceSwitch.switch_matrix_space(child, parents, default_value)
 
     for name in fk_chain:

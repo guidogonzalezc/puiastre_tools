@@ -86,13 +86,13 @@ class jawModule():
         cmds.parent(chin_curve_grp[0], jaw_curve_ctl)
 
         #Collsion set-up
-        upper_jaw_mmx = cmds.createNode("multMatrix", n=f"{side}upperJaw_MMX", ss=True)
+        upper_jaw_mmx = cmds.createNode("multMatrix", n=f"{side}_upperJaw_MMX", ss=True)
         cmds.connectAttr(f"{upper_jaw_curve_ctl}.matrix", f"{upper_jaw_mmx}.matrixIn[0]")
         cmds.connectAttr(f"{upper_jaw_curve_grp[-1]}.matrix", f"{upper_jaw_mmx}.matrixIn[1]")
         upper_jaw_dcm = cmds.createNode("decomposeMatrix", n=f"{side}upperJaw_DCM", ss=True)
         cmds.connectAttr(f"{upper_jaw_trn}.worldMatrix[0]", f"{upper_jaw_dcm}.inputMatrix")
 
-        jaw_mmx = cmds.createNode("multMatrix", n=f"{side}jaw_MMX", ss=True)
+        jaw_mmx = cmds.createNode("multMatrix", n=f"{side}_jaw_MMX", ss=True)
         cmds.connectAttr(f"{jaw_curve_ctl}.matrix", f"{jaw_mmx}.matrixIn[0]")
         cmds.connectAttr(f"{jaw_curve_grp[-1]}.matrix", f"{jaw_mmx}.matrixIn[1]")
         jaw_dcm = cmds.createNode("decomposeMatrix", n=f"{side}jaw_DCM", ss=True)
