@@ -18,7 +18,7 @@
         "fk_ctl": "L_hipFk_CTL",
         "pv_ctl": "L_legPv_CTL",
         "root_ctl": "L_rootIk_CTL",
-        "tip_joint": "L_tipIk_JNT"
+        "tip_joint": "L_tipBlend_JNT"
     },
     "L_armModule": {
         "skinning_joints": [
@@ -45,7 +45,7 @@
         "fk_ctl": "R_hipFk_CTL",
         "pv_ctl": "R_legPv_CTL",
         "root_ctl": "R_rootIk_CTL",
-        "tip_joint": "R_tipIk_JNT"
+        "tip_joint": "R_tipBlend_JNT"
     },
     "R_armModule": {
         "skinning_joints": [
