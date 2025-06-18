@@ -18,7 +18,7 @@
         "fk_ctl": "L_hipFk_CTL",
         "pv_ctl": "L_legPv_CTL",
         "root_ctl": "L_rootIk_CTL",
-        "tip_joint": "L_tipIk_JNT"
+        "tip_joint": "L_tipBlend_JNT"
     },
     "L_armModule": {
         "skinning_joints": [
@@ -38,14 +38,16 @@
         "armSettings": "L_ArmSettings_CTL",
         "armPV": "L_wingArmPV_CTL",
         "shoulderFK": "L_wingArm1Fk_CTL",
-        "armRoot": "L_wingArmRoot_CTL"
+        "armRoot": "L_wingArmRoot_CTL",
+        "armUpperTwist": "L_wingArmUpperTwist02_JNT",
+        "armLowerTwist": "L_wingArmLowerTwist02_JNT"
     },
     "R_legModule": {
         "ik_ctl": "R_legIk_CTL",
         "fk_ctl": "R_hipFk_CTL",
         "pv_ctl": "R_legPv_CTL",
         "root_ctl": "R_rootIk_CTL",
-        "tip_joint": "R_tipIk_JNT"
+        "tip_joint": "R_tipBlend_JNT"
     },
     "R_armModule": {
         "skinning_joints": [
@@ -65,7 +67,9 @@
         "armSettings": "R_ArmSettings_CTL",
         "armPV": "R_wingArmPV_CTL",
         "shoulderFK": "R_wingArm1Fk_CTL",
-        "armRoot": "R_wingArmRoot_CTL"
+        "armRoot": "R_wingArmRoot_CTL",
+        "armUpperTwist": "R_wingArmUpperTwist02_JNT",
+        "armLowerTwist": "R_wingArmLowerTwist02_JNT"
     },
     "L_clavicleModule": {
         "clavicle_ctl": "L_clavicle_CTL"

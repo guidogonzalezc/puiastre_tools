@@ -49,6 +49,11 @@ class WingArmModule(object):
         self.twists_setup()
 
         data_exporter = data_export.DataExport()
+        print(self.skinning_joints[2])
+        print(self.skinning_joints[7])
+
+        joint01 = self.skinning_joints[2]
+        joint02 = self.skinning_joints[7]
         data_exporter.append_data(
             f"{self.side}_armModule",
             {
@@ -58,6 +63,8 @@ class WingArmModule(object):
                 "armPV": self.pole_vector_ctl,
                 "shoulderFK": self.arm_fk_controllers[0],
                 "armRoot": self.root_ctl,
+                "armUpperTwist": joint01,
+                "armLowerTwist": joint02,
             }
         )
 
