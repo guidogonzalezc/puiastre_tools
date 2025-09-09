@@ -6,11 +6,11 @@ import math
 
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
-from puiastreTools.utils.guides.guides_manager import guide_import
+from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 
 # Dev only imports
-from puiastreTools.utils.guides import guides_manager
+from puiastreTools.utils import guide_creation
 import puiastreTools.utils.de_boor_core_002 as de_boors_002
 from puiastreTools.utils import space_switch as ss
 from puiastreTools.utils import core
@@ -18,7 +18,7 @@ from puiastreTools.utils import basic_structure
 
 
 reload(de_boors_002)
-reload(guides_manager)
+reload(guide_creation)
 reload(ss)
 reload(core)
 
@@ -324,7 +324,7 @@ class LimbModule(object):
 
         )
 
-        cmds.connectAttr(self.guides[2] + ".worldMatrix[0]", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+        cmds.connectAttr(self.guides_matrix[2] + ".outputMatrix", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix") 
 
         cmds.addAttr(self.pv_ik_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.pv_ik_ctl+".extraAttr", channelBox=True, lock=True)
@@ -1288,13 +1288,13 @@ class LegModule(LimbModule):
 
 
 
-# cmds.file(new=True, force=True)
+cmds.file(new=True, force=True)
 
-# core.DataManager.set_guide_data("D:/git/maya/biped_autorig/guides/moana_01.guides")
-# core.DataManager.set_ctls_data("D:/git/maya/biped_autorig/curves/elephant_02.ctls")
+core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
-# basic_structure.create_basic_structure(asset_name="moana_02")
+basic_structure.create_basic_structure(asset_name="dragon")
 # a = LegModule("L_hip_GUIDE").make()
 # a = LegModule("R_hip_GUIDE").make()
-# a = ArmModule("L_clavicle_GUIDE").make()
+a = ArmModule("L_clavicle_GUIDE").make()
 # a = ArmModule("R_clavicle_GUIDE").make()

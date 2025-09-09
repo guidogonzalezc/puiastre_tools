@@ -6,11 +6,11 @@ import math
 
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
-from puiastreTools.utils.guides.guides_manager import guide_import
+from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 
 # Dev only imports
-from puiastreTools.utils.guides import guides_manager
+from puiastreTools.utils import guide_creation
 import puiastreTools.utils.de_boor_core_002 as de_boors_002
 from puiastreTools.utils import space_switch as ss
 from puiastreTools.utils import core
@@ -18,7 +18,7 @@ from puiastreTools.utils import basic_structure
 
 
 reload(de_boors_002)
-reload(guides_manager)
+reload(guide_creation)
 reload(ss)
 reload(core)
 

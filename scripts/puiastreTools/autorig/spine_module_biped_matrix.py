@@ -6,7 +6,7 @@ import math
 
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
-from puiastreTools.utils.guides.guides_manager import guide_import
+from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
 from puiastreTools.utils import basic_structure
@@ -243,8 +243,6 @@ class SpineModule():
         cmds.addAttr(self.body_ctl, shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.body_ctl+".attachedFk", channelBox=True, lock=True)
         cmds.addAttr(self.body_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
-
-        print(self.main_controllers)
 
         clamped_distance = cmds.createNode("distanceBetween", name=f"{self.side}_spineToTan01_DIB", ss=True)
         real_distance = cmds.createNode("distanceBetween", name=f"{self.side}_spineToTan01_DIB", ss=True)

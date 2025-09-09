@@ -6,7 +6,7 @@ import math
 
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
-from puiastreTools.utils.guides.guides_manager import guide_import
+from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
 from puiastreTools.utils import basic_structure
@@ -18,7 +18,7 @@ reload(data_export)
 AXIS_VECTOR = {'x': (1, 0, 0), '-x': (-1, 0, 0), 'y': (0, 1, 0), '-y': (0, -1, 0), 'z': (0, 0, 1), '-z': (0, 0, -1)}
 
 
-class SpineModule():
+class NeckModule():
     """
     Class to create a spine module in a Maya rigging setup.
     This module handles the creation of spine joints, controllers, and various systems such as stretch, reverse, offset, squash, and volume preservation.
@@ -217,6 +217,7 @@ class SpineModule():
         for i in range(self.num_joints):
             t = i / (float(self.num_joints) - 1)
             t_values.append(t)
+        
 
         self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvs, num_joints=self.num_joints, name=f"{self.side}_neck", parent=self.skinning_trn, custom_parm=t_values)
 
@@ -282,8 +283,8 @@ class SpineModule():
 
 cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("H:/ggMayaAutorig/guides/elephant_04.guides")
-core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
+core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
 basic_structure.create_basic_structure(asset_name="elephant_04")
 a = SpineModule().make("C_spine01_GUIDE")

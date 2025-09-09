@@ -4,11 +4,14 @@ import os
 from importlib import reload
 
 from puiastreTools.ui import option_menu
-from puiastreTools.utils import guides_manager 
+from puiastreTools.utils import guide_creation 
 from puiastreTools.autorig import rig_builder
-from puiastreTools.tools import curve_tool  
+from puiastreTools.utils import curve_tool  
 
-
+reload(option_menu)
+reload(guide_creation)
+reload(rig_builder)
+reload(curve_tool)
 
 
 def reload_ui(*args):
@@ -28,7 +31,7 @@ def export_guides(*args):
     Args:
         *args: Variable length argument list, not used in this function.
     """ 
-    guides_manager.guides_export()
+    guide_creation.guides_export()
 
 def import_guides(*args, value=None): 
     """
@@ -39,7 +42,7 @@ def import_guides(*args, value=None):
         value (bool, optional): If True, imports all guides. If None, opens an option box. Defaults to None.
     """
     if value == True:   
-        guides_manager.guide_import(joint_name = "all")
+        guide_creation.guide_import(joint_name = "all")
 
 def complete_rig(*args):
     """

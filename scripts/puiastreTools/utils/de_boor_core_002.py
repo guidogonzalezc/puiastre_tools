@@ -326,9 +326,7 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
             up_off = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
             # cmds.setAttr(f'{up_off}.matrixIn[0]', list(up_off_val), type='matrix')
-            print(axis_change, f"{len(params)-1} == {i}")
             if axis_change and len(params)-1 == i:
-                print(aim)
                 cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
                                                    0, 1, 0, 0,
                                                    0, 0, 1, 0,

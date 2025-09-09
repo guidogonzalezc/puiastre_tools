@@ -2,7 +2,9 @@
     "basic_structure": {
         "modules_GRP": "modules_GRP",
         "skel_GRP": "skel_GRP",
-        "masterWalk_CTL": "C_masterWalk_CTL"
+        "masterWalk_CTL": "C_masterWalk_CTL",
+        "guides_GRP": "guides_GRP",
+        "skeletonHierarchy_GRP": "skeletonHierarchy_GRP"
     },
     "C_spineModule": {
         "lastSpineJnt": "C_subSpineFk07_JNT",
@@ -48,7 +50,17 @@
         "shoulderFK": "L_wingArm1Fk_CTL",
         "armRoot": "L_wingArmRoot_CTL",
         "armUpperTwist": "L_wingArmUpperTwist00_JNT",
-        "armLowerTwist": "L_wingArmLowerTwist00_JNT"
+        "armLowerTwist": "L_wingArmLowerTwist00_JNT",
+        "skinning_transform": "L_armSkinningJoints_GRP",
+        "fk_ctl": [
+            "L_shoulderFk_CTL",
+            "L_elbowFk_CTL",
+            "L_wristFk_CTL"
+        ],
+        "pv_ctl": "L_armPV_CTL",
+        "root_ctl": "L_armRootIk_CTL",
+        "end_ik": "L_armIk_CTL",
+        "scapula_ctl": "L_scapula_CTL"
     },
     "R_legModule": {
         "ik_ctl": "R_legIk_CTL",
