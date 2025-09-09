@@ -1,24 +1,6 @@
 import maya.cmds as cmds
-from puiastreTools.tools.curve_tool import controller_creator
+from puiastreTools.utils.curve_tool import controller_creator
 from puiastreTools.utils import data_export
-
-
-def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
-    """
-    Lock specified attributes of a controller, added rotate order attribute if ro is True.
-    
-    Args:
-        ctl (str): The name of the controller to lock attributes on.
-        attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
-        ro (bool): If True, adds a rotate order attribute. Default is True.
-    """
-
-    for attr in attrs:
-        cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
-    
-    if ro:
-        cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
-        cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
 def condition(main_ctl, vis_trn, value):
     """
@@ -55,13 +37,13 @@ def create_basic_structure(asset_name = "assetName"):
                 "modules_GRP",
                 "skel_GRP",
                 "geoLayering_GRP",
-                "skeletonHirearchy_GRP"
+                "skeletonHierarchy_GRP",
+                "guides_GRP",
             },
             "model_GRP": {
                 "SKELETON",
                 "PROXY",
-                "LOD_100",
-                "LOD_200"
+                "MODEL",
             },
             "groom_GRP": {},
             "clothSim_GRP": {}
@@ -74,13 +56,24 @@ def create_basic_structure(asset_name = "assetName"):
     secondary_transforms = []
     rig_transforms = []
 
+
+
     for folder, subfolders in folder_structure[asset_name].items():
         secondary_transform = cmds.createNode("transform", name=folder, parent=main_transform, ss=True)
         secondary_transforms.append(secondary_transform)
         subfolders = sorted(list(subfolders))
         for subfolder in subfolders:
+
             if subfolder.startswith("C_"):
-                ctl, grp = controller_creator(subfolder, ["GRP", "ANM"])
+
+                lock_attrs = ["sx", "sy", "sz", "v"]
+                ro=True
+                if "preferences" in subfolder:
+                    lock_attrs += ["tx", "ty", "tz", "rx", "ry", "rz"]
+                    ro= False
+
+                ctl, grp = controller_creator(subfolder, ["GRP", "ANM"], lock=lock_attrs, ro=ro)
+
                 cmds.setAttr(f"{ctl}.overrideEnabled", 1)
                 if ctls:
                     cmds.parent(grp[0], ctls[-1])
@@ -92,44 +85,57 @@ def create_basic_structure(asset_name = "assetName"):
                 rig_transforms.append(trn)
 
     data_exporter = data_export.DataExport()
-    data_exporter.append_data("basic_structure", {"modules_GRP": rig_transforms[1],
-                                                  "skel_GRP": rig_transforms[2],
-                                                  "masterWalk_CTL": ctls[1],})
+    data_exporter.append_data("basic_structure", {"modules_GRP": rig_transforms[2],
+                                                  "skel_GRP": rig_transforms[3],
+                                                  "masterWalk_CTL": ctls[1],
+                                                  "guides_GRP": rig_transforms[1],
+                                                  "skeletonHierarchy_GRP": rig_transforms[4],})
 
 
-    cmds.addAttr(ctls[2], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=False)
-    cmds.setAttr(ctls[2]+".extraAttributesSep", channelBox=True)
+    cmds.addAttr(ctls[2], shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=False)
+    cmds.setAttr(ctls[2]+".extraAttr", channelBox=True)
     cmds.addAttr(ctls[2], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
     cmds.setAttr(ctls[2]+".reference", channelBox=True)
+    cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="SKELETON:PROXY:MODEL",attributeType="enum", keyable=False)
+    cmds.addAttr(ctls[2], shortName="hideControllersOnPlayblast", niceName="Hide Controllers On Playblast",attributeType="bool", keyable=False, defaultValue=False)
 
+    cmds.addAttr(ctls[2], shortName="extraVisibility", niceName="Extra Visibility  ———", enumName="———",attributeType="enum", keyable=False)
+    cmds.setAttr(ctls[2]+".extraVisibility", channelBox=True)
     cmds.addAttr(ctls[2], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=False)
-    cmds.addAttr(ctls[2], shortName="showJoints", niceName="Show Joints",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="SKELETON:PROXY:LOD100:LOD200",attributeType="enum", keyable=False)
+    cmds.addAttr(ctls[2], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
+    cmds.addAttr(ctls[2], shortName="showJoints", niceName="Show Joints",attributeType="bool", keyable=False, defaultValue=False)
     cmds.setAttr(ctls[2]+".showModules", channelBox=True)
+    cmds.setAttr(ctls[2]+".showSkeleton", channelBox=True)
     cmds.setAttr(ctls[2]+".showJoints", channelBox=True)
     cmds.setAttr(ctls[2]+".meshLods", channelBox=True)
+    cmds.setAttr(ctls[2]+".hideControllersOnPlayblast", channelBox=True)
+
+    # Connect hideControllersOnPlayblast to controls_GRP.drawOverride.hideOnPlayback
+    cmds.connectAttr(f"{ctls[2]}.hideControllersOnPlayblast", f"{secondary_transforms[0]}.hideOnPlayback")
 
     cmds.setAttr(secondary_transforms[2]+".overrideDisplayType", 2)
     cmds.connectAttr(ctls[2]+".reference", secondary_transforms[2]+".overrideEnabled")
         
-    cmds.addAttr(ctls[1], shortName="extraAttributesSep", niceName="EXTRA ATTRIBUTES_____", enumName="_____",attributeType="enum", keyable=True)
+    cmds.addAttr(ctls[1], shortName="extraAttributesSep", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
     cmds.addAttr(ctls[1], shortName="globalScale", niceName="Global Scale", minValue=0.001,defaultValue=1, keyable=True)
     cmds.setAttr(ctls[1]+".extraAttributesSep", channelBox=True, lock=True)
-    cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleX", force=True)
-    cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleY", force=True)
-    cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + ".scaleZ", force=True)
 
-    condition(f"{ctls[2]}.meshLods", rig_transforms[7], 0)
-    condition(f"{ctls[2]}.meshLods", rig_transforms[6], 1)
-    condition(f"{ctls[2]}.meshLods", rig_transforms[4], 2)
-    condition(f"{ctls[2]}.meshLods", rig_transforms[5], 3)
+    for attr in ["sx", "sy", "sz"]:
+        cmds.setAttr(f"{ctls[1]}.{attr}", keyable=False, channelBox=False, lock=False)
+        cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + f".{attr}", force=True)
 
-    cmds.connectAttr(f"{ctls[2]}.showModules", rig_transforms[1]+ ".visibility")
-    cmds.connectAttr(f"{ctls[2]}.showJoints", rig_transforms[2] + ".visibility")
+        cmds.setAttr(f"{ctls[1]}.{attr}", keyable=False, channelBox=False, lock=True)
 
-    lock_attr(ctls[2], ["tx", "tz", "ty", "rx", "ry", "rz", "scaleX", "scaleY", "scaleZ", "visibility"])
-    lock_attr(ctls[0])
-    lock_attr(ctls[1])
+    # Optimize meshLods visibility conditions using a loop
+    mesh_lods_indices = [7, 6, 5]
+    for value, idx in enumerate(mesh_lods_indices):
+        condition(f"{ctls[2]}.meshLods", rig_transforms[idx], value)
+
+    cmds.connectAttr(f"{ctls[2]}.showModules", rig_transforms[2]+ ".visibility")
+    cmds.connectAttr(f"{ctls[2]}.showJoints", rig_transforms[3] + ".visibility")
+    cmds.connectAttr(f"{ctls[2]}.showSkeleton", rig_transforms[4] + ".visibility")
+    cmds.setAttr(f"{rig_transforms[0]}.visibility", 0)
+    cmds.setAttr(f"{rig_transforms[1]}.visibility", 0)
 
     cmds.select(clear=True)
 

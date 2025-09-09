@@ -3,33 +3,41 @@ import maya.cmds as cmds
 import json
 import os
 
+from puiastreTools.utils import core
+from importlib import reload
+reload(core)
 
 TEMPLATE_FILE = None
 
-def init_template_file(path=None):
+def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True):
     """
-    Initializes the TEMPLATE_FILE variable.
-    If a path is provided, it sets TEMPLATE_FILE to that path.
-    Otherwise, it uses the default template file path.
+    Lock specified attributes of a controller, added rotate order attribute if ro is True.
+    
+    Args:
+        ctl (str): The name of the controller to lock attributes on.
+        attrs (list): List of attributes to lock. Default is ["scaleX", "scaleY", "scaleZ", "visibility"].
+        ro (bool): If True, adds a rotate order attribute. Default is True.
     """
-    global TEMPLATE_FILE
-    if path:
-        TEMPLATE_FILE = path
-    else:
-        complete_path = os.path.realpath(__file__)
-        relative_path = complete_path.split("\scripts")[0]
-        TEMPLATE_FILE = os.path.join(relative_path, "curves", "template_curves_001.json")
 
-def get_all_ctl_curves_data():
+    for attr in attrs:
+        cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+    
+    if ro:
+        cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+        cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
+
+def get_all_ctl_curves_data(path = "",prefix="CTL"):
     """
     Collects data from all controller curves in the scene and saves it to a JSON file.
     This function retrieves information about each controller's transform and its associated nurbsCurve shapes,
     including their CV positions, form, knots, degree, and override attributes.
     """
 
+    TEMPLATE_FILE = core.init_template_file(ext=".ctls")
+
     ctl_data = {}
 
-    transforms = cmds.ls("*_CTL*", type="transform", long=True)
+    transforms = cmds.ls(f"*_{prefix}*", type="transform", long=True)
 
     for transform_name in transforms:
         shapes = cmds.listRelatives(transform_name, shapes=True, fullPath=True) or []
@@ -124,12 +132,16 @@ def get_all_ctl_curves_data():
             "shapes": shape_data_list
         }
 
+    
+    
+
     with open(TEMPLATE_FILE, "w") as f:
         json.dump(ctl_data, f, indent=4)
 
-    print(f"Controllers template saved to: {TEMPLATE_FILE}")
+    print(f"Controller curves data saved to {TEMPLATE_FILE}")
 
-def build_curves_from_template(target_transform_name=None):
+
+def build_curves_from_template(target_transform_name=None, path=None):
     """
     Builds controller curves from a predefined template JSON file.
     If a specific target transform name is provided, it filters the curves to only create those associated with that transform.
@@ -140,15 +152,15 @@ def build_curves_from_template(target_transform_name=None):
         list: A list of created transform names.
     """
 
-    if not os.path.exists(TEMPLATE_FILE):
+    if not os.path.exists(path):
         om.MGlobal.displayError("Template file does not exist.")
         return
 
-    with open(TEMPLATE_FILE, "r") as f:
+    with open(path, "r") as f:
         ctl_data = json.load(f)
 
     if target_transform_name:
-        ctl_data = {k: v for k, v in ctl_data.items() if v["transform"]["name"] == target_transform_name}
+        ctl_data = {k: v for k, v in ctl_data.items() if "transform" in v and v["transform"].get("name") == target_transform_name}
         if not ctl_data:
             return
 
@@ -228,7 +240,7 @@ def build_curves_from_template(target_transform_name=None):
     return created_transforms
 
 
-def controller_creator(name, suffixes=["GRP"]):
+def controller_creator(name, suffixes=["GRP", "ANM"], mirror=False, parent=None, match=None, lock=["scaleX", "scaleY", "scaleZ", "visibility"], ro=True, prefix="CTL"):
     """
     Creates a controller with a specific name and offset transforms and returns the controller and the groups.
 
@@ -236,6 +248,9 @@ def controller_creator(name, suffixes=["GRP"]):
         name (str): Name of the controller.
         suffixes (list): List of suffixes for the groups to be created. Default is ["GRP"].
     """
+
+    TEMPLATE_FILE = core.init_template_file(ext=".ctls", export=False)
+
     created_grps = []
     if suffixes:
         for suffix in suffixes:
@@ -249,144 +264,203 @@ def controller_creator(name, suffixes=["GRP"]):
                 cmds.parent(tra, created_grps[-1])
             created_grps.append(tra)
 
-    if cmds.ls(f"{name}_CTL"):
-        om.MGlobal.displayWarning(f"{name}_CTL already exists.")
+    if cmds.ls(f"{name}_{prefix}"):
+        om.MGlobal.displayWarning(f"{name}_{prefix} already exists.")
         if created_grps:
             cmds.delete(created_grps[0])
         return
     else:
-        ctl = build_curves_from_template(f"{name}_CTL")
+        ctl = build_curves_from_template(f"{name}_{prefix}", path = TEMPLATE_FILE)
 
         if not ctl:
-            ctl = cmds.circle(name=f"{name}_CTL", ch=False)
+            # if name == "C_preferences":
+            #     ctl = text_curve(f"L_aaaa_CTL")
+            #     print(ctl)
+            #     cvs = cmds.ls(ctl + ".cv[*]", fl=True)
+            #     cmds.move(0, 10, 0, cvs, r=True, ws=True)
+
+            #     # cmds.setAttr(ctl + ".lineWidth", 1.5)
+            #     cmds.setAttr(ctl + ".overrideEnabled", 1)
+            #     cmds.setAttr(ctl + ".overrideColor", 14)
+            #     ctl = [ctl]
+            # else:
+            ctl = cmds.circle(name=f"{name}_{prefix}", ch=False)
         else:
-            ctl = [ctl[0]]  # make sure ctl is a list with one element for consistency
+            ctl = [ctl[0]]
 
         if created_grps:
             cmds.parent(ctl[0], created_grps[-1])
+    
+        if match:
+            if cmds.objExists(match):
+                cmds.xform(ctl[0], ws=True, t=cmds.xform(match, q=True, ws=True, t=True))
+                cmds.xform(ctl[0], ws=True, ro=cmds.xform(match, q=True, ws=True, ro=True))
+
+        if parent:
+            if cmds.objExists(parent):
+                if created_grps:
+                    cmds.parent(created_grps[0], parent)
+                else:
+                    cmds.parent(ctl[0], parent)
+
+
+        if mirror:
+            force_behavior_mirror(created_grps[0])
+
+        lock_attr(ctl[0], lock, ro)
+
+    if created_grps:
         return ctl[0], created_grps
+    else:
+        return ctl[0]
 
-def get_dag_path(node_name):
-    """
-    Returns the MObject dag path for a given node name.
+
+
+def force_behavior_mirror(node):
+
+    """Mirrors the transform of a given node along the X-axis.
+    It adjusts the translation and rotation values to achieve the mirroring effect.
+
     Args:
-        node_name (str): The name of the node to get the dag path for.
-    Returns:
-        om.MDagPath: The dag path of the node.
+        node (str): The name of the node to mirror.
     """
-    sel = om.MSelectionList()
-    sel.add(node_name)
-    return sel.getDagPath(0)
 
-def curves_match(curveA, curveB):
-    """
-    Compares two MFnNurbsCurve objects to check if they have the same structure.
-    Args:
-        curveA (om.MFnNurbsCurve): The first curve to compare.
-        curveB (om.MFnNurbsCurve): The second curve to compare.
-    Returns:
-        bool: True if the curves match in structure, False otherwise.
-    """
-    return (
-        curveA.degree == curveB.degree and
-        curveA.numCVs == curveB.numCVs and
-        curveA.form == curveB.form and
-        curveA.numSpans == curveB.numSpans and
-        curveA.knots() == curveB.knots()
-    )
+    t = cmds.xform(node, q=True, ws=True, t=True)
+    r = cmds.xform(node, q=True, ws=True, ro=True)
 
-def rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name):
-    """
-    Rebuilds the target curve shape by duplicating the source curve and renaming it.
-    Args:
-        src_transform (str): The source transform containing the original curve.
-        src_shape (str): The name of the source shape to duplicate.
-        tgt_transform (str): The target transform where the new shape will be parented.
-        tgt_shape_name (str): The name for the new shape in the target transform.
-    Returns:
-        str: The name of the newly created shape in the target transform.
-    """ 
-    if cmds.objExists(tgt_shape_name):
-        cmds.delete(tgt_shape_name)
+    mirrored_t = [-t[0], t[1], t[2]]
+    mirrored_r = [(r[0] + 180) % 360, -r[1], -r[2]]
 
-    dup = cmds.duplicate(f"{src_transform}|{src_shape}", name="tempCurveDup", returnRootsOnly=True)[0]
-    new_shape = cmds.listRelatives(dup, shapes=True, fullPath=False)[0]
+    for i in range(3):
+        if mirrored_r[i] > 180:
+            mirrored_r[i] -= 360
 
-    final_shape = cmds.rename(new_shape, tgt_shape_name)
-    cmds.parent(final_shape, tgt_transform, shape=True, relative=True)
-    cmds.delete(dup)  
+    cmds.xform(node, ws=True, t=mirrored_t, ro=mirrored_r)  
 
-    return final_shape
+    name = node.replace("_GRP", "mirrored_GRP")
+    mirror_transform = cmds.createNode("transform", name=name, ss=True)
 
-def mirror_all_L_CTL_shapes():
-    """
-    Mirrors all left controller shapes (L_*_CTL) to their right counterparts (R_*_CTL).
-    This function searches for all transform nodes that match the pattern "L_*_CTL", retrieves their shapes,
-    and creates or updates the corresponding right-side shapes by mirroring the CV positions.
-    """
-    all_transforms = cmds.ls(type="transform")
-    left_ctl_transforms = [t for t in all_transforms if "L_" in t and t.endswith("_CTL")]
+    parent = cmds.listRelatives(node, parent=True, fullPath=True)
+    if parent:
+        cmds.parent(mirror_transform, parent[0])
 
-    if not left_ctl_transforms:
-        om.MGlobal.displayWarning("No matching 'L_*_CTL' transform nodes found.")
-        return
+    cmds.parent(node, mirror_transform)
 
-    mirror_matrix = om.MMatrix([
-        [-1, 0, 0, 0],
-        [ 0, 1, 0, 0],
-        [ 0, 0, 1, 0],
-        [ 0, 0, 0, 1]
-    ])
 
-    for src_transform in left_ctl_transforms:
-        shapes = cmds.listRelatives(src_transform, shapes=True, fullPath=False)
-        if not shapes:
-            om.MGlobal.displayWarning(f"No shape under {src_transform}. Skipping.")
+def mirror_shapes():
+    left_side = 'L_'
+    right_side = 'R_'
+    suffix = '_CTL'
+
+    color_map = {
+        6: 13,
+        18: 4
+    }
+
+    all_ctls = cmds.ls(type='transform')
+    source_ctls = []
+    for tr in all_ctls:
+        if suffix in tr:
+            shapes = cmds.listRelatives(tr, shapes=True) or []
+            if any(cmds.nodeType(s) == 'nurbsCurve' for s in shapes):
+                source_ctls.append(tr)
+
+    for src in source_ctls:
+        if not src.startswith(left_side):
             continue
 
-        for src_shape in shapes:
-            if not cmds.objectType(src_shape, isType="nurbsCurve"):
-                om.MGlobal.displayWarning(f"{src_shape} is not a nurbsCurve. Skipping.")
-                continue
+        tgt = src.replace(left_side, right_side, 1)
+        src_shapes = cmds.listRelatives(src, shapes=True, fullPath=True) or []
 
-            if "L_" not in src_shape:
-                continue
+        if not cmds.objExists(tgt):
+            cmds.warning(f"No matching right-side transform for {src}, expected {tgt}")
+            continue
 
-            tgt_shape_name = src_shape.replace("L_", "R_", 1)
-            tgt_transform = src_transform.replace("L_", "R_", 1)
+        trans_override = cmds.getAttr(f'{src}.overrideEnabled')
+        cmds.setAttr(f'{tgt}.overrideEnabled', trans_override)
 
-            if not cmds.objExists(tgt_transform):
-                om.MGlobal.displayWarning(f"Target transform '{tgt_transform}' not found. Skipping.")
-                continue
+        if trans_override:
+            src_col = cmds.getAttr(f'{src}.overrideColor')
+            tgt_col = color_map.get(src_col, src_col)
+            cmds.setAttr(f'{tgt}.overrideColor', tgt_col)
 
-            try:
-                src_dag = get_dag_path(f"{src_transform}|{src_shape}")
-                src_curve = om.MFnNurbsCurve(src_dag)
+        tgt_shapes = cmds.listRelatives(tgt, shapes=True, fullPath=True) or []
+        for s in tgt_shapes:
+            cmds.delete(s)
 
-                if not cmds.objExists(tgt_shape_name):
-                    final_shape = rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name)
-                    tgt_dag = get_dag_path(f"{tgt_transform}|{final_shape}")
-                else:
-                    tgt_dag = get_dag_path(f"{tgt_transform}|{tgt_shape_name}")
-                    tgt_curve = om.MFnNurbsCurve(tgt_dag)
+        for i, src_shape in enumerate(src_shapes):
+            dup_tr = cmds.duplicate(src, name=src + '_dup')[0]
+            dup_shapes = cmds.listRelatives(dup_tr, shapes=True, fullPath=True)
+            dup_shape = dup_shapes[i] if i < len(dup_shapes) else dup_shapes[0]
 
-                    if not curves_match(src_curve, tgt_curve):
-                        final_shape = rebuild_target_curve(src_transform, src_shape, tgt_transform, tgt_shape_name)
-                        tgt_dag = get_dag_path(f"{tgt_transform}|{final_shape}")
+            new_shape = cmds.parent(dup_shape, tgt, shape=True, relative=True)[0]
+            shape_name = f'{tgt}Shape{i+1:02d}'
+            new_shape = cmds.rename(new_shape, shape_name)
 
-                tgt_curve = om.MFnNurbsCurve(tgt_dag)
+            cmds.delete(dup_tr)
 
-                mirrored_points = om.MPointArray()
-                for i in range(src_curve.numCVs):
-                    pt = src_curve.cvPosition(i)
-                    mirrored_points.append(pt * mirror_matrix)
+            num_cvs = cmds.getAttr(f'{src_shape}.spans') + cmds.getAttr(f'{src_shape}.degree')
+            for pt_idx in range(num_cvs + 1):
+                pt = cmds.xform(f'{src_shape}.controlPoints[{pt_idx}]', q=True, t=True, ws=True)
+                cmds.xform(f'{new_shape}.controlPoints[{pt_idx}]', t=(-pt[0], pt[1], pt[2]), ws=True)
 
-                tgt_curve.setCVPositions(mirrored_points)
-                tgt_curve.updateCurve()
+            if cmds.attributeQuery('lineWidth', node=src_shape, exists=True):
+                line_width = cmds.getAttr(f'{src_shape}.lineWidth')
+                cmds.setAttr(f'{new_shape}.lineWidth', line_width)
 
-                om.MGlobal.displayInfo(f"Mirrored and synced '{src_shape}' → '{tgt_shape_name}'")
+            shape_override = cmds.getAttr(f'{src_shape}.overrideEnabled')
+            cmds.setAttr(f'{new_shape}.overrideEnabled', shape_override)
 
-            except Exception as e:
-                om.MGlobal.displayError(f"Error processing {src_shape}: {e}")
+            if shape_override:
+                draw_type = cmds.getAttr(f'{src_shape}.overrideDisplayType')
+                cmds.setAttr(f'{new_shape}.overrideDisplayType', draw_type)
+
+                src_col = cmds.getAttr(f'{src_shape}.overrideColor')
+                tgt_col = color_map.get(src_col, src_col)
+                cmds.setAttr(f'{new_shape}.overrideColor', tgt_col)
+
+        print(f"Mirrored {len(src_shapes)} shapes from {src} → {tgt}")
 
 
+def text_curve(ctl_name):
+    """
+    Creates a text curve for a given controller name and letter.
+
+    Args:
+        ctl_name (str): The name of the controller.
+        letter (str): The letter to use for the text curve.
+
+    Returns:
+        str: The name of the created text curve.
+    """
+    letter = ctl_name.split("_")[1][0].upper()
+    text_curve = cmds.textCurves(ch=False, t=letter)
+    text_curve = cmds.rename(text_curve, ctl_name)
+    relatives = cmds.listRelatives(text_curve, allDescendents=True, type="nurbsCurve")
+    for i, relative in enumerate(relatives):
+        cmds.parent(relative, text_curve, r=True, shape=True)
+        cmds.rename(relative, f"{ctl_name}Shape{i+1:02d}")
+    relatives_transforms = cmds.listRelatives(text_curve, allDescendents=True, type="transform")
+    cmds.delete(relatives_transforms)
+
+    pivot_world = cmds.xform(text_curve, q=True, ws=True, rp=True)
+    
+    cvs = cmds.ls(text_curve + ".cv[*]", fl=True)
+    
+    positions = [cmds.pointPosition(cv, w=True) for cv in cvs]
+    
+    avg_x = sum(p[0] for p in positions) / len(positions)
+    avg_y = sum(p[1] for p in positions) / len(positions)
+    avg_z = sum(p[2] for p in positions) / len(positions)
+    center_cvs = (avg_x, avg_y, avg_z)
+    
+    offset = [pivot_world[0] - center_cvs[0],
+            pivot_world[1] - center_cvs[1],
+            pivot_world[2] - center_cvs[2]]
+    
+    cmds.move(offset[0], offset[1], offset[2], cvs, r=True, ws=True)
+
+    return text_curve
+
+# get_all_ctl_curves_data()
+# mirror_shapes()
