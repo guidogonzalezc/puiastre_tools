@@ -810,9 +810,8 @@ class LimbModule(object):
 
 
         # IK CONTROLLERS
-        reverse_foot_guide = "" if self.module_name == "leg" else self.module_name
-        bank_name = "bankOut" if reverse_foot_guide == "" else "BankOut"
-        self.leg_ik_guides = guide_import(f"{self.side}_{reverse_foot_guide}{bank_name}_GUIDE", all_descendents=True, path=None)
+
+        self.leg_ik_guides = guide_import(f"{self.side}_bankOut_GUIDE", all_descendents=True, path=None)
 
         self.ik_leg_guides = [f"{self.leg_ik_guides[0]}.worldMatrix[0]", f"{self.leg_ik_guides[1]}.worldMatrix[0]", f"{self.leg_ik_guides[2]}.worldMatrix[0]", self.leg_guides[1], self.leg_guides[0]]
 
@@ -1068,16 +1067,11 @@ class BackLegModule(LimbModule):
             }
         )
 
-    # def curvature(self):
-    #     super().curvature()
-    #     self.reverse_foot()
 
+# cmds.file(new=True, force=True)
 
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
-cmds.file(new=True, force=True)
-
-core.DataManager.set_guide_data("D:/git/maya/biped_autorig/guides/test_02.guides")
-core.DataManager.set_ctls_data("D:/git/maya/biped_autorig/curves/elephant_02.ctls")
-
-basic_structure.create_basic_structure()
-a = BackLegModule("L_hip_GUIDE").make()
+# basic_structure.create_basic_structure()
+# a = BackLegModule("L_hip_GUIDE").make()

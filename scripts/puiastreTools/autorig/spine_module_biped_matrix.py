@@ -66,15 +66,15 @@ class SpineModule():
 
         self.create_chain()
 
-        # self.data_exporter.append_data(f"{self.side}_spineModule", 
-        #                             {"skinning_transform": self.skinning_trn,
-        #                             "body_ctl": self.body_ctl,
-        #                             "localHip": self.localHip_ctl,
-        #                             "localChest": self.localChest_ctl,
-        #                             "main_ctl" : self.localHip,
-        #                             "end_main_ctl" : self.localChest_ctl
-        #                             }
-        #                           )
+        self.data_exporter.append_data(f"{self.side}_spineModule", 
+                                    {"skinning_transform": self.skinning_trn,
+                                    # "body_ctl": self.body_ctl,
+                                    # "localHip": self.localHip_ctl,
+                                    # "localChest": self.localChest_ctl,
+                                    # "main_ctl" : self.localHip,
+                                    # "end_main_ctl" : self.localChest_ctl
+                                    }
+                                  )
 
     def create_chain(self):
         """
@@ -117,6 +117,27 @@ class SpineModule():
 
         self.guide_matrix = [aim_matrix, blend_matrix02, blend_matrix]
 
+        hip_ctl, hip_grp = controller_creator(
+                name=f"{self.side}_hip",
+                suffixes=["GRP", "ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                ro=True,
+                parent=self.controllers_trn
+            )
+        
+        self.body_ctl, body_grp = controller_creator(
+            name=f"{self.side}_body",
+            suffixes=["GRP", "ANM"],
+            lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+            ro=True,
+            parent=self.controllers_trn
+        )
+
+        cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{body_grp[0]}.offsetParentMatrix")
+
+        cmds.connectAttr(f"{self.body_ctl}.worldMatrix[0]", f"{hip_grp[0]}.offsetParentMatrix")
+
+
         for i, matrix in enumerate(self.guide_matrix ):
             name = f"Tan0{i}" if i == 1 else f"0{i+1}"
             ctl, ctl_grp = controller_creator(
@@ -126,31 +147,19 @@ class SpineModule():
                 ro=True,
             )
 
-            cmds.parent(ctl_grp[0], self.main_controllers[0] if i == 2 else self.controllers_trn)
+            cmds.parent(ctl_grp[0], self.controllers_trn)
 
             if i == 2:
-                offset_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_spineOffset{name}_MMX", ss=True)
-                inverse_matrix = cmds.createNode("inverseMatrix", name=f"{self.side}_spineOffset{name}_IMX", ss=True)
-                cmds.connectAttr(f"{matrix}.outputMatrix", f"{offset_multMatrix}.matrixIn[0]")
+                cmds.connectAttr(f"{self.guide_matrix[i]}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
+                fk_switch(target= ctl, sources= [self.main_controllers[0]])
 
-                cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{inverse_matrix}.inputMatrix")
-
-                cmds.connectAttr(f"{inverse_matrix}.outputMatrix", f"{offset_multMatrix}.matrixIn[1]")
-        
-
-                cmds.connectAttr(f"{offset_multMatrix}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix")
-
-                for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
-                    cmds.setAttr(f"{ctl_grp[0]}.{attr}", 0)
 
             elif i == 1:
-                parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_spine{name}_PMX", ss=True)
-                cmds.connectAttr(f"{matrix}.outputMatrix", f"{parent_matrix}.inputMatrix")
-                cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
+                cmds.connectAttr(f"{matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
 
 
             else:
-                cmds.connectAttr(f"{matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
+                cmds.connectAttr(f"{hip_ctl}.worldMatrix[0]", f"{ctl_grp[0]}.offsetParentMatrix")
 
 
 
@@ -189,21 +198,12 @@ class SpineModule():
 
         local_hip_joint = cmds.createNode("joint", n=f"{self.side}_localHip_JNT", p=self.skinning_trn, ss=True)
         cmds.connectAttr(f"{self.localHip_ctl}.worldMatrix[0]", f"{local_hip_joint}.offsetParentMatrix")
-            
-        self.body_ctl, body_grp = controller_creator(
-            name=f"{self.side}_body",
-            suffixes=["GRP", "ANM"],
-            lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-            ro=True,
-            parent=self.controllers_trn
-        )
 
         for ctl in [localHip_grp[0], localChest_grp[0]]:
             cmds.setAttr(f"{ctl}.inheritsTransform", 0)
 
-        cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{body_grp[0]}.offsetParentMatrix")
 
-        cmds.parent(self.main_controllers_grp[0][0], self.body_ctl)
+        # cmds.parent(self.main_controllers_grp[0][0], self.body_ctl)
 
         movable_ctl = controller_creator(f"{self.side}_movablePivot", 
                                                           suffixes=[], 
@@ -234,6 +234,9 @@ class SpineModule():
 
         cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", offset_matrix, type="matrix")
         cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{localHip_grp[0]}.offsetParentMatrix")
+
+        fk_switch(target= self.localHip_ctl, sources= [hip_ctl])
+
 
 
         cmds.addAttr(self.body_ctl, shortName="STRETCH", niceName="Stretch ———", enumName="———",attributeType="enum", keyable=True)
@@ -386,10 +389,10 @@ class SpineModule():
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
 
-cmds.file(new=True, force=True)
+# cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("H:/ggMayaAutorig/guides/elephant_04.guides")
-core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
+# core.DataManager.set_guide_data("H:/ggMayaAutorig/guides/elephant_04.guides")
+# core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
-basic_structure.create_basic_structure(asset_name="elephant_04")
-a = SpineModule().make("C_spine01_GUIDE")
+# basic_structure.create_basic_structure(asset_name="elephant_04")
+# a = SpineModule().make("C_spine01_GUIDE")

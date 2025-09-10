@@ -4,11 +4,10 @@
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
-# from gg_autorig.utils.guides import guides_manager
 
 # Rig modules import
 from puiastreTools.autorig import limb_module_matrix as lbm
-from puiastreTools.autorig import dragon_falanges as spm
+# from puiastreTools.autorig import dragon_falanges as spm
 from puiastreTools.autorig import dragon_leg_matrix as dlm
 from puiastreTools.autorig import neck_module_quad_matrix as nmm
 from puiastreTools.autorig import spine_module_biped_matrix as spmm
@@ -24,7 +23,7 @@ reload(basic_structure)
 reload(core)
 reload(data_export)
 reload(lbm)
-reload(spm)
+# reload(spm)
 reload(dlm)
 reload(nmm)
 reload(spmm)
@@ -64,6 +63,9 @@ def make(asset_name="dragon"):
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
     """   
+    cmds.file(new=True, force=True)
+    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+    core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/template_curves_001.json")
 
     data_exporter = data_export.DataExport()
     data_exporter.new_build()
@@ -71,7 +73,12 @@ def make(asset_name="dragon"):
         asset_name = "asset"
     basic_structure.create_basic_structure(asset_name=asset_name)
 
-    final_path = core.init_template_file(ext=".guides", export=False)
+
+    
+
+    final_path = core.DataManager.get_guide_data()
+    # core.DataManager.set_asset_name("Dragon")
+    # core.DataManager.set_mesh_data("Puiastre")
 
     try:
         with open(final_path, "r") as infile:
@@ -88,24 +95,18 @@ def make(asset_name="dragon"):
             if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "arm":
                     lbm.ArmModule(guide_name).make()
-                if guide_info.get("moduleName") == "frontLeg":
-                    lbm.FrontLegModule(guide_name).make()
-                if guide_info.get("moduleName") == "leg":
-                    lbm.LegModule(guide_name).make()
                 if guide_info.get("moduleName") == "backLeg":
-                    lbm.BackLegModule(guide_name).make()
-                if guide_info.get("moduleName") == "hand":
-                    han.HandModule().make(guide_name=guide_name)
+                    dlm.BackLegModule(guide_name).make()
+                # if guide_info.get("moduleName") == "hand":
+                #     han.HandModule().make(guide_name=guide_name)
                 if guide_info.get("moduleName") == "spine":
                     spmm.SpineModule().make(guide_name)
                 if guide_info.get("moduleName") == "neck":
                     nmm.NeckModule().make(guide_name)
-                # if guide_info.get("moduleName") == "variableFk":
-                #     vfk.VariableFkModule().make(guide_name)
                 if guide_info.get("moduleName") == "tail":
                     tmm.TailModule().make(guide_name)
 
-    skeleton_hierarchy = skh.build_complete_hierarchy() 
+    # skeleton_hierarchy = skh.build_complete_hierarchy() 
 
     rename_ctl_shapes()
     joint_label()
@@ -119,3 +120,4 @@ def make(asset_name="dragon"):
     cmds.select(clear=True)
 
 
+make()

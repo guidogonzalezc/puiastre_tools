@@ -6,51 +6,31 @@
         "guides_GRP": "guides_GRP",
         "skeletonHierarchy_GRP": "skeletonHierarchy_GRP"
     },
-    "C_spineModule": {
-        "lastSpineJnt": "C_subSpineFk07_JNT",
-        "localChest": "C_localChest_CTL",
-        "localHip": "C_localHip_CTL",
-        "body": "C_body_CTL",
-        "body_grp": [
-            "C_body_GRP"
+    "L_backLegModule": {
+        "skinning_transform": "L_backLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "L_hipFk_CTL",
+            "L_backKneeFk_CTL",
+            "L_backAnkleFk_CTL",
+            "L_backFootFk_CTL"
         ],
-        "spine_ctl": [
-            "C_spine01_CTL",
-            "C_spineTan_CTL",
-            "C_spine03_CTL"
-        ]
+        "pv_ctl": "L_backLegPV_CTL",
+        "root_ctl": "L_backLegRootIk_CTL",
+        "end_ik": "L_backLegIk_CTL"
     },
-    "C_tailModule": {
-        "tail00_ctl": "C_tail00_CTL"
-    },
-    "L_legModule": {
-        "ik_ctl": "L_legIk_CTL",
-        "fk_ctl": "L_hipFk_CTL",
-        "pv_ctl": "L_legPv_CTL",
-        "root_ctl": "L_rootIk_CTL",
-        "tip_joint": "L_tipBlend_JNT"
+    "R_backLegModule": {
+        "skinning_transform": "R_backLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_hipFk_CTL",
+            "R_backKneeFk_CTL",
+            "R_backAnkleFk_CTL",
+            "R_backFootFk_CTL"
+        ],
+        "pv_ctl": "R_backLegPV_CTL",
+        "root_ctl": "R_backLegRootIk_CTL",
+        "end_ik": "R_backLegIk_CTL"
     },
     "L_armModule": {
-        "skinning_joints": [
-            "L_wingArmUpperTwist00_JNT",
-            "L_wingArmUpperTwist01_JNT",
-            "L_wingArmUpperTwist02_JNT",
-            "L_wingArmUpperTwist03_JNT",
-            "L_wingArmUpperTwist04_JNT",
-            "L_wingArmLowerTwist00_JNT",
-            "L_wingArmLowerTwist01_JNT",
-            "L_wingArmLowerTwist02_JNT",
-            "L_wingArmLowerTwist03_JNT",
-            "L_wingArmLowerTwist04_JNT",
-            "L_wristSkinning_JNT"
-        ],
-        "armIk": "L_wingArmWrist_CTL",
-        "armSettings": "L_ArmSettings_CTL",
-        "armPV": "L_wingArmPV_CTL",
-        "shoulderFK": "L_wingArm1Fk_CTL",
-        "armRoot": "L_wingArmRoot_CTL",
-        "armUpperTwist": "L_wingArmUpperTwist00_JNT",
-        "armLowerTwist": "L_wingArmLowerTwist00_JNT",
         "skinning_transform": "L_armSkinningJoints_GRP",
         "fk_ctl": [
             "L_shoulderFk_CTL",
@@ -62,226 +42,16 @@
         "end_ik": "L_armIk_CTL",
         "scapula_ctl": "L_scapula_CTL"
     },
-    "R_legModule": {
-        "ik_ctl": "R_legIk_CTL",
-        "fk_ctl": "R_hipFk_CTL",
-        "pv_ctl": "R_legPv_CTL",
-        "root_ctl": "R_rootIk_CTL",
-        "tip_joint": "R_tipBlend_JNT"
-    },
     "R_armModule": {
-        "skinning_joints": [
-            "R_wingArmUpperTwist00_JNT",
-            "R_wingArmUpperTwist01_JNT",
-            "R_wingArmUpperTwist02_JNT",
-            "R_wingArmUpperTwist03_JNT",
-            "R_wingArmUpperTwist04_JNT",
-            "R_wingArmLowerTwist00_JNT",
-            "R_wingArmLowerTwist01_JNT",
-            "R_wingArmLowerTwist02_JNT",
-            "R_wingArmLowerTwist03_JNT",
-            "R_wingArmLowerTwist04_JNT",
-            "R_wristSkinning_JNT"
+        "skinning_transform": "R_armSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_shoulderFk_CTL",
+            "R_elbowFk_CTL",
+            "R_wristFk_CTL"
         ],
-        "armIk": "R_wingArmWrist_CTL",
-        "armSettings": "R_ArmSettings_CTL",
-        "armPV": "R_wingArmPV_CTL",
-        "shoulderFK": "R_wingArm1Fk_CTL",
-        "armRoot": "R_wingArmRoot_CTL",
-        "armUpperTwist": "R_wingArmUpperTwist00_JNT",
-        "armLowerTwist": "R_wingArmLowerTwist00_JNT"
-    },
-    "L_clavicleModule": {
-        "clavicle_ctl": "L_clavicle_CTL"
-    },
-    "L_finger": {
-        "attr_ctl": "L_fingerAttr_CTL"
-    },
-    "L_fingerThumb": {
-        "bendy_joints": [
-            "L_fingerThumb01Fk01Skinning_JNT",
-            "L_fingerThumb01Fk01Bendy01_JNT",
-            "L_fingerThumb01Fk01Bendy02_JNT",
-            "L_fingerThumb01Fk01Bendy03_JNT",
-            "L_fingerThumb01Fk01Bendy04_JNT",
-            "L_fingerThumb01Fk02Skinning_JNT",
-            "L_fingerThumb01Fk02Bendy01_JNT",
-            "L_fingerThumb01Fk02Bendy02_JNT",
-            "L_fingerThumb01Fk02Bendy03_JNT",
-            "L_fingerThumb01Fk02Bendy04_JNT",
-            "L_fingerThumb01Fk03Skinning_JNT",
-            "L_fingerThumb01Fk03Bendy01_JNT",
-            "L_fingerThumb01Fk03Bendy02_JNT",
-            "L_fingerThumb01Fk03Bendy03_JNT",
-            "L_fingerThumb01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "L_fingerThumb01Ik_CTL",
-        "ikPv": "L_fingerThumb01PoleVector_CTL",
-        "settingsAttr": "L_fingerAttr_CTL"
-    },
-    "L_fingerIndex": {
-        "bendy_joints": [
-            "L_fingerIndex01Fk01Skinning_JNT",
-            "L_fingerIndex01Fk01Bendy01_JNT",
-            "L_fingerIndex01Fk01Bendy02_JNT",
-            "L_fingerIndex01Fk01Bendy03_JNT",
-            "L_fingerIndex01Fk01Bendy04_JNT",
-            "L_fingerIndex01Fk02Skinning_JNT",
-            "L_fingerIndex01Fk02Bendy01_JNT",
-            "L_fingerIndex01Fk02Bendy02_JNT",
-            "L_fingerIndex01Fk02Bendy03_JNT",
-            "L_fingerIndex01Fk02Bendy04_JNT",
-            "L_fingerIndex01Fk03Skinning_JNT",
-            "L_fingerIndex01Fk03Bendy01_JNT",
-            "L_fingerIndex01Fk03Bendy02_JNT",
-            "L_fingerIndex01Fk03Bendy03_JNT",
-            "L_fingerIndex01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "L_fingerIndex01Ik_CTL",
-        "ikPv": "L_fingerIndex01PoleVector_CTL",
-        "settingsAttr": "L_fingerAttr_CTL"
-    },
-    "L_fingerMiddle": {
-        "bendy_joints": [
-            "L_fingerMiddle01Fk01Skinning_JNT",
-            "L_fingerMiddle01Fk01Bendy01_JNT",
-            "L_fingerMiddle01Fk01Bendy02_JNT",
-            "L_fingerMiddle01Fk01Bendy03_JNT",
-            "L_fingerMiddle01Fk01Bendy04_JNT",
-            "L_fingerMiddle01Fk02Skinning_JNT",
-            "L_fingerMiddle01Fk02Bendy01_JNT",
-            "L_fingerMiddle01Fk02Bendy02_JNT",
-            "L_fingerMiddle01Fk02Bendy03_JNT",
-            "L_fingerMiddle01Fk02Bendy04_JNT",
-            "L_fingerMiddle01Fk03Skinning_JNT",
-            "L_fingerMiddle01Fk03Bendy01_JNT",
-            "L_fingerMiddle01Fk03Bendy02_JNT",
-            "L_fingerMiddle01Fk03Bendy03_JNT",
-            "L_fingerMiddle01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "L_fingerMiddle01Ik_CTL",
-        "ikPv": "L_fingerMiddle01PoleVector_CTL",
-        "settingsAttr": "L_fingerAttr_CTL"
-    },
-    "L_fingerRing": {
-        "bendy_joints": [
-            "L_fingerRing01Fk01Skinning_JNT",
-            "L_fingerRing01Fk01Bendy01_JNT",
-            "L_fingerRing01Fk01Bendy02_JNT",
-            "L_fingerRing01Fk01Bendy03_JNT",
-            "L_fingerRing01Fk01Bendy04_JNT",
-            "L_fingerRing01Fk02Skinning_JNT",
-            "L_fingerRing01Fk02Bendy01_JNT",
-            "L_fingerRing01Fk02Bendy02_JNT",
-            "L_fingerRing01Fk02Bendy03_JNT",
-            "L_fingerRing01Fk02Bendy04_JNT",
-            "L_fingerRing01Fk03Skinning_JNT",
-            "L_fingerRing01Fk03Bendy01_JNT",
-            "L_fingerRing01Fk03Bendy02_JNT",
-            "L_fingerRing01Fk03Bendy03_JNT",
-            "L_fingerRing01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "L_fingerRing01Ik_CTL",
-        "ikPv": "L_fingerRing01PoleVector_CTL",
-        "settingsAttr": "L_fingerAttr_CTL"
-    },
-    "R_clavicleModule": {
-        "clavicle_ctl": "R_clavicle_CTL"
-    },
-    "R_finger": {
-        "attr_ctl": "R_fingerAttr_CTL"
-    },
-    "R_fingerThumb": {
-        "bendy_joints": [
-            "R_fingerThumb01Fk01Skinning_JNT",
-            "R_fingerThumb01Fk01Bendy01_JNT",
-            "R_fingerThumb01Fk01Bendy02_JNT",
-            "R_fingerThumb01Fk01Bendy03_JNT",
-            "R_fingerThumb01Fk01Bendy04_JNT",
-            "R_fingerThumb01Fk02Skinning_JNT",
-            "R_fingerThumb01Fk02Bendy01_JNT",
-            "R_fingerThumb01Fk02Bendy02_JNT",
-            "R_fingerThumb01Fk02Bendy03_JNT",
-            "R_fingerThumb01Fk02Bendy04_JNT",
-            "R_fingerThumb01Fk03Skinning_JNT",
-            "R_fingerThumb01Fk03Bendy01_JNT",
-            "R_fingerThumb01Fk03Bendy02_JNT",
-            "R_fingerThumb01Fk03Bendy03_JNT",
-            "R_fingerThumb01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "R_fingerThumb01Ik_CTL",
-        "ikPv": "R_fingerThumb01PoleVector_CTL",
-        "settingsAttr": "R_fingerAttr_CTL"
-    },
-    "R_fingerIndex": {
-        "bendy_joints": [
-            "R_fingerIndex01Fk01Skinning_JNT",
-            "R_fingerIndex01Fk01Bendy01_JNT",
-            "R_fingerIndex01Fk01Bendy02_JNT",
-            "R_fingerIndex01Fk01Bendy03_JNT",
-            "R_fingerIndex01Fk01Bendy04_JNT",
-            "R_fingerIndex01Fk02Skinning_JNT",
-            "R_fingerIndex01Fk02Bendy01_JNT",
-            "R_fingerIndex01Fk02Bendy02_JNT",
-            "R_fingerIndex01Fk02Bendy03_JNT",
-            "R_fingerIndex01Fk02Bendy04_JNT",
-            "R_fingerIndex01Fk03Skinning_JNT",
-            "R_fingerIndex01Fk03Bendy01_JNT",
-            "R_fingerIndex01Fk03Bendy02_JNT",
-            "R_fingerIndex01Fk03Bendy03_JNT",
-            "R_fingerIndex01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "R_fingerIndex01Ik_CTL",
-        "ikPv": "R_fingerIndex01PoleVector_CTL",
-        "settingsAttr": "R_fingerAttr_CTL"
-    },
-    "R_fingerMiddle": {
-        "bendy_joints": [
-            "R_fingerMiddle01Fk01Skinning_JNT",
-            "R_fingerMiddle01Fk01Bendy01_JNT",
-            "R_fingerMiddle01Fk01Bendy02_JNT",
-            "R_fingerMiddle01Fk01Bendy03_JNT",
-            "R_fingerMiddle01Fk01Bendy04_JNT",
-            "R_fingerMiddle01Fk02Skinning_JNT",
-            "R_fingerMiddle01Fk02Bendy01_JNT",
-            "R_fingerMiddle01Fk02Bendy02_JNT",
-            "R_fingerMiddle01Fk02Bendy03_JNT",
-            "R_fingerMiddle01Fk02Bendy04_JNT",
-            "R_fingerMiddle01Fk03Skinning_JNT",
-            "R_fingerMiddle01Fk03Bendy01_JNT",
-            "R_fingerMiddle01Fk03Bendy02_JNT",
-            "R_fingerMiddle01Fk03Bendy03_JNT",
-            "R_fingerMiddle01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "R_fingerMiddle01Ik_CTL",
-        "ikPv": "R_fingerMiddle01PoleVector_CTL",
-        "settingsAttr": "R_fingerAttr_CTL"
-    },
-    "R_fingerRing": {
-        "bendy_joints": [
-            "R_fingerRing01Fk01Skinning_JNT",
-            "R_fingerRing01Fk01Bendy01_JNT",
-            "R_fingerRing01Fk01Bendy02_JNT",
-            "R_fingerRing01Fk01Bendy03_JNT",
-            "R_fingerRing01Fk01Bendy04_JNT",
-            "R_fingerRing01Fk02Skinning_JNT",
-            "R_fingerRing01Fk02Bendy01_JNT",
-            "R_fingerRing01Fk02Bendy02_JNT",
-            "R_fingerRing01Fk02Bendy03_JNT",
-            "R_fingerRing01Fk02Bendy04_JNT",
-            "R_fingerRing01Fk03Skinning_JNT",
-            "R_fingerRing01Fk03Bendy01_JNT",
-            "R_fingerRing01Fk03Bendy02_JNT",
-            "R_fingerRing01Fk03Bendy03_JNT",
-            "R_fingerRing01Fk03Bendy04_JNT"
-        ],
-        "ikFinger": "R_fingerRing01Ik_CTL",
-        "ikPv": "R_fingerRing01PoleVector_CTL",
-        "settingsAttr": "R_fingerAttr_CTL"
-    },
-    "C_neckModule": {
-        "neck_main_ctl": "C_neckMain_CTL",
-        "neck00_ctl": "C_neck_CTL",
-        "head_ctl": "C_head_CTL"
+        "pv_ctl": "R_armPV_CTL",
+        "root_ctl": "R_armRootIk_CTL",
+        "end_ik": "R_armIk_CTL",
+        "scapula_ctl": "R_scapula_CTL"
     }
 }

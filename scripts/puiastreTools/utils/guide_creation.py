@@ -306,14 +306,13 @@ class GuideCreation(object):
         for side in self.sides:
             color = {"L": 6, "R": 13}.get(side, 17)
             self.guides = []
-            print(self.position_data)
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
                 temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                 type = "joint"
-                if not positions[0]:
-                    positions = ([0, 0, 0], positions[0])
-
-                positions = [round(coord, 6) for coord in positions[0]]
+                # if not positions[0] and len(positions) > 1:
+                #     positions = ([0, 0, 0], positions[0])
+                # if len(positions) > 1:
+                #     positions = positions[1]
                 cmds.setAttr(temp_pos + ".translate", *positions)
 
                 parent = self.guides_trn if not self.guides else self.guides[-1]
@@ -366,7 +365,6 @@ class GuideCreation(object):
             meta = []
 
             for i in range(len(self.guides) - 1):
-                print(self.guides[i])
                 if "Settings" in self.guides[i+1] or "localHip" in self.guides[i+1]:
                     continue
                 if "metacarpal" in self.guides[i] or "Metacarpal" in self.guides[i]:
@@ -466,7 +464,6 @@ class ArmGuideCreation(GuideCreation):
             "wrist": get_data(f"{self.sides}_wrist"),
             "armSettings": get_data(f"{self.sides}_armSettings"),
         }
-
 
 class BackLegGuideCreation(GuideCreation):
     """
@@ -569,7 +566,6 @@ def number_to_ordinal_word(n):
     else:
         return str(n)
 
-
 class HandGuideCreation(GuideCreation):
     """
     Guide creation for hands.
@@ -581,50 +577,26 @@ class HandGuideCreation(GuideCreation):
         self.aim_offset = 1
         self.prefix = None
         self.controller_number = controller_number
-        if controller_number == 5:
-            self.position_data = {
-                "hand": get_data(f"{self.sides}_hand"),
-                "metacarpalIndex": get_data(f"{self.sides}_metacarpalIndex"),
-                "index01": get_data(f"{self.sides}_index01"),
-                "index02": get_data(f"{self.sides}_index02"),
-                "index03": get_data(f"{self.sides}_index03"),
-                "metacarpalMiddle": get_data(f"{self.sides}_metacarpalMiddle"),
-                "middle01": get_data(f"{self.sides}_middle01"),
-                "middle02": get_data(f"{self.sides}_middle02"),
-                "middle03": get_data(f"{self.sides}_middle03"),
-                "metacarpalRing": get_data(f"{self.sides}_metacarpalRing"),
-                "ring01": get_data(f"{self.sides}_ring01"),
-                "ring02": get_data(f"{self.sides}_ring02"),
-                "ring03": get_data(f"{self.sides}_ring03"),
-                "metacarpalPinky": get_data(f"{self.sides}_metacarpalPinky"),
-                "pinky01": get_data(f"{self.sides}_pinky01"),
-                "pinky02": get_data(f"{self.sides}_pinky02"),
-                "pinky03": get_data(f"{self.sides}_pinky03"),
-                "metacarpalThumb": get_data(f"{self.sides}_metacarpalThumb"),
-                "thumb01": get_data(f"{self.sides}_thumb01"),
-                "thumb02": get_data(f"{self.sides}_thumb02"),
-                "thumb03": get_data(f"{self.sides}_thumb03"),
-            }
-        else:
-            self.position_data = {
-                "hand": get_data(f"{self.sides}_hand"),
-            }
-            for item in range(int(controller_number)):
-                name = number_to_ordinal_word(item + 1)
-                if name == "first":
-                    self.position_data.update({
-                        f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
-                        f"{name}Finger01": get_data(f"{self.sides}_{name}Finger01"),
-                        f"{name}Finger02": get_data(f"{self.sides}_{name}Finger02"),
-                        f"{name}Finger03": get_data(f"{self.sides}_{name}FingerEnd"),
-                    })
-                else:
-                    self.position_data.update({
-                        f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
-                        f"{name}Finger01": get_data(f"{self.sides}_{name}Finger01"),
-                        f"{name}Finger02": get_data(f"{self.sides}_{name}Finger02"),
-                        f"{name}Finger03": get_data(f"{self.sides}_{name}Finger03"),
-                    })
+
+        self.position_data = {
+            "hand": get_data(f"{self.sides}_hand"),
+        }
+        for item in range(int(controller_number)):
+            name = number_to_ordinal_word(item + 1)
+            if name == "first":
+                self.position_data.update({
+                    f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
+                    f"{name}Finger01": get_data(f"{self.sides}_{name}Finger01"),
+                    f"{name}Finger02": get_data(f"{self.sides}_{name}Finger02"),
+                    f"{name}Finger03": get_data(f"{self.sides}_{name}Finger03"),
+                })
+            else:
+                self.position_data.update({
+                    f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
+                    f"{name}Finger01": get_data(f"{self.sides}_{name}Finger01"),
+                    f"{name}Finger02": get_data(f"{self.sides}_{name}Finger02"),
+                    f"{name}Finger03": get_data(f"{self.sides}_{name}Finger03"),
+                })
 
 class FootGuideCreation(GuideCreation):
     """
@@ -647,31 +619,6 @@ class FootGuideCreation(GuideCreation):
         f"{ctl}{first_h_letter}eel": get_data(f"{self.sides}_{ctl}{first_h_letter}eel"),
     }
         
-class VariableFK(GuideCreation):
-    """
-    Guide creation for variable FK.
-    """
-    limb_name = "variableFk"
-    aim_name = None
-    aim_offset = 0
-
-    def __init__(self, quantity=5, sides=["L", "R"], prefix="trunk", joints=None):
-        self.sides = sides
-        self.controller_number = int(quantity)
-        self.prefix = prefix
-        self.twist_joints = int(joints)
-
-        zero_value = 3 if self.twist_joints >= 10 else 2
-
-        self.position_data = {}
-
-        for i in range(self.twist_joints):
-
-            position_data = {
-                f"{self.prefix}VariableFK{str(i+1).zfill(zero_value)}": get_data(f"{self.sides}_{self.prefix}VariableFK{str(i+1).zfill(zero_value)}"),
-            }
-            self.position_data.update(position_data)
-
 class JiggleJoint(GuideCreation):
     """
     Guide creation for jiggle joints.
@@ -689,7 +636,6 @@ class JiggleJoint(GuideCreation):
         }
         self.position_data.update(position_data)
 
-
 def dragon_rebuild_guides():
     """
     Rebuilds the guides for a quadruped character in the Maya scene.
@@ -703,6 +649,7 @@ def dragon_rebuild_guides():
 
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
     buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
+    cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
 
 
 
@@ -717,14 +664,14 @@ def dragon_rebuild_guides():
     ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)
     HandGuideCreation(controller_number=4).create_guides(guides_trn, buffers_trn)
     HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
-
+# dragon_rebuild_guides()
 
 def load_guides(path = ""):
     if not path or path == "_":
         path = "body_template_"
 
     # final_path = core.init_template_file(ext=".guides", export=False, file_name=path)
-    final_path = core.init_template_file(ext=".guides", export=False)
+    final_path = core.DataManager.get_guide_data()
 
     try:
         with open(final_path, "r") as infile:
@@ -756,21 +703,23 @@ def load_guides(path = ""):
             if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "arm":
                     ArmGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
-                if guide_info.get("moduleName") == "frontLeg":
-                    FrontLegGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
-                if guide_info.get("moduleName") == "leg":
-                    LegGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLeg":
                     BackLegGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "spine":
                     SpineGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "neck":
                     NeckGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "tail":
+                    TailGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "foot":
                     limb_name = guide_name.split("_")[1].split("BankOut")[0]
-                    FootGuideCreation(side=guide_name.split("_")[0], limb_name=limb_name).create_guides(guides_trn, buffers_trn)
+                    FootGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "hand":
+                    HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
 
-def guides_export(skelTree = None):
+
+
+def guides_export():
         """
         Exports the guides from the selected folder in the Maya scene to a JSON file.
         """
@@ -798,6 +747,7 @@ def guides_export(skelTree = None):
                 guides_type = []
                 guides_module_name = []
                 guides_prefix_name = []
+                guides_ctl_number = []
 
                 for guide in guides_descendents:
                         # Try to get 'jointTwist' attribute, if not present, set value as 'Child'
@@ -813,6 +763,13 @@ def guides_export(skelTree = None):
                         else:
                                 guide_type = "Child"
                         guides_type.append(guide_type)
+
+                        # Try to get 'type' attribute, if not present, set value as 'Child'
+                        if cmds.attributeQuery("controllerNumber", node=guide, exists=True):
+                                guide_type = cmds.getAttr(f"{guide}.controllerNumber")
+                        else:
+                                guide_type = "Child"
+                        guides_ctl_number.append(guide_type)
 
                         # Try to get 'moduleName' attribute, if not present, set value as 'Child'
                         if cmds.attributeQuery("moduleName", node=guide, exists=True):
@@ -847,7 +804,6 @@ def guides_export(skelTree = None):
         guides_data = {guides_name: {},
                        "controls": ctl_path,
                        "meshes": mesh_path,
-                       "hierarchy": skelTree
                        }
 
         for i, guide in enumerate(guides_descendents):
@@ -857,7 +813,8 @@ def guides_export(skelTree = None):
                         "jointTwist": guides_joint_twist[i],
                         "type": guides_type[i],
                         "moduleName": guides_module_name[i],
-                        "prefix": guides_prefix_name[i]
+                        "prefix": guides_prefix_name[i],
+                        "controllerNumber": guides_ctl_number[i]
                 }
 
 
@@ -920,10 +877,13 @@ def guide_import(joint_name, all_descendents=True, path=None):
         transforms_chain_export = []
 
         if all_descendents:
+                print(joint_name)
                 
                 if all_descendents is True:
+                        print(joint_name)
                         world_position, parent, moduleName, prefix = get_data(joint_name, module_name=True)
                         guide_transform = cmds.createNode('transform', name=joint_name)
+                        print(world_position)
                         cmds.xform(guide_transform, ws=True, t=world_position)
                         cmds.parent(guide_transform, guide_grp)
                         transforms_chain_export.append(guide_transform)
@@ -975,9 +935,8 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-# core.DataManager.set_asset_name("LaiaGay")
+# core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
+# # load_guides()
 
 # guides_export()
-# biped_rebuild_guides()
-# dragon_rebuild_guides()

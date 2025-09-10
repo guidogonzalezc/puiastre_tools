@@ -1288,13 +1288,13 @@ class LegModule(LimbModule):
 
 
 
-cmds.file(new=True, force=True)
+# cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+# core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
-basic_structure.create_basic_structure(asset_name="dragon")
-# a = LegModule("L_hip_GUIDE").make()
-# a = LegModule("R_hip_GUIDE").make()
-a = ArmModule("L_clavicle_GUIDE").make()
-# a = ArmModule("R_clavicle_GUIDE").make()
+# basic_structure.create_basic_structure(asset_name="dragon")
+# # a = LegModule("L_hip_GUIDE").make()
+# # a = LegModule("R_hip_GUIDE").make()
+# a = ArmModule("L_clavicle_GUIDE").make()
+# # a = ArmModule("R_clavicle_GUIDE").make()

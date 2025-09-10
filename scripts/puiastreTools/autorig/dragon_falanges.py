@@ -653,10 +653,10 @@ class falangeModule(object):
 
 
 
-cmds.file(new=True, force=True)
+# cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
-basic_structure.create_basic_structure(asset_name="dragon")
-a = falangeModule("L_firstMetacarpal_GUIDE").make()
+# basic_structure.create_basic_structure(asset_name="dragon")
+# a = falangeModule("L_firstMetacarpal_GUIDE").make()

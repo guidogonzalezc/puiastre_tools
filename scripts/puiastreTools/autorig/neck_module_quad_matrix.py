@@ -20,15 +20,15 @@ AXIS_VECTOR = {'x': (1, 0, 0), '-x': (-1, 0, 0), 'y': (0, 1, 0), '-y': (0, -1, 0
 
 class NeckModule():
     """
-    Class to create a spine module in a Maya rigging setup.
-    This module handles the creation of spine joints, controllers, and various systems such as stretch, reverse, offset, squash, and volume preservation.
+    Class to create a neck module in a Maya rigging setup.
+    This module handles the creation of neck joints, controllers, and various systems such as stretch, reverse, offset, squash, and volume preservation.
     """
     def __init__(self):
         """
-        Initializes the SpineModule class, setting up paths and data exporters.
+        Initializes the NeckModule class, setting up paths and data exporters.
         
         Args:
-            self: Instance of the SpineModule class.
+            self: Instance of the NeckModule class.
         """
         
         self.data_exporter = data_export.DataExport()
@@ -41,10 +41,10 @@ class NeckModule():
 
     def make(self, guide_name):
         """
-        Creates the spine module, including the spine chain, controllers, and various systems.
+        Creates the neck module, including the neck chain, controllers, and various systems.
 
         Args:
-            self: Instance of the SpineModule class.
+            self: Instance of the NeckModule class.
         """
 
         self.guide_name = guide_name
@@ -66,22 +66,22 @@ class NeckModule():
 
         self.create_chain()
 
-        # self.data_exporter.append_data(f"{self.side}_neckModule", 
-        #                             {"skinning_transform": self.skinning_trn,
-        #                             "body_ctl": self.body_ctl,
-        #                             "localHip": self.localHip_ctl,
-        #                             "localChest": self.localChest_ctl,
-        #                             "main_ctl" : self.localHip,
-        #                             "end_main_ctl" : self.localChest_ctl
-        #                             }
-        #                           )
+        self.data_exporter.append_data(f"{self.side}_neckModule", 
+                                    {"skinning_transform": self.skinning_trn,
+                                    # "body_ctl": self.body_ctl,
+                                    # "localHip": self.localHip_ctl,
+                                    # "localChest": self.localChest_ctl,
+                                    # "main_ctl" : self.localHip,
+                                    # "end_main_ctl" : self.localChest_ctl
+                                    }
+                                  )
 
     def create_chain(self):
         """
-        Creates the spine joint chain by importing guides and parenting the first joint to the module transform.
+        Creates the neck joint chain by importing guides and parenting the first joint to the module transform.
 
         Args:
-            self: Instance of the SpineModule class.
+            self: Instance of the neckModule class.
         """
         
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
@@ -153,39 +153,39 @@ class NeckModule():
         cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{clamped_distance}.inMatrix1")
         cmds.connectAttr(f"{self.guide_matrix[1]}.outputMatrix", f"{clamped_distance}.inMatrix2")
 
-        spine_to_tan01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_neckToTan01_B2A", ss=True)
-        cmds.connectAttr(f"{clamped_distance}.distance", f"{spine_to_tan01_blendTwo}.input[0]")
-        cmds.connectAttr(f"{real_distance}.distance", f"{spine_to_tan01_blendTwo}.input[1]")
-        cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{spine_to_tan01_blendTwo}.attributesBlender")
+        neck_to_tan01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_neckToTan01_B2A", ss=True)
+        cmds.connectAttr(f"{clamped_distance}.distance", f"{neck_to_tan01_blendTwo}.input[0]")
+        cmds.connectAttr(f"{real_distance}.distance", f"{neck_to_tan01_blendTwo}.input[1]")
+        cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{neck_to_tan01_blendTwo}.attributesBlender")
 
-        spine01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_neck01WM_AIM", ss=True)
-        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{spine01_world_matrix}.inputMatrix")
-        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{spine01_world_matrix}.primaryTargetMatrix")
-        cmds.setAttr(f"{spine01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        cmds.setAttr(f"{spine01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{spine01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{spine01_world_matrix}.secondaryMode", 2)
+        neck01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_neck01WM_AIM", ss=True)
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix}.inputMatrix")
+        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck01_world_matrix}.primaryTargetMatrix")
+        cmds.setAttr(f"{neck01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        cmds.setAttr(f"{neck01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{neck01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{neck01_world_matrix}.secondaryMode", 2)
         tan01_translate_offset = cmds.createNode("fourByFourMatrix", name=f"{self.side}_tan01TranslateOffset_FBM", ss=True)
-        cmds.connectAttr(f"{spine_to_tan01_blendTwo}.output", f"{tan01_translate_offset}.in32")
+        cmds.connectAttr(f"{neck_to_tan01_blendTwo}.output", f"{tan01_translate_offset}.in32")
 
         tan01_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_tan01EndPos_MMT", ss=True)
         cmds.connectAttr(f"{tan01_translate_offset}.output", f"{tan01_end_pos}.matrixIn[0]")
-        cmds.connectAttr(f"{spine01_world_matrix}.outputMatrix", f"{tan01_end_pos}.matrixIn[1]")
+        cmds.connectAttr(f"{neck01_world_matrix}.outputMatrix", f"{tan01_end_pos}.matrixIn[1]")
 
         tan01_wm_no_rot = cmds.createNode("blendMatrix", name=f"{self.side}_tan01EndWMNoRot_BMX", ss=True)
         cmds.connectAttr(f"{tan01_end_pos}.matrixSum", f"{tan01_wm_no_rot}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{tan01_wm_no_rot}.target[0].targetMatrix")
         cmds.setAttr(f"{tan01_wm_no_rot}.target[0].translateWeight", 0)
 
-        clamped_distance_tan_neck = cmds.createNode("distanceBetween", name=f"{self.side}_tan01ToSpine_DIB", ss=True)
-        real_distance_tan_neck = cmds.createNode("distanceBetween", name=f"{self.side}_tan01ToSpine_DIB", ss=True)
+        clamped_distance_tan_neck = cmds.createNode("distanceBetween", name=f"{self.side}_tan01Toneck_DIB", ss=True)
+        real_distance_tan_neck = cmds.createNode("distanceBetween", name=f"{self.side}_tan01Toneck_DIB", ss=True)
         cmds.connectAttr(f"{tan01_wm_no_rot}.outputMatrix", f"{real_distance_tan_neck}.inMatrix1")
         cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{real_distance_tan_neck}.inMatrix2")
 
         cmds.connectAttr(f"{self.guide_matrix[1]}.outputMatrix", f"{clamped_distance_tan_neck}.inMatrix1")
         cmds.connectAttr(f"{self.guide_matrix[2]}.outputMatrix", f"{clamped_distance_tan_neck}.inMatrix2")
 
-        tan01_to_neck01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_tan01ToSpine01_B2A", ss=True)
+        tan01_to_neck01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_tan01Toneck01_B2A", ss=True)
         cmds.connectAttr(f"{clamped_distance_tan_neck}.distance", f"{tan01_to_neck01_blendTwo}.input[0]")
         cmds.connectAttr(f"{real_distance_tan_neck}.distance", f"{tan01_to_neck01_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{tan01_to_neck01_blendTwo}.attributesBlender")
@@ -197,19 +197,19 @@ class NeckModule():
         cmds.setAttr(f"{tan01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{tan01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{tan01_world_matrix}.secondaryMode", 2)
-        spine02_translate_offset = cmds.createNode("fourByFourMatrix", name=f"{self.side}_neck02TranslateOffset_FBM", ss=True)
-        cmds.connectAttr(f"{tan01_to_neck01_blendTwo}.output", f"{spine02_translate_offset}.in32")
+        neck02_translate_offset = cmds.createNode("fourByFourMatrix", name=f"{self.side}_neck02TranslateOffset_FBM", ss=True)
+        cmds.connectAttr(f"{tan01_to_neck01_blendTwo}.output", f"{neck02_translate_offset}.in32")
 
-        spine02_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_neck02EndPos_MMT", ss=True)
-        cmds.connectAttr(f"{spine02_translate_offset}.output", f"{spine02_end_pos}.matrixIn[0]")
-        cmds.connectAttr(f"{tan01_world_matrix}.outputMatrix", f"{spine02_end_pos}.matrixIn[1]")
+        neck02_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_neck02EndPos_MMT", ss=True)
+        cmds.connectAttr(f"{neck02_translate_offset}.output", f"{neck02_end_pos}.matrixIn[0]")
+        cmds.connectAttr(f"{tan01_world_matrix}.outputMatrix", f"{neck02_end_pos}.matrixIn[1]")
 
-        spine_wm = cmds.createNode("blendMatrix", name=f"{self.side}_neck02WM_BMX", ss=True)
-        cmds.connectAttr(f"{spine02_end_pos}.matrixSum", f"{spine_wm}.inputMatrix")
-        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{spine_wm}.target[0].targetMatrix")
-        cmds.setAttr(f"{spine_wm}.target[0].translateWeight", 0)
+        neck_wm = cmds.createNode("blendMatrix", name=f"{self.side}_neck02WM_BMX", ss=True)
+        cmds.connectAttr(f"{neck02_end_pos}.matrixSum", f"{neck_wm}.inputMatrix")
+        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck_wm}.target[0].targetMatrix")
+        cmds.setAttr(f"{neck_wm}.target[0].translateWeight", 0)
 
-        cvs = [f"{spine01_world_matrix}.outputMatrix", f"{tan01_world_matrix}.outputMatrix", f"{spine_wm}.outputMatrix"]
+        cvs = [f"{neck01_world_matrix}.outputMatrix", f"{tan01_world_matrix}.outputMatrix", f"{neck_wm}.outputMatrix"]
 
         self.num_joints = 5
 
@@ -234,7 +234,7 @@ class NeckModule():
         Creates the attached FK controllers for the neck module, including sub-neck controllers and joints.
 
         Args:
-            self: Instance of the SpineModule class.
+            self: Instance of the neckModule class.
         Returns:
             list: A list of sub-neck joint names created for the attached FK system.
         """
@@ -281,10 +281,10 @@ class NeckModule():
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
 
-cmds.file(new=True, force=True)
+# cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
-basic_structure.create_basic_structure(asset_name="elephant_04")
-a = SpineModule().make("C_spine01_GUIDE")
+# basic_structure.create_basic_structure(asset_name="elephant_04")
+# a = NeckModule().make("C_neck_GUIDE")
