@@ -68,11 +68,8 @@ class NeckModule():
 
         self.data_exporter.append_data(f"{self.side}_neckModule", 
                                     {"skinning_transform": self.skinning_trn,
-                                    # "body_ctl": self.body_ctl,
-                                    # "localHip": self.localHip_ctl,
-                                    # "localChest": self.localChest_ctl,
-                                    # "main_ctl" : self.localHip,
-                                    # "end_main_ctl" : self.localChest_ctl
+                                    "neck_ctl": self.main_controllers[0],
+
                                     }
                                   )
 
@@ -118,9 +115,11 @@ class NeckModule():
         self.guide_matrix = [aim_matrix, blend_matrix02, blend_matrix]
 
         for i, matrix in enumerate(self.guide_matrix ):
+            pre_name = "neck" if i != len(self.guide_matrix ) - 1 else "head"
             name = f"Tan0{i}" if i == 1 else f"0{i+1}"
+            name = name if pre_name == "neck" else ""
             ctl, ctl_grp = controller_creator(
-                name=f"{self.side}_neck{name}",
+                name=f"{self.side}_{pre_name}{name}",
                 suffixes=["GRP", "ANM"],
                 lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                 ro=True,
@@ -150,12 +149,16 @@ class NeckModule():
         cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{real_distance}.inMatrix1")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{real_distance}.inMatrix2")
 
+        real_dis_global = cmds.createNode("divide", name=f"{self.side}_realDistanceGlobalNeck_DIV", ss=True)
+        cmds.connectAttr(f"{real_distance}.distance", f"{real_dis_global}.input1")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{real_dis_global}.input2")
+
         cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{clamped_distance}.inMatrix1")
         cmds.connectAttr(f"{self.guide_matrix[1]}.outputMatrix", f"{clamped_distance}.inMatrix2")
 
         neck_to_tan01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_neckToTan01_B2A", ss=True)
         cmds.connectAttr(f"{clamped_distance}.distance", f"{neck_to_tan01_blendTwo}.input[0]")
-        cmds.connectAttr(f"{real_distance}.distance", f"{neck_to_tan01_blendTwo}.input[1]")
+        cmds.connectAttr(f"{real_dis_global}.output", f"{neck_to_tan01_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{neck_to_tan01_blendTwo}.attributesBlender")
 
         neck01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_neck01WM_AIM", ss=True)
@@ -182,12 +185,16 @@ class NeckModule():
         cmds.connectAttr(f"{tan01_wm_no_rot}.outputMatrix", f"{real_distance_tan_neck}.inMatrix1")
         cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{real_distance_tan_neck}.inMatrix2")
 
+        real_dis_global_tanToHead = cmds.createNode("divide", name=f"{self.side}_realDistanceGlobalNeckTanToHead_DIV", ss=True)
+        cmds.connectAttr(f"{real_distance_tan_neck}.distance", f"{real_dis_global_tanToHead}.input1")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{real_dis_global_tanToHead}.input2")
+
         cmds.connectAttr(f"{self.guide_matrix[1]}.outputMatrix", f"{clamped_distance_tan_neck}.inMatrix1")
         cmds.connectAttr(f"{self.guide_matrix[2]}.outputMatrix", f"{clamped_distance_tan_neck}.inMatrix2")
 
         tan01_to_neck01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_tan01Toneck01_B2A", ss=True)
         cmds.connectAttr(f"{clamped_distance_tan_neck}.distance", f"{tan01_to_neck01_blendTwo}.input[0]")
-        cmds.connectAttr(f"{real_distance_tan_neck}.distance", f"{tan01_to_neck01_blendTwo}.input[1]")
+        cmds.connectAttr(f"{real_dis_global_tanToHead}.output", f"{tan01_to_neck01_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{tan01_to_neck01_blendTwo}.attributesBlender")
 
         tan01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_tan01WM_AIM", ss=True)
@@ -217,11 +224,16 @@ class NeckModule():
         for i in range(self.num_joints):
             t = i / (float(self.num_joints) - 1)
             t_values.append(t)
+
+        t_values.pop(-1)
         
 
-        self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvs, num_joints=self.num_joints, name=f"{self.side}_neck", parent=self.skinning_trn, custom_parm=t_values)
+        self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvs, num_joints=self.num_joints-1, name=f"{self.side}_neck", parent=self.skinning_trn, custom_parm=t_values)
 
         self.input_connections = []
+        head_temp_joint = cmds.createNode("joint", n=f"{self.side}_head_JNT", parent=self.skinning_trn, ss=True)
+        cmds.connectAttr(f"{neck_wm}.outputMatrix", f"{head_temp_joint}.offsetParentMatrix")
+        self.old_joints.append(head_temp_joint)
         for joint in self.old_joints:
             input_connection = cmds.listConnections(f"{joint}.offsetParentMatrix", source=True, destination=False, plugs=True)[0]
             self.input_connections.append(input_connection)
@@ -248,6 +260,8 @@ class NeckModule():
             name = joint.split(".")[0].split("_")[1]
             if "Scale" in name or "End" in name:
                 name = name.replace("Scale", "").replace("End", "")
+                if i == len(self.input_connections)-1:
+                    name = name.replace("neck", "head")
 
             ctl, controller_grp = controller_creator(
                 name=f"{self.side}_{name}AttachedFk",
@@ -261,12 +275,19 @@ class NeckModule():
                 cmds.connectAttr(f"{joint}", f"{controller_grp[0]}.offsetParentMatrix")
 
             else:
-                mmt = cmds.createNode("multMatrix", n=f"{self.side}neckSubAttachedFk0{i+1}_MMT")
+                mmt = cmds.createNode("multMatrix", n=f"{self.side}_neckSubAttachedFk0{i+1}_MMT")
 
                 inverse = cmds.createNode("inverseMatrix", n=f"{self.side}_neckSubAttachedFk0{i+1}_IMX")
                 cmds.connectAttr(f"{self.input_connections[i-1]}", f"{inverse}.inputMatrix")
                 cmds.connectAttr(f"{joint}", f"{mmt}.matrixIn[0]")
                 cmds.connectAttr(f"{inverse}.outputMatrix", f"{mmt}.matrixIn[1]")
+                # if len(self.input_connections)-1 == i:
+                #     blend_matrix_head = cmds.createNode("blendMatrix", n=f"{self.side}_headSubAttachedFk0{i+1}_BMX")
+                #     cmds.connectAttr(f"{mmt}.matrixSum", f"{blend_matrix_head}.inputMatrix")
+                #     cmds.connectAttr(f"{self.main_controllers[-1]}.worldMatrix[0]", f"{blend_matrix_head}.target[0].targetMatrix")
+                #     cmds.setAttr(f"{blend_matrix_head}.target[0].translateWeight", 0)
+                #     cmds.connectAttr(f"{blend_matrix_head}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix")
+                # else:
                 cmds.connectAttr(f"{mmt}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
 
                 for attr in ["translateX","translateY","translateZ", "rotateX", "rotateY", "rotateZ"]:
@@ -276,7 +297,7 @@ class NeckModule():
 
         cmds.delete(self.old_joints)
 
-        for ctl in ctls_sub_neck:
+        for i, ctl in enumerate(ctls_sub_neck):
             name = ctl.replace("AttachedFk_CTL", "_JNT")
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
