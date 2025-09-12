@@ -65,7 +65,7 @@ class TailModule():
 
         self.data_exporter.append_data(f"{self.side}_tailModule", 
                             {"skinning_transform": self.skinning_trn,
-                            # "body_ctl": self.body_ctl,
+                            "main_ctl": self.ctls[0],
                             # "localHip": self.localHip_ctl,
                             # "localChest": self.localChest_ctl,
                             # "main_ctl" : self.localHip,
@@ -80,6 +80,13 @@ class TailModule():
         """
 
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
+
+        if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
+            self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
+        else:
+            self.enum_str = "———"
+
+        cmds.addAttr(self.skinning_trn, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
         
 

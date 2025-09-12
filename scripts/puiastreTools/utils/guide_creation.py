@@ -877,13 +877,10 @@ def guide_import(joint_name, all_descendents=True, path=None):
         transforms_chain_export = []
 
         if all_descendents:
-                print(joint_name)
                 
                 if all_descendents is True:
-                        print(joint_name)
                         world_position, parent, moduleName, prefix = get_data(joint_name, module_name=True)
                         guide_transform = cmds.createNode('transform', name=joint_name)
-                        print(world_position)
                         cmds.xform(guide_transform, ws=True, t=world_position)
                         cmds.parent(guide_transform, guide_grp)
                         transforms_chain_export.append(guide_transform)

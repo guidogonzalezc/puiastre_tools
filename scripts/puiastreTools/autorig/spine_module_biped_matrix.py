@@ -68,11 +68,11 @@ class SpineModule():
 
         self.data_exporter.append_data(f"{self.side}_spineModule", 
                                     {"skinning_transform": self.skinning_trn,
-                                    # "body_ctl": self.body_ctl,
-                                    # "localHip": self.localHip_ctl,
-                                    # "localChest": self.localChest_ctl,
+                                    "body_ctl": self.body_ctl,
+                                    "localHip": self.localHip_ctl,
+                                    "localChest": self.localChest_ctl,
                                     # "main_ctl" : self.localHip,
-                                    # "end_main_ctl" : self.localChest_ctl
+                                    "end_main_ctl" : self.main_controllers[-1]
                                     }
                                   )
 
@@ -196,10 +196,10 @@ class SpineModule():
             parent=self.controllers_trn
         )
 
-        local_hip_joint = cmds.createNode("joint", n=f"{self.side}_localHip_JNT", p=self.skinning_trn, ss=True)
-        cmds.connectAttr(f"{self.localHip_ctl}.worldMatrix[0]", f"{local_hip_joint}.offsetParentMatrix")
+        self.local_hip_joint = cmds.createNode("joint", n=f"{self.side}_localHip_JNT", p=self.skinning_trn, ss=True)
+        cmds.connectAttr(f"{self.localHip_ctl}.worldMatrix[0]", f"{self.local_hip_joint}.offsetParentMatrix")
 
-        for ctl in [localHip_grp[0], localChest_grp[0]]:
+        for ctl in [localHip_grp[0], localChest_grp[0], self.main_controllers_grp[0][0], self.main_controllers_grp[1][0], self.main_controllers_grp[2][0], hip_grp[0]]:
             cmds.setAttr(f"{ctl}.inheritsTransform", 0)
 
 
@@ -252,12 +252,16 @@ class SpineModule():
         cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{real_distance}.inMatrix1")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{real_distance}.inMatrix2")
 
+        real_dis_global = cmds.createNode("divide", name=f"{self.side}_realDistanceGlobal_DIV", ss=True)
+        cmds.connectAttr(f"{real_distance}.distance", f"{real_dis_global}.input1")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{real_dis_global}.input2")
+
         cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{clamped_distance}.inMatrix1")
         cmds.connectAttr(f"{self.guide_matrix[1]}.outputMatrix", f"{clamped_distance}.inMatrix2")
 
         spine_to_tan01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_spineToTan01_B2A", ss=True)
         cmds.connectAttr(f"{clamped_distance}.distance", f"{spine_to_tan01_blendTwo}.input[0]")
-        cmds.connectAttr(f"{real_distance}.distance", f"{spine_to_tan01_blendTwo}.input[1]")
+        cmds.connectAttr(f"{real_dis_global}.output", f"{spine_to_tan01_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.body_ctl}.stretch", f"{spine_to_tan01_blendTwo}.attributesBlender")
 
         spine01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_spine01WM_AIM", ss=True)
@@ -284,12 +288,16 @@ class SpineModule():
         cmds.connectAttr(f"{tan01_wm_no_rot}.outputMatrix", f"{real_distance_tan_spine}.inMatrix1")
         cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{real_distance_tan_spine}.inMatrix2")
 
+        real_dis_global_tan_spine = cmds.createNode("divide", name=f"{self.side}_realDistanceGlobalTanSpine_DIV", ss=True)
+        cmds.connectAttr(f"{real_distance_tan_spine}.distance", f"{real_dis_global_tan_spine}.input1")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{real_dis_global_tan_spine}.input2")
+
         cmds.connectAttr(f"{self.guide_matrix[1]}.outputMatrix", f"{clamped_distance_tan_spine}.inMatrix1")
         cmds.connectAttr(f"{self.guide_matrix[2]}.outputMatrix", f"{clamped_distance_tan_spine}.inMatrix2")
 
         tan01_to_spine01_blendTwo = cmds.createNode("blendTwoAttr", name=f"{self.side}_tan01ToSpine01_B2A", ss=True)
         cmds.connectAttr(f"{clamped_distance_tan_spine}.distance", f"{tan01_to_spine01_blendTwo}.input[0]")
-        cmds.connectAttr(f"{real_distance_tan_spine}.distance", f"{tan01_to_spine01_blendTwo}.input[1]")
+        cmds.connectAttr(f"{real_dis_global_tan_spine}.output", f"{tan01_to_spine01_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.body_ctl}.stretch", f"{tan01_to_spine01_blendTwo}.attributesBlender")
 
         tan01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_tan01WM_AIM", ss=True)
@@ -348,7 +356,7 @@ class SpineModule():
         """
         
         ctls_sub_neck = []
-        sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_subNeckControllers_GRP", parent=self.controllers_trn, ss=True)
+        sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_subSpineControllers_GRP", parent=self.controllers_trn, ss=True)
         cmds.setAttr(f"{sub_neck_ctl_trn}.inheritsTransform", 0)
         cmds.connectAttr(f"{self.body_ctl}.attachedFKVis", f"{sub_neck_ctl_trn}.visibility")
 
@@ -369,9 +377,9 @@ class SpineModule():
                 cmds.connectAttr(f"{joint}", f"{controller_grp[0]}.offsetParentMatrix")
 
             else:
-                mmt = cmds.createNode("multMatrix", n=f"{self.side}neckSubAttachedFk0{i+1}_MMT")
+                mmt = cmds.createNode("multMatrix", n=f"{self.side}_spineSubAttachedFk0{i+1}_MMT")
 
-                inverse = cmds.createNode("inverseMatrix", n=f"{self.side}_neckSubAttachedFk0{i+1}_IMX")
+                inverse = cmds.createNode("inverseMatrix", n=f"{self.side}_spineSubAttachedFk0{i+1}_IMX")
                 cmds.connectAttr(f"{self.input_connections[i-1]}", f"{inverse}.inputMatrix")
                 cmds.connectAttr(f"{joint}", f"{mmt}.matrixIn[0]")
                 cmds.connectAttr(f"{inverse}.outputMatrix", f"{mmt}.matrixIn[1]")
@@ -388,6 +396,8 @@ class SpineModule():
             name = ctl.replace("AttachedFk_CTL", "_JNT")
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
+
+        cmds.reorder(self.local_hip_joint, back=True)
 
 # cmds.file(new=True, force=True)
 

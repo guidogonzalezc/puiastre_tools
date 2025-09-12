@@ -168,7 +168,7 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1):
 
     cmds.addAttr(target, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
     cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
-
+    print(sources)
     spaces = [src.split("_")[1] for src in sources]
 
 
