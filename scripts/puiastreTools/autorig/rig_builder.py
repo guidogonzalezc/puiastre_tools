@@ -7,7 +7,7 @@ from puiastreTools.utils import core
 
 # Rig modules import
 from puiastreTools.autorig import limb_module_matrix as lbm
-# from puiastreTools.autorig import dragon_falanges as spm
+from puiastreTools.autorig import dragon_falanges as dfl
 from puiastreTools.autorig import dragon_leg_matrix as dlm
 from puiastreTools.autorig import neck_module_quad_matrix as nmm
 from puiastreTools.autorig import spine_module_biped_matrix as spmm
@@ -24,13 +24,13 @@ reload(basic_structure)
 reload(core)
 reload(data_export)
 reload(lbm)
-# reload(spm)
+reload(dfl)
 reload(dlm)
 reload(nmm)
 reload(spmm)
 reload(tmm)
 reload(skh)
-    
+
 def rename_ctl_shapes():
     """
     Rename all shapes in the scene to follow a specific naming convention.
@@ -102,14 +102,19 @@ def make(asset_name="dragon"):
             if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "arm":
                     lbm.ArmModule(guide_name).make()
+
                 if guide_info.get("moduleName") == "backLeg":
                     dlm.BackLegModule(guide_name).make()
-                # if guide_info.get("moduleName") == "hand":
-                #     han.HandModule().make(guide_name=guide_name)
+
+                if guide_info.get("moduleName") == "hand":
+                    dfl.FalangeModule().hand_distribution(guide_name=guide_name)
+
                 if guide_info.get("moduleName") == "spine":
                     spmm.SpineModule().make(guide_name)
+
                 if guide_info.get("moduleName") == "neck":
                     nmm.NeckModule().make(guide_name)
+
                 if guide_info.get("moduleName") == "tail":
                     tmm.TailModule().make(guide_name)
 
@@ -127,4 +132,4 @@ def make(asset_name="dragon"):
     cmds.select(clear=True)
 
 
-make()
+# make()
