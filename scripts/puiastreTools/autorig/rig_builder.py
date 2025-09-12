@@ -12,6 +12,7 @@ from puiastreTools.autorig import dragon_leg_matrix as dlm
 from puiastreTools.autorig import neck_module_quad_matrix as nmm
 from puiastreTools.autorig import spine_module_biped_matrix as spmm
 from puiastreTools.autorig import tail_module_matrix as tmm
+from puiastreTools.autorig import skeleton_hierarchy as skh
 
 # Python libraries import
 import maya.cmds as cmds
@@ -28,7 +29,8 @@ reload(dlm)
 reload(nmm)
 reload(spmm)
 reload(tmm)
-
+reload(skh)
+    
 def rename_ctl_shapes():
     """
     Rename all shapes in the scene to follow a specific naming convention.
@@ -64,8 +66,13 @@ def make(asset_name="dragon"):
     It also sets the radius for all joints and displays a completion message.
     """   
     cmds.file(new=True, force=True)
-    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-    core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/template_curves_001.json")
+    #UNI
+    # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+    # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/template_curves_001.json")
+
+    #CASA
+    core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/test_03.guides")
+    core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/template_curves_001.json")
 
     data_exporter = data_export.DataExport()
     data_exporter.new_build()
@@ -106,7 +113,7 @@ def make(asset_name="dragon"):
                 if guide_info.get("moduleName") == "tail":
                     tmm.TailModule().make(guide_name)
 
-    # skeleton_hierarchy = skh.build_complete_hierarchy() 
+    skeleton_hierarchy = skh.build_complete_hierarchy() 
 
     rename_ctl_shapes()
     joint_label()
