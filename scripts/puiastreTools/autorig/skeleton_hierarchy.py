@@ -12,7 +12,7 @@ from puiastreTools.utils import space_switch
 
 reload(core)
 
-def parented_chain(skinning_joints, parent, hand_value):
+def parented_chain(skinning_joints, parent, hand_value=False):
 
     data_exporter = data_export.DataExport()
 
@@ -51,7 +51,9 @@ def parented_chain(skinning_joints, parent, hand_value):
         joints = []
         for joint in chain:
             cmds.select(clear=True)
-            joint_env = cmds.createNode("joint", n=joint.replace("_JNT", "_ENV"))
+            joint_env = cmds.createNode("joint", n=joint.replace("_JNT", "_ENV"), ss=True)
+            cube = cmds.polyCube(n=joint_env.replace("_ENV", "_GEO"))[0]
+            cmds.parent(cube, joint_env)
 
 
             if "localHip" in joint_env:
@@ -145,124 +147,122 @@ def build_complete_hierarchy():
 
     skel_grps = []
     skinning_joints = []
+    modules_name = []
     for module, data in build_data.items():
         for value in data.items():
             if "skinning_transform" in value:
                     joints = cmds.listRelatives(value[1], allDescendents=True, type="joint")
                     skel_grps.append((value[1]))
                     skinning_joints.append(joints)
+                    modules_name.append(module)
 
-    skel_grps_to_modules = []
-    for group in skel_grps:
-        module_side  = group.split("_")[0]
-        
-        try:
-            enum_text = cmds.attributeQuery('moduleName', node=group, listEnum=True)[0].split(':')[0]
-            try:
-                prefix = cmds.attributeQuery('prefix', node=group, listEnum=True)[0].split(':')[0]
-                enum_text = enum_text[0].upper() + enum_text[1:]
-                skel_grps_to_modules.append((module_side, prefix + enum_text))
+    spine_index = next((i for i, grp in enumerate(skel_grps) if "spine" in grp.lower()), None)
+    parented_chain(skinning_joints=skinning_joints[spine_index], parent=None)
 
-            except Exception as e:
-                skel_grps_to_modules.append((module_side, enum_text))
+    
 
-
-        except Exception as e:
-            om.MGlobal.displayError(f"Error getting attribute for {group}: {e}")
-
-    parent_child_pairs = []
-    hierarchy_list = guides_data.get("hierarchy", [])
-    stack = [(None, item) for item in hierarchy_list]
-
-    while stack:
-        parent_name, current_item = stack.pop()
-        for key, children in current_item.items():
-            if parent_name:
-                parent_child_pairs.append((parent_name, key))
-            for child in children:
-                if isinstance(child, dict):
-                    stack.append((key, child))
-
-
-    for parent, child in parent_child_pairs:
-        parent_side, parent_module = parent.split("_")[0], parent.split("_")[1]
-        child_side, child_module = child.split("_")[0], child.split("_")[1]
-
-        if child_module == "localHip" and parent_module == "spine":
-            continue
-
-        for i, (side, grp) in enumerate(skel_grps_to_modules):
-            match_parent_module = "spine" if parent_module == "localHip" else parent_module
-            match_child_module = "spine" if child_module == "localHip" else child_module
-
-            if side == parent_side and grp == match_parent_module:
-                parent_index = i
-
-            elif side == child_side and grp == match_child_module:
-                child_index = i
-            elif match_parent_module == "root":
-                parent_index = "Skip"
-                continue
-
-        parent_index_chain = -1 if not parent_module == "spine" else -2
-
-
-        hand_value = True if child_module == "hand" else False
-
-        if parent_module == "root":
-            parented_chain(skinning_joints=skinning_joints[child_index], parent=None, hand_value=hand_value)
-        else:
-            parented_chain(skinning_joints=skinning_joints[child_index], parent=skinning_joints[parent_index][parent_index_chain], hand_value=hand_value)
-
-        # ===== SPACE SWITCHES ===== #
-        parent_ctl = "localHip" if parent_module == "localHip" else f"localChest"
-
-        if hand_value:
-            hand_controller = data_exporter.get_data(f"{child_side}_HandModule", "hand_controllers")
-            space_switch.fk_switch(target = hand_controller, sources= [skinning_joints[parent_index][-1]])
-
-        if parent_module == "spine" or parent_module == "localHip":
-            parent_module = "spine" if parent_module == "localHip" else parent_module
-            body_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", "body_ctl")
-            local_hip_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", parent_ctl)
-
-            if child_module == "arm" or child_module == "leg" or child_module == "frontLeg" or child_module == "backLeg":
-                if child_module == "arm" or child_module == "frontLeg":
-                    clavicle = data_exporter.get_data(f"{child_side}_{child_module}Module", "scapula_ctl")
-                    space_switch.fk_switch(target = clavicle, sources= [local_hip_ctl, body_ctl])
-                    parents = [clavicle, local_hip_ctl, body_ctl]
-
-                else:
-                    parents = [local_hip_ctl, body_ctl]
-
-                fk = data_exporter.get_data(f"{child_side}_{child_module}Module", "fk_ctl")[0]
-                pv = data_exporter.get_data(f"{child_side}_{child_module}Module", "pv_ctl")
-                root = data_exporter.get_data(f"{child_side}_{child_module}Module", "root_ctl")
-                ik = data_exporter.get_data(f"{child_side}_{child_module}Module", "end_ik")
-
-                space_switch.fk_switch(target = fk, sources= parents)
-                space_switch.fk_switch(target = root, sources= parents)
-                space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
-                space_switch.fk_switch(target = pv, sources= [ik, local_hip_ctl, body_ctl])
-
-            elif child_module == "neck":
-                
-                neck = data_exporter.get_data(f"{child_side}_{child_module}Module", "neck_ctl")
-                head = data_exporter.get_data(f"{child_side}_{child_module}Module", "head_ctl")
-
-                space_switch.fk_switch(target = neck, sources= [local_hip_ctl, body_ctl])
-                space_switch.fk_switch(target = head, sources= [neck, local_hip_ctl, body_ctl], default_rotate=0)
-
+    for i, skinning_joint_list in enumerate(skinning_joints):
+      
+        if i != spine_index:
+            if "Leg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0]:
+                parented_chain(skinning_joints=skinning_joint_list, parent=skinning_joints[spine_index][-1], hand_value=False)
             else:
-                main_ctl= data_exporter.get_data(f"{child_side}_{child_module}Module", "main_ctl")
-                space_switch.fk_switch(target = main_ctl, sources= [local_hip_ctl, body_ctl])
+                parented_chain(skinning_joints=skinning_joint_list, parent=skinning_joints[spine_index][-2], hand_value=False)
 
-        else:
-            main_ctl= data_exporter.get_data(f"{child_side}_{child_module}Module", "main_ctl")
-            parent_main_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", "end_main_ctl")
+        if "Leg" in skel_grps[i]:
+            fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
+            pv = data_exporter.get_data(modules_name[i], "pv_ctl")
+            root = data_exporter.get_data(modules_name[i], "root_ctl")
+            ik = data_exporter.get_data(modules_name[i], "end_ik")
 
-            if not main_ctl or not parent_main_ctl:
-                continue
+            parents = [data_exporter.get_data("C_spineModule", "localHip"), data_exporter.get_data("C_spineModule", "body_ctl")]
 
-            space_switch.fk_switch(target = main_ctl, sources= [parent_main_ctl, local_hip_ctl, body_ctl])
+            space_switch.fk_switch(target = fk, sources= parents)
+            space_switch.fk_switch(target = root, sources= parents)
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            parents.insert(0, ik)
+            space_switch.fk_switch(target = pv, sources= parents)
+
+        if "tail" in skel_grps[i]:
+            main_ctl= data_exporter.get_data(modules_name[i], "main_ctl")
+            parents = [data_exporter.get_data("C_spineModule", "localHip"), data_exporter.get_data("C_spineModule", "body_ctl")]
+            space_switch.fk_switch(target = main_ctl, sources= parents)
+
+        if "neck" in skel_grps[i]:
+            main_ctl= data_exporter.get_data(modules_name[i], "neck_ctl")
+            parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
+            space_switch.fk_switch(target = main_ctl, sources= parents)
+
+        if "arm" in skel_grps[i]:
+            fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
+            pv = data_exporter.get_data(modules_name[i], "pv_ctl")
+            root = data_exporter.get_data(modules_name[i], "root_ctl")
+            ik = data_exporter.get_data(modules_name[i], "end_ik")
+            scapula = data_exporter.get_data(modules_name[i], "scapula_ctl")
+
+            parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
+
+            space_switch.fk_switch(target = scapula, sources= parents)
+            parents.insert(0, scapula)
+
+
+            space_switch.fk_switch(target = fk, sources= parents)
+            space_switch.fk_switch(target = root, sources= parents)
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            parents.insert(0, ik)
+            space_switch.fk_switch(target = pv, sources= parents)
+
+
+
+    # ===== SPACE SWITCHES ===== #
+    # parent_ctl = "localHip" if parent_module == "localHip" else f"localChest"
+
+    # if hand_value:
+    #     hand_controller = data_exporter.get_data(f"{child_side}_HandModule", "hand_controllers")
+    #     space_switch.fk_switch(target = hand_controller, sources= [skinning_joints[parent_index][-1]])
+
+    # if parent_module == "spine" or parent_module == "localHip":
+    #     parent_module = "spine" if parent_module == "localHip" else parent_module
+    #     body_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", "body_ctl")
+    #     local_hip_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", parent_ctl)
+
+    #     if child_module == "arm" or child_module == "leg" or child_module == "frontLeg" or child_module == "backLeg":
+    #         if child_module == "arm" or child_module == "frontLeg":
+    #             clavicle = data_exporter.get_data(f"{child_side}_{child_module}Module", "scapula_ctl")
+    #             space_switch.fk_switch(target = clavicle, sources= [local_hip_ctl, body_ctl])
+    #             parents = [clavicle, local_hip_ctl, body_ctl]
+
+    #         else:
+    #             parents = [local_hip_ctl, body_ctl]
+
+            # fk = data_exporter.get_data(f"{child_side}_{child_module}Module", "fk_ctl")[0]
+            # pv = data_exporter.get_data(f"{child_side}_{child_module}Module", "pv_ctl")
+            # root = data_exporter.get_data(f"{child_side}_{child_module}Module", "root_ctl")
+            # ik = data_exporter.get_data(f"{child_side}_{child_module}Module", "end_ik")
+
+            # space_switch.fk_switch(target = fk, sources= parents)
+            # space_switch.fk_switch(target = root, sources= parents)
+            # space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            # space_switch.fk_switch(target = pv, sources= [ik, local_hip_ctl, body_ctl])
+
+    #     elif child_module == "neck":
+            
+    #         neck = data_exporter.get_data(f"{child_side}_{child_module}Module", "neck_ctl")
+    #         head = data_exporter.get_data(f"{child_side}_{child_module}Module", "head_ctl")
+
+    #         space_switch.fk_switch(target = neck, sources= [local_hip_ctl, body_ctl])
+    #         space_switch.fk_switch(target = head, sources= [neck, local_hip_ctl, body_ctl], default_rotate=0)
+
+    #     else:
+    #         main_ctl= data_exporter.get_data(f"{child_side}_{child_module}Module", "main_ctl")
+    #         space_switch.fk_switch(target = main_ctl, sources= [local_hip_ctl, body_ctl])
+
+    # else:
+    #     main_ctl= data_exporter.get_data(f"{child_side}_{child_module}Module", "main_ctl")
+    #     parent_main_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", "end_main_ctl")
+
+    #     if not main_ctl or not parent_main_ctl:
+    #         continue
+
+    #     space_switch.fk_switch(target = main_ctl, sources= [parent_main_ctl, local_hip_ctl, body_ctl])
 
