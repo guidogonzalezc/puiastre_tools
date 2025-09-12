@@ -337,12 +337,9 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{self.root_ik_ctl_grp[0]}.offsetParentMatrix")      
 
         cmds.addAttr(self.hand_ik_ctl, shortName="softSettings", niceName="Soft Settings  ———", enumName="———",attributeType="enum", keyable=True)
-        # cmds.addAttr(self.hand_ik_ctl, shortName="curvature", niceName="Curvature", maxValue=1, minValue=0,defaultValue=0, keyable=True)
         cmds.setAttr(self.hand_ik_ctl+".softSettings", channelBox=True, lock=True)
         cmds.addAttr(self.hand_ik_ctl, shortName="soft", niceName="Soft",minValue=0,maxValue=1,defaultValue=0, keyable=True)
         cmds.addAttr(self.hand_ik_ctl, shortName="softStart", niceName="Soft Start",minValue=0,maxValue=1,defaultValue=0.8, keyable=True)
-        # cmds.addAttr(self.hand_ik_ctl, shortName="twist", niceName="Twist",minValue=-180,defaultValue=0, maxValue=180, keyable=True)
-        # cmds.addAttr(self.hand_ik_ctl, shortName="upperTwist", niceName="Upper Twist",defaultValue=0, keyable=True)
 
         cmds.addAttr(self.hand_ik_ctl, shortName="strechySep", niceName="Strechy  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.hand_ik_ctl+".strechySep", channelBox=True, lock=True)
@@ -655,7 +652,13 @@ class LimbModule(object):
         )
 
         self.switch_pos = guide_import(f"{self.side}_{self.module_name}Settings_GUIDE", all_descendents=False)[0]
-        cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
+        self.switch_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}SwitchPos_MMX", ss=True)
+        cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_pos_multMatrix}.matrixIn[0]")
+        inverse_guide = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}SwitchPosInverse_MTX", ss=True)
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse_guide}.inputMatrix")
+        cmds.connectAttr(f"{inverse_guide}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{self.switch_pos_multMatrix}.matrixSum", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
+        cmds.setAttr(f"{self.switch_ctl_grp[0]}.inheritsTransform", 0)
 
         cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=self.default_ik, keyable=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.fk_grps[0][0]}.visibility", force=True)
@@ -694,6 +697,8 @@ class LimbModule(object):
         cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
 
         cmds.setAttr(f"{nonRollPick}.useRotate", 0)
+
+        cmds.connectAttr(f"{self.blend_wm[0]}", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
