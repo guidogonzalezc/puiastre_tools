@@ -1,4 +1,5 @@
 #Python libraries import
+import json
 from maya import cmds
 from importlib import reload
 import maya.api.OpenMaya as om
@@ -24,21 +25,44 @@ reload(core)
 
 AXIS_VECTOR = {'x': (1, 0, 0), '-x': (-1, 0, 0), 'y': (0, 1, 0), '-y': (0, -1, 0), 'z': (0, 0, 1), '-z': (0, 0, -1)}
 
-class falangeModule(object):
+class FalangeModule(object):
 
-    def __init__(self, guide_name):
+    def __init__(self):
 
+        self.data_exporter = data_export.DataExport()
 
+        self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
+        self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
+        self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
+        self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
 
-        self.guides = guide_import(guide_name, all_descendents=True, path=None)
-        if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
-            self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
+    def hand_distribution(self, guide_name):      
+        
+        self.hand_guide = guide_import(guide_name, all_descendents=False, path=None)[0]
+        if cmds.attributeQuery("moduleName", node=self.hand_guide, exists=True):
+            self.enum_str = cmds.attributeQuery("moduleName", node=self.hand_guide, listEnum=True)[0]
         else:
             self.enum_str = "———"
 
         self.side = guide_name.split("_")[0]
-        self.names = [name.split("_")[1] for name in self.guides]
 
+
+        self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_handModule_GRP", parent=self.modules_grp, ss=True)
+        self.individual_controllers_grp = cmds.createNode("transform", name=f"{self.side}_handControllers_GRP", parent=self.masterWalk_ctl, ss=True)
+
+        self.switch_ctl, self.switch_ctl_grp = controller_creator(
+            name=f"{self.side}_hand",
+            suffixes=["GRP"],
+            lock=["sx", "sy", "sz", "visibility"],
+            ro=False,
+            parent=self.individual_controllers_grp
+        )
+
+        cmds.connectAttr(f"{self.hand_guide}.worldMatrix[0]", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
+
+        cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
+        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
 
         # Arm-specific setup
         if self.side == "L":
@@ -49,23 +73,50 @@ class falangeModule(object):
             self.primary_aim = "-x"
             self.secondary_aim = "-y"
 
-        self.data_exporter = data_export.DataExport()
-
-        self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
-        self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
-        self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
-        self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
+        final_path = core.DataManager.get_guide_data()
 
 
-    def make(self):
+        try:
+            with open(final_path, "r") as infile:
+                guides_data = json.load(infile)
+
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading guides data: {e}")
+
+        for template_name, guides in guides_data.items():
+            if not isinstance(guides, dict):
+                continue
+
+            for guide_name, guide_info in guides.items():
+                if guide_info.get("parent") == self.hand_guide:
+                    guides_pass = guide_import(guide_name, all_descendents=True, path=None)
+                    self.names = [name.split("_")[1] for name in guides_pass]
+
+                    self.make(guide_name=guides_pass)
+
+                    
+                    self.data_exporter.append_data(f"{self.side}_{self.names[0]}Module", 
+                                        {"skinning_transform": self.skinnging_grp,
+                                         "fk_ctls": self.fk_ctls,
+                                         "pv_ctl": self.pv_ik_ctl,
+                                         "root_ctl": self.root_ik_ctl,
+                                         "end_ik": self.hand_ik_ctl,
+                                         "settings_ctl": self.switch_ctl,
+                                        }
+                                        )
+
+
+
+
+
+    def make(self, guide_name):
+
+        self.guides = guide_name
 
         """
         Create a limb rig with controllers and constraints.
         This function sets up the basic structure for a limb, including controllers and constraints.
         """      
-
-        self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_{self.names[0]}Module_GRP", parent=self.modules_grp, ss=True)
-        self.individual_controllers_grp = cmds.createNode("transform", name=f"{self.side}_{self.names[0]}Controllers_GRP", parent=self.masterWalk_ctl, ss=True)
         self.skinnging_grp = cmds.createNode("transform", name=f"{self.side}_{self.names[0]}SkinningJoints_GRP", parent=self.skel_grp, ss=True)
         
         self.primary_aim_vector = om.MVector(AXIS_VECTOR[self.primary_aim])
@@ -84,6 +135,7 @@ class falangeModule(object):
 
             cmds.setAttr(aim_matrix + ".primaryInputAxis", *self.primary_aim_vector, type="double3")
             cmds.setAttr(aim_matrix + ".secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+            cmds.setAttr(aim_matrix + ".secondaryTargetVector", *self.secondary_aim_vector, type="double3")
             
             cmds.setAttr(aim_matrix + ".primaryMode", 1)
             cmds.setAttr(aim_matrix + ".secondaryMode", 1)
@@ -215,17 +267,27 @@ class falangeModule(object):
         
         cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{self.root_ik_ctl_grp[0]}.offsetParentMatrix")      
 
-        temp_trn = cmds.createNode("transform", name=f"{self.side}_PV_Transform", ss=True)
-        cmds.connectAttr(f"{self.guides_matrix[1]}.outputMatrix", f"{temp_trn}.offsetParentMatrix")
-        cmds.matchTransform(self.pv_ik_ctl_grp[0], temp_trn)
-        cmds.delete(temp_trn)
+        pv_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}PVPosition_MMX", ss=True)
+        cmds.connectAttr(f"{self.guides_matrix[1]}.outputMatrix", f"{pv_pos_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{pv_pos_multMatrix}.matrixSum", f"{self.pv_ik_ctl_grp[0]}.offsetParentMatrix")
+
+        pv_pos_4b4 = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[1]}PVPosition_F4X", ss=True)
+        cmds.connectAttr(f"{pv_pos_4b4}.output", f"{pv_pos_multMatrix}.matrixIn[0]")
+
 
         name = [f"{self.side}_{self.names[1]}SecondaryUpperInitialLength", f"{self.side}_{self.names[2]}SecondaryLowerInitialLength", f"{self.side}_{self.names[3]}SecondaryCurrentLength"]
 
         self.ikHandleManager = f"{self.hand_ik_ctl}.worldMatrix[0]"
 
+        secondary_root_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}SecondaryRoot_MMX", ss=True)
+        inverse_secondary_root = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[1]}SecondaryRoot_IMX", ss=True)
+        cmds.connectAttr(f"{self.guides_matrix[1]}.outputMatrix", f"{secondary_root_multmatrix}.matrixIn[0]")
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse_secondary_root}.inputMatrix")
+        cmds.connectAttr(f"{inverse_secondary_root}.outputMatrix", f"{secondary_root_multmatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixIn[2]")
+
         self.distance_between_output = []
-        for i, (first, second) in enumerate(zip([f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{self.guides[1]}.worldMatrix[0]"], [f"{self.guides[2]}.worldMatrix[0]", f"{self.guides[3]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
+        for i, (first, second) in enumerate(zip([f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixSum"], [f"{self.guides[2]}.worldMatrix[0]", f"{self.guides[3]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
             distance = cmds.createNode("distanceBetween", name=f"{name[i]}_DB", ss=True)
             cmds.connectAttr(f"{first}", f"{distance}.inMatrix1")
             cmds.connectAttr(f"{second}", f"{distance}.inMatrix2")
@@ -240,7 +302,11 @@ class falangeModule(object):
 
         distance_1 = cmds.getAttr(self.distance_between_output[0])
         distance_2 = cmds.getAttr(self.distance_between_output[1])
-        cmds.move(0, distance_1+distance_2, 0, self.pv_ik_ctl_grp[0], r=True, os=True, wd=True)
+
+        pv_pos_sum = cmds.createNode("sum", name=f"{self.side}_{self.names[1]}PVPosition_SUM", ss=True)
+        cmds.connectAttr(f"{self.distance_between_output[0]}", f"{pv_pos_sum}.input[0]")
+        cmds.connectAttr(f"{self.distance_between_output[1]}", f"{pv_pos_sum}.input[1]")
+        cmds.connectAttr(f"{pv_pos_sum}.output", f"{pv_pos_4b4}.in31")
 
         # --- STRETCH --- #
 
@@ -266,7 +332,7 @@ class falangeModule(object):
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIk_AIM", ss=True)
         cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
         cmds.connectAttr(f"{self.pv_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{self.guides[1]}.worldMatrix[0]", f"{upper_arm_ik_aim_matrix}.inputMatrix")
+        cmds.connectAttr(f"{secondary_root_multmatrix}.matrixSum", f"{upper_arm_ik_aim_matrix}.inputMatrix")
         cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
         self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIkWM_MMX", ss=True)
@@ -524,22 +590,10 @@ class falangeModule(object):
         self.pairblends()
 
     def pairblends(self):
-        self.switch_ctl, self.switch_ctl_grp = controller_creator(
-            name=f"{self.side}_hand",
-            suffixes=["GRP"],
-            lock=["tx","ty","tz","rx","ry","rz","sx", "sy", "sz", "visibility"],
-            ro=False,
-            parent=self.individual_controllers_grp
-        )
 
-        self.switch_pos = guide_import(f"{self.side}_hand_GUIDE", all_descendents=False)[0]
-        cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
-
-        cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.fk_grps[0][0]}.visibility", force=True)
-        rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
-        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{rev}.inputX")
-        cmds.connectAttr(f"{rev}.outputX", f"{self.ik_controllers}.visibility")
+        cmds.connectAttr(f"{self.ik_visibility_rev}.outputX", f"{self.ik_controllers}.visibility")
+
 
         self.blend_wm = []
         for i, (fk, ik) in enumerate(zip(self.fk_wm, self.ik_wm)):
@@ -568,7 +622,7 @@ class falangeModule(object):
         cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
         cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *(0, 1, 0), type="double3")
         cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
 
         cmds.setAttr(f"{nonRollPick}.useRotate", 0)
