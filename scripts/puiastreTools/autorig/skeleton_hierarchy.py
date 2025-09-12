@@ -157,18 +157,37 @@ def build_complete_hierarchy():
                     modules_name.append(module)
 
     spine_index = next((i for i, grp in enumerate(skel_grps) if "spine" in grp.lower()), None)
-    parented_chain(skinning_joints=skinning_joints[spine_index], parent=None)
+    l_arm_index = next((i for i, grp in enumerate(skel_grps) if "L_arm" in grp), None)
+    r_arm_index = next((i for i, grp in enumerate(skel_grps) if "R_arm" in grp), None)
 
-    
+    arm_joints = []
+
+    spine_joints = parented_chain(skinning_joints=skinning_joints[spine_index], parent=None, hand_value=False)
 
     for i, skinning_joint_list in enumerate(skinning_joints):
-      
         if i != spine_index:
             if "Leg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0]:
-                parented_chain(skinning_joints=skinning_joint_list, parent=skinning_joints[spine_index][-1], hand_value=False)
+                parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
+            elif "Metacarpal" in skinning_joint_list[0]:
+                pass
             else:
-                parented_chain(skinning_joints=skinning_joint_list, parent=skinning_joints[spine_index][-2], hand_value=False)
+                joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
+                print(joints)
+                if "clavicle" in skinning_joint_list[0]:
+                    arm_joints.append(joints[-1])
 
+    hand_settings_value = None
+
+    for i, skinning_joint_list in enumerate(skinning_joints):
+
+        if "Metacarpal" in skinning_joint_list[0]:
+            side = skinning_joint_list[0].split("_")[0]
+            index = l_arm_index if side == "L" else r_arm_index
+            parent_joint = next((j for j in arm_joints if side in j), None)
+            print("dentro", arm_joints)
+            parented_chain(skinning_joints=skinning_joint_list, parent=parent_joint, hand_value=False)
+
+        # ===== SPACE SWITCHES ===== #
         if "Leg" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
             pv = data_exporter.get_data(modules_name[i], "pv_ctl")
@@ -205,6 +224,34 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = scapula, sources= parents)
             parents.insert(0, scapula)
 
+
+            space_switch.fk_switch(target = fk, sources= parents)
+            space_switch.fk_switch(target = root, sources= parents)
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            parents.insert(0, ik)
+            space_switch.fk_switch(target = pv, sources= parents)
+        
+        if "Metacarpal" in skel_grps[i]:
+            fk = data_exporter.get_data(modules_name[i], "fk_ctls")[0]
+            pv = data_exporter.get_data(modules_name[i], "pv_ctl")
+            root = data_exporter.get_data(modules_name[i], "root_ctl")
+            ik = data_exporter.get_data(modules_name[i], "end_ik")
+            
+            side = skel_grps[i].split("_")[0]
+            index = l_arm_index if side == "L" else r_arm_index
+            print(arm_joints)
+            parent_joint = next((j for j in arm_joints if side in j), None)
+
+            hand_settings = data_exporter.get_data(modules_name[i], "settings_ctl")
+            print(hand_settings_value)
+            if hand_settings_value is None:
+                print("FIRST TIME")
+                print(hand_settings)
+                print(parent_joint)
+                space_switch.fk_switch(target = hand_settings, sources=[parent_joint])
+                hand_settings_value = True
+            print("fuera")
+            parents = [hand_settings, parent_joint]
 
             space_switch.fk_switch(target = fk, sources= parents)
             space_switch.fk_switch(target = root, sources= parents)
