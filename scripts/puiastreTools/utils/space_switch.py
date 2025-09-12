@@ -23,75 +23,6 @@ def get_offset_matrix(child, parent):
     
     return offset_matrix
 
-def switch_matrix_space(target, sources = [None], default_value=1): 
-    """
-    Switch the matrix space of a target control to multiple source controls in Maya.
-
-    Args:
-        target (str): The name of the target control to switch space for.
-        sources (list, optional): A list of source controls to switch to. Defaults to [None].
-        default_value (float, optional): The default value for the follow attribute. Defaults to 1.
-    """
-
-    target_grp = target.replace("CTL", "GRP")
-    if not cmds.objExists(target):
-        target_grp = target
-    if not cmds.objExists(target_grp):
-        om.MGlobal.displayError(f"Target group '{target_grp}' does not exist.")
-        return
-    
-    
-    parent_matrix = cmds.createNode("parentMatrix", name=target.replace("CTL", "PM"), ss=True)
-    mult_matrix = cmds.createNode("multMatrix", name=target.replace("_CTL", "OffsetParent_MMX"), ss=True)   
-    cmds.connectAttr(f"{target_grp}.worldMatrix[0]", f"{parent_matrix}.inputMatrix")
-    cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{mult_matrix}.matrixIn[0]")
-    cmds.connectAttr(f"{target_grp}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
-    target_matrix = cmds.getAttr(f"{target_grp}.worldInverseMatrix[0]")
-
-    condition_nodes = []
-    spaces = []
-    
-    for i, matrix in enumerate(sources):
-
-        matrix_offset = get_offset_matrix(target_grp, matrix)
-
-        cmds.connectAttr(f"{matrix}.worldMatrix[0]", f"{parent_matrix}.target[{i}].targetMatrix")
-        cmds.setAttr(f"{parent_matrix}.target[{i}].offsetMatrix", matrix_offset, type="matrix")
-
-        name = matrix.split("_")[1]
-        name = name[0].upper() + name[1:].lower()
-
-        replace_name = f"{name}_COND"
-
-        condition = cmds.createNode("condition", name=f"{target.replace('_CTL', replace_name)}", ss=True)
-        cmds.setAttr(f"{condition}.firstTerm", i)
-        cmds.setAttr(f"{condition}.operation", 0)
-        cmds.setAttr(f"{condition}.colorIfFalseR", 0)
-
-        condition_nodes.append(condition)
-        spaces.append(name)
-
-    cmds.addAttr(target, longName="SpaceSwitchSep", niceName = "SpaceSwitches_____", attributeType="enum", enumName="____", keyable=True)
-    cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
-    if len(sources) == 1:     
-        cmds.addAttr(target, longName="SpaceSwitch", attributeType="enum", enumName=":".join(spaces), keyable=False)
-        cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
-    else:
-        cmds.addAttr(target, longName="SpaceSwitch", attributeType="enum", enumName=":".join(spaces), keyable=True)
-
-    cmds.addAttr(target, longName="FollowValue", attributeType="float", min=0, max=1, defaultValue=default_value, keyable=True)
-
-    for i, condition in enumerate(condition_nodes):
-        cmds.connectAttr(f"{target}.SpaceSwitch", f"{condition}.secondTerm")
-        cmds.connectAttr(f"{target}.FollowValue", f"{condition}.colorIfTrueR")
-        cmds.connectAttr(f"{condition}.outColorR", f"{parent_matrix}.target[{i}].weight")
-
-    
-    cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{target}.offsetParentMatrix")
-
-
-
-
 def leg_pv_spaceswitch(localHip, legPv, footCtl, root):
 
     side = legPv.split("_")[0]
@@ -168,7 +99,6 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1):
 
     cmds.addAttr(target, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
     cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
-    print(sources)
     spaces = [src.split("_")[1] for src in sources]
 
 
@@ -211,69 +141,3 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1):
 
     cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{target_grp}.offsetParentMatrix", force=True)
 
-
-def make_spaces_biped():
-
-    data_exporter = data_export.DataExport()
-
-
-    body_ctl = data_exporter.get_data("C_spineModule", "body_ctl")
-    local_hip_ctl = data_exporter.get_data("C_spineModule", "local_hip_ctl")
-    local_chest_ctl = data_exporter.get_data("C_spineModule", "local_chest_ctl")
-
-    for side in ["L", "R"]:
-        clavicle_ctl = data_exporter.get_data(f"{side}_armModule", f"clavicle_ctl")
-        l_shoulder_ctl = data_exporter.get_data(f"{side}_armModule", f"fk_ctl")[0]
-        l_armRootIk = data_exporter.get_data(f"{side}_armModule", f"root_ctl")
-        l_leg_ctl = data_exporter.get_data(f"{side}_legModule", f"fk_ctl")[0]
-        l_legRootIk = data_exporter.get_data(f"{side}_legModule", f"root_ctl")
-
-        fk_switch(target=clavicle_ctl, sources=[local_chest_ctl])
-        fk_switch(target=l_shoulder_ctl, sources=[clavicle_ctl, local_chest_ctl])
-        fk_switch(target=l_leg_ctl, sources=[local_hip_ctl, body_ctl])
-        fk_switch(target=l_armRootIk, sources=[clavicle_ctl, local_chest_ctl, body_ctl])
-        fk_switch(target=l_legRootIk, sources=[local_hip_ctl, body_ctl])
-
-
-def make_spaces_quadruped():
-
-    data_exporter = data_export.DataExport()
-
-
-    body_ctl = data_exporter.get_data("C_spineModule", "body_ctl")
-    local_hip_ctl = data_exporter.get_data("C_spineModule", "local_hip_ctl")
-    local_chest_ctl = data_exporter.get_data("C_spineModule", "local_chest_ctl")
-
-    neck = data_exporter.get_data("C_neckModule", "neck_ctl")
-    head = data_exporter.get_data("C_neckModule", "head_ctl")
-
-    trunk = data_exporter.get_data("C_trunkModule", "main_ctl")
-
-    fk_switch(target=trunk, sources=[head, local_chest_ctl, body_ctl], default_rotate=1, default_translate=1)
-    fk_switch(target=neck, sources=[local_chest_ctl, body_ctl])
-    fk_switch(target=head, sources=[neck, local_chest_ctl, body_ctl], default_rotate=0, default_translate=1)
-
-
-    for side in ["L", "R"]:
-        scapula = data_exporter.get_data(f"{side}_frontLegModule", f"scapula_ctl")
-        shoulder_ctl = data_exporter.get_data(f"{side}_frontLegModule", f"fk_ctl")[0]
-        frontLegRootIk = data_exporter.get_data(f"{side}_frontLegModule", f"root_ctl")
-        armPv = data_exporter.get_data(f"{side}_frontLegModule", f"pv_ctl")
-        frontLegEndIk = data_exporter.get_data(f"{side}_frontLegModule", f"end_ik")
-        backLeg_ctl = data_exporter.get_data(f"{side}_backLegModule", f"fk_ctl")[0]
-        backLegRootIk = data_exporter.get_data(f"{side}_backLegModule", f"root_ctl")
-        backLegPv = data_exporter.get_data(f"{side}_backLegModule", f"pv_ctl")
-        backLegEndIk = data_exporter.get_data(f"{side}_backLegModule", f"end_ik")
-
-        fk_switch(target=scapula, sources=[local_chest_ctl])
-        fk_switch(target=shoulder_ctl, sources=[scapula, local_chest_ctl])
-        fk_switch(target=backLeg_ctl, sources=[local_hip_ctl, body_ctl])
-        fk_switch(target=frontLegRootIk, sources=[scapula, local_chest_ctl, body_ctl])
-        fk_switch(target=backLegRootIk, sources=[local_hip_ctl, body_ctl])
-
-
-        fk_switch(target=frontLegEndIk, sources=[scapula, local_chest_ctl, body_ctl], default_rotate=0, default_translate=0)
-        fk_switch(target=backLegEndIk, sources=[local_hip_ctl, body_ctl], default_rotate=0, default_translate=0)
-
-        fk_switch(target=armPv, sources=[frontLegEndIk, local_chest_ctl, body_ctl])
-        fk_switch(target=backLegPv, sources=[backLegEndIk, local_hip_ctl, body_ctl])
