@@ -57,18 +57,6 @@
         "end_ik": "L_armIk_CTL",
         "scapula_ctl": "L_scapula_CTL"
     },
-    "R_armModule": {
-        "skinning_transform": "R_armSkinningJoints_GRP",
-        "fk_ctl": [
-            "R_shoulderFk_CTL",
-            "R_elbowFk_CTL",
-            "R_wristFk_CTL"
-        ],
-        "pv_ctl": "R_armPV_CTL",
-        "root_ctl": "R_armRootIk_CTL",
-        "end_ik": "R_armIk_CTL",
-        "scapula_ctl": "R_scapula_CTL"
-    },
     "L_firstMetacarpalModule": {
         "skinning_transform": "L_firstMetacarpalSkinningJoints_GRP",
         "fk_ctls": [
@@ -120,6 +108,18 @@
         "root_ctl": "L_fourthMetacarpalRootIk_CTL",
         "end_ik": "L_fourthFinger03Ik_CTL",
         "settings_ctl": "L_hand_CTL"
+    },
+    "R_armModule": {
+        "skinning_transform": "R_armSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_shoulderFk_CTL",
+            "R_elbowFk_CTL",
+            "R_wristFk_CTL"
+        ],
+        "pv_ctl": "R_armPV_CTL",
+        "root_ctl": "R_armRootIk_CTL",
+        "end_ik": "R_armIk_CTL",
+        "scapula_ctl": "R_scapula_CTL"
     },
     "R_firstMetacarpalModule": {
         "skinning_transform": "R_firstMetacarpalSkinningJoints_GRP",

@@ -82,13 +82,13 @@ def make(asset_name="dragon"):
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
     """   
-    cmds.file(new=True, force=True)
+    # cmds.file(new=True, force=True)
     #UNI
     # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
     # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/template_curves_001.json")
 
     #CASA
-    core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/test_03.guides")
+    core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_001.guides")
     core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/template_curves_001.json")
 
     data_exporter = data_export.DataExport()
