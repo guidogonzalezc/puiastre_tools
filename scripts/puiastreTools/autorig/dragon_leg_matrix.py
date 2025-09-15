@@ -391,6 +391,7 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.distance_between_output[2]}", f"{divide}.input1")
 
         max = cmds.createNode("max", name=f"{self.side}_{self.module_name}Scalar_MAX", ss=True)
+        print(max)
         cmds.connectAttr(f"{divide}.output", f"{max}.input[0]")
         cmds.setAttr(f"{max}.input[1]", 1)  ############### QUIZAS SE HA DE PONER UN FLOATCONSTANT PROBAR SI GUARDA EL VALOR
 
@@ -737,7 +738,6 @@ class LimbModule(object):
 
             cmds.addAttr(ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
             cmds.setAttr(ctl+".extraAttr", channelBox=True, lock=True)
-            cmds.addAttr(ctl, shortName="secondaryControllersHeight", niceName="secondary Controllers Height", maxValue=1, minValue=0,defaultValue=1, keyable=True)
 
             cmds.parent(ctl_grp[0], self.bendy_controllers)
 

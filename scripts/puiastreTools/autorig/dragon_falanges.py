@@ -60,7 +60,11 @@ class FalangeModule(object):
 
         cmds.connectAttr(f"{self.hand_guide}.worldMatrix[0]", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
 
+        
+        cmds.addAttr(self.switch_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(self.switch_ctl+".extraAttr", channelBox=True, lock=True)
         cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.switch_ctl, shortName="bendysVis", niceName="Bendys Visibility", attributeType="bool", keyable=False)
         self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
 
@@ -104,7 +108,6 @@ class FalangeModule(object):
                                          "settings_ctl": self.switch_ctl,
                                         }
                                         )
-
 
 
 
@@ -365,7 +368,9 @@ class FalangeModule(object):
 
         lower_sin_value_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.names[2]}SecondaryLowerSinValueSquared_MAX", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared}.output", f"{lower_sin_value_squared_clamped}.input[1]")
-        cmds.setAttr(f"{lower_sin_value_squared_clamped}.input[0]", 0)
+        self.floatConstant_zero = cmds.createNode("floatConstant", name=f"{self.side}_zero{self.names[2]}_FLC", ss=True)
+        cmds.setAttr(f"{self.floatConstant_zero}.inFloat", 0)
+        cmds.connectAttr(f"{self.floatConstant_zero}.outFloat", f"{lower_sin_value_squared_clamped}.input[0]")
 
         lower_sin = cmds.createNode("power", name=f"{self.side}_{self.names[2]}SecondaryLowerSin_POW", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared_clamped}.output", f"{lower_sin}.input")
@@ -504,7 +509,8 @@ class FalangeModule(object):
 
         lower_sin_value_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.names[1]}LowerSinValueSquared_MAX", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared}.output", f"{lower_sin_value_squared_clamped}.input[1]")
-        cmds.setAttr(f"{lower_sin_value_squared_clamped}.input[0]", 0)
+        cmds.connectAttr(f"{self.floatConstant_zero}.outFloat", f"{lower_sin_value_squared_clamped}.input[0]")
+
 
         lower_sin = cmds.createNode("power", name=f"{self.side}_{self.names[1]}LowerSin_POW", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared_clamped}.output", f"{lower_sin}.input")
@@ -553,9 +559,8 @@ class FalangeModule(object):
         """
         
         ctls_sub_neck = []
-        sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_subNeckControllers_GRP", parent=self.individual_controllers_grp, ss=True)
-        cmds.setAttr(f"{sub_neck_ctl_trn}.inheritsTransform", 0)
-        cmds.connectAttr(f"{self.hand_ik_ctl}.attachedFKVis", f"{sub_neck_ctl_trn}.visibility")
+        # sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_sub{self.names[0]}Controllers_GRP", parent=self.individual_controllers_grp, ss=True)
+
 
         for i, joint in enumerate(self.ik_wm):
             name = joint.split(".")[0].split("_")[1]
@@ -565,16 +570,18 @@ class FalangeModule(object):
                 suffixes=["GRP", "ANM"],
                 lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                 ro=True,
-                parent=ctls_sub_neck[-1] if ctls_sub_neck else sub_neck_ctl_trn
+                parent=ctls_sub_neck[-1] if ctls_sub_neck else self.individual_controllers_grp
             )
 
             if i == 0:
+                cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
+                cmds.connectAttr(f"{self.hand_ik_ctl}.attachedFKVis", f"{controller_grp[0]}.visibility")
                 cmds.connectAttr(f"{joint}", f"{controller_grp[0]}.offsetParentMatrix")
 
             else:
-                mmt = cmds.createNode("multMatrix", n=f"{self.side}neckSubAttachedFk0{i+1}_MMT")
+                mmt = cmds.createNode("multMatrix", n=f"{self.side}_{name}SubAttachedFk0{i+1}_MMT")
 
-                inverse = cmds.createNode("inverseMatrix", n=f"{self.side}_neckSubAttachedFk0{i+1}_IMX")
+                inverse = cmds.createNode("inverseMatrix", n=f"{self.side}_{name}SubAttachedFk0{i+1}_IMX")
                 cmds.connectAttr(f"{self.ik_wm[i-1]}", f"{inverse}.inputMatrix")
                 cmds.connectAttr(f"{joint}", f"{mmt}.matrixIn[0]")
                 cmds.connectAttr(f"{inverse}.outputMatrix", f"{mmt}.matrixIn[1]")
@@ -653,6 +660,7 @@ class FalangeModule(object):
 
     def bendys(self):
         self.bendy_controllers = cmds.createNode("transform", name=f"{self.side}_{self.names[1]}BendyControllers_GRP", parent=self.individual_controllers_grp, ss=True)
+        cmds.connectAttr(f"{self.switch_ctl}.bendysVis", f"{self.bendy_controllers}.visibility")
         cmds.setAttr(f"{self.bendy_controllers}.inheritsTransform", 0)
         
 
@@ -663,10 +671,6 @@ class FalangeModule(object):
                 lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                 ro=True,
             )
-
-            cmds.addAttr(ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
-            cmds.setAttr(ctl+".extraAttr", channelBox=True, lock=True)
-            cmds.addAttr(ctl, shortName="secondaryControllersHeight", niceName="secondary Controllers Height", maxValue=1, minValue=0,defaultValue=1, keyable=True)
 
             cmds.parent(ctl_grp[0], self.bendy_controllers)
 

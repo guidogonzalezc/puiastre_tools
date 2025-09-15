@@ -184,7 +184,6 @@ def build_complete_hierarchy():
             side = skinning_joint_list[0].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
             parent_joint = next((j for j in arm_joints if side in j), None)
-            print("dentro", arm_joints)
             parented_chain(skinning_joints=skinning_joint_list, parent=parent_joint, hand_value=False)
 
         # ===== SPACE SWITCHES ===== #
@@ -243,14 +242,9 @@ def build_complete_hierarchy():
             parent_joint = next((j for j in arm_joints if side in j), None)
 
             hand_settings = data_exporter.get_data(modules_name[i], "settings_ctl")
-            print(hand_settings_value)
             if hand_settings_value is None:
-                print("FIRST TIME")
-                print(hand_settings)
-                print(parent_joint)
                 space_switch.fk_switch(target = hand_settings, sources=[parent_joint])
                 hand_settings_value = True
-            print("fuera")
             parents = [hand_settings, parent_joint]
 
             space_switch.fk_switch(target = fk, sources= parents)
@@ -258,58 +252,4 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents)
-
-
-
-    # ===== SPACE SWITCHES ===== #
-    # parent_ctl = "localHip" if parent_module == "localHip" else f"localChest"
-
-    # if hand_value:
-    #     hand_controller = data_exporter.get_data(f"{child_side}_HandModule", "hand_controllers")
-    #     space_switch.fk_switch(target = hand_controller, sources= [skinning_joints[parent_index][-1]])
-
-    # if parent_module == "spine" or parent_module == "localHip":
-    #     parent_module = "spine" if parent_module == "localHip" else parent_module
-    #     body_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", "body_ctl")
-    #     local_hip_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", parent_ctl)
-
-    #     if child_module == "arm" or child_module == "leg" or child_module == "frontLeg" or child_module == "backLeg":
-    #         if child_module == "arm" or child_module == "frontLeg":
-    #             clavicle = data_exporter.get_data(f"{child_side}_{child_module}Module", "scapula_ctl")
-    #             space_switch.fk_switch(target = clavicle, sources= [local_hip_ctl, body_ctl])
-    #             parents = [clavicle, local_hip_ctl, body_ctl]
-
-    #         else:
-    #             parents = [local_hip_ctl, body_ctl]
-
-            # fk = data_exporter.get_data(f"{child_side}_{child_module}Module", "fk_ctl")[0]
-            # pv = data_exporter.get_data(f"{child_side}_{child_module}Module", "pv_ctl")
-            # root = data_exporter.get_data(f"{child_side}_{child_module}Module", "root_ctl")
-            # ik = data_exporter.get_data(f"{child_side}_{child_module}Module", "end_ik")
-
-            # space_switch.fk_switch(target = fk, sources= parents)
-            # space_switch.fk_switch(target = root, sources= parents)
-            # space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
-            # space_switch.fk_switch(target = pv, sources= [ik, local_hip_ctl, body_ctl])
-
-    #     elif child_module == "neck":
-            
-    #         neck = data_exporter.get_data(f"{child_side}_{child_module}Module", "neck_ctl")
-    #         head = data_exporter.get_data(f"{child_side}_{child_module}Module", "head_ctl")
-
-    #         space_switch.fk_switch(target = neck, sources= [local_hip_ctl, body_ctl])
-    #         space_switch.fk_switch(target = head, sources= [neck, local_hip_ctl, body_ctl], default_rotate=0)
-
-    #     else:
-    #         main_ctl= data_exporter.get_data(f"{child_side}_{child_module}Module", "main_ctl")
-    #         space_switch.fk_switch(target = main_ctl, sources= [local_hip_ctl, body_ctl])
-
-    # else:
-    #     main_ctl= data_exporter.get_data(f"{child_side}_{child_module}Module", "main_ctl")
-    #     parent_main_ctl = data_exporter.get_data(f"{parent_side}_{parent_module}Module", "end_main_ctl")
-
-    #     if not main_ctl or not parent_main_ctl:
-    #         continue
-
-    #     space_switch.fk_switch(target = main_ctl, sources= [parent_main_ctl, local_hip_ctl, body_ctl])
 

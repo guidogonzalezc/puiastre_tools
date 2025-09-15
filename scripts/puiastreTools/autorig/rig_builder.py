@@ -43,6 +43,23 @@ def rename_ctl_shapes():
         parentName = cmds.listRelatives(shapes, parent=True)[0]
         cmds.rename(shapes, f"{parentName}Shape")
 
+def setIsHistoricallyInteresting(value=0):
+    cmds.select(r=True, allDependencyNodes=True)
+    allNodes = cmds.ls(sl=True)
+    allNodes.extend(cmds.ls(shapes=True))
+
+    failed = []
+    for node in allNodes:
+        plug = '{}.ihi'.format(node)
+        if cmds.objExists(plug):
+            try:
+                cmds.setAttr(plug, value)
+            except:
+                failed.append(node)
+    if failed:
+        print("Skipped the following nodes {}".format(failed))
+
+
 def joint_label():
     """
     Set attributes for all joints in the scene to label them according to their side and type.
@@ -122,6 +139,7 @@ def make(asset_name="dragon"):
 
     rename_ctl_shapes()
     joint_label()
+    setIsHistoricallyInteresting(0)
 
     cmds.inViewMessage(
     amg=f'Completed <hl> {asset_name.capitalize()} RIG</hl> build.',
@@ -132,4 +150,4 @@ def make(asset_name="dragon"):
     cmds.select(clear=True)
 
 
-# make()
+make()
