@@ -799,11 +799,11 @@ class LimbModule(object):
                 t = 0.95 if i == self.twist_number - 1 else i / (float(self.twist_number) - 1)
                 t_values.append(t)
 
-            if bendy == "LowerBendy":
-                t_values.append(1)
-                self.twist_number += 1
-
             de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
+
+            if bendy == "LowerBendy":
+                joint = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
+                cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint}.offsetParentMatrix")
 
     def scapula(self):
 
@@ -1047,28 +1047,7 @@ class LimbModule(object):
 
         cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{ball_joint}.offsetParentMatrix") 
 
-        # cmds.select(clear=True)
-        # joint_blend = cmds.joint(name=self.fk_joints[-1].replace("Fk_JNT", "Blend_JNT"), rad=0.5)
-        # blendMatrix = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}0{i+1}_BLM", ss=True)
-        # cmds.connectAttr(f"{self.feet_joints[1]}.worldMatrix[0]", f"{blendMatrix}.inputMatrix")
-        # cmds.connectAttr(f"{self.fk_joints[-1]}.worldMatrix[0]", f"{blendMatrix}.target[0].targetMatrix")
-        # cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blendMatrix}.target[0].weight")
-        
-        # cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{joint_blend}.offsetParentMatrix")
 
-        # cmds.parent(joint_blend, self.individual_module_grp)
-
-        # cmds.select(clear=True)
-        # joint = cmds.joint(name=joint_blend.replace("Blend_JNT", "Foot_JNT"), rad=0.5)
-        # cmds.parent(joint, self.skinnging_grp)
-        # cmds.connectAttr(f"{joint_blend}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
-
-
-        # self.blend_chain.append(joint)
-
-        # skin_joints = cmds.listRelatives(self.skinnging_grp, type="joint", allDescendents=True)[0]
-
-        # ss.fk_switch(self.switch_ctl, sources = [skin_joints])
 
 class ArmModule(LimbModule):
     """

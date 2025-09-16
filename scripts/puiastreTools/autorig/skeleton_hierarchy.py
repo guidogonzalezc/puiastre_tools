@@ -52,8 +52,7 @@ def parented_chain(skinning_joints, parent, hand_value=False):
         for joint in chain:
             cmds.select(clear=True)
             joint_env = cmds.createNode("joint", n=joint.replace("_JNT", "_ENV"), ss=True)
-            cube = cmds.polyCube(n=joint_env.replace("_ENV", "_GEO"))[0]
-            cmds.parent(cube, joint_env)
+
 
 
             if "localHip" in joint_env:
@@ -238,13 +237,13 @@ def build_complete_hierarchy():
             
             side = skel_grps[i].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
-            print(arm_joints)
             parent_joint = next((j for j in arm_joints if side in j), None)
-
+            print(modules_name[i])
             hand_settings = data_exporter.get_data(modules_name[i], "settings_ctl")
-            if hand_settings_value is None:
+
+            if hand_settings_value is None or hand_settings_value != modules_name[i].split("_")[0]:
                 space_switch.fk_switch(target = hand_settings, sources=[parent_joint])
-                hand_settings_value = True
+                hand_settings_value = modules_name[i].split("_")[0]
             parents = [hand_settings, parent_joint]
 
             space_switch.fk_switch(target = fk, sources= parents)

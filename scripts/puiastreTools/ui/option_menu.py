@@ -5,12 +5,12 @@ from importlib import reload
 
 from puiastreTools.ui import option_menu
 from puiastreTools.utils import guide_creation 
-# from puiastreTools.autorig import rig_builder
+from puiastreTools.autorig import rig_builder
 from puiastreTools.utils import curve_tool  
 
 reload(option_menu)
 reload(guide_creation)
-# reload(rig_builder)
+reload(rig_builder)
 reload(curve_tool)
 
 
@@ -44,15 +44,15 @@ def import_guides(*args, value=None):
     if value == True:   
         guide_creation.guide_import(joint_name = "all")
 
-# def complete_rig(*args):
-#     """
-#     Function to build a complete rig using the rig builder module.
+def complete_rig(*args):
+    """
+    Function to build a complete rig using the rig builder module.
 
-#     Args:
-#         *args: Variable length argument list, not used in this function.
-#     """
-#     reload(rig_builder)
-#     rig_builder.make()
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+    reload(rig_builder)
+    rig_builder.make()
 
 def export_curves(*args, curves_path): 
     """
@@ -107,7 +107,7 @@ def puiastre_ui():
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
-    # cmds.menuItem(label="   Complete Rig (dev only)", command=complete_rig)
+    cmds.menuItem(label="   Complete Rig (dev only)", command=complete_rig)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
