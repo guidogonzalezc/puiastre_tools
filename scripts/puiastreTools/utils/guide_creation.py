@@ -313,7 +313,7 @@ class GuideCreation(object):
                 #     positions = ([0, 0, 0], positions[0])
                 # if len(positions) > 1:
                 #     positions = positions[1]
-                cmds.setAttr(temp_pos + ".translate", *positions)
+                cmds.setAttr(temp_pos + ".translate", positions[0][0], positions[0][1], positions[0][2], type="double3")
 
                 parent = self.guides_trn if not self.guides else self.guides[-1]
                 if "Settings" in joint_name:
@@ -463,6 +463,7 @@ class ArmGuideCreation(GuideCreation):
             "elbow": get_data(f"{self.sides}_elbow"),
             "wrist": get_data(f"{self.sides}_wrist"),
             "armSettings": get_data(f"{self.sides}_armSettings"),
+            # "shoulderFrontDistance": get_data(f"{self.sides}_shoulderFrontDistance"),
         }
 
 class BackLegGuideCreation(GuideCreation):
@@ -484,6 +485,7 @@ class BackLegGuideCreation(GuideCreation):
         "backFoot": get_data(f"{self.sides}_backFoot"),
         "backToe": get_data(f"{self.sides}_backToe"),
         "backLegSettings": get_data(f"{self.sides}_backLegSettings"),
+        # "backLegFrontDistance": get_data(f"{self.sides}_backLegFrontDistance"),
     }
 
 class SpineGuideCreation(GuideCreation):
@@ -519,6 +521,9 @@ class NeckGuideCreation(GuideCreation):
         self.position_data = {
             "neck": get_data(f"{self.sides}_neck"),
             "head": get_data(f"{self.sides}_head"),
+            # "centerHeadDistance": get_data(f"{self.sides}_centerHeadDistance"),
+            # "leftHeadDistance": get_data(f"L_leftHeadDistance"),
+            # "rightHeadDistance": get_data(f"R_rightHeadDistance"),
         }
 
 class TailGuideCreation(GuideCreation):
@@ -931,9 +936,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
         return transforms_chain_export
 
 
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-# core.DataManager.set_asset_name("Dragon")
-# core.DataManager.set_mesh_data("Puiastre")
-# # load_guides()
+core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_001.guides")
+core.DataManager.set_asset_name("Dragon")
+core.DataManager.set_mesh_data("Puiastre")
+load_guides()
 
 # guides_export()
