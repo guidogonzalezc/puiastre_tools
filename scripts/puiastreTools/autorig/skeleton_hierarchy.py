@@ -171,7 +171,6 @@ def build_complete_hierarchy():
                 pass
             else:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
-                print(joints)
                 if "clavicle" in skinning_joint_list[0]:
                     arm_joints.append(joints[-1])
 
@@ -238,7 +237,6 @@ def build_complete_hierarchy():
             side = skel_grps[i].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
             parent_joint = next((j for j in arm_joints if side in j), None)
-            print(modules_name[i])
             hand_settings = data_exporter.get_data(modules_name[i], "settings_ctl")
 
             if hand_settings_value is None or hand_settings_value != modules_name[i].split("_")[0]:
