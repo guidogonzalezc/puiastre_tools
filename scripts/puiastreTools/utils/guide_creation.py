@@ -309,10 +309,10 @@ class GuideCreation(object):
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
                 temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                 type = "joint"
-                # if not positions[0] and len(positions) > 1:
-                #     positions = ([0, 0, 0], positions[0])
-                # if len(positions) > 1:
-                #     positions = positions[1]
+                print(positions)
+                if not positions[0] :
+                    positions = ([0, 0, 0], positions[1])
+               
                 cmds.setAttr(temp_pos + ".translate", positions[0][0], positions[0][1], positions[0][2], type="double3")
 
                 parent = self.guides_trn if not self.guides else self.guides[-1]
@@ -322,6 +322,9 @@ class GuideCreation(object):
                 
                 if "localHip" in joint_name:
                     parent = self.guides_trn
+
+                if "Distance" in joint_name:
+                    parent = self.guides[1]
                     
 
                 guide = self.controller_creator(
@@ -382,11 +385,12 @@ class GuideCreation(object):
                     cmds.setAttr(curve + ".overrideDisplayType", 1)
 
                 if not "Metacarpal" in self.guides[i+1]:
-                    curve = cmds.curve(d=1, p=[(1, 0, 0), (2, 0, 0)], n=f"{self.guides[i]}_to_{self.guides[i + 1]}_CRV")
-                    dcmp = cmds.createNode("decomposeMatrix", name=f"{self.guides[i]}_to_{self.guides[i + 1]}{i}_DCM", ss=True)
-                    dcmp02 = cmds.createNode("decomposeMatrix", name=f"{self.guides[i]}_to_{self.guides[i + 1]}{i+1}_DCM", ss=True)
+                    number = i+1 if not "Distance" in self.guides[i] else 1
+                    curve = cmds.curve(d=1, p=[(1, 0, 0), (2, 0, 0)], n=f"{self.guides[i]}_to_{self.guides[number]}_CRV")
+                    dcmp = cmds.createNode("decomposeMatrix", name=f"{self.guides[i]}_to_{self.guides[number]}{i}_DCM", ss=True)
+                    dcmp02 = cmds.createNode("decomposeMatrix", name=f"{self.guides[i]}_to_{self.guides[number]}{i+1}_DCM", ss=True)
                     cmds.connectAttr(self.guides[i] + ".worldMatrix[0]", dcmp + ".inputMatrix")
-                    cmds.connectAttr(self.guides[i + 1] + ".worldMatrix[0]", dcmp02 + ".inputMatrix")
+                    cmds.connectAttr(self.guides[number] + ".worldMatrix[0]", dcmp02 + ".inputMatrix")
                     cmds.connectAttr(dcmp + ".outputTranslate", curve + ".controlPoints[0]")
                     cmds.connectAttr(dcmp02 + ".outputTranslate", curve + ".controlPoints[1]")
                     cmds.parent(curve, self.buffers_trn)
@@ -463,7 +467,7 @@ class ArmGuideCreation(GuideCreation):
             "elbow": get_data(f"{self.sides}_elbow"),
             "wrist": get_data(f"{self.sides}_wrist"),
             "armSettings": get_data(f"{self.sides}_armSettings"),
-            # "shoulderFrontDistance": get_data(f"{self.sides}_shoulderFrontDistance"),
+            "shoulderFrontDistance": get_data(f"{self.sides}_shoulderFrontDistance"),
         }
 
 class BackLegGuideCreation(GuideCreation):
@@ -485,7 +489,7 @@ class BackLegGuideCreation(GuideCreation):
         "backFoot": get_data(f"{self.sides}_backFoot"),
         "backToe": get_data(f"{self.sides}_backToe"),
         "backLegSettings": get_data(f"{self.sides}_backLegSettings"),
-        # "backLegFrontDistance": get_data(f"{self.sides}_backLegFrontDistance"),
+        "backLegFrontDistance": get_data(f"{self.sides}_backLegFrontDistance"),
     }
 
 class SpineGuideCreation(GuideCreation):
@@ -521,9 +525,9 @@ class NeckGuideCreation(GuideCreation):
         self.position_data = {
             "neck": get_data(f"{self.sides}_neck"),
             "head": get_data(f"{self.sides}_head"),
-            # "centerHeadDistance": get_data(f"{self.sides}_centerHeadDistance"),
-            # "leftHeadDistance": get_data(f"L_leftHeadDistance"),
-            # "rightHeadDistance": get_data(f"R_rightHeadDistance"),
+            "centerHeadDistance": get_data(f"{self.sides}_centerHeadDistance"),
+            "leftHeadDistance": get_data(f"L_leftHeadDistance"),
+            "rightHeadDistance": get_data(f"R_rightHeadDistance"),
         }
 
 class TailGuideCreation(GuideCreation):
@@ -939,6 +943,6 @@ def guide_import(joint_name, all_descendents=True, path=None):
 core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_001.guides")
 core.DataManager.set_asset_name("Dragon")
 core.DataManager.set_mesh_data("Puiastre")
-load_guides()
+# load_guides()
 
 # guides_export()

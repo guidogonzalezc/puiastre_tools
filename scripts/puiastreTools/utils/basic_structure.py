@@ -46,7 +46,9 @@ def create_basic_structure(asset_name = "assetName"):
                 "MODEL",
             },
             "groom_GRP": {},
-            "clothSim_GRP": {}
+            "clothSim_GRP": {},
+            "muscleLocators_GRP": {},
+            "muscleSystems_GRP": {},
         }
     }
 
@@ -89,8 +91,10 @@ def create_basic_structure(asset_name = "assetName"):
                                                   "skel_GRP": rig_transforms[3],
                                                   "masterWalk_CTL": ctls[1],
                                                   "guides_GRP": rig_transforms[1],
-                                                  "skeletonHierarchy_GRP": rig_transforms[4],})
+                                                  "skeletonHierarchy_GRP": rig_transforms[4],
+                                                  "muscleLocators_GRP": secondary_transforms[-2]})
 
+    cmds.setAttr(secondary_transforms[-2]+".visibility", 0)
 
     cmds.addAttr(ctls[2], shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=False)
     cmds.setAttr(ctls[2]+".extraAttr", channelBox=True)

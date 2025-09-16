@@ -49,6 +49,7 @@ class LimbModule(object):
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
+        self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
 
 
     def make(self):
@@ -395,7 +396,9 @@ class LimbModule(object):
 
         max = cmds.createNode("max", name=f"{self.side}_{self.module_name}Scalar_MAX", ss=True)
         cmds.connectAttr(f"{divide}.output", f"{max}.input[0]")
-        cmds.setAttr(f"{max}.input[1]", 1)  ############### QUIZAS SE HA DE PONER UN FLOATCONSTANT PROBAR SI GUARDA EL VALOR
+        self.float_value_one = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}One_FC", ss=True)
+        cmds.setAttr(f"{self.float_value_one}.inFloat", 1)
+        cmds.connectAttr(f"{self.float_value_one}.outFloat", f"{max}.input[1]")
 
         scalar_remap = cmds.createNode("remapValue", name=f"{self.side}_{self.module_name}LengthRatio_REMAP", ss=True)
         cmds.connectAttr(f"{self.hand_ik_ctl}.stretch", f"{scalar_remap}.inputValue")
@@ -449,7 +452,9 @@ class LimbModule(object):
         cmds.connectAttr(f"{soft_cosValueSquared}.output", f"{soft_height_squared}.input2")
 
         soft_height_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.module_name}SoftHeightSquaredClamped_MAX", ss=True)
-        cmds.setAttr(f"{soft_height_squared_clamped}.input[0]", 0)
+        self.float_value_zero = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}Zero_FC", ss=True)
+        cmds.setAttr(f"{self.float_value_zero}.inFloat", 0)
+        cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{soft_height_squared_clamped}.input[0]")
         cmds.connectAttr(f"{soft_height_squared}.output", f"{soft_height_squared_clamped}.input[1]")
 
         soft_height = cmds.createNode("power", name=f"{self.side}_{self.module_name}SoftHeight_POW", ss=True)
@@ -580,7 +585,7 @@ class LimbModule(object):
 
         lower_sin_value_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.module_name}LowerSinValueSquared_MAX", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared}.output", f"{lower_sin_value_squared_clamped}.input[1]")
-        cmds.setAttr(f"{lower_sin_value_squared_clamped}.input[0]", 0)
+        cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{lower_sin_value_squared_clamped}.input[0]")
 
         lower_sin = cmds.createNode("power", name=f"{self.side}_{self.module_name}LowerSin_POW", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared_clamped}.output", f"{lower_sin}.input")
@@ -706,7 +711,17 @@ class LimbModule(object):
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
 
-        self.bendys()
+        skinning_joints = self.bendys()
+        self.distance = guide_import(f"{self.side}_shoulderFrontDistance_GUIDE", all_descendents=False)[0]
+        pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_shoulderFrontDistancePos_MMX", ss=True)
+        cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+
+        inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_shoulderFrontDistanceInverse_MTX", ss=True)
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
+        cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+        distance_joints = cmds.createNode("joint", name=f"{self.side}_shoulderFrontDistance_JNT", ss=True, parent = self.muscle_locators)
+        cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
     def get_offset_matrix(self, child, parent):
         """
@@ -730,8 +745,7 @@ class LimbModule(object):
     def bendys(self):
         self.bendy_controllers = cmds.createNode("transform", name=f"{self.side}_{self.module_name}BendyControllers_GRP", parent=self.individual_controllers_grp, ss=True)
         cmds.setAttr(f"{self.bendy_controllers}.inheritsTransform", 0)
-        
-
+        joints = []
         for i, bendy in enumerate(["UpperBendy", "LowerBendy"]):
             ctl, ctl_grp = controller_creator(
                 name=f"{self.side}_{self.module_name}{bendy}",
@@ -764,31 +778,6 @@ class LimbModule(object):
                 cmds.setAttr(f"{blendMatrix}.target[1].shearWeight", 0)
 
             cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix") 
-
-            # --- Future degree 3 wip --- #
-
-            # for j in range(0, 2):
-            #     ctl_tan, ctl_grp_tan = controller_creator(
-            #     name=f"{self.side}_{self.module_name}{bendy}Tan0{j+1}",
-            #     suffixes=["GRP", "ANM"],
-            #     lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-            #     ro=True,
-            #     )
-
-            #     cmds.parent(ctl_grp_tan[0], self.bendy_controllers)
-
-            #     blendMatrix = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}{bendy}Tan0{j+1}_BLM", ss=True)
-            #     cmds.connectAttr(f"{self.blend_wm[i+j]}", f"{blendMatrix}.inputMatrix")
-            #     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{blendMatrix}.target[0].targetMatrix")
-            #     cmds.setAttr(f"{blendMatrix}.target[0].scaleWeight", 0.5)
-            #     cmds.setAttr(f"{blendMatrix}.target[0].translateWeight", 0.5)
-            #     cmds.setAttr(f"{blendMatrix}.target[0].rotateWeight", 0.5 if j == 0 else 1)
-            #     cmds.setAttr(f"{blendMatrix}.target[0].shearWeight", 1)
-
-            #     cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{ctl_grp_tan[0]}.offsetParentMatrix")
-
-
-    #def bendy_twist(self, twist_number=5, degree=2, blend_chain=["L_shoulderDr_JNT", "L_elbowDr_JNT"], suffix=f"L_upperArm"):
     
             cvMatrices = [self.blend_wm[i], f"{ctl}.worldMatrix[0]", self.blend_wm[i+1]]
 
@@ -799,11 +788,15 @@ class LimbModule(object):
                 t = 0.95 if i == self.twist_number - 1 else i / (float(self.twist_number) - 1)
                 t_values.append(t)
 
-            de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
+            joint = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
 
             if bendy == "LowerBendy":
-                joint = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
-                cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint}.offsetParentMatrix")
+                joint_end = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
+                cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint_end}.offsetParentMatrix")
+                joint.append(joint_end)
+
+            joints.append(joint)
+        return joints
 
     def scapula(self):
 

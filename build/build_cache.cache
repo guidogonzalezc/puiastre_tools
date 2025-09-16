@@ -4,7 +4,8 @@
         "skel_GRP": "skel_GRP",
         "masterWalk_CTL": "C_masterWalk_CTL",
         "guides_GRP": "guides_GRP",
-        "skeletonHierarchy_GRP": "skeletonHierarchy_GRP"
+        "skeletonHierarchy_GRP": "skeletonHierarchy_GRP",
+        "muscleLocators_GRP": "muscleLocators_GRP"
     },
     "L_backLegModule": {
         "skinning_transform": "L_backLegSkinningJoints_GRP",

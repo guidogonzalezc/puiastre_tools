@@ -37,6 +37,8 @@ class NeckModule():
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
+        self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
+
 
 
     def make(self, guide_name):
@@ -100,19 +102,19 @@ class NeckModule():
         cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", 0)
         cmds.setAttr(f"{blend_matrix}.target[0].shearWeight", 0)
 
-        blend_matrix02 = cmds.createNode("blendMatrix", name=f"{self.side}_neck02Guide_BMX", ss=True)
-        cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{blend_matrix02}.inputMatrix")
-        cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{blend_matrix02}.target[0].targetMatrix")
-        cmds.setAttr(f"{blend_matrix02}.target[0].weight", 0.5)
-        cmds.setAttr(f"{blend_matrix02}.target[0].scaleWeight", 0)
-        cmds.setAttr(f"{blend_matrix02}.target[0].rotateWeight", 0)
-        cmds.setAttr(f"{blend_matrix02}.target[0].shearWeight", 0)
+        self.blend_matrix02 = cmds.createNode("blendMatrix", name=f"{self.side}_neck02Guide_BMX", ss=True)
+        cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{self.blend_matrix02}.inputMatrix")
+        cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{self.blend_matrix02}.target[0].targetMatrix")
+        cmds.setAttr(f"{self.blend_matrix02}.target[0].weight", 0.5)
+        cmds.setAttr(f"{self.blend_matrix02}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{self.blend_matrix02}.target[0].rotateWeight", 0)
+        cmds.setAttr(f"{self.blend_matrix02}.target[0].shearWeight", 0)
 
 
         self.main_controllers = []
         self.main_controllers_grp = []
 
-        self.guide_matrix = [aim_matrix, blend_matrix02, blend_matrix]
+        self.guide_matrix = [aim_matrix, self.blend_matrix02, blend_matrix]
 
         for i, matrix in enumerate(self.guide_matrix ):
             pre_name = "neck" if i != len(self.guide_matrix ) - 1 else "head"
@@ -281,13 +283,6 @@ class NeckModule():
                 cmds.connectAttr(f"{self.input_connections[i-1]}", f"{inverse}.inputMatrix")
                 cmds.connectAttr(f"{joint}", f"{mmt}.matrixIn[0]")
                 cmds.connectAttr(f"{inverse}.outputMatrix", f"{mmt}.matrixIn[1]")
-                # if len(self.input_connections)-1 == i:
-                #     blend_matrix_head = cmds.createNode("blendMatrix", n=f"{self.side}_headSubAttachedFk0{i+1}_BMX")
-                #     cmds.connectAttr(f"{mmt}.matrixSum", f"{blend_matrix_head}.inputMatrix")
-                #     cmds.connectAttr(f"{self.main_controllers[-1]}.worldMatrix[0]", f"{blend_matrix_head}.target[0].targetMatrix")
-                #     cmds.setAttr(f"{blend_matrix_head}.target[0].translateWeight", 0)
-                #     cmds.connectAttr(f"{blend_matrix_head}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix")
-                # else:
                 cmds.connectAttr(f"{mmt}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
 
                 for attr in ["translateX","translateY","translateZ", "rotateX", "rotateY", "rotateZ"]:
@@ -297,10 +292,27 @@ class NeckModule():
 
         cmds.delete(self.old_joints)
 
+        skinning_joints = []
+
         for i, ctl in enumerate(ctls_sub_neck):
             name = ctl.replace("AttachedFk_CTL", "_JNT")
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
+            skinning_joints.append((joint_skin))
+
+        for name in ["center", "left", "right"]:
+            self.distance = guide_import(f"{self.side}_{name}HeadDistance_GUIDE", all_descendents=False)[0]
+
+            pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}HeadFrontDistance_MMX", ss=True)
+            cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+
+            inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{name}HeadDistanceInverse_MTX", ss=True)
+            cmds.connectAttr(f"{self.blend_matrix02}.outputMatrix", f"{inverse}.inputMatrix")
+            cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{skinning_joints[-1]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+            distance_joints = cmds.createNode("joint", name=f"{self.side}_{name}HeadDistance_JNT", ss=True, parent = self.muscle_locators)
+            cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
+            
 
 # cmds.file(new=True, force=True)
 
