@@ -68,7 +68,6 @@ class LimbModule(object):
         self.secondary_aim_vector = om.MVector(AXIS_VECTOR[self.secondary_aim])
 
         cmds.addAttr(self.skinnging_grp, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
-        print(self.guides)
         #Position Joints
         order = [[self.guides[0], self.guides[1], self.guides[2]], [self.guides[1], self.guides[2], self.guides[0]], [self.guides[2], self.leg_guides[0].replace(".worldMatrix[0]", ""), self.guides[1]]]
 

@@ -138,7 +138,7 @@ class FalangeModule(object):
 
             cmds.setAttr(aim_matrix + ".primaryInputAxis", *self.primary_aim_vector, type="double3")
             cmds.setAttr(aim_matrix + ".secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-            cmds.setAttr(aim_matrix + ".secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+            cmds.setAttr(aim_matrix + ".secondaryTargetVector", 0,1,0, type="double3")
             
             cmds.setAttr(aim_matrix + ".primaryMode", 1)
             cmds.setAttr(aim_matrix + ".secondaryMode", 1)
@@ -309,7 +309,13 @@ class FalangeModule(object):
         pv_pos_sum = cmds.createNode("sum", name=f"{self.side}_{self.names[1]}PVPosition_SUM", ss=True)
         cmds.connectAttr(f"{self.distance_between_output[0]}", f"{pv_pos_sum}.input[0]")
         cmds.connectAttr(f"{self.distance_between_output[1]}", f"{pv_pos_sum}.input[1]")
-        cmds.connectAttr(f"{pv_pos_sum}.output", f"{pv_pos_4b4}.in31")
+
+        if self.side == "R":
+            negate = cmds.createNode("negate", name=f"{self.side}_{self.names[1]}PVPosition_NEG", ss=True)
+            cmds.connectAttr(f"{pv_pos_sum}.output", f"{negate}.input")
+            cmds.connectAttr(f"{negate}.output", f"{pv_pos_4b4}.in31")
+        else:
+            cmds.connectAttr(f"{pv_pos_sum}.output", f"{pv_pos_4b4}.in31")
 
         # --- STRETCH --- #
 
@@ -629,7 +635,7 @@ class FalangeModule(object):
         cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
         cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *(0, 1, 0), type="double3")
+        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
 
         cmds.setAttr(f"{nonRollPick}.useRotate", 0)
