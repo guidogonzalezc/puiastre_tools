@@ -796,6 +796,11 @@ class LimbModule(object):
                 joint.append(joint_end)
 
             joints.append(joint)
+
+
+
+        core.pv_locator(name=f"{self.side}_{self.module_name}PVLocator", parents=[self.pv_ik_ctl, joints[1][0]], parent_append=self.ik_controllers)
+        
         return joints
 
     def scapula(self):

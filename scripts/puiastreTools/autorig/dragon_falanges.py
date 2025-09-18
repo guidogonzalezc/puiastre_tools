@@ -87,6 +87,7 @@ class FalangeModule(object):
         except Exception as e:
             om.MGlobal.displayError(f"Error loading guides data: {e}")
 
+        skinning_joints_list = []
         for template_name, guides in guides_data.items():
             if not isinstance(guides, dict):
                 continue
@@ -96,7 +97,8 @@ class FalangeModule(object):
                     guides_pass = guide_import(guide_name, all_descendents=True, path=None)
                     self.names = [name.split("_")[1] for name in guides_pass]
 
-                    self.make(guide_name=guides_pass)
+                    skinning_joints = self.make(guide_name=guides_pass)
+                    skinning_joints_list.append(skinning_joints)
 
                     
                     self.data_exporter.append_data(f"{self.side}_{self.names[0]}Module", 
@@ -109,7 +111,7 @@ class FalangeModule(object):
                                         }
                                         )
 
-
+        print(skinning_joints_list)
 
 
     def make(self, guide_name):
@@ -161,8 +163,7 @@ class FalangeModule(object):
 
         self.fk_rig()
 
-        # self.ik_rig()
-
+        return self.joints
 
     def fk_rig(self):
         """
@@ -669,7 +670,7 @@ class FalangeModule(object):
         cmds.connectAttr(f"{self.switch_ctl}.bendysVis", f"{self.bendy_controllers}.visibility")
         cmds.setAttr(f"{self.bendy_controllers}.inheritsTransform", 0)
         
-
+        self.joints = []
         for i, bendy in enumerate(["UpperBendy", "MiddleBendy", "LowerBendy"]):
             ctl, ctl_grp = controller_creator(
                 name=f"{self.side}_{self.names[i]}{bendy}",
@@ -709,12 +710,16 @@ class FalangeModule(object):
                 t_values.append(t)
 
  
-            de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.names[i]}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
+            skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.names[i]}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
 
             if bendy == "LowerBendy":
                 joint = cmds.createNode("joint", name= f"{self.side}_{self.names[i]}{bendy}0{self.twist_number+1}_JNT", ss=True, parent=self.skinnging_grp)
                 cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint}.offsetParentMatrix")
+                skinning_joints.append(joint)
 
+
+            self.joints.append(skinning_joints)
+        core.pv_locator(name=f"{self.side}_{self.names[i]}PVLocator", parents=[self.pv_ik_ctl, self.joints[1][0]], parent_append=self.ik_controllers)
 
 
 # cmds.file(new=True, force=True)

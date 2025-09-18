@@ -39,6 +39,26 @@ class DataManager:
         return cls._asset_name
 
 
+def pv_locator(name, parents =[], parent_append = None):
+    curve = cmds.curve(d=1, p=[(0, 0, 0), (0, 1, 0)], k=[0, 1], name=name+"_CTL")
+    cmds.delete(curve, ch=True)
+    for i, p in enumerate(parents):
+        decompose = cmds.createNode("decomposeMatrix", name=f"{name}0{i}_DCP", ss=True)
+        cmds.connectAttr(f"{p}.worldMatrix[0]", f"{decompose}.inputMatrix")
+        cmds.connectAttr(f"{decompose}.outputTranslate", f"{curve}.controlPoints[{i}]")
+    if parent_append:
+        cmds.parent(curve, parent_append)
+
+    cmds.setAttr(f"{curve}.overrideEnabled", 1)
+    cmds.setAttr(f"{curve}.overrideDisplayType", 1)
+    cmds.setAttr(f"{curve}.hiddenInOutliner ", 1)
+    cmds.setAttr(f"{curve}.inheritsTransform ", 0)
+
+    cmds.setAttr(f"{curve}.translate", 0, 0, 0, type="double3")
+    cmds.setAttr(f"{curve}.rotate", 0, 0, 0, type="double3")
+
+    return curve
+
 def init_template_file(ext=".guides", export=True):
     """
     Initializes the TEMPLATE_FILE variable.

@@ -776,16 +776,16 @@ class LimbModule(object):
 
             axis_change = True if i == 0 else False 
 
-            skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvMatrices, num_joints=self.twist_number, name=f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change=axis_change)
+            skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvMatrices, num_joints=self.twist_number, name=f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
 
             if bendy == "LowerBendy":
                 joint = cmds.createNode("joint", name=f"{self.side}_{self.module_name}LowerBendy0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
                 cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint}.offsetParentMatrix")
                 skinning_joints.append(joint)
-                # t_values.append(1)
-                # self.twist_number += 1
 
             joints.append(skinning_joints)
+        core.pv_locator(name=f"{self.side}_{self.module_name}PVLocator", parents=[self.pv_ik_ctl, joints[1][0]], parent_append=self.ik_controllers)
+
 
         return joints
     def reverse_foot(self):
@@ -888,7 +888,13 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{ball_distance}.inMatrix2")
 
         position_forward_fourbyfour = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.module_name}PositionForward_4B4", ss=True)
-        cmds.connectAttr(f"{ball_distance}.distance", f"{position_forward_fourbyfour}.in30") # z axis
+        if self.side == "R":
+            pos_forward_neg = cmds.createNode("negate", name=f"{self.side}_{self.module_name}PositionForward_NEG", ss=True)
+            cmds.connectAttr(f"{ball_distance}.distance", f"{pos_forward_neg}.input")
+            cmds.connectAttr(f"{pos_forward_neg}.output", f"{position_forward_fourbyfour}.in30") # x axis
+        
+        else:
+            cmds.connectAttr(f"{ball_distance}.distance", f"{position_forward_fourbyfour}.in30") # x axis
 
         ankle_ball_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}AnkleBall_AIM", ss=True)
         cmds.connectAttr(f"{self.blend_wm[-1]}", f"{ankle_ball_aim_matrix}.inputMatrix")
@@ -913,9 +919,9 @@ class LimbModule(object):
         cmds.setAttr(f"{ball_wm}.secondaryMode", 2)
 
         front_roll_wm = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontRollWM_MMX", ss=True)
-        cmds.connectAttr(f"{self.frontRoll_ctl}.worldMatrix[0]", f"{front_roll_wm}.matrixIn[0]")
+        cmds.connectAttr(f"{self.frontRoll_ctl}.worldMatrix[0]", f"{front_roll_wm}.matrixIn[2]")
         cmds.connectAttr(f"{self.frontRoll_grp[0]}.worldInverseMatrix[0]", f"{front_roll_wm}.matrixIn[1]")
-        cmds.connectAttr(f"{ball_wm}.outputMatrix", f"{front_roll_wm}.matrixIn[2]")
+        cmds.connectAttr(f"{ball_wm}.outputMatrix", f"{front_roll_wm}.matrixIn[0]")
 
         cmds.addAttr(self.hand_ik_ctl, shortName="reverseFoot", niceName="Reverse foot  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.hand_ik_ctl+".reverseFoot", channelBox=True, lock=True)

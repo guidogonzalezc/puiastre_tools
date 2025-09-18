@@ -547,6 +547,7 @@ class TailGuideCreation(GuideCreation):
             "tail02": get_data(f"{self.sides}_tail02"),
         }
 
+
 def number_to_ordinal_word(n):
     base_ordinal = {
         1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth',
@@ -653,7 +654,7 @@ def dragon_rebuild_guides():
 
     cmds.file(new=True, force=True)
 
-    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
+    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_002.guides")
     # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
