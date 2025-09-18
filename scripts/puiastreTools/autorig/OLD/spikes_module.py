@@ -1,6 +1,6 @@
 import maya.cmds as cmds
-import puiastreTools.tools.curve_tool as curve_tool
-from puiastreTools.utils import guides_manager
+from puiastreTools.utils import curve_tool
+from puiastreTools.utils import guide_creation
 from puiastreTools.utils import data_export
 import maya.api.OpenMaya as om
 from importlib import reload
@@ -43,8 +43,8 @@ class SpikesModule(object):
         
         """
 
-        self.upper_spike = guides_manager.guide_import(joint_name=f"{side}_upperSpike_JNT", all_descendents=True)
-        self.lateral_spike = guides_manager.guide_import(joint_name=f"{side}_lateralSpike_JNT", all_descendents=True)
+        self.upper_spike = guide_creation.guide_import(joint_name=f"{side}_upperSpike_JNT", all_descendents=True)
+        self.lateral_spike = guide_creation.guide_import(joint_name=f"{side}_lateralSpike_JNT", all_descendents=True)
         cmds.parent(self.upper_spike[0], self.lateral_spike[0], self.module_trn)
     
     def lock_attrs(self, ctl, attrs):

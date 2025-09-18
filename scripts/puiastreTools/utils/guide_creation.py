@@ -525,9 +525,9 @@ class NeckGuideCreation(GuideCreation):
         self.position_data = {
             "neck": get_data(f"{self.sides}_neck"),
             "head": get_data(f"{self.sides}_head"),
-            "centerHeadDistance": get_data(f"{self.sides}_centerHeadDistance"),
-            "leftHeadDistance": get_data(f"L_leftHeadDistance"),
-            "rightHeadDistance": get_data(f"R_rightHeadDistance"),
+            "centerHeadDistance": get_data(f"C_centerHeadDistance"),
+            "leftHeadDistance": get_data(f"C_leftHeadDistance"),
+            "rightHeadDistance": get_data(f"C_rightHeadDistance"),
         }
 
 class TailGuideCreation(GuideCreation):
@@ -546,6 +546,32 @@ class TailGuideCreation(GuideCreation):
             "tail01": get_data(f"{self.sides}_tail01"),
             "tail02": get_data(f"{self.sides}_tail02"),
         }
+
+class MemmbranCreation(GuideCreation):
+    """
+    Guide creation for neck.
+    """
+    def __init__(self, side = "L"):
+        self.sides = side
+        self.type = None
+        self.limb_name = "membran"
+        self.aim_name = None
+        self.prefix = None
+        self.controller_number = None
+        self.position_data = {
+            "primaryMembran01": get_data(f"{self.sides}_primaryMembran01"),
+            "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
+            "secondaryMembran01": get_data(f"{self.sides}_secondaryMembran01"),
+            "secondaryMembran02": get_data(f"{self.sides}_secondaryMembran02"),
+            "secondaryMembran03": get_data(f"{self.sides}_secondaryMembran03"),
+            "tertiaryMembran01": get_data(f"{self.sides}_tertiaryMembran01"),
+            "tertiaryMembran02": get_data(f"{self.sides}_tertiaryMembran02"),
+            "tertiaryMembran03": get_data(f"{self.sides}_tertiaryMembran03"),
+            "quaternaryMembran01": get_data(f"{self.sides}_quaternaryMembran01"),
+            "quaternaryMembran02": get_data(f"{self.sides}_quaternaryMembran02"),
+            "quaternaryMembran03": get_data(f"{self.sides}_quaternaryMembran03"),
+        }
+
 
 
 def number_to_ordinal_word(n):
@@ -726,8 +752,8 @@ def load_guides(path = ""):
                     FootGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "hand":
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
-
-
+                if guide_info.get("moduleName") == "membran":
+                    MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
 
 def guides_export():
         """
@@ -941,9 +967,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
         return transforms_chain_export
 
 
-core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_001.guides")
-core.DataManager.set_asset_name("Dragon")
-core.DataManager.set_mesh_data("Puiastre")
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
+# core.DataManager.set_asset_name("Dragon")
+# core.DataManager.set_mesh_data("Puiastre")
 # load_guides()
 
 # guides_export()
