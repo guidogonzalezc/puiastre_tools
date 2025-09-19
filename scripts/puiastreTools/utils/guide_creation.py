@@ -309,7 +309,6 @@ class GuideCreation(object):
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
                 temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                 type = "joint"
-                print(positions)
                 if not positions[0] :
                     positions = ([0, 0, 0], positions[1])
                
@@ -561,6 +560,8 @@ class MemmbranCreation(GuideCreation):
         self.position_data = {
             "primaryMembran01": get_data(f"{self.sides}_primaryMembran01"),
             "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
+            "primaryMembran03": get_data(f"{self.sides}_primaryMembran03"),
+            "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
             "secondaryMembran01": get_data(f"{self.sides}_secondaryMembran01"),
             "secondaryMembran02": get_data(f"{self.sides}_secondaryMembran02"),
             "secondaryMembran03": get_data(f"{self.sides}_secondaryMembran03"),

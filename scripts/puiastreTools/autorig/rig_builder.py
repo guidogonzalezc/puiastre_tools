@@ -13,6 +13,7 @@ from puiastreTools.autorig import neck_module_quad_matrix as nmm
 from puiastreTools.autorig import spine_module_biped_matrix as spmm
 from puiastreTools.autorig import tail_module_matrix as tmm
 from puiastreTools.autorig import skeleton_hierarchy as skh
+from puiastreTools.autorig import membran_module as mm
 
 # Python libraries import
 import maya.cmds as cmds
@@ -30,6 +31,7 @@ reload(nmm)
 reload(spmm)
 reload(tmm)
 reload(skh)
+reload(mm)
 
 def rename_ctl_shapes():
     """
@@ -97,9 +99,6 @@ def make(asset_name="dragon"):
         asset_name = "asset"
     basic_structure.create_basic_structure(asset_name=asset_name)
 
-
-    
-
     final_path = core.DataManager.get_guide_data()
     # core.DataManager.set_asset_name("Dragon")
     # core.DataManager.set_mesh_data("Puiastre")
@@ -134,6 +133,15 @@ def make(asset_name="dragon"):
 
                 if guide_info.get("moduleName") == "tail":
                     tmm.TailModule().make(guide_name)
+
+    for template_name, guides in guides_data.items():
+        if not isinstance(guides, dict):
+            continue
+
+        for guide_name, guide_info in guides.items():
+            if guide_info.get("moduleName") != "Child":
+                if guide_info.get("moduleName") == "membran":
+                    mm.MembraneModule(guide_name).make()
 
     skeleton_hierarchy = skh.build_complete_hierarchy() 
 
