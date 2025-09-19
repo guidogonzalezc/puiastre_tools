@@ -43,8 +43,8 @@ class SpikesModule(object):
         
         """
 
-        self.upper_spike = guide_creation.guide_import(joint_name=f"{side}_upperSpike_JNT", all_descendents=True)
-        self.lateral_spike = guide_creation.guide_import(joint_name=f"{side}_lateralSpike_JNT", all_descendents=True)
+        self.upper_spike = guide_creation.guide_import(joint_name=f"{side}_upperSpike*_GUIDE", all_descendents=True)
+        self.lateral_spike = guide_creation.guide_import(joint_name=f"{side}_lateralSpike*_GUIDE", all_descendents=True)
         cmds.parent(self.upper_spike[0], self.lateral_spike[0], self.module_trn)
     
     def lock_attrs(self, ctl, attrs):
@@ -55,37 +55,36 @@ class SpikesModule(object):
     def spike_build(self):
 
         self.attrs_ctl, self.attrs_grp = curve_tool.controller_creator(f"{self.side}_spikeAttributes", ["GRP"])
-        cmds.move(0, 250, 0, self.attrs_grp, r=True)
+        cmds.move(0, 250, 0, self.attrs_grp, r=True) # Move it up
         self.lock_attrs(self.attrs_ctl, ["translateX", "translateY", "translateZ", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"])
         cmds.addAttr(self.attrs_ctl, ln="Envelope", at="float", dv=0, maxValue=1, minValue=0, keyable=True)
         cmds.addAttr(self.attrs_ctl, ln="Amplitude", at="float", dv=0.1, keyable=True)
         cmds.addAttr(self.attrs_ctl, ln="Wave", at="float", dv=0, keyable=True)
         cmds.addAttr(self.attrs_ctl, ln="Dropoff", at="float", dv=0, keyable=True)
 
-    def spike(self, side, spike_joint):
+    def spike(self, side, spike_guides):
 
-        
-        name = spike_joint.split("_")[1]
-        self.spike_joints = cmds.listRelatives(spike_joint, type="joint", allDescendents=True)
-        self.spike_joints.reverse() 
-        match_jnt = spike_joint
+        name = spike_guides[0].split("_")[1]
+        curve = cmds.curve(n=f"{side}_{name}_CRV", d=1, p=[cmds.xform(jnt, q=True, ws=True, t=True) for jnt in self.spike_guides]) # Create a curve with the joints positions
+        cmds.parent(curve, self.module_trn)
 
-        self.spike_transform = cmds.createNode("transform", n=f"{side}_{name}Module_GRP", p=self.module_trn)
-        cmds.parent(match_jnt, self.spike_transform)
-
-        # Get the positions of the end joints
-        end_jnts = []
-        end_jnts_pos = []
-        
-        
-
-        
-        # Add a Sine handle to the curve
-        # Do the handle local
         sine_hdl = cmds.nonLinear(curve, type="sine", n=f"{side}_{name}Sine_")
-        cmds.parent(sine_hdl[1], self.spike_transform)
+        cmds.parent(sine_hdl[1], self.module_trn)
         cmds.rotate(90, 0, 0, sine_hdl[1], ws=True)
 
+
+        for i, guide in enumerate(spike_guides):
+
+            decompose_node = cmds.createNode("decomposeMatrix", name=f"{guide.replace('_GUIDE', '_DCM')}", ss=True) # Create a decompose matrix node for each guide
+            cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{decompose_node}.inputMatrix") # Connect the guide world matrix to the decompose node
+            tweak_node = cmds.createNode("tweak", name=f"{guide.replace('_GUIDE', '_TWK')}", ss=True) # Create a tweak node for each guide
+            cmds.connectAttr(f"{decompose_node}.outputTranslate", f"{tweak_node}.plist[0].controlPoints[{i}]")
+            cmds.connectAttr(f"{tweak_node}.plist[0].controlPoints[{i}]", f"{curve}.tweakLocation")
+            compose_matrix = cmds.createNode("composeMatrix", name=f"{guide.replace('_GUIDE', '_CMT')}", ss=True)
+            cmds.connectAttr(f"{decompose_node}.editPoints[{i}]", f"{compose_matrix}.inputTranslate")
+            jnt = cmds.createNode("joint", name=guide.replace("_GUIDE", "_JNT"), ss=True, p=self.skinning_trn)
+            cmds.connectAttr(f"{compose_matrix}.outputMatrix", f"{jnt}.offsetParentMatrix") # Connect the compose matrix output to the joint offset parent matrix
+        
 
         # Create a controller for the curve and the sine handle
         self.ctl, self.grp = curve_tool.controller_creator(f"{side}_{name}", ["GRP"])
@@ -104,14 +103,7 @@ class SpikesModule(object):
         cmds.connectAttr(f"{self.ctl}.Dropoff", f"{sine_hdl[0]}.dropoff")
         
 
-        for i, jnt in enumerate(end_jnts):
-            cmds.select(clear=True)
-            skin_joint = cmds.joint(n=jnt.replace("_JNT", "Skinning_JNT"))
-            cmds.connectAttr(f"{jnt}.worldMatrix[0]", f"{skin_joint}.offsetParentMatrix")
-            cmds.parent(skin_joint, self.skinning_trn)
-
         cmds.delete(match_jnt)
-
 
 
 
