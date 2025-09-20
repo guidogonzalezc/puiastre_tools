@@ -685,6 +685,7 @@ class LimbModule(object):
 
         name = self.blend_wm[0].replace("_BLM.outputMatrix", "")
         
+        """ NON-ROLL OLD
         nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
         nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
         nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
@@ -703,6 +704,27 @@ class LimbModule(object):
         cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
 
         cmds.setAttr(f"{nonRollPick}.useRotate", 0)
+
+        """
+
+        nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
+        nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
+        nonRollMasterWalk_mmx = cmds.createNode("multMatrix", name=f"{name}NonRollMasterWalk_MMX", ss=True)
+
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{nonRollMasterWalk_mmx}.matrixIn[0]")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{nonRollMasterWalk_mmx}.matrixIn[1]")
+
+        cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollAlign}.inputMatrix")
+        cmds.connectAttr(f"{nonRollMasterWalk_mmx}.matrixSum", f"{nonRollAlign}.target[0].targetMatrix")
+        cmds.setAttr(f"{nonRollAlign}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{nonRollAlign}.target[0].translateWeight", 0)
+        cmds.setAttr(f"{nonRollAlign}.target[0].shearWeight", 0)
+        
+
+        cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.inputMatrix")
+        cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
+        cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+
 
         cmds.connectAttr(f"{self.blend_wm[0]}", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
@@ -829,10 +851,12 @@ class LimbModule(object):
         cmds.setAttr(f"{fk_end_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{fk_end_aim}.secondaryMode", 1)
 
+        pick_matrix_end_fk = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}FkEnd_PIM", ss=True)
+        cmds.connectAttr(f"{fk_end_aim}.outputMatrix", f"{pick_matrix_end_fk}.inputMatrix")
+        cmds.setAttr(f"{pick_matrix_end_fk}.useTranslate", 0)
 
-        cmds.connectAttr(f"{fk_end_aim}.outputMatrix", f"{fk_end_multMatrix}.matrixIn[2]")
-        cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{fk_end_multMatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{ctl_grp[0]}.worldInverseMatrix[0]", f"{fk_end_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{pick_matrix_end_fk}.outputMatrix", f"{fk_end_multMatrix}.matrixIn[0]")
+        cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{fk_end_multMatrix}.matrixIn[1]")
 
         self.fk_ctls.append(ctl)
         self.fk_grps.append(ctl_grp) 
