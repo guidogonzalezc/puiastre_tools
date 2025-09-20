@@ -687,6 +687,7 @@ class LimbModule(object):
 
         name = self.blend_wm[0].replace("_BLM.outputMatrix", "")
         
+        """        Non-roll setup OLD
         nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
         nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
         nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
@@ -707,6 +708,22 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.blend_wm[0]}", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
         cmds.setAttr(f"{nonRollPick}.useRotate", 0)
+
+        """
+
+        nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
+        nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
+
+        cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollAlign}.inputMatrix")
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{nonRollAlign}.target[0].targetMatrix")
+        cmds.setAttr(f"{nonRollAlign}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{nonRollAlign}.target[0].translateWeight", 0)
+        cmds.setAttr(f"{nonRollAlign}.target[0].shearWeight", 0)
+        
+
+        cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.inputMatrix")
+        cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
+        cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
