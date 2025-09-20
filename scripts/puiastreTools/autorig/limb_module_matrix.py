@@ -713,9 +713,13 @@ class LimbModule(object):
 
         nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
         nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
+        nonRollMasterWalk_mmx = cmds.createNode("multMatrix", name=f"{name}NonRollMasterWalk_MMX", ss=True)
+
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{nonRollMasterWalk_mmx}.matrixIn[0]")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{nonRollMasterWalk_mmx}.matrixIn[1]")
 
         cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollAlign}.inputMatrix")
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{nonRollAlign}.target[0].targetMatrix")
+        cmds.connectAttr(f"{nonRollMasterWalk_mmx}.matrixSum", f"{nonRollAlign}.target[0].targetMatrix")
         cmds.setAttr(f"{nonRollAlign}.target[0].scaleWeight", 0)
         cmds.setAttr(f"{nonRollAlign}.target[0].translateWeight", 0)
         cmds.setAttr(f"{nonRollAlign}.target[0].shearWeight", 0)
