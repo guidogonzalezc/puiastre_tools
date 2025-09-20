@@ -705,7 +705,6 @@ class LimbModule(object):
         cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
 
-        cmds.connectAttr(f"{self.blend_wm[0]}", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
         cmds.setAttr(f"{nonRollPick}.useRotate", 0)
 
@@ -728,6 +727,8 @@ class LimbModule(object):
         cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.inputMatrix")
         cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
         cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+
+        cmds.connectAttr(f"{self.blend_wm[0]}", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
