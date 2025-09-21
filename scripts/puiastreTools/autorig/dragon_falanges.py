@@ -111,9 +111,6 @@ class FalangeModule(object):
                                         }
                                         )
 
-        print(skinning_joints_list)
-
-
     def make(self, guide_name):
 
         self.guides = guide_name

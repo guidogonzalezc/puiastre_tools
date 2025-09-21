@@ -39,19 +39,6 @@
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "L_backLegFrontDistance_GUIDE": {
-            "worldPosition": [
-                78.1631028973885,
-                278.04212709606594,
-                69.2923812866211
-            ],
-            "parent": "L_backKnee_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
         "L_backKnee_GUIDE": {
             "worldPosition": [
                 77.98826355620604,
@@ -91,6 +78,19 @@
             "prefix": "Child",
             "controllerNumber": "Child"
         },
+        "L_backLegFrontDistance_GUIDE": {
+            "worldPosition": [
+                78.1631028973885,
+                278.04212709606594,
+                69.2923812866211
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
         "R_backToe_GUIDE": {
             "worldPosition": [
                 -78.35049806881604,
@@ -122,19 +122,6 @@
                 -77.7783762970589,
                 119.98737418929366,
                 -51.566864823494406
-            ],
-            "parent": "R_backKnee_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_backLegFrontDistance_GUIDE": {
-            "worldPosition": [
-                -78.163,
-                278.04212709606594,
-                69.2923812866211
             ],
             "parent": "R_backKnee_GUIDE",
             "jointTwist": "Child",
@@ -182,6 +169,19 @@
             "prefix": "Child",
             "controllerNumber": "Child"
         },
+        "R_backLegFrontDistance_GUIDE": {
+            "worldPosition": [
+                -78.163,
+                278.04212709606594,
+                69.2923812866211
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
         "C_spine02_GUIDE": {
             "worldPosition": [
                 0.0,
@@ -221,45 +221,6 @@
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_centerHeadDistance_GUIDE": {
-            "worldPosition": [
-                0.0,
-                397.01568603515625,
-                563.7188298399631
-            ],
-            "parent": "C_head_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_leftHeadDistance_GUIDE": {
-            "worldPosition": [
-                34.46964645385742,
-                357.51442465124177,
-                563.7188298399631
-            ],
-            "parent": "C_head_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_rightHeadDistance_GUIDE": {
-            "worldPosition": [
-                -34.47,
-                357.51442465124177,
-                563.7188298399631
-            ],
-            "parent": "C_head_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
         "C_head_GUIDE": {
             "worldPosition": [
                 0.0,
@@ -283,6 +244,45 @@
             "jointTwist": 5.0,
             "type": 1,
             "moduleName": "neck",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
+        "C_centerHeadDistance_GUIDE": {
+            "worldPosition": [
+                0.0,
+                397.01568603515625,
+                563.7188298399631
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
+        "C_leftHeadDistance_GUIDE": {
+            "worldPosition": [
+                34.46964645385742,
+                357.51442465124177,
+                563.7188298399631
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
+        "C_rightHeadDistance_GUIDE": {
+            "worldPosition": [
+                -34.47,
+                357.51442465124177,
+                563.7188298399631
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
@@ -351,19 +351,6 @@
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "L_shoulderFrontDistance_GUIDE": {
-            "worldPosition": [
-                107.9408023239585,
-                331.92034143192734,
-                292.7729715690084
-            ],
-            "parent": "L_shoulder_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
         "L_wrist_GUIDE": {
             "worldPosition": [
                 662.2423206197983,
@@ -394,7 +381,7 @@
             "worldPosition": [
                 107.9408023239585,
                 331.92034143192734,
-                242.53596087999892
+                292.7729715690084
             ],
             "parent": "L_clavicle_GUIDE",
             "jointTwist": "Child",
@@ -426,6 +413,19 @@
             "jointTwist": 5.0,
             "type": "Child",
             "moduleName": "arm",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
+        "L_shoulderFrontDistance_GUIDE": {
+            "worldPosition": [
+                107.9408023239585,
+                331.92034143192734,
+                326.70676309787143
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
@@ -715,24 +715,11 @@
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "R_shoulderFrontDistance_GUIDE": {
-            "worldPosition": [
-                -107.9408023239585,
-                331.92034143192734,
-                292.7729715690084
-            ],
-            "parent": "R_shoulder_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
         "R_shoulder_GUIDE": {
             "worldPosition": [
                 -107.9408023239585,
                 331.92034143192734,
-                242.53596087999892
+                292.7729715690084
             ],
             "parent": "R_clavicle_GUIDE",
             "jointTwist": "Child",
@@ -764,6 +751,19 @@
             "jointTwist": 5.0,
             "type": "Child",
             "moduleName": "arm",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        },
+        "R_shoulderFrontDistance_GUIDE": {
+            "worldPosition": [
+                -107.9408023239585,
+                331.92034143192734,
+                326.70676309787143
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
@@ -988,123 +988,6 @@
             "prefix": "Child",
             "controllerNumber": 4
         },
-        "L_quaternaryMembran03_GUIDE": {
-            "worldPosition": [
-                1444.0759883327764,
-                361.90305680180876,
-                432.1253711915779
-            ],
-            "parent": "L_quaternaryMembran02_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_quaternaryMembran02_GUIDE": {
-            "worldPosition": [
-                1191.837984104252,
-                352.2575893739276,
-                400.6427210818563
-            ],
-            "parent": "L_quaternaryMembran01_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_quaternaryMembran01_GUIDE": {
-            "worldPosition": [
-                867.3479529799682,
-                339.84923705027916,
-                360.14205923581994
-            ],
-            "parent": "L_tertiaryMembran03_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_tertiaryMembran03_GUIDE": {
-            "worldPosition": [
-                1517.8771006853485,
-                357.55058995959206,
-                185.04344605257413
-            ],
-            "parent": "L_tertiaryMembran02_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_tertiaryMembran02_GUIDE": {
-            "worldPosition": [
-                1203.10304341948,
-                348.0227206876258,
-                235.38105458894216
-            ],
-            "parent": "L_tertiaryMembran01_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_tertiaryMembran01_GUIDE": {
-            "worldPosition": [
-                877.23186390857,
-                338.1589535625639,
-                287.49327759101016
-            ],
-            "parent": "L_secondaryMembran03_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_secondaryMembran03_GUIDE": {
-            "worldPosition": [
-                1178.5702081993786,
-                333.8066850004667,
-                -205.2949090425037
-            ],
-            "parent": "L_secondaryMembran02_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_secondaryMembran02_GUIDE": {
-            "worldPosition": [
-                969.9509000144651,
-                333.03200747075664,
-                25.96880821017598
-            ],
-            "parent": "L_secondaryMembran01_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "L_secondaryMembran01_GUIDE": {
-            "worldPosition": [
-                776.1405274753658,
-                331.9262043294319,
-                190.31866915941492
-            ],
-            "parent": "L_primaryMembran04_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
         "L_primaryMembran04_GUIDE": {
             "worldPosition": [
                 591.1934861555435,
@@ -1154,123 +1037,6 @@
             "jointTwist": "Child",
             "type": 1,
             "moduleName": "membran",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_quaternaryMembran03_GUIDE": {
-            "worldPosition": [
-                -1444.0759883327764,
-                361.90305680180876,
-                432.1253711915779
-            ],
-            "parent": "R_quaternaryMembran02_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_quaternaryMembran02_GUIDE": {
-            "worldPosition": [
-                -1191.837984104252,
-                352.2575893739276,
-                400.6427210818563
-            ],
-            "parent": "R_quaternaryMembran01_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_quaternaryMembran01_GUIDE": {
-            "worldPosition": [
-                -867.3479529799682,
-                339.84923705027916,
-                360.14205923581994
-            ],
-            "parent": "R_tertiaryMembran03_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_tertiaryMembran03_GUIDE": {
-            "worldPosition": [
-                -1517.8771006853485,
-                357.55058995959206,
-                185.04344605257413
-            ],
-            "parent": "R_tertiaryMembran02_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_tertiaryMembran02_GUIDE": {
-            "worldPosition": [
-                -1203.10304341948,
-                348.0227206876258,
-                235.38105458894216
-            ],
-            "parent": "R_tertiaryMembran01_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_tertiaryMembran01_GUIDE": {
-            "worldPosition": [
-                -877.23186390857,
-                338.1589535625639,
-                287.49327759101016
-            ],
-            "parent": "R_secondaryMembran03_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_secondaryMembran03_GUIDE": {
-            "worldPosition": [
-                -1178.5702081993786,
-                333.8066850004667,
-                -205.2949090425037
-            ],
-            "parent": "R_secondaryMembran02_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_secondaryMembran02_GUIDE": {
-            "worldPosition": [
-                -969.9509000144651,
-                333.03200747075664,
-                25.96880821017598
-            ],
-            "parent": "R_secondaryMembran01_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "R_secondaryMembran01_GUIDE": {
-            "worldPosition": [
-                -776.1405274753658,
-                331.9262043294319,
-                190.31866915941492
-            ],
-            "parent": "R_primaryMembran04_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },

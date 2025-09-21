@@ -323,7 +323,7 @@ class GuideCreation(object):
                     parent = self.guides_trn
 
                 if "Distance" in joint_name:
-                    parent = self.guides[1]
+                    parent = self.guides_trn
                     
 
                 guide = self.controller_creator(
@@ -469,6 +469,8 @@ class ArmGuideCreation(GuideCreation):
             "shoulderFrontDistance": get_data(f"{self.sides}_shoulderFrontDistance"),
         }
 
+        print(self.position_data.get("shoulderFrontDistance"))
+
 class BackLegGuideCreation(GuideCreation):
     """
     Guide creation for back legs.
@@ -562,15 +564,6 @@ class MemmbranCreation(GuideCreation):
             "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
             "primaryMembran03": get_data(f"{self.sides}_primaryMembran03"),
             "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
-            "secondaryMembran01": get_data(f"{self.sides}_secondaryMembran01"),
-            "secondaryMembran02": get_data(f"{self.sides}_secondaryMembran02"),
-            "secondaryMembran03": get_data(f"{self.sides}_secondaryMembran03"),
-            "tertiaryMembran01": get_data(f"{self.sides}_tertiaryMembran01"),
-            "tertiaryMembran02": get_data(f"{self.sides}_tertiaryMembran02"),
-            "tertiaryMembran03": get_data(f"{self.sides}_tertiaryMembran03"),
-            "quaternaryMembran01": get_data(f"{self.sides}_quaternaryMembran01"),
-            "quaternaryMembran02": get_data(f"{self.sides}_quaternaryMembran02"),
-            "quaternaryMembran03": get_data(f"{self.sides}_quaternaryMembran03"),
         }
 
 
@@ -969,6 +962,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
+# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
 # load_guides()

@@ -1,4 +1,5 @@
 #Python libraries import
+from unicodedata import name
 from maya import cmds
 from importlib import reload
 import maya.api.OpenMaya as om
@@ -35,7 +36,7 @@ class MembraneModule(object):
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
     
-    def number_to_ordinal_word(n):
+    def number_to_ordinal_word(self, n):
         base_ordinal = {
             1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth',
             6: 'sixth', 7: 'seventh', 8: 'eighth', 9: 'ninth', 10: 'tenth',
@@ -82,6 +83,7 @@ class MembraneModule(object):
         self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_membraneModule_GRP", parent=self.modules_grp, ss=True)
         self.individual_controllers_grp = cmds.createNode("transform", name=f"{self.side}_membraneControllers_GRP", parent=self.masterWalk_ctl, ss=True)
         self.skinnging_grp = cmds.createNode("transform", name=f"{self.side}_membraneSkinningJoints_GRP", parent=self.skel_grp, ss=True)
+        cmds.setAttr(f"{self.individual_controllers_grp}.inheritsTransform", 0)
         
         self.primary_aim_vector = om.MVector(AXIS_VECTOR[self.primary_aim])
         self.secondary_aim_vector = om.MVector(AXIS_VECTOR[self.secondary_aim])
@@ -93,30 +95,96 @@ class MembraneModule(object):
 
         cmds.addAttr(self.skinnging_grp, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
-
-        self.main_membrane_guide = [[self.guides[0], self.guides[1]], [self.guides[2], self.guides[3]]]
-        self.secondary_membrane_guides = [self.guides[4 + i:4 + i + 3] for i in range(0, len(self.guides[4:]), 3)]
-
-        for i, list in enumerate(self.secondary_membrane_guides):
-
-            self.secondary_membranes(list, i)
+        self.secondary_membranes()
 
 
 
-    def secondary_membranes(self, guides_list, input):
+    def secondary_membranes(self):
 
         print("Creating secondary membrane")
-        print(guides_list)
-        print(input)
-        print(self.number_to_ordinal_word(input + 1))
-        self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
+
+        input_val = 0
+        skinning_joints = []
+        while True:
+            joint_name = f"{self.side}_{self.number_to_ordinal_word(input_val + 1)}MetacarpalModule"
+            joint = self.data_exporter.get_data(joint_name, "skinning_transform")
+            if joint is None:
+                break
+            skinning_joints.append(joint)
+            input_val += 1
+
+        for i in range(len(skinning_joints)-1):
+            joint_list_one = cmds.listRelatives(skinning_joints[i], children=True, type="joint")
+            joint_list_two = cmds.listRelatives(skinning_joints[i+1], children=True, type="joint")
+
+            if joint_list_one and joint_list_two:
+                len_one = len(joint_list_one)-3
+                split_indices = [len_one // 3, (len_one * 2) // 3, len_one]
+                split_points_one = [joint_list_one[idx - 1] for idx in split_indices if idx > 0 and idx <= len_one]
+                split_points_two = [joint_list_two[idx - 1] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
 
 
+            for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
+                y_axis_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_AMX", ss=True)
+                cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{y_axis_aim}.inputMatrix")
+                cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim}.primaryTargetMatrix")
+                cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim}.secondaryTargetMatrix")
+                cmds.setAttr(f"{y_axis_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+                cmds.setAttr(f"{y_axis_aim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+                cmds.setAttr(f"{y_axis_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+                cmds.setAttr(f"{y_axis_aim}.secondaryMode", 2)
 
+                y_axis_aim_translate = cmds.createNode("blendMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_BMX", ss=True)
+                cmds.connectAttr(f"{y_axis_aim}.outputMatrix", f"{y_axis_aim_translate}.inputMatrix")
+                cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim_translate}.target[0].targetMatrix")
+                cmds.setAttr(f"{y_axis_aim_translate}.target[0].scaleWeight", 0)
+                cmds.setAttr(f"{y_axis_aim_translate}.target[0].translateWeight", 0.5)
+                cmds.setAttr(f"{y_axis_aim_translate}.target[0].rotateWeight", 0)
+                cmds.setAttr(f"{y_axis_aim_translate}.target[0].shearWeight", 0)
 
+                mult_side = 1 if self.side == "L" else -1
 
+                y_axis_aim_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_MMX", ss=True)
+                cmds.setAttr(f"{y_axis_aim_end_pos}.matrixIn[0]",   1, 0, 0, 0, 
+                                                                    0, 1, 0, 0, 
+                                                                    0, 0, 1, 0, 
+                                                                    0, 50*mult_side, 0, 1, type="matrix")
+                cmds.connectAttr(f"{y_axis_aim_translate}.outputMatrix", f"{y_axis_aim_end_pos}.matrixIn[1]")   
 
+                mid_position = cmds.createNode("wtAddMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_WTM", ss=True)
+                cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{mid_position}.wtMatrix[0].matrixIn")
+                cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{mid_position}.wtMatrix[1].matrixIn")
+                cmds.setAttr(f"{mid_position}.wtMatrix[0].weightIn", 0.5)
+                cmds.setAttr(f"{mid_position}.wtMatrix[1].weightIn", 0.5)
 
+                front_offset_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}FrontOffset_MMX", ss=True)
+                cmds.setAttr(f"{front_offset_multMatrix}.matrixIn[0]",   1, 0, 0, 0, 
+                                                                        0, 1, 0, 0,
+                                                                        0, 0, 1, 0,
+                                                                        10, 0, 0, 1, type="matrix")
+                cmds.connectAttr(f"{mid_position}.matrixSum", f"{front_offset_multMatrix}.matrixIn[1]")
+
+                membran_wm_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_end_AMX", ss=True)
+                cmds.connectAttr(f"{mid_position}.matrixSum", f"{membran_wm_aim}.inputMatrix")
+                cmds.connectAttr(f"{front_offset_multMatrix}.matrixSum", f"{membran_wm_aim}.primaryTargetMatrix")
+                cmds.connectAttr(f"{y_axis_aim_end_pos}.matrixSum", f"{membran_wm_aim}.secondaryTargetMatrix")
+
+                cmds.setAttr(f"{membran_wm_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+                cmds.setAttr(f"{membran_wm_aim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+                cmds.setAttr(f"{membran_wm_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+                cmds.setAttr(f"{membran_wm_aim}.secondaryMode", 1)
+
+                ctl, ctl_grp = controller_creator(
+                name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}",
+                suffixes=["GRP", "ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                ro=True,
+                parent=self.individual_controllers_grp,
+                )
+
+                joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                cmds.connectAttr(f"{membran_wm_aim}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
+                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
 # cmds.file(new=True, force=True)
 
