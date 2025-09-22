@@ -1,104 +1,135 @@
 import maya.cmds as cmds
 import json
-import open
+import os
+from biped.utils import data_manager
 import maya.api.OpenMaya as om
-from puiastreTools.utils import guides_manager
-from puiastreTools.utils import data_export
-from importlib import reload
-reload(guides_manager) 
 
-class SkinClusterTool:
 
-    def __init__(self):
+def export_joint_weights_json():
 
-        self.skin_cluster = None
+    answer = cmds.promptDialog(
+                title="INPUT DIALOG",
+                message="INSERT FILE NAME",
+                button=["OK", "Cancel"],    
+                defaultButton="OK",
+                cancelButton="Cancel",
+                dismissString="Cancel")
+    
+    if answer == "Cancel":
+        om.MGlobal.displayInfo("Operation cancelled by user.")
+        return
 
-    def export_skin_cluster(self, skin_cluster_name):
+    CHARACTER_NAME = cmds.promptDialog(query=True, text=True)
 
-        """
-        Exports the skin cluster to a file.
-        :param skin_cluster_name: Name of the skin cluster to export.
-        Select the GEO_GRP, get a joint list and export the skin cluster data to a JSON file.
-        """
+    guides_name = cmds.promptDialog(query=True, text=True)
+
+    # Get selected mesh
+    sel = cmds.ls(sl=True, long=True)
+    if not sel:
+        cmds.error("Please select a skinned mesh first.")
+        return
+
+    mesh = sel[0]
+
+    # Find skinCluster
+    skin_clusters = cmds.ls(cmds.listHistory(mesh), type='skinCluster')
+    if not skin_clusters:
+        cmds.error("No skinCluster found on selected mesh.")
+        return
+
+    sc = skin_clusters[0]
+
+    # Get all influences (joints)
+    influences = cmds.skinCluster(sc, q=True, inf=True)
+
+    vtx_count = cmds.polyEvaluate(mesh, v=True)
+
+    # Build data structure
+    result = {CHARACTER_NAME: {mesh: {sc : {}}}}
+
+    # Initialize joint dictionaries
+    for jnt in influences:
+        result[CHARACTER_NAME][mesh][sc][jnt] = {}
+
+    # Collect weights
+    for i in range(vtx_count):
+        vtx = f"{mesh}.vtx[{i}]"
+        weights = cmds.skinPercent(sc, vtx, q=True, v=True)
+        for jnt, w in zip(influences, weights):
+            if w > 0.0:
+                result[CHARACTER_NAME][mesh][sc][jnt][f"vtx[{i}]"] = w
+
+    # Write JSON
+    complete_path = os.path.realpath(__file__)
+    relative_path = complete_path.split("\scripts")[0]
+    final_path = os.path.join(relative_path, "skin_cluster")
+    path = os.path.join(final_path, f"{CHARACTER_NAME}.weights")
+
+    with open(path, 'w') as f:
+        json.dump(result, f, indent=4)
+
+    print(f"Export complete! Weights saved to: {path}")
+
+def import_joint_weights_json(filePath=None):
+
+    """
+    Import joint weights from a JSON file and apply them to the selected skinned mesh.
+    """
+
+    if not filePath:
         
-        geo_trn = cmds.ls(sl=True, type='transform')
+        complete_path = os.path.realpath(__file__)
+        relative_path = complete_path.split("\scripts")[0]
+        path = os.path.join(relative_path, "skin_cluster")
+        guides_path = os.path.join(path, "guides")
 
-        if not geo_trn:
-
-            om.MGlobal.displayError("Please select a geometry transform node.")
-            return
+        final_path = cmds.fileDialog2(fileMode=1, caption="Select a file", dir=guides_path, fileFilter="*.guides")[0]
+       
+        if not final_path:
+            om.MGlobal.displayError("No file selected.")
+            return None
         
-        skin_cluster_data = {
-            'skin_cluster': skin_cluster_name,
-            'influences': [],
-            'weights': {}
-        }
+    else:
 
-        
-        for msh in cmds.listRelatives(geo_trn, shapes=True, fullPath=True):
+        final_path = os.path.normpath(filePath)[0]
 
-            history = cmds.listHistory(msh, pruneDagObjects=True)
-            skin_cluster = cmds.ls(history, type='skinCluster')
-            joint_list = cmds.skinCluster(skin_cluster, influence=True)
+    if not final_path:
+        om.MGlobal.displayError("No file selected.")
+        return None
+    
+    with open(final_path, 'r') as f:
+        data = json.load(f)
 
+    # Apply weights to the selected mesh
+    sel = cmds.ls(sl=True, long=True)
+    if not sel:
+        cmds.error("Please select a mesh to import weights into first.")
+        return
 
-            for jnt in joint_list:
+    mesh = sel[0]
 
-                weight = cmds.skinPercent(jnt, )
+    if mesh not in data:
+        cmds.error(f"No weight data found for mesh: {mesh}")
+        return
 
+    # Create a new skinCluster if one doesn't exist
+    skin_clusters = cmds.ls(cmds.listHistory(mesh), type='skinCluster') 
+    if not skin_clusters:
+        joints = list(data[mesh].keys())
+        new_joints = []
+        for jnt in joints:
+            if not cmds.objExists(jnt):
+                new_jnt = cmds.createNode('joint', name=jnt)
+                new_joints.append(new_jnt) # Create missing joints in the 0,0,0 position
+            new_joints.append(jnt) # Add existing joints as well
 
+        sc = cmds.skinCluster(new_joints, mesh, toSelectedBones=True)[0]
+    else:
+        sc = skin_clusters[0]
 
-            if not skin_cluster:
+    # Apply weights from JSON data
+    for joint, weights in data[mesh].items():
+        for vtx, weight in weights.items():
+            cmds.skinPercent(sc, f"{mesh}.{vtx}", tv=[(joint, weight)])
 
-                continue
-
-
-
-
-
-            
-
-        
-
-        dialog = cmds.fileDialog2(
-            dialogStyle=2,
-            fileMode=0,
-            caption="Export Skin Cluster",
-            okCaption="Export",
-            fileFilter="JSON Files (*.json)"
-        )
-
-
-    def import_skin_cluster(self, file_path):
-
-        """
-        Imports a skin cluster from a file.
-        :param file_path: Path to the file containing the skin cluster data.
-        """
-
-
-
-        dialog = cmds.fileDialog2(
-            dialogStyle=2,
-            fileMode=1,
-            caption="Import Skin Cluster",
-            okCaption="Import",
-            fileFilter="JSON Files (*.json)"
-        )
-
-        if dialog:
-            file_path = dialog[0]
-
-            if not file_path.endswith('.json'):
-                cmds.warning("Please select a valid JSON file.")
-                return
-            
-            with open(file_path, 'r') as file:
-                data = json.load(file)
-                self.skin_cluster = data.get('skin_cluster', None)
-                if self.skin_cluster:
-                    print(f"Skin cluster '{self.skin_cluster}' imported successfully.")
-                else:
-                    print("No skin cluster data found in the file.")
-
-
+    print(f"Import complete! Weights loaded from: {final_path}")

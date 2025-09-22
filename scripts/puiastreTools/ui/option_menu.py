@@ -6,7 +6,7 @@ from importlib import reload
 from puiastreTools.ui import option_menu
 from puiastreTools.utils import guide_creation 
 from puiastreTools.autorig import rig_builder
-from puiastreTools.utils import curve_tool  
+from puiastreTools.utils import curve_tool 
 
 reload(option_menu)
 reload(guide_creation)

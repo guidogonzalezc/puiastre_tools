@@ -324,14 +324,14 @@ class GuideCreation(object):
 
                 if "Distance" in joint_name:
                     parent = self.guides_trn
-                    
+
 
                 guide = self.controller_creator(
                     f"{side}_{joint_name}",
                     type=type,
                     parent=parent,
                     match=temp_pos,
-                    color=color
+                    color=color,
                 )
 
                 if i == 0:
@@ -446,6 +446,28 @@ def get_data(name, file_name=None):
                 return guide_info.get("worldPosition")
     return [0,0,0]
 
+def get_curve_cvs(curve_name, position):
+     
+    """
+     Get the CVs of a NURBS curve.
+    Args:
+        curve (str): The name of the NURBS curve.
+    """
+
+    curve = cmds.curve(name=curve, shapes=True, fullPath=True) # Create a curve with the input curve_name 
+    cmds.matchTransform(curve, position, pos=True, rot=False, scl=False) # and match it to the position
+    curve_shape = cmds.listRelatives(curve, shapes=True, fullPath=True)[0]
+    num_cvs = cmds.ls(f"{curve_shape}.cv[*]", flatten=True) # Get every CV of the curve
+    num_cvs = len(num_cvs)
+    ditc = {}
+    for i in range(num_cvs):
+        pos = cmds.xform(f"{curve_shape}.cv[{i}]", query=True, translation=True, worldSpace=True)
+        name = f"{curve_name}0{i+1}"
+        ditc.update({name : pos}) # Add the CV position to the dictionary with the name as key
+
+    cmds.delete(curve) # Delete the curve for the final scene.
+     
+    return ditc # Return the dictionary with the CV positions and the name of the GUIDES
 
 
 class ArmGuideCreation(GuideCreation):
@@ -665,6 +687,36 @@ class JiggleJoint(GuideCreation):
 
         }
         self.position_data.update(position_data)
+
+
+class EyeGuideCreation(GuideCreation):
+    """
+    Guide creation for eyebrow.
+    """
+
+    def __init__(self, side = "L"):
+        self.sides = side
+        self.type = None
+        self.limb_name = "eye"
+        self.aim_name = None
+        self.prefix = None
+        self.controller_number = None
+
+        eye_up_pos = get_data(f"{self.sides}_eyeUp") # Import each curve as guide from the template file.
+        eye_down_pos = get_data(f"{self.sides}_eyeDown")
+        eye_blink_pos = get_data(f"{self.sides}_eyeBlink")
+        eye_up_blink_pos = get_data(f"{self.sides}_eyeUpBlink")
+        eye_down_blink_pos = get_data(f"{self.sides}_eyeDownBlink")
+        curve_pos = [eye_up_pos, eye_down_pos, eye_blink_pos, eye_up_blink_pos, eye_down_blink_pos] # Put them all in a list.
+
+        for i, curve in enumerate([f"{self.sides}_eyeUp", f"{self.sides}_eyeDown", f"{self.sides}_eyeBlink", f"{self.sides}_eyeUpBlink", f"{self.sides}_eyeDownBlink"]):
+            curve_cvs = get_curve_cvs(curve, curve_pos[i]) # Create a curve with the name, match it to the position from the template file, create a guide for each CV and store the position in a dictionary.
+            for j, (name, pos) in enumerate(curve_cvs.items()):
+                self.position_data = {
+                    f"{self.sides}_{name}0{j+1}": pos,
+                }
+            
+
 
 def dragon_rebuild_guides():
     """
@@ -962,9 +1014,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
-# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
+# # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
 # load_guides()
 
-# guides_export()
+guides_export()
