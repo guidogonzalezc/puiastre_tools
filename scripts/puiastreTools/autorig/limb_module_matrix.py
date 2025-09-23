@@ -710,6 +710,12 @@ class LimbModule(object):
 
         """
 
+        nonRollSpace = cmds.createNode("blendMatrix", name=f"{name}NonRollSpace_BLM", ss=True)
+
+        cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollSpace}.inputMatrix")
+        cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollSpace}.target[0].targetMatrix")
+        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollSpace}.target[0].weight")
+
         nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
         nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
         nonRollMasterWalk_mmx = cmds.createNode("multMatrix", name=f"{name}NonRollMasterWalk_MMX", ss=True)
@@ -718,7 +724,7 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{nonRollMasterWalk_mmx}.matrixIn[1]")
 
         cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollAlign}.inputMatrix")
-        cmds.connectAttr(f"{nonRollMasterWalk_mmx}.matrixSum", f"{nonRollAlign}.target[0].targetMatrix")
+        cmds.connectAttr(f"{nonRollSpace}.outputMatrix", f"{nonRollAlign}.target[0].targetMatrix")
         cmds.setAttr(f"{nonRollAlign}.target[0].scaleWeight", 0)
         cmds.setAttr(f"{nonRollAlign}.target[0].translateWeight", 0)
         cmds.setAttr(f"{nonRollAlign}.target[0].shearWeight", 0)
