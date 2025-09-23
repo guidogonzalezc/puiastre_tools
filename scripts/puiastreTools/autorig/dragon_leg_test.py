@@ -1076,10 +1076,10 @@ class BackLegModule(LimbModule):
         )
 
 
-cmds.file(new=True, force=True)
+# cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_002.guides")
-core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_002.guides")
+# core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
-basic_structure.create_basic_structure()
-a = BackLegModule("L_hip_GUIDE").make()
+# basic_structure.create_basic_structure()
+# a = BackLegModule("L_hip_GUIDE").make()

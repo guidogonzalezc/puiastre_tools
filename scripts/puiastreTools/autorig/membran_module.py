@@ -97,11 +97,16 @@ class MembraneModule(object):
 
         self.secondary_membranes()
 
+        self.data_exporter.append_data(
+            f"{self.side}_membraneModule",
+            {
+                "skinning_transform": self.skinnging_grp,
+            }
+        )
+
 
 
     def secondary_membranes(self):
-
-        print("Creating secondary membrane")
 
         input_val = 0
         skinning_joints = []
@@ -118,12 +123,17 @@ class MembraneModule(object):
             joint_list_two = cmds.listRelatives(skinning_joints[i+1], children=True, type="joint")
 
             if joint_list_one and joint_list_two:
-                len_one = len(joint_list_one)-3
-                split_indices = [len_one // 3, (len_one * 2) // 3, len_one]
-                split_points_one = [joint_list_one[idx - 1] for idx in split_indices if idx > 0 and idx <= len_one]
-                split_points_two = [joint_list_two[idx - 1] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
+                len_one = len(joint_list_one)
+                # Split into 4 indices: 1 (first), equally spaced, and len_one-1 (last)
+                split_indices = [
+                    1,
+                    len_one // 2,
+                    len_one - 1
+                ]
+                split_points_one = [joint_list_one[idx] for idx in split_indices if idx > 0 and idx <= len_one]
+                split_points_two = [joint_list_two[idx] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
 
-
+            ctls = []
             for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
                 y_axis_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_AMX", ss=True)
                 cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{y_axis_aim}.inputMatrix")
@@ -181,10 +191,26 @@ class MembraneModule(object):
                 ro=True,
                 parent=self.individual_controllers_grp,
                 )
+                ctls.append(ctl)
 
-                joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
-                cmds.connectAttr(f"{membran_wm_aim}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
-                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+                pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_PMX", ss=True)
+
+                cmds.connectAttr(f"{membran_wm_aim}.outputMatrix", f"{pick_matrix}.inputMatrix")
+                cmds.setAttr(f"{pick_matrix}.useScale", 0)
+                cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
+
+
+            self.joints = de_boors_002.de_boor_ribbon(
+                aim_axis=self.primary_aim,
+                up_axis=self.secondary_aim,
+                cvs=ctls,
+                num_joints=20,
+                name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran",
+                parent=self.skinnging_grp
+            )
+
+                # joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                # cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
 # cmds.file(new=True, force=True)
 

@@ -167,7 +167,7 @@ def build_complete_hierarchy():
         if i != spine_index:
             if "Leg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0]:
                 parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
-            elif "Metacarpal" in skinning_joint_list[0]:
+            elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0]:
                 pass
             else:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
@@ -177,12 +177,33 @@ def build_complete_hierarchy():
     hand_settings_value = None
 
     for i, skinning_joint_list in enumerate(skinning_joints):
-
-        if "Metacarpal" in skinning_joint_list[0]:
+        if "Finger" in skinning_joint_list[0]:
             side = skinning_joint_list[0].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
             parent_joint = next((j for j in arm_joints if side in j), None)
             parented_chain(skinning_joints=skinning_joint_list, parent=parent_joint, hand_value=False)
+
+        if "Membran" in skinning_joint_list[0]:
+            side = skinning_joint_list[0].split("_")[0]
+            index = l_arm_index if side == "L" else r_arm_index
+            parent_joint = next((j for j in arm_joints if side in j), None)
+            membrane_groups = []
+            current_group = []
+
+            for joint in skinning_joint_list:
+                if "00_JNT" in joint:
+                    membrane_groups.append(current_group)
+                    current_group = []
+                current_group.append(joint)
+
+                if joint == skinning_joint_list[-1]:
+                    membrane_groups.append(current_group)
+
+            for joint_list in membrane_groups:
+                if joint_list:
+                    print(joint_list, parent_joint)
+                    parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
+
 
         # ===== SPACE SWITCHES ===== #
         if "Leg" in skel_grps[i]:

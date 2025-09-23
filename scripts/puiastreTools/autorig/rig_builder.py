@@ -100,8 +100,8 @@ def make(asset_name="dragon"):
     basic_structure.create_basic_structure(asset_name=asset_name)
 
     final_path = core.DataManager.get_guide_data()
-    # core.DataManager.set_asset_name("Dragon")
-    # core.DataManager.set_mesh_data("Puiastre")
+    core.DataManager.set_asset_name("Dragon")
+    core.DataManager.set_mesh_data("Puiastre")
 
     try:
         with open(final_path, "r") as infile:

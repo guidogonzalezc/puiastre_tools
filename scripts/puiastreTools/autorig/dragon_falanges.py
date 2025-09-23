@@ -641,7 +641,19 @@ class FalangeModule(object):
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
 
-        self.bendys()
+        # Remove any kind of numbers from the name string
+        clean_name = ''.join([c for c in f"{self.side}_{self.names[i]}" if not c.isdigit()])
+        self.joints = de_boors_002.de_boor_ribbon(
+            aim_axis=self.primary_aim,
+            up_axis=self.secondary_aim,
+            cvs=self.blend_wm,
+            num_joints=20,
+            name=clean_name,
+            parent=self.skinnging_grp
+        )
+
+
+        # self.bendys()
 
     def get_offset_matrix(self, child, parent):
         """

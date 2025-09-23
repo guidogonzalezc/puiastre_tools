@@ -11,7 +11,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -70,11 +70,11 @@
                 }
             },
             {
-                "name": "C_body_CTLShape10",
+                "name": "C_body_CTLShape13",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -133,11 +133,11 @@
                 }
             },
             {
-                "name": "C_body_CTLShape11",
+                "name": "C_body_CTLShape14",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -196,11 +196,11 @@
                 }
             },
             {
-                "name": "C_body_CTLShape12",
+                "name": "C_body_CTLShape15",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -272,7 +272,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -364,7 +364,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -502,7 +502,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -640,7 +640,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -732,7 +732,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -870,7 +870,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -949,11 +949,11 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape10",
+                "name": "C_localHip_CTLShape13",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1032,11 +1032,11 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape11",
+                "name": "C_localHip_CTLShape14",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1115,11 +1115,11 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape12",
+                "name": "C_localHip_CTLShape15",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1211,7 +1211,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1303,7 +1303,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1382,11 +1382,11 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape7",
+                "name": "C_movablePivot_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1465,11 +1465,11 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape8",
+                "name": "C_movablePivot_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1561,7 +1561,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1653,7 +1653,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1745,7 +1745,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1885,7 +1885,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -1977,7 +1977,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -2069,7 +2069,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -2161,7 +2161,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -2301,7 +2301,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -2658,7 +2658,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -2832,7 +2832,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -2924,7 +2924,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3016,7 +3016,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3108,7 +3108,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3200,7 +3200,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3292,7 +3292,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3384,7 +3384,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3476,7 +3476,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3616,7 +3616,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3756,7 +3756,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -3896,7 +3896,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4036,7 +4036,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4176,7 +4176,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4316,7 +4316,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4456,7 +4456,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4594,7 +4594,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4674,6 +4674,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_armControllers_GRP|L_armIkControllers_GRP|L_armPVLocator_CTL": {
+        "transform": {
+            "name": "L_armPVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "L_armPVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            330.5862121582031,
+                            331.92034912109375,
+                            -171.69462585449224
+                        ],
+                        [
+                            337.84256390522063,
+                            331.92034143192734,
+                            149.65260894602287
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_armControllers_GRP|L_armIkControllers_GRP|L_armPV_GRP|L_armPV_ANM|L_armPV_CTL": {
         "transform": {
             "name": "L_armPV_CTL",
@@ -4686,7 +4722,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -4824,7 +4860,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -5154,7 +5190,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -5751,7 +5787,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -5987,7 +6023,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6079,7 +6115,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6171,7 +6207,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6263,7 +6299,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6475,7 +6511,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6567,7 +6603,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6659,7 +6695,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6751,7 +6787,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6831,6 +6867,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_backLegControllers_GRP|L_backLegIkControllers_GRP|L_backLegPVLocator_CTL": {
+        "transform": {
+            "name": "L_backLegPVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "L_backLegPVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            77.29486083984375,
+                            144.7220458984375,
+                            116.72584533691406
+                        ],
+                        [
+                            77.98826700236884,
+                            177.88342814401415,
+                            23.58328258437428
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_backLegControllers_GRP|L_backLegIkControllers_GRP|L_backLegPV_GRP|L_backLegPV_ANM|L_backLegPV_CTL": {
         "transform": {
             "name": "L_backLegPV_CTL",
@@ -6843,7 +6915,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -6963,7 +7035,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -7293,7 +7365,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -7890,7 +7962,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -8126,7 +8198,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -8218,7 +8290,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -8328,7 +8400,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -9060,7 +9132,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -9792,7 +9864,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -10524,7 +10596,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -10616,7 +10688,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -10754,7 +10826,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -10846,7 +10918,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -10966,7 +11038,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11104,7 +11176,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11242,7 +11314,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11322,6 +11394,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkControllers_GRP|L_firstFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "L_firstFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "L_firstFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            751.213619008661,
+                            903.966634065465,
+                            20.88419423400137
+                        ],
+                        [
+                            751.2136190086609,
+                            331.92034143192757,
+                            20.884194234001257
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalWMAttachedFk_GRP|L_firstMetacarpalWMAttachedFk_ANM|L_firstMetacarpalWMAttachedFk_CTL|L_firstFinger01WMAttachedFk_GRP|L_firstFinger01WMAttachedFk_ANM|L_firstFinger01WMAttachedFk_CTL|L_firstFinger02WMAttachedFk_GRP|L_firstFinger02WMAttachedFk_ANM|L_firstFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "L_firstFinger02WMAttachedFk_CTL",
@@ -11334,7 +11442,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11472,7 +11580,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11610,7 +11718,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11736,7 +11844,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -11862,6 +11970,336 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_firstMembran01_GRP|L_firstMembran01_ANM|L_firstMembran01_CTL": {
+        "transform": {
+            "name": "L_firstMembran01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_firstMembran01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            9.4867752329983e-19,
+                            -3.470491853551499e-14,
+                            9.163200193464163e-14
+                        ],
+                        [
+                            -2.289141495318627e-05,
+                            28.93995307303875,
+                            -3.076862754669156e-12
+                        ],
+                        [
+                            -2.289141495318627e-05,
+                            28.93995307303875,
+                            -3.076862754669156e-12
+                        ],
+                        [
+                            -2.289141495318627e-05,
+                            28.93995307303875,
+                            -3.076862754669156e-12
+                        ],
+                        [
+                            -2.289141495319187e-05,
+                            28.923719452706,
+                            5.888597309879113
+                        ],
+                        [
+                            -2.289141495319187e-05,
+                            28.923719452706,
+                            5.888597309879113
+                        ],
+                        [
+                            -3.120443229344216e-05,
+                            39.433263411180214,
+                            5.888597309877949
+                        ],
+                        [
+                            -3.120443229344216e-05,
+                            39.433263411180214,
+                            5.888597309877949
+                        ],
+                        [
+                            -3.120443229343098e-05,
+                            39.46573065184569,
+                            -5.888597309886493
+                        ],
+                        [
+                            -3.120443229343098e-05,
+                            39.46573065184569,
+                            -5.888597309886493
+                        ],
+                        [
+                            -2.2891414953180833e-05,
+                            28.95618669337149,
+                            -5.888597309885335
+                        ],
+                        [
+                            -2.2891414953180833e-05,
+                            28.95618669337149,
+                            -5.888597309885335
+                        ],
+                        [
+                            -2.289141495318627e-05,
+                            28.93995307303875,
+                            -3.076862754669156e-12
+                        ],
+                        [
+                            -2.289141495318627e-05,
+                            28.93995307303875,
+                            -3.076862754669156e-12
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_firstMembran02_GRP|L_firstMembran02_ANM|L_firstMembran02_CTL": {
+        "transform": {
+            "name": "L_firstMembran02_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_firstMembran02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1.1368715751637337e-13,
+                            6.95542703009705e-14,
+                            3.3130918796261456e-13
+                        ],
+                        [
+                            -2.2891701948327577e-05,
+                            28.93995309595531,
+                            5.398542220230172e-07
+                        ],
+                        [
+                            -2.2891701948327577e-05,
+                            28.93995309595531,
+                            5.398542220230172e-07
+                        ],
+                        [
+                            -2.2891701948327577e-05,
+                            28.93995309595531,
+                            5.398542220230172e-07
+                        ],
+                        [
+                            -2.2891701035854514e-05,
+                            28.931350815654174,
+                            5.88874520299332
+                        ],
+                        [
+                            -2.2891701035854514e-05,
+                            28.931350815654174,
+                            5.88874520299332
+                        ],
+                        [
+                            -3.120482263967516e-05,
+                            39.440894782450385,
+                            5.888745399041254
+                        ],
+                        [
+                            -3.120482263967516e-05,
+                            39.440894782450385,
+                            5.888745399041254
+                        ],
+                        [
+                            -3.120482446462124e-05,
+                            39.458099343052666,
+                            -5.888743927237017
+                        ],
+                        [
+                            -3.120482446462124e-05,
+                            39.458099343052666,
+                            -5.888743927237017
+                        ],
+                        [
+                            -2.289170286080057e-05,
+                            28.94855537625645,
+                            -5.888744123284958
+                        ],
+                        [
+                            -2.289170286080057e-05,
+                            28.94855537625645,
+                            -5.888744123284958
+                        ],
+                        [
+                            -2.2891701948327577e-05,
+                            28.93995309595531,
+                            5.398542220230172e-07
+                        ],
+                        [
+                            -2.2891701948327577e-05,
+                            28.93995309595531,
+                            5.398542220230172e-07
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_firstMembran03_GRP|L_firstMembran03_ANM|L_firstMembran03_CTL": {
+        "transform": {
+            "name": "L_firstMembran03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_firstMembran03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -2.2737334253192135e-13,
+                            1.8628931966568153e-13,
+                            2.299236943111232e-13
+                        ],
+                        [
+                            -2.289177117254886e-05,
+                            28.939953073040005,
+                            2.7761439152903447e-13
+                        ],
+                        [
+                            -2.289177117254886e-05,
+                            28.939953073040005,
+                            2.7761439152903447e-13
+                        ],
+                        [
+                            -2.289177117254886e-05,
+                            28.939953073040005,
+                            2.7761439152903447e-13
+                        ],
+                        [
+                            -2.2891771172548798e-05,
+                            28.934666831814088,
+                            5.888780462364242
+                        ],
+                        [
+                            -2.2891771172548798e-05,
+                            28.934666831814088,
+                            5.888780462364242
+                        ],
+                        [
+                            -3.1204917791289346e-05,
+                            39.44421079028846,
+                            5.888780462364246
+                        ],
+                        [
+                            -3.1204917791289346e-05,
+                            39.44421079028846,
+                            5.888780462364246
+                        ],
+                        [
+                            -3.120491779128944e-05,
+                            39.45478327274024,
+                            -5.88878046236374
+                        ],
+                        [
+                            -3.120491779128944e-05,
+                            39.45478327274024,
+                            -5.88878046236374
+                        ],
+                        [
+                            -2.2891771172548825e-05,
+                            28.945239314265912,
+                            -5.888780462363752
+                        ],
+                        [
+                            -2.2891771172548825e-05,
+                            28.945239314265912,
+                            -5.888780462363752
+                        ],
+                        [
+                            -2.289177117254886e-05,
+                            28.939953073040005,
+                            2.7761439152903447e-13
+                        ],
+                        [
+                            -2.289177117254886e-05,
+                            28.939953073040005,
+                            2.7761439152903447e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalFk_GRP|L_firstMetacarpalFk_ANM|L_firstMetacarpalFk_CTL": {
         "transform": {
             "name": "L_firstMetacarpalFk_CTL",
@@ -11874,7 +12312,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12012,7 +12450,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12152,7 +12590,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12244,7 +12682,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12382,7 +12820,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12520,7 +12958,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12612,7 +13050,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12732,7 +13170,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -12870,7 +13308,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13008,7 +13446,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13088,6 +13526,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkControllers_GRP|L_fourthFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "L_fourthFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "L_fourthFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            951.2573506053278,
+                            832.0286258531975,
+                            427.343066020882
+                        ],
+                        [
+                            951.0073340817648,
+                            331.7886018351168,
+                            427.2598880361784
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalWMAttachedFk_GRP|L_fourthMetacarpalWMAttachedFk_ANM|L_fourthMetacarpalWMAttachedFk_CTL|L_fourthFinger01WMAttachedFk_GRP|L_fourthFinger01WMAttachedFk_ANM|L_fourthFinger01WMAttachedFk_CTL|L_fourthFinger02WMAttachedFk_GRP|L_fourthFinger02WMAttachedFk_ANM|L_fourthFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "L_fourthFinger02WMAttachedFk_CTL",
@@ -13100,7 +13574,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13238,7 +13712,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13376,7 +13850,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13502,7 +13976,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13640,7 +14114,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13778,7 +14252,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -13918,7 +14392,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -14010,7 +14484,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -14148,7 +14622,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -14453,11 +14927,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape22",
+                "name": "L_hand_CTLShape29",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -14714,11 +15188,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape23",
+                "name": "L_hand_CTLShape30",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -15023,11 +15497,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape24",
+                "name": "L_hand_CTLShape31",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -15380,11 +15854,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape25",
+                "name": "L_hand_CTLShape32",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -16265,11 +16739,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape26",
+                "name": "L_hand_CTLShape33",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -16526,11 +17000,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape27",
+                "name": "L_hand_CTLShape34",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -16787,11 +17261,11 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape28",
+                "name": "L_hand_CTLShape35",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -17109,7 +17583,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -17841,7 +18315,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -17933,7 +18407,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18016,7 +18490,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18052,7 +18526,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18190,7 +18664,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18282,7 +18756,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18402,7 +18876,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18540,7 +19014,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18678,7 +19152,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18758,6 +19232,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkControllers_GRP|L_secondFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "L_secondFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "L_secondFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1007.1585671740419,
+                            982.5813824071685,
+                            200.42082829056739
+                        ],
+                        [
+                            1007.1585671740415,
+                            334.64332431769645,
+                            200.4208282905674
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalWMAttachedFk_GRP|L_secondMetacarpalWMAttachedFk_ANM|L_secondMetacarpalWMAttachedFk_CTL|L_secondFinger01WMAttachedFk_GRP|L_secondFinger01WMAttachedFk_ANM|L_secondFinger01WMAttachedFk_CTL|L_secondFinger02WMAttachedFk_GRP|L_secondFinger02WMAttachedFk_ANM|L_secondFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "L_secondFinger02WMAttachedFk_CTL",
@@ -18770,7 +19280,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -18908,7 +19418,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19046,7 +19556,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19172,7 +19682,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19298,6 +19808,336 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_secondMembran01_GRP|L_secondMembran01_ANM|L_secondMembran01_CTL": {
+        "transform": {
+            "name": "L_secondMembran01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_secondMembran01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1.1368778167211876e-13,
+                            7.430403334241523e-14,
+                            2.0133583032068388e-13
+                        ],
+                        [
+                            -2.0531758297503823e-05,
+                            28.93995307303928,
+                            -4.2662947406701446e-13
+                        ],
+                        [
+                            -2.0531758297503823e-05,
+                            28.93995307303928,
+                            -4.2662947406701446e-13
+                        ],
+                        [
+                            -2.0531758297503823e-05,
+                            28.93995307303928,
+                            -4.2662947406701446e-13
+                        ],
+                        [
+                            -2.0531758297504274e-05,
+                            28.94391802631875,
+                            5.28163786483377
+                        ],
+                        [
+                            -2.0531758297504274e-05,
+                            28.94391802631875,
+                            5.28163786483377
+                        ],
+                        [
+                            -2.798786636452864e-05,
+                            39.453461984792895,
+                            5.281637864833539
+                        ],
+                        [
+                            -2.798786636452864e-05,
+                            39.453461984792895,
+                            5.281637864833539
+                        ],
+                        [
+                            -2.7987866364527677e-05,
+                            39.445532078233946,
+                            -5.281637864834921
+                        ],
+                        [
+                            -2.7987866364527677e-05,
+                            39.445532078233946,
+                            -5.281637864834921
+                        ],
+                        [
+                            -2.0531758297503278e-05,
+                            28.93598811975979,
+                            -5.281637864834697
+                        ],
+                        [
+                            -2.0531758297503278e-05,
+                            28.93598811975979,
+                            -5.281637864834697
+                        ],
+                        [
+                            -2.0531758297503823e-05,
+                            28.93995307303928,
+                            -4.2662947406701446e-13
+                        ],
+                        [
+                            -2.0531758297503823e-05,
+                            28.93995307303928,
+                            -4.2662947406701446e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_secondMembran02_GRP|L_secondMembran02_ANM|L_secondMembran02_CTL": {
+        "transform": {
+            "name": "L_secondMembran02_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_secondMembran02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -2.2737386143947375e-13,
+                            -1.5532909743695426e-13,
+                            1.9518896668776195e-13
+                        ],
+                        [
+                            -2.0531897514413315e-05,
+                            28.939953073038907,
+                            -3.735634177484191e-13
+                        ],
+                        [
+                            -2.0531897514413315e-05,
+                            28.939953073038907,
+                            -3.735634177484191e-13
+                        ],
+                        [
+                            -2.0531897514413315e-05,
+                            28.939953073038907,
+                            -3.735634177484191e-13
+                        ],
+                        [
+                            -2.0531897514413877e-05,
+                            28.9421843622753,
+                            5.281709314575683
+                        ],
+                        [
+                            -2.0531897514413877e-05,
+                            28.9421843622753,
+                            5.281709314575683
+                        ],
+                        [
+                            -2.7988056014202483e-05,
+                            39.45172832074936,
+                            5.281709314575475
+                        ],
+                        [
+                            -2.7988056014202483e-05,
+                            39.45172832074936,
+                            5.281709314575475
+                        ],
+                        [
+                            -2.7988056014201195e-05,
+                            39.44726574227657,
+                            -5.281709314576715
+                        ],
+                        [
+                            -2.7988056014201195e-05,
+                            39.44726574227657,
+                            -5.281709314576715
+                        ],
+                        [
+                            -2.0531897514412586e-05,
+                            28.9377217838025,
+                            -5.2817093145765135
+                        ],
+                        [
+                            -2.0531897514412586e-05,
+                            28.9377217838025,
+                            -5.2817093145765135
+                        ],
+                        [
+                            -2.0531897514413315e-05,
+                            28.939953073038907,
+                            -3.735634177484191e-13
+                        ],
+                        [
+                            -2.0531897514413315e-05,
+                            28.939953073038907,
+                            -3.735634177484191e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_secondMembran03_GRP|L_secondMembran03_ANM|L_secondMembran03_CTL": {
+        "transform": {
+            "name": "L_secondMembran03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_secondMembran03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            6.4385985572710815e-19,
+                            9.709184650374622e-14,
+                            1.3834628368182506e-13
+                        ],
+                        [
+                            -2.0531935989233223e-05,
+                            28.939953073039604,
+                            -4.2520887103771754e-13
+                        ],
+                        [
+                            -2.0531935989233223e-05,
+                            28.939953073039604,
+                            -4.2520887103771754e-13
+                        ],
+                        [
+                            -2.0531935989233223e-05,
+                            28.939953073039604,
+                            -4.2520887103771754e-13
+                        ],
+                        [
+                            -2.053193598923383e-05,
+                            28.94136132065855,
+                            5.281729226416047
+                        ],
+                        [
+                            -2.053193598923383e-05,
+                            28.94136132065855,
+                            5.281729226416047
+                        ],
+                        [
+                            -2.7988108543724394e-05,
+                            39.45090527913306,
+                            5.281729226415839
+                        ],
+                        [
+                            -2.7988108543724394e-05,
+                            39.45090527913306,
+                            5.281729226415839
+                        ],
+                        [
+                            -2.7988108543723062e-05,
+                            39.448088783895166,
+                            -5.281729226417179
+                        ],
+                        [
+                            -2.7988108543723062e-05,
+                            39.448088783895166,
+                            -5.281729226417179
+                        ],
+                        [
+                            -2.0531935989232528e-05,
+                            28.938544825420625,
+                            -5.281729226416978
+                        ],
+                        [
+                            -2.0531935989232528e-05,
+                            28.938544825420625,
+                            -5.281729226416978
+                        ],
+                        [
+                            -2.0531935989233223e-05,
+                            28.939953073039604,
+                            -4.2520887103771754e-13
+                        ],
+                        [
+                            -2.0531935989233223e-05,
+                            28.939953073039604,
+                            -4.2520887103771754e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalFk_GRP|L_secondMetacarpalFk_ANM|L_secondMetacarpalFk_CTL": {
         "transform": {
             "name": "L_secondMetacarpalFk_CTL",
@@ -19310,7 +20150,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19448,7 +20288,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19588,7 +20428,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19680,7 +20520,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -19818,7 +20658,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20030,7 +20870,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20168,7 +21008,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20260,7 +21100,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20380,7 +21220,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20518,7 +21358,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20656,7 +21496,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20736,6 +21576,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkControllers_GRP|L_thirdFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "L_thirdFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "L_thirdFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1032.655690151987,
+                            975.4698304370992,
+                            329.7190748383737
+                        ],
+                        [
+                            1032.655690151987,
+                            331.92034143192757,
+                            329.719074838374
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalWMAttachedFk_GRP|L_thirdMetacarpalWMAttachedFk_ANM|L_thirdMetacarpalWMAttachedFk_CTL|L_thirdFinger01WMAttachedFk_GRP|L_thirdFinger01WMAttachedFk_ANM|L_thirdFinger01WMAttachedFk_CTL|L_thirdFinger02WMAttachedFk_GRP|L_thirdFinger02WMAttachedFk_ANM|L_thirdFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "L_thirdFinger02WMAttachedFk_CTL",
@@ -20748,7 +21624,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -20886,7 +21762,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21024,7 +21900,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21150,7 +22026,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21276,6 +22152,336 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_thirdMembran01_GRP|L_thirdMembran01_ANM|L_thirdMembran01_CTL": {
+        "transform": {
+            "name": "L_thirdMembran01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_thirdMembran01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1.1368777140464805e-13,
+                            1.8641293969050094e-14,
+                            1.9155874250082555e-13
+                        ],
+                        [
+                            -2.0471647400358153e-05,
+                            28.93995307303962,
+                            1.6680626201411632e-13
+                        ],
+                        [
+                            -2.0471647400358153e-05,
+                            28.93995307303962,
+                            1.6680626201411632e-13
+                        ],
+                        [
+                            -2.0471647400358153e-05,
+                            28.93995307303962,
+                            1.6680626201411632e-13
+                        ],
+                        [
+                            -2.047164712313448e-05,
+                            28.939847805859692,
+                            5.266686961476366
+                        ],
+                        [
+                            -2.047164712313448e-05,
+                            28.939847805859692,
+                            5.266686961476366
+                        ],
+                        [
+                            -2.7905925917860302e-05,
+                            39.44939176433405,
+                            5.2666869614763625
+                        ],
+                        [
+                            -2.7905925917860302e-05,
+                            39.44939176433405,
+                            5.2666869614763625
+                        ],
+                        [
+                            -2.7905926472307558e-05,
+                            39.44960229869386,
+                            -5.266686961476121
+                        ],
+                        [
+                            -2.7905926472307558e-05,
+                            39.44960229869386,
+                            -5.266686961476121
+                        ],
+                        [
+                            -2.0471647677581856e-05,
+                            28.940058340219554,
+                            -5.266686961476124
+                        ],
+                        [
+                            -2.0471647677581856e-05,
+                            28.940058340219554,
+                            -5.266686961476124
+                        ],
+                        [
+                            -2.0471647400358153e-05,
+                            28.93995307303962,
+                            1.6680626201411632e-13
+                        ],
+                        [
+                            -2.0471647400358153e-05,
+                            28.93995307303962,
+                            1.6680626201411632e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_thirdMembran02_GRP|L_thirdMembran02_ANM|L_thirdMembran02_CTL": {
+        "transform": {
+            "name": "L_thirdMembran02_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_thirdMembran02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            2.2737496789312036e-13,
+                            3.3870435405147384e-13,
+                            2.230555156227847e-13
+                        ],
+                        [
+                            -2.0471647155683752e-05,
+                            28.939953073039767,
+                            2.2805113179351887e-13
+                        ],
+                        [
+                            -2.0471647155683752e-05,
+                            28.939953073039767,
+                            2.2805113179351887e-13
+                        ],
+                        [
+                            -2.0471647155683752e-05,
+                            28.939953073039767,
+                            2.2805113179351887e-13
+                        ],
+                        [
+                            -2.0471646887239146e-05,
+                            28.93985143531279,
+                            5.26668696772295
+                        ],
+                        [
+                            -2.0471646887239146e-05,
+                            28.93985143531279,
+                            5.26668696772295
+                        ],
+                        [
+                            -2.7905925634396878e-05,
+                            39.449395393787135,
+                            5.2666869677229435
+                        ],
+                        [
+                            -2.7905925634396878e-05,
+                            39.449395393787135,
+                            5.2666869677229435
+                        ],
+                        [
+                            -2.7905926171286272e-05,
+                            39.449598669241034,
+                            -5.266686967722567
+                        ],
+                        [
+                            -2.7905926171286272e-05,
+                            39.449598669241034,
+                            -5.266686967722567
+                        ],
+                        [
+                            -2.0471647424128463e-05,
+                            28.940054710766724,
+                            -5.266686967722567
+                        ],
+                        [
+                            -2.0471647424128463e-05,
+                            28.940054710766724,
+                            -5.266686967722567
+                        ],
+                        [
+                            -2.0471647155683752e-05,
+                            28.939953073039767,
+                            2.2805113179351887e-13
+                        ],
+                        [
+                            -2.0471647155683752e-05,
+                            28.939953073039767,
+                            2.2805113179351887e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_thirdMembran03_GRP|L_thirdMembran03_ANM|L_thirdMembran03_CTL": {
+        "transform": {
+            "name": "L_thirdMembran03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 29
+        },
+        "shapes": [
+            {
+                "name": "L_thirdMembran03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            2.2737440027055297e-13,
+                            -9.262387829852848e-14,
+                            3.1447077092226546e-13
+                        ],
+                        [
+                            -2.0471647229444662e-05,
+                            28.93995307303935,
+                            2.956908654708189e-13
+                        ],
+                        [
+                            -2.0471647229444662e-05,
+                            28.93995307303935,
+                            2.956908654708189e-13
+                        ],
+                        [
+                            -2.0471647229444662e-05,
+                            28.93995307303935,
+                            2.956908654708189e-13
+                        ],
+                        [
+                            -2.0471646962847855e-05,
+                            28.939852132023056,
+                            5.266686968877607
+                        ],
+                        [
+                            -2.0471646962847855e-05,
+                            28.939852132023056,
+                            5.266686968877607
+                        ],
+                        [
+                            -2.7905925736791648e-05,
+                            39.449396090497345,
+                            5.266686968877606
+                        ],
+                        [
+                            -2.7905925736791648e-05,
+                            39.449396090497345,
+                            5.266686968877606
+                        ],
+                        [
+                            -2.7905926269985454e-05,
+                            39.44959797252994,
+                            -5.266686968877099
+                        ],
+                        [
+                            -2.7905926269985454e-05,
+                            39.44959797252994,
+                            -5.266686968877099
+                        ],
+                        [
+                            -2.0471647496041455e-05,
+                            28.94005401405564,
+                            -5.266686968877104
+                        ],
+                        [
+                            -2.0471647496041455e-05,
+                            28.94005401405564,
+                            -5.266686968877104
+                        ],
+                        [
+                            -2.0471647229444662e-05,
+                            28.93995307303935,
+                            2.956908654708189e-13
+                        ],
+                        [
+                            -2.0471647229444662e-05,
+                            28.93995307303935,
+                            2.956908654708189e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalFk_GRP|L_thirdMetacarpalFk_ANM|L_thirdMetacarpalFk_CTL": {
         "transform": {
             "name": "L_thirdMetacarpalFk_CTL",
@@ -21288,7 +22494,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21426,7 +22632,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21566,7 +22772,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21658,7 +22864,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21796,7 +23002,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -21888,7 +23094,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -22026,7 +23232,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -22106,6 +23312,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_armControllers_GRP|R_armIkControllers_GRP|R_armPVLocator_CTL": {
+        "transform": {
+            "name": "R_armPVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "R_armPVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -330.58621215820324,
+                            331.92034912109375,
+                            -171.69462585449213
+                        ],
+                        [
+                            -337.84256390522046,
+                            331.9203414319273,
+                            149.6526089460226
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_armControllers_GRP|R_armIkControllers_GRP|R_armPV_GRP|R_armPV_ANM|R_armPV_CTL": {
         "transform": {
             "name": "R_armPV_CTL",
@@ -22118,7 +23360,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -22256,7 +23498,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -22586,7 +23828,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23183,7 +24425,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23419,7 +24661,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23511,7 +24753,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23603,7 +24845,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23695,7 +24937,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23907,7 +25149,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -23999,7 +25241,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -24091,7 +25333,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -24183,7 +25425,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -24263,6 +25505,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_backLegControllers_GRP|R_backLegIkControllers_GRP|R_backLegPVLocator_CTL": {
+        "transform": {
+            "name": "R_backLegPVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "R_backLegPVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -79.03124237060547,
+                            144.7220458984375,
+                            116.72584533691406
+                        ],
+                        [
+                            -78.33783589501964,
+                            177.8834281440142,
+                            23.583282584374277
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_backLegControllers_GRP|R_backLegIkControllers_GRP|R_backLegPV_GRP|R_backLegPV_ANM|R_backLegPV_CTL": {
         "transform": {
             "name": "R_backLegPV_CTL",
@@ -24275,7 +25553,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -24395,7 +25673,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -24725,7 +26003,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -25322,7 +26600,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -25558,7 +26836,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -25650,7 +26928,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -25760,7 +27038,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -26492,7 +27770,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -27224,7 +28502,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -27956,7 +29234,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28048,7 +29326,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28186,7 +29464,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28278,7 +29556,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28398,7 +29676,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28536,7 +29814,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28674,7 +29952,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28754,6 +30032,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkControllers_GRP|R_firstFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "R_firstFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "R_firstFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -751.2136190086612,
+                            903.9666340654649,
+                            20.884194234001257
+                        ],
+                        [
+                            -751.213619008661,
+                            331.9203414319275,
+                            20.884194234001143
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalWMAttachedFk_GRP|R_firstMetacarpalWMAttachedFk_ANM|R_firstMetacarpalWMAttachedFk_CTL|R_firstFinger01WMAttachedFk_GRP|R_firstFinger01WMAttachedFk_ANM|R_firstFinger01WMAttachedFk_CTL|R_firstFinger02WMAttachedFk_GRP|R_firstFinger02WMAttachedFk_ANM|R_firstFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "R_firstFinger02WMAttachedFk_CTL",
@@ -28766,7 +30080,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -28904,7 +30218,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29042,7 +30356,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29168,7 +30482,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29294,6 +30608,336 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_firstMembran01_GRP|R_firstMembran01_ANM|R_firstMembran01_CTL": {
+        "transform": {
+            "name": "R_firstMembran01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_firstMembran01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -1.1368588904409273e-13,
+                            2.188589022962635e-14,
+                            -2.053188396562487e-13
+                        ],
+                        [
+                            -2.2891415066870883e-05,
+                            28.939953073038822,
+                            2.9631759169472396e-12
+                        ],
+                        [
+                            -2.2891415066870883e-05,
+                            28.939953073038822,
+                            2.9631759169472396e-12
+                        ],
+                        [
+                            -2.2891415066870883e-05,
+                            28.939953073038822,
+                            2.9631759169472396e-12
+                        ],
+                        [
+                            -2.289141506687648e-05,
+                            28.90748583237272,
+                            -5.8885973098786515
+                        ],
+                        [
+                            -2.289141506687648e-05,
+                            28.90748583237272,
+                            -5.8885973098786515
+                        ],
+                        [
+                            -3.120443240712596e-05,
+                            39.41702979084694,
+                            -5.888597309877487
+                        ],
+                        [
+                            -3.120443240712596e-05,
+                            39.41702979084694,
+                            -5.888597309877487
+                        ],
+                        [
+                            -3.120443240711478e-05,
+                            39.48196427217911,
+                            5.888597309885804
+                        ],
+                        [
+                            -3.120443240711478e-05,
+                            39.48196427217911,
+                            5.888597309885804
+                        ],
+                        [
+                            -2.2891415066865445e-05,
+                            28.972420313704912,
+                            5.888597309884646
+                        ],
+                        [
+                            -2.2891415066865445e-05,
+                            28.972420313704912,
+                            5.888597309884646
+                        ],
+                        [
+                            -2.2891415066870883e-05,
+                            28.939953073038822,
+                            2.9631759169472396e-12
+                        ],
+                        [
+                            -2.2891415066870883e-05,
+                            28.939953073038822,
+                            2.9631759169472396e-12
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_firstMembran02_GRP|R_firstMembran02_ANM|R_firstMembran02_CTL": {
+        "transform": {
+            "name": "R_firstMembran02_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_firstMembran02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            3.200432173021152e-19,
+                            -1.2068516517105318e-06,
+                            8.06927411913005e-09
+                        ],
+                        [
+                            -2.278832645629172e-05,
+                            28.939951886955928,
+                            -5.317846166200847e-07
+                        ],
+                        [
+                            -2.278832645629172e-05,
+                            28.939951886955928,
+                            -5.317846166200847e-07
+                        ],
+                        [
+                            -2.278832645629172e-05,
+                            28.939951886955928,
+                            -5.317846166200847e-07
+                        ],
+                        [
+                            -2.2788356271786106e-05,
+                            28.922747453919342,
+                            -5.88874519520062
+                        ],
+                        [
+                            -2.2788356271786106e-05,
+                            28.922747453919342,
+                            -5.88874519520062
+                        ],
+                        [
+                            -3.106393702438855e-05,
+                            39.43229141993563,
+                            -5.888745391248555
+                        ],
+                        [
+                            -3.106393702438855e-05,
+                            39.43229141993563,
+                            -5.888745391248555
+                        ],
+                        [
+                            -3.106387739339974e-05,
+                            39.4667002860088,
+                            5.888743935583528
+                        ],
+                        [
+                            -3.106387739339974e-05,
+                            39.4667002860088,
+                            5.888743935583528
+                        ],
+                        [
+                            -2.278829664079726e-05,
+                            28.957156319992514,
+                            5.888744131631469
+                        ],
+                        [
+                            -2.278829664079726e-05,
+                            28.957156319992514,
+                            5.888744131631469
+                        ],
+                        [
+                            -2.278832645629172e-05,
+                            28.939951886955928,
+                            -5.317846166200847e-07
+                        ],
+                        [
+                            -2.278832645629172e-05,
+                            28.939951886955928,
+                            -5.317846166200847e-07
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_firstMembran03_GRP|R_firstMembran03_ANM|R_firstMembran03_CTL": {
+        "transform": {
+            "name": "R_firstMembran03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_firstMembran03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            3.3305865465766846e-19,
+                            -9.219653933538803e-07,
+                            3.787701822352218e-09
+                        ],
+                        [
+                            -2.2868882059525052e-05,
+                            28.939952151653443,
+                            3.787654131655001e-09
+                        ],
+                        [
+                            -2.2868882059525052e-05,
+                            28.939952151653443,
+                            3.787654131655001e-09
+                        ],
+                        [
+                            -2.2868882059525052e-05,
+                            28.939952151653443,
+                            3.787654131655001e-09
+                        ],
+                        [
+                            -2.286888624046373e-05,
+                            28.92937964052909,
+                            -5.8887804584583385
+                        ],
+                        [
+                            -2.286888624046373e-05,
+                            28.92937964052909,
+                            -5.8887804584583385
+                        ],
+                        [
+                            -3.117372076038044e-05,
+                            39.43892359921373,
+                            -5.888780458458343
+                        ],
+                        [
+                            -3.117372076038044e-05,
+                            39.43892359921373,
+                            -5.888780458458343
+                        ],
+                        [
+                            -3.117371239850305e-05,
+                            39.46006862146238,
+                            5.8887804660337
+                        ],
+                        [
+                            -3.117371239850305e-05,
+                            39.46006862146238,
+                            5.8887804660337
+                        ],
+                        [
+                            -2.286887787858628e-05,
+                            28.950524662777788,
+                            5.888780466033713
+                        ],
+                        [
+                            -2.286887787858628e-05,
+                            28.950524662777788,
+                            5.888780466033713
+                        ],
+                        [
+                            -2.2868882059525052e-05,
+                            28.939952151653443,
+                            3.787654131655001e-09
+                        ],
+                        [
+                            -2.2868882059525052e-05,
+                            28.939952151653443,
+                            3.787654131655001e-09
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalFk_GRP|R_firstMetacarpalFk_ANM|R_firstMetacarpalFk_CTL": {
         "transform": {
             "name": "R_firstMetacarpalFk_CTL",
@@ -29306,7 +30950,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29444,7 +31088,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29584,7 +31228,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29676,7 +31320,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29814,7 +31458,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -29952,7 +31596,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30044,7 +31688,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30164,7 +31808,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30302,7 +31946,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30440,7 +32084,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30520,6 +32164,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkControllers_GRP|R_fourthFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "R_fourthFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "R_fourthFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -951.2573506053277,
+                            832.0286258531976,
+                            427.34306602088225
+                        ],
+                        [
+                            -951.0073340791309,
+                            331.7885965642317,
+                            427.2598880353017
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalWMAttachedFk_GRP|R_fourthMetacarpalWMAttachedFk_ANM|R_fourthMetacarpalWMAttachedFk_CTL|R_fourthFinger01WMAttachedFk_GRP|R_fourthFinger01WMAttachedFk_ANM|R_fourthFinger01WMAttachedFk_CTL|R_fourthFinger02WMAttachedFk_GRP|R_fourthFinger02WMAttachedFk_ANM|R_fourthFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "R_fourthFinger02WMAttachedFk_CTL",
@@ -30532,7 +32212,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30670,7 +32350,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30808,7 +32488,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -30934,7 +32614,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -31072,7 +32752,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -31210,7 +32890,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -31350,7 +33030,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -31442,7 +33122,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -31580,7 +33260,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -31885,11 +33565,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape22",
+                "name": "R_hand_CTLShape29",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -32146,11 +33826,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape23",
+                "name": "R_hand_CTLShape30",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -32455,11 +34135,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape24",
+                "name": "R_hand_CTLShape31",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -32812,11 +34492,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape25",
+                "name": "R_hand_CTLShape32",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -33697,11 +35377,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape26",
+                "name": "R_hand_CTLShape33",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -33958,11 +35638,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape27",
+                "name": "R_hand_CTLShape34",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -34219,11 +35899,11 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape28",
+                "name": "R_hand_CTLShape35",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -34541,7 +36221,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35273,7 +36953,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35365,7 +37045,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35448,7 +37128,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35484,7 +37164,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35622,7 +37302,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35714,7 +37394,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35834,7 +37514,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -35972,7 +37652,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36110,7 +37790,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36190,6 +37870,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkControllers_GRP|R_secondFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "R_secondFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "R_secondFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -1007.158567174042,
+                            982.5813824071686,
+                            200.4208282905674
+                        ],
+                        [
+                            -1007.1585671740415,
+                            334.64332431769645,
+                            200.42082829056716
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalWMAttachedFk_GRP|R_secondMetacarpalWMAttachedFk_ANM|R_secondMetacarpalWMAttachedFk_CTL|R_secondFinger01WMAttachedFk_GRP|R_secondFinger01WMAttachedFk_ANM|R_secondFinger01WMAttachedFk_CTL|R_secondFinger02WMAttachedFk_GRP|R_secondFinger02WMAttachedFk_ANM|R_secondFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "R_secondFinger02WMAttachedFk_CTL",
@@ -36202,7 +37918,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36340,7 +38056,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36478,7 +38194,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36604,7 +38320,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36730,6 +38446,336 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_secondMembran01_GRP|R_secondMembran01_ANM|R_secondMembran01_CTL": {
+        "transform": {
+            "name": "R_secondMembran01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_secondMembran01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -1.1368589377111367e-13,
+                            7.445517720746524e-14,
+                            -3.7186608690310717e-13
+                        ],
+                        [
+                            -2.053175852487743e-05,
+                            28.93995307303928,
+                            2.5609921748458885e-13
+                        ],
+                        [
+                            -2.053175852487743e-05,
+                            28.93995307303928,
+                            2.5609921748458885e-13
+                        ],
+                        [
+                            -2.053175852487743e-05,
+                            28.93995307303928,
+                            2.5609921748458885e-13
+                        ],
+                        [
+                            -2.053175852487788e-05,
+                            28.947882979598127,
+                            -5.281637864833921
+                        ],
+                        [
+                            -2.053175852487788e-05,
+                            28.947882979598127,
+                            -5.281637864833921
+                        ],
+                        [
+                            -2.7987866591902223e-05,
+                            39.45742693807227,
+                            -5.28163786483369
+                        ],
+                        [
+                            -2.7987866591902223e-05,
+                            39.45742693807227,
+                            -5.28163786483369
+                        ],
+                        [
+                            -2.798786659190126e-05,
+                            39.441567124954574,
+                            5.281637864834731
+                        ],
+                        [
+                            -2.798786659190126e-05,
+                            39.441567124954574,
+                            5.281637864834731
+                        ],
+                        [
+                            -2.0531758524876885e-05,
+                            28.932023166480416,
+                            5.281637864834507
+                        ],
+                        [
+                            -2.0531758524876885e-05,
+                            28.932023166480416,
+                            5.281637864834507
+                        ],
+                        [
+                            -2.053175852487743e-05,
+                            28.93995307303928,
+                            2.5609921748458885e-13
+                        ],
+                        [
+                            -2.053175852487743e-05,
+                            28.93995307303928,
+                            2.5609921748458885e-13
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_secondMembran02_GRP|R_secondMembran02_ANM|R_secondMembran02_CTL": {
+        "transform": {
+            "name": "R_secondMembran02_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_secondMembran02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -4.547475369148903e-13,
+                            -1.2067462041118093e-06,
+                            -1.789637927917146e-08
+                        ],
+                        [
+                            -2.0525900537399436e-05,
+                            28.939951865745375,
+                            -1.7895810526787014e-08
+                        ],
+                        [
+                            -2.0525900537399436e-05,
+                            28.939951865745375,
+                            -1.7895810526787014e-08
+                        ],
+                        [
+                            -2.0525900537399436e-05,
+                            28.939951865745375,
+                            -1.7895810526787014e-08
+                        ],
+                        [
+                            -2.0525900075011635e-05,
+                            28.944414437482035,
+                            -5.281709332571687
+                        ],
+                        [
+                            -2.0525900075011635e-05,
+                            28.944414437482035,
+                            -5.281709332571687
+                        ],
+                        [
+                            -2.79798806900269e-05,
+                            39.45395839575728,
+                            -5.281709332571479
+                        ],
+                        [
+                            -2.79798806900269e-05,
+                            39.45395839575728,
+                            -5.281709332571479
+                        ],
+                        [
+                            -2.7979881614802342e-05,
+                            39.445033252283956,
+                            5.281709296780351
+                        ],
+                        [
+                            -2.7979881614802342e-05,
+                            39.445033252283956,
+                            5.281709296780351
+                        ],
+                        [
+                            -2.0525900999787075e-05,
+                            28.9354892940087,
+                            5.281709296780149
+                        ],
+                        [
+                            -2.0525900999787075e-05,
+                            28.9354892940087,
+                            5.281709296780149
+                        ],
+                        [
+                            -2.0525900537399436e-05,
+                            28.939951865745375,
+                            -1.7895810526787014e-08
+                        ],
+                        [
+                            -2.0525900537399436e-05,
+                            28.939951865745375,
+                            -1.7895810526787014e-08
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_secondMembran03_GRP|R_secondMembran03_ANM|R_secondMembran03_CTL": {
+        "transform": {
+            "name": "R_secondMembran03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_secondMembran03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1.1368690210511444e-12,
+                            -9.21933024715898e-07,
+                            -8.625899784735854e-09
+                        ],
+                        [
+                            -2.0539348347746777e-05,
+                            28.939952151533614,
+                            -8.625336229581142e-09
+                        ],
+                        [
+                            -2.0539348347746777e-05,
+                            28.939952151533614,
+                            -8.625336229581142e-09
+                        ],
+                        [
+                            -2.0539348347746777e-05,
+                            28.939952151533614,
+                            -8.625336229581142e-09
+                        ],
+                        [
+                            -2.0539348708495626e-05,
+                            28.942768655099936,
+                            -5.281729234963565
+                        ],
+                        [
+                            -2.0539348708495626e-05,
+                            28.942768655099936,
+                            -5.281729234963565
+                        ],
+                        [
+                            -2.7998213473834142e-05,
+                            39.45231261372956,
+                            -5.2817292349633576
+                        ],
+                        [
+                            -2.7998213473834142e-05,
+                            39.45231261372956,
+                            -5.2817292349633576
+                        ],
+                        [
+                            -2.7998212752336322e-05,
+                            39.446679606596916,
+                            5.281729217713174
+                        ],
+                        [
+                            -2.7998212752336322e-05,
+                            39.446679606596916,
+                            5.281729217713174
+                        ],
+                        [
+                            -2.053934798699784e-05,
+                            28.937135647967256,
+                            5.281729217712973
+                        ],
+                        [
+                            -2.053934798699784e-05,
+                            28.937135647967256,
+                            5.281729217712973
+                        ],
+                        [
+                            -2.0539348347746777e-05,
+                            28.939952151533614,
+                            -8.625336229581142e-09
+                        ],
+                        [
+                            -2.0539348347746777e-05,
+                            28.939952151533614,
+                            -8.625336229581142e-09
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalFk_GRP|R_secondMetacarpalFk_ANM|R_secondMetacarpalFk_CTL": {
         "transform": {
             "name": "R_secondMetacarpalFk_CTL",
@@ -36742,7 +38788,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -36880,7 +38926,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37020,7 +39066,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37112,7 +39158,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37250,7 +39296,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37462,7 +39508,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37600,7 +39646,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37692,7 +39738,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37812,7 +39858,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -37950,7 +39996,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38088,7 +40134,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38168,6 +40214,42 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkControllers_GRP|R_thirdFinger02PVLocator_CTL": {
+        "transform": {
+            "name": "R_thirdFinger02PVLocator_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 0
+        },
+        "shapes": [
+            {
+                "name": "R_thirdFinger02PVLocator_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -1032.655690151987,
+                            975.4698304370992,
+                            329.7190748383738
+                        ],
+                        [
+                            -1032.655690151987,
+                            331.9203414319276,
+                            329.71907483837356
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        1.0
+                    ],
+                    "degree": 1
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalWMAttachedFk_GRP|R_thirdMetacarpalWMAttachedFk_ANM|R_thirdMetacarpalWMAttachedFk_CTL|R_thirdFinger01WMAttachedFk_GRP|R_thirdFinger01WMAttachedFk_ANM|R_thirdFinger01WMAttachedFk_CTL|R_thirdFinger02WMAttachedFk_GRP|R_thirdFinger02WMAttachedFk_ANM|R_thirdFinger02WMAttachedFk_CTL": {
         "transform": {
             "name": "R_thirdFinger02WMAttachedFk_CTL",
@@ -38180,7 +40262,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38318,7 +40400,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38456,7 +40538,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38582,7 +40664,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38708,6 +40790,336 @@
             }
         ]
     },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_thirdMembran01_GRP|R_thirdMembran01_ANM|R_thirdMembran01_CTL": {
+        "transform": {
+            "name": "R_thirdMembran01_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_thirdMembran01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            5.205720309771772e-10,
+                            1.976581491355425e-06,
+                            1.594777931073573e-09
+                        ],
+                        [
+                            0.0001583816204732454,
+                            28.93995504966179,
+                            1.0295219819382229e-06
+                        ],
+                        [
+                            0.0001583816204732454,
+                            28.93995504966179,
+                            1.0295219819382229e-06
+                        ],
+                        [
+                            0.0001583816204732454,
+                            28.93995504966179,
+                            1.0295219819382229e-06
+                        ],
+                        [
+                            0.00015840869479465686,
+                            28.939744693869994,
+                            -5.266685931968984
+                        ],
+                        [
+                            0.00015840869479465686,
+                            28.939744693869994,
+                            -5.266685931968984
+                        ],
+                        [
+                            0.00021592479122378304,
+                            39.44928865235913,
+                            -5.266685558677225
+                        ],
+                        [
+                            0.00021592479122378304,
+                            39.44928865235913,
+                            -5.266685558677225
+                        ],
+                        [
+                            0.00021587064258095988,
+                            39.449709363942674,
+                            5.266688364304791
+                        ],
+                        [
+                            0.00021587064258095988,
+                            39.449709363942674,
+                            5.266688364304791
+                        ],
+                        [
+                            0.00015835454615183394,
+                            28.94016540545359,
+                            5.266687991013039
+                        ],
+                        [
+                            0.00015835454615183394,
+                            28.94016540545359,
+                            5.266687991013039
+                        ],
+                        [
+                            0.0001583816204732454,
+                            28.93995504966179,
+                            1.0295219819382229e-06
+                        ],
+                        [
+                            0.0001583816204732454,
+                            28.93995504966179,
+                            1.0295219819382229e-06
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_thirdMembran02_GRP|R_thirdMembran02_ANM|R_thirdMembran02_CTL": {
+        "transform": {
+            "name": "R_thirdMembran02_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_thirdMembran02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            1.0118128895922604e-10,
+                            3.859518050418441e-07,
+                            3.234433714778186e-10
+                        ],
+                        [
+                            0.00015839552014054585,
+                            28.93995345892412,
+                            3.2343837586164785e-10
+                        ],
+                        [
+                            0.00015839552014054585,
+                            28.93995345892412,
+                            3.2343837586164785e-10
+                        ],
+                        [
+                            0.00015839552014054585,
+                            28.93995345892412,
+                            3.2343837586164785e-10
+                        ],
+                        [
+                            0.00015842165716207932,
+                            28.93975019770308,
+                            -5.266686967386581
+                        ],
+                        [
+                            0.00015842165716207932,
+                            28.93975019770308,
+                            -5.266686967386581
+                        ],
+                        [
+                            0.00021594295355713397,
+                            39.44929415615305,
+                            -5.266686967386574
+                        ],
+                        [
+                            0.00021594295355713397,
+                            39.44929415615305,
+                            -5.266686967386574
+                        ],
+                        [
+                            0.00021589067951406648,
+                            39.44970067859507,
+                            5.266686968033531
+                        ],
+                        [
+                            0.00021589067951406648,
+                            39.44970067859507,
+                            5.266686968033531
+                        ],
+                        [
+                            0.00015836938311901213,
+                            28.940156720145133,
+                            5.266686968033531
+                        ],
+                        [
+                            0.00015836938311901213,
+                            28.940156720145133,
+                            5.266686968033531
+                        ],
+                        [
+                            0.00015839552014054585,
+                            28.93995345892412,
+                            3.2343837586164785e-10
+                        ],
+                        [
+                            0.00015839552014054585,
+                            28.93995345892412,
+                            3.2343837586164785e-10
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_thirdMembran03_GRP|R_thirdMembran03_ANM|R_thirdMembran03_CTL": {
+        "transform": {
+            "name": "R_thirdMembran03_CTL",
+            "overrideEnabled": true,
+            "overrideColor": 4
+        },
+        "shapes": [
+            {
+                "name": "R_thirdMembran03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": 1.3,
+                "curve": {
+                    "cvs": [
+                        [
+                            -3.901732269066221e-10,
+                            -1.4775876382806547e-06,
+                            -1.2434516195473633e-09
+                        ],
+                        [
+                            0.00015838787599016047,
+                            28.939951595463246,
+                            -1.2434328396419118e-09
+                        ],
+                        [
+                            0.00015838787599016047,
+                            28.939951595463246,
+                            -1.2434328396419118e-09
+                        ],
+                        [
+                            0.00015838787599016047,
+                            28.939951595463246,
+                            -1.2434328396419118e-09
+                        ],
+                        [
+                            0.00015841383726032787,
+                            28.93974971066228,
+                            -5.2666869701229295
+                        ],
+                        [
+                            0.00015841383726032787,
+                            28.93974971066228,
+                            -5.2666869701229295
+                        ],
+                        [
+                            0.00021593253611756213,
+                            39.449293669140715,
+                            -5.266686970122929
+                        ],
+                        [
+                            0.00021593253611756213,
+                            39.449293669140715,
+                            -5.266686970122929
+                        ],
+                        [
+                            0.00021588061357722722,
+                            39.44969743874266,
+                            5.266686967636148
+                        ],
+                        [
+                            0.00021588061357722722,
+                            39.44969743874266,
+                            5.266686967636148
+                        ],
+                        [
+                            0.00015836191471999307,
+                            28.940153480264204,
+                            5.2666869676361525
+                        ],
+                        [
+                            0.00015836191471999307,
+                            28.940153480264204,
+                            5.2666869676361525
+                        ],
+                        [
+                            0.00015838787599016047,
+                            28.939951595463246,
+                            -1.2434328396419118e-09
+                        ],
+                        [
+                            0.00015838787599016047,
+                            28.939951595463246,
+                            -1.2434328396419118e-09
+                        ]
+                    ],
+                    "form": "open",
+                    "knots": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0,
+                        11.0,
+                        11.0,
+                        11.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalFk_GRP|R_thirdMetacarpalFk_ANM|R_thirdMetacarpalFk_CTL": {
         "transform": {
             "name": "R_thirdMetacarpalFk_CTL",
@@ -38720,7 +41132,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38858,7 +41270,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -38998,7 +41410,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -39090,7 +41502,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [
@@ -39228,7 +41640,7 @@
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
-                "lineWidth": -1.0,
+                "lineWidth": 1.3,
                 "curve": {
                     "cvs": [
                         [

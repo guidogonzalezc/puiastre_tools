@@ -454,7 +454,7 @@ def get_curve_cvs(curve_name, position):
         curve (str): The name of the NURBS curve.
     """
 
-    curve = cmds.curve(name=curve, shapes=True, fullPath=True) # Create a curve with the input curve_name 
+    curve = get_data(curve_name)
     cmds.matchTransform(curve, position, pos=True, rot=False, scl=False) # and match it to the position
     curve_shape = cmds.listRelatives(curve, shapes=True, fullPath=True)[0]
     num_cvs = cmds.ls(f"{curve_shape}.cv[*]", flatten=True) # Get every CV of the curve
@@ -697,7 +697,7 @@ class EyeGuideCreation(GuideCreation):
     def __init__(self, side = "L"):
         self.sides = side
         self.type = None
-        self.limb_name = "eye"
+        self.limb_name = "facial"
         self.aim_name = None
         self.prefix = None
         self.controller_number = None
@@ -710,7 +710,7 @@ class EyeGuideCreation(GuideCreation):
         curve_pos = [eye_up_pos, eye_down_pos, eye_blink_pos, eye_up_blink_pos, eye_down_blink_pos] # Put them all in a list.
 
         for i, curve in enumerate([f"{self.sides}_eyeUp", f"{self.sides}_eyeDown", f"{self.sides}_eyeBlink", f"{self.sides}_eyeUpBlink", f"{self.sides}_eyeDownBlink"]):
-            curve_cvs = get_curve_cvs(curve, curve_pos[i]) # Create a curve with the name, match it to the position from the template file, create a guide for each CV and store the position in a dictionary.
+            curve_cvs = get_curve_cvs(curve)
             for j, (name, pos) in enumerate(curve_cvs.items()):
                 self.position_data = {
                     f"{self.sides}_{name}0{j+1}": pos,
@@ -746,6 +746,7 @@ def dragon_rebuild_guides():
     ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)
     HandGuideCreation(controller_number=4).create_guides(guides_trn, buffers_trn)
     HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
+    
 # dragon_rebuild_guides()
 
 def load_guides(path = ""):
@@ -800,6 +801,8 @@ def load_guides(path = ""):
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "membran":
                     MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "facial":
+                    EyeGuideCreation(side=guide_name.split("_")[0], cvsPosition=guide_info.get("cvsPosition")).create_guides(guides_trn, buffers_trn)
 
 def guides_export():
         """
@@ -830,6 +833,7 @@ def guides_export():
                 guides_module_name = []
                 guides_prefix_name = []
                 guides_ctl_number = []
+                guides_cvs = []
 
                 for guide in guides_descendents:
                         # Try to get 'jointTwist' attribute, if not present, set value as 'Child'
@@ -855,10 +859,21 @@ def guides_export():
 
                         # Try to get 'moduleName' attribute, if not present, set value as 'Child'
                         if cmds.attributeQuery("moduleName", node=guide, exists=True):
-                                index = cmds.getAttr(f"{guide}.moduleName")
-                                enum_string = cmds.addAttr(f"{guide}.moduleName", q=True, en=True)
-                                enum_list = enum_string.split(":")
-                                module_name = enum_list[index]  
+                            index = cmds.getAttr(f"{guide}.moduleName")
+                            enum_string = cmds.addAttr(f"{guide}.moduleName", q=True, en=True)
+                            enum_list = enum_string.split(":")
+                            module_name = enum_list[index]
+
+                            if module_name == "facial":
+                                    shapes = cmds.listRelatives(guide, shapes=True, fullPath=True)
+                                    if shapes:
+                                            for shape in shapes:
+                                                if cmds.nodeType(shape) == "nurbsCurve":
+                                                    cvs = cmds.ls(f"{shape}.cv[*]", flatten=True)
+                                                    if cvs:
+                                                        for cv in cvs:
+                                                            pos = cmds.xform(cv, query=True, translation=True, worldSpace=True)
+                                                            guides_cvs.append(pos)
                         else:
                                 module_name = "Child"
                         guides_module_name.append(module_name)
@@ -896,7 +911,8 @@ def guides_export():
                         "type": guides_type[i],
                         "moduleName": guides_module_name[i],
                         "prefix": guides_prefix_name[i],
-                        "controllerNumber": guides_ctl_number[i]
+                        "controllerNumber": guides_ctl_number[i],
+                        "cvsPosition": guides_cvs[i] if guides_cvs else "Child",
                 }
 
 
@@ -905,7 +921,7 @@ def guides_export():
 
         om.MGlobal.displayInfo(f"Guides data exported to {TEMPLATE_FILE}")
 
-def get_data(name, module_name=False):
+def get_data(name, module_name=False, cv=False):
 
     final_path = core.init_template_file(ext=".guides", export=False)
 
@@ -928,6 +944,11 @@ def get_data(name, module_name=False):
                 if module_name:
                         moduleName = guide_info.get("moduleName")
                         prefix = guide_info.get("prefix")
+                        cv = guide_info.get("cvsPosition")
+                        if cv:
+                            print("Holi")
+                            return world_position, parent, moduleName, prefix, cv
+                        print("Holi2")
                         return world_position, parent, moduleName, prefix
                 else:
                     return world_position, parent
@@ -1014,9 +1035,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
-# # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
+# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
-# load_guides()
+# # load_guides()
 
-guides_export()
+# guides_export()
