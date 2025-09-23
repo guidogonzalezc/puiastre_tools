@@ -912,7 +912,7 @@ def guides_export():
                         "moduleName": guides_module_name[i],
                         "prefix": guides_prefix_name[i],
                         "controllerNumber": guides_ctl_number[i],
-                        "cvsPosition": guides_cvs[i] if guides_cvs else "Child",
+                        # "cvsPosition": guides_cvs[i] if guides_cvs else "Child",
                 }
 
 
@@ -1038,6 +1038,6 @@ def guide_import(joint_name, all_descendents=True, path=None):
 # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
-# # load_guides()
+# load_guides()
 
 # guides_export()
