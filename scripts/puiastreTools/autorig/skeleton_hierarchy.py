@@ -201,7 +201,6 @@ def build_complete_hierarchy():
 
             for joint_list in membrane_groups:
                 if joint_list:
-                    print(joint_list, parent_joint)
                     parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
 
 

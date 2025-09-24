@@ -278,17 +278,20 @@ class FalangeModule(object):
 
         name = [f"{self.side}_{self.names[1]}SecondaryUpperInitialLength", f"{self.side}_{self.names[2]}SecondaryLowerInitialLength", f"{self.side}_{self.names[3]}SecondaryCurrentLength"]
 
-        self.ikHandleManager = f"{self.hand_ik_ctl}.worldMatrix[0]"
 
-        secondary_root_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}SecondaryRoot_MMX", ss=True)
-        inverse_secondary_root = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[1]}SecondaryRoot_IMX", ss=True)
+        secondary_root_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}SecondaryRoot_MMX", ss=True)
+        inverse_secondary_root = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[3]}SecondaryRoot_IMX", ss=True)
         cmds.connectAttr(f"{self.guides_matrix[1]}.outputMatrix", f"{secondary_root_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse_secondary_root}.inputMatrix")
+        cmds.connectAttr(f"{self.guides_matrix[2]}.outputMatrix", f"{inverse_secondary_root}.inputMatrix")
         cmds.connectAttr(f"{inverse_secondary_root}.outputMatrix", f"{secondary_root_multmatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixIn[2]")
+        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixIn[2]")
+
+        self.ikHandleManager = f"{secondary_root_multmatrix}.matrixSum"
+        print(self.ikHandleManager)
+
 
         self.distance_between_output = []
-        for i, (first, second) in enumerate(zip([f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixSum"], [f"{self.guides[2]}.worldMatrix[0]", f"{self.guides[3]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
+        for i, (first, second) in enumerate(zip([f"{self.guides[0]}.worldMatrix[0]", f"{self.guides[1]}.worldMatrix[0]", f"{self.root_ik_ctl}.worldMatrix[0]"], [f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
             distance = cmds.createNode("distanceBetween", name=f"{name[i]}_DB", ss=True)
             cmds.connectAttr(f"{first}", f"{distance}.inMatrix1")
             cmds.connectAttr(f"{second}", f"{distance}.inMatrix2")
@@ -339,7 +342,7 @@ class FalangeModule(object):
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIk_AIM", ss=True)
         cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
         cmds.connectAttr(f"{self.pv_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{secondary_root_multmatrix}.matrixSum", f"{upper_arm_ik_aim_matrix}.inputMatrix")
+        cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{upper_arm_ik_aim_matrix}.inputMatrix")
         cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
         self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIkWM_MMX", ss=True)
@@ -405,43 +408,15 @@ class FalangeModule(object):
         cmds.connectAttr(f"{fourByfour}.output", f"{lower_wm_multmatrix_end}.matrixIn[0]")
         cmds.connectAttr(f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix_end}.matrixIn[1]")
 
-        # Hand
-
-        lower_inverse_matrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[3]}LowerIkInverse_MTX", ss=True)
-        cmds.connectAttr(f"{lower_wm_multmatrix_end}.matrixSum", f"{lower_inverse_matrix}.inputMatrix")
-
-        hand_local_matrix_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}EndBaseLocal_MMX", ss=True)
-        cmds.connectAttr(f"{self.ikHandleManager}", f"{hand_local_matrix_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_inverse_matrix}.outputMatrix", f"{hand_local_matrix_multmatrix}.matrixIn[1]")
-
-        hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[3]}EndLocal_F4X", ss=True)
-
-        hand_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}WM_MMX", ss=True)
-        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix_end}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_wm_multmatrix_end}.matrixSum", f"{hand_wm_multmatrix_end}.matrixIn[1]")
-
-
-        for i in range(0, 3):
-            row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{self.side}_{self.names[3]}EndLocalAxis{i}_RFM", ss=True)
-            cmds.connectAttr(f"{hand_local_matrix_multmatrix}.matrixSum", f"{row_from_matrix}.matrix")
-            cmds.setAttr(f"{row_from_matrix}.input", i)
-            for z, attr in enumerate(["X", "Y", "Z", "W"]):
-                cmds.connectAttr(f"{row_from_matrix}.output{attr}", f"{hand_local_matrix}.in{i}{z}")
-
-        if self.side == "R":
-            translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.names[3]}LowerTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{translate_negate}.input")
-            cmds.connectAttr(f"{translate_negate}.output", f"{hand_local_matrix}.in30")
-        else:
-            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{hand_local_matrix}.in30")      
+        self.end_end_test = self.upperArmIkWM
 
         name = [f"{self.side}_{self.names[0]}UpperInitialLength", f"{self.side}_{self.names[1]}LowerInitialLength", f"{self.side}_{self.names[0]}CurrentLength"]
 
-
         self.ikHandleManager = f"{lower_wm_multmatrix_end}.matrixSum"
+        self.ikHandleManager = f"{self.hand_ik_ctl}.worldMatrix[0]"
         
         self.distance_between_output = []
-        for i, (first, second) in enumerate(zip([f"{self.guides[0]}.worldMatrix[0]", f"{self.guides[1]}.worldMatrix[0]", f"{self.root_ik_ctl}.worldMatrix[0]"], [f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
+        for i, (first, second) in enumerate(zip([f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{lower_wm_multmatrix_end}.matrixSum"], [f"{self.guides[2]}.worldMatrix[0]", f"{self.guides[3]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
             distance = cmds.createNode("distanceBetween", name=f"{name[i]}_DB", ss=True)
             cmds.connectAttr(f"{first}", f"{distance}.inMatrix1")
             cmds.connectAttr(f"{second}", f"{distance}.inMatrix2")
@@ -480,7 +455,7 @@ class FalangeModule(object):
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.names[0]}UpperIk_AIM", ss=True)
         cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
         cmds.connectAttr(f"{self.pv_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.inputMatrix")
+        cmds.connectAttr(f"{lower_wm_multmatrix_end}.matrixSum", f"{upper_arm_ik_aim_matrix}.inputMatrix")
         cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
         self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[0]}WM_MMX", ss=True)
@@ -546,9 +521,39 @@ class FalangeModule(object):
         cmds.connectAttr(f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixIn[1]")
 
         # Hand
+        lower_inverse_matrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[3]}LowerIkInverse_MTX", ss=True)
+        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{lower_inverse_matrix}.inputMatrix")
+
+        hand_local_matrix_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}EndBaseLocal_MMX", ss=True)
+        cmds.connectAttr(f"{self.ikHandleManager}", f"{hand_local_matrix_multmatrix}.matrixIn[0]")
+        cmds.connectAttr(f"{lower_inverse_matrix}.outputMatrix", f"{hand_local_matrix_multmatrix}.matrixIn[1]")
+
+        hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[3]}EndLocal_F4X", ss=True)
+
+        hand_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}WM_MMX", ss=True)
+        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix_end}.matrixIn[0]")
+        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix_end}.matrixIn[1]")
+
+
+        for i in range(0, 3):
+            row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{self.side}_{self.names[3]}EndLocalAxis{i}_RFM", ss=True)
+            cmds.connectAttr(f"{hand_local_matrix_multmatrix}.matrixSum", f"{row_from_matrix}.matrix")
+            cmds.setAttr(f"{row_from_matrix}.input", i)
+            for z, attr in enumerate(["X", "Y", "Z", "W"]):
+                cmds.connectAttr(f"{row_from_matrix}.output{attr}", f"{hand_local_matrix}.in{i}{z}")
+
+        if self.side == "R":
+            translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.names[3]}LowerTranslate_NEGATE", ss=True)
+            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{translate_negate}.input")
+            cmds.connectAttr(f"{translate_negate}.output", f"{hand_local_matrix}.in30")
+        else:
+            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{hand_local_matrix}.in30")    
 
        
-        self.ik_wm = [f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum", f"{lower_wm_multmatrix_end}.matrixSum", f"{hand_wm_multmatrix_end}.matrixSum"]
+        self.ik_wm = [f"{self.end_end_test}.matrixSum",  f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum",f"{hand_wm_multmatrix_end}.matrixSum"]
+        print(self.end_end_test, lower_wm_multmatrix, self.upperArmIkWM, hand_wm_multmatrix_end)
+
+
         
         self.attached_fk()
 

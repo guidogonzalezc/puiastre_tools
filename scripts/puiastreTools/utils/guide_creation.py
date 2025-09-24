@@ -491,8 +491,6 @@ class ArmGuideCreation(GuideCreation):
             "shoulderFrontDistance": get_data(f"{self.sides}_shoulderFrontDistance"),
         }
 
-        print(self.position_data.get("shoulderFrontDistance"))
-
 class BackLegGuideCreation(GuideCreation):
     """
     Guide creation for back legs.
@@ -946,9 +944,7 @@ def get_data(name, module_name=False, cv=False):
                         prefix = guide_info.get("prefix")
                         cv = guide_info.get("cvsPosition")
                         if cv:
-                            print("Holi")
                             return world_position, parent, moduleName, prefix, cv
-                        print("Holi2")
                         return world_position, parent, moduleName, prefix
                 else:
                     return world_position, parent
