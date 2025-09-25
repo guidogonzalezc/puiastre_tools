@@ -134,6 +134,12 @@ class NeckModule():
             self.main_controllers.append(ctl)
             self.main_controllers_grp.append(ctl_grp)
 
+        cmds.addAttr(self.main_controllers[1], shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(self.main_controllers[1]+".tangents", channelBox=True, lock=True)
+        cmds.addAttr(self.main_controllers[1], shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
+        cmds.setAttr(self.main_controllers[1]+".tangentVisibility", channelBox=True)
+
+
         fk_switch(target= self.main_controllers[1], sources= [self.main_controllers[2], self.main_controllers[0]])
         fk_switch(target= self.main_controllers[2], sources= [self.main_controllers[0]])
         cmds.setAttr(f"{self.main_controllers[1]}.RotateValue", lock=True, keyable=False)
@@ -145,6 +151,8 @@ class NeckModule():
         cmds.addAttr(self.main_controllers[-1], shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.main_controllers[-1]+".attachedFk", channelBox=True, lock=True)
         cmds.addAttr(self.main_controllers[-1], shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+
+        
 
         clamped_distance = cmds.createNode("distanceBetween", name=f"{self.side}_neckToTan01_DIB", ss=True)
         real_distance = cmds.createNode("distanceBetween", name=f"{self.side}_neckToTan01_DIB", ss=True)
@@ -199,7 +207,7 @@ class NeckModule():
         cmds.connectAttr(f"{real_dis_global_tanToHead}.output", f"{tan01_to_neck01_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{tan01_to_neck01_blendTwo}.attributesBlender")
 
-        tan01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_tan01WM_AIM", ss=True)
+        tan01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_neckTan01WM_AIM", ss=True)
         cmds.connectAttr(f"{tan01_wm_no_rot}.outputMatrix", f"{tan01_world_matrix}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{tan01_world_matrix}.primaryTargetMatrix")
         cmds.setAttr(f"{tan01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
@@ -218,9 +226,45 @@ class NeckModule():
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck_wm}.target[0].targetMatrix")
         cmds.setAttr(f"{neck_wm}.target[0].translateWeight", 0)
 
-        cvs = [f"{neck01_world_matrix}.outputMatrix", f"{tan01_world_matrix}.outputMatrix", f"{neck_wm}.outputMatrix"]
+        head_to_neck_tan_1 = cmds.createNode("blendMatrix", name=f"{self.side}_headToNeckTan01StartPos_BMX", ss=True)
+        cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{head_to_neck_tan_1}.inputMatrix")
+        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{head_to_neck_tan_1}.target[0].targetMatrix")
+        cmds.setAttr(f"{head_to_neck_tan_1}.target[0].translateWeight", 0.2)
+        neck01_tan = cmds.createNode("multMatrix", name=f"{self.side}_neck01Tan_MMT", ss=True)
+        cmds.connectAttr(f"{head_to_neck_tan_1}.outputMatrix", f"{neck01_tan}.matrixIn[0]")
+        cmds.connectAttr(f"{self.guides[-1]}.worldInverseMatrix[0]", f"{neck01_tan}.matrixIn[1]")
+        cmds.connectAttr(f"{neck_wm}.outputMatrix", f"{neck01_tan}.matrixIn[2]")
 
-        self.num_joints = 5
+        head_to_neck_tan_2 = cmds.createNode("blendMatrix", name=f"{self.side}_headToNeckTan02StartPos_BMX", ss=True)
+        cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{head_to_neck_tan_2}.inputMatrix")
+        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{head_to_neck_tan_2}.target[0].targetMatrix")
+        cmds.setAttr(f"{head_to_neck_tan_2}.target[0].translateWeight", 0.8)
+        neck02_tan = cmds.createNode("multMatrix", name=f"{self.side}_neck02Tan_MMT", ss=True)
+        cmds.connectAttr(f"{head_to_neck_tan_2}.outputMatrix", f"{neck02_tan}.matrixIn[0]")
+        cmds.connectAttr(f"{self.guides[0]}.worldInverseMatrix[0]", f"{neck02_tan}.matrixIn[1]")
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck02_tan}.matrixIn[2]")
+
+        ctls = []
+        for node, name in zip([neck02_tan, neck01_tan], ["neckTangent", "headTangent"]):
+
+            ctl, controller_grp = controller_creator(
+                    name=f"{self.side}_{name}",
+                    suffixes=["GRP", "ANM"],
+                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                    ro=True,
+                    parent=self.controllers_trn
+                )
+        
+            cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
+
+            cmds.connectAttr(f"{node}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
+            cmds.connectAttr(f"{self.main_controllers[1]}.tangentVisibility", f"{controller_grp[0]}.visibility")
+            ctls.append(ctl)
+
+
+        cvs = [f"{neck01_world_matrix}.outputMatrix", f"{ctls[0]}.worldMatrix[0]", f"{tan01_world_matrix}.outputMatrix",f"{ctls[1]}.worldMatrix[0]", f"{neck_wm}.outputMatrix"]
+
+        self.num_joints = 10
 
         t_values = []
         for i in range(self.num_joints):

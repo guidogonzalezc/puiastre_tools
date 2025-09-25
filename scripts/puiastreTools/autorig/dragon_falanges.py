@@ -52,7 +52,7 @@ class FalangeModule(object):
 
         self.switch_ctl, self.switch_ctl_grp = controller_creator(
             name=f"{self.side}_hand",
-            suffixes=["GRP"],
+            suffixes=["GRP", "SDK"],
             lock=["sx", "sy", "sz", "visibility"],
             ro=False,
             parent=self.individual_controllers_grp
@@ -287,7 +287,6 @@ class FalangeModule(object):
         cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixIn[2]")
 
         self.ikHandleManager = f"{secondary_root_multmatrix}.matrixSum"
-        print(self.ikHandleManager)
 
 
         self.distance_between_output = []
@@ -551,7 +550,6 @@ class FalangeModule(object):
 
        
         self.ik_wm = [f"{self.end_end_test}.matrixSum",  f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum",f"{hand_wm_multmatrix_end}.matrixSum"]
-        print(self.end_end_test, lower_wm_multmatrix, self.upperArmIkWM, hand_wm_multmatrix_end)
 
 
         
@@ -570,7 +568,7 @@ class FalangeModule(object):
         ctls_sub_neck = []
         # sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_sub{self.names[0]}Controllers_GRP", parent=self.individual_controllers_grp, ss=True)
 
-
+        self.attached_fk_ctls = []
         for i, joint in enumerate(self.ik_wm):
             name = joint.split(".")[0].split("_")[1]
 
@@ -600,6 +598,7 @@ class FalangeModule(object):
                     cmds.setAttr(f"{controller_grp[0]}.{attr}", 0)
 
             ctls_sub_neck.append(ctl)
+            self.attached_fk_ctls.append(ctl)
 
         self.ik_wm = [f"{ctl}.worldMatrix[0]" for ctl in ctls_sub_neck]
 
@@ -734,6 +733,88 @@ class FalangeModule(object):
 
             self.joints.append(skinning_joints)
         core.pv_locator(name=f"{self.side}_{self.names[i]}PVLocator", parents=[self.pv_ik_ctl, self.joints[1][0]], parent_append=self.ik_controllers)
+
+        self.attributes()
+
+    def attributes(self):
+
+        """
+        Add attributes to the hand controller for CURL, SPREAD, and FIST controls.
+        """
+
+        # Set driven keys to hand_sdk offset grp rotation
+        for ctl in self.fk_ctls:
+            blend_two_attr_curl = cmds.createNode("blendTwoAttr", name=f"{self.side}_fingersCurl_B2A", ss=True)
+            blend_two_attr_spread = cmds.createNode("blendTwoAttr", name=f"{self.side}_fingersSpread_B2A", ss=True)
+
+            for attatched_ctl in self.attached_fk_ctls:
+
+                #Curl
+                cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blend_two_attr_curl}.attributesBlender")
+                cmds.connectAttr(f"{ctl}.rz", f"{blend_two_attr_curl}.input[0]")
+                cmds.connectAttr(f"{attatched_ctl}.rz", f"{blend_two_attr_curl}.input[1]")
+
+                # Spread
+                cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blend_two_attr_spread}.attributesBlender")
+
+                if "first" or "second" in ctl:
+
+                    #Attatched ctl ry needs to be negated
+                    negate_node = cmds.createNode("negate", name=f"{self.side}_fingersSpread_NEG", ss=True)
+
+                    if "second" in ctl: # If the finger name is second rotate needs to be halved
+
+                        float_math_half_rotate = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalfRotate_MUL", ss=True)
+                        cmds.setAttr(f"{float_math_half_rotate}.input2", 0.5)
+                        cmds.connectAttr(f"{negate_node}.output", f"{float_math_half_rotate}.input1")
+                        cmds.connectAttr(f"{float_math_half_rotate}.output", f"{blend_two_attr_spread}.input[1]")
+
+                    elif "first" in ctl: # First finger
+
+                        cmds.connectAttr(f"{negate_node}.output", f"{blend_two_attr_spread}.input[1]")
+
+                    else:
+                        if "third" in ctl: # If not first or second just connect normally
+                            half_multiply = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalf_MUL", ss=True)
+                            cmds.setAttr(f"{half_multiply}.input2", 0.5)
+                            cmds.connectAttr(f"{ctl}.ry", f"{half_multiply}.input1")
+                            cmds.connectAttr(f"{half_multiply}.output", f"{blend_two_attr_spread}.input[0]")
+                        else:
+                            cmds.connectAttr(f"{ctl}.ry", f"{blend_two_attr_spread}.input[0]")
+
+                elif "first" in attatched_ctl or "second" in attatched_ctl:
+                    
+                    if "second" in attatched_ctl:
+
+                        float_math_half_rotate = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalfRotate_MUL", ss=True)
+                        negate_node = cmds.createNode("negate", name=f"{self.side}_fingersSpread_NEG", ss=True)
+                        cmds.setAttr(f"{float_math_half_rotate}.input2", 0.5)
+                        cmds.connectAttr(f"{attatched_ctl}.ry", f"{negate_node}.input")
+                        cmds.connectAttr(f"{negate_node}.output", f"{float_math_half_rotate}.input1")
+                        cmds.connectAttr(f"{float_math_half_rotate}.output", f"{blend_two_attr_spread}.input[1]")
+
+                    elif "first" in attatched_ctl:
+
+                        negate_node = cmds.createNode("negate", name=f"{self.side}_fingersSpread_NEG", ss=True)
+                        cmds.connectAttr(f"{attatched_ctl}.ry", f"{negate_node}.input")
+                        cmds.connectAttr(f"{negate_node}.output", f"{blend_two_attr_spread}.input[1]")
+                    else:
+
+                        if "third" in attatched_ctl:
+
+                            half_multiply = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalf_MUL", ss=True)
+                            cmds.setAttr(f"{half_multiply}.input2", 0.5)
+                            cmds.connectAttr(f"{attatched_ctl}.ry", f"{half_multiply}.input1")
+                            cmds.connectAttr(f"{half_multiply}.output", f"{blend_two_attr_spread}.input[1]")
+
+                        else:
+
+                            cmds.connectAttr(f"{attatched_ctl}.ry", f"{blend_two_attr_spread}.input[1]")
+
+
+            cmds.connectAttr(f"{blend_two_attr_curl}.output", f"{self.switch_ctl_grp[1]}.rz") # Connect curl to rz
+            cmds.connectAttr(f"{blend_two_attr_spread}.output", f"{self.switch_ctl_grp[1]}.ry") # Connect spread to ry
+
 
 
 # cmds.file(new=True, force=True)

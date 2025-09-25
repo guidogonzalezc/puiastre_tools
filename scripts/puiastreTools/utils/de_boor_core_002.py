@@ -100,6 +100,25 @@ def de_boor(n, d, t, kv, tol=0.000001):
 
     return weights[:n]
 
+def get_offset_matrix(child, parent):
+    """
+    Calculate the offset matrix between a child and parent transform in Maya.
+    Args:
+        child (str): The name of the child transform.
+        parent (str): The name of the parent transform. 
+    Returns:
+        om.MMatrix: The offset matrix that transforms the child into the parent's space.
+    """
+    child_dag = om.MSelectionList().add(child).getDagPath(0)
+    parent_dag = om.MSelectionList().add(parent).getDagPath(0)
+    
+    child_world_matrix = child_dag.inclusiveMatrix()
+    parent_world_matrix = parent_dag.inclusiveMatrix()
+    
+    offset_matrix = child_world_matrix * parent_world_matrix.inverse()
+
+    return offset_matrix
+
 def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=0.001, d=None, kv_type=OPEN,
                    param_from_length=True, tol=0.000001, name='ribbon', use_position=True, use_tangent=True,
                    use_up=True, use_scale=True, custom_parm = [], parent=None, axis_change=False):
@@ -320,23 +339,37 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
             up = create_wt_add_matrix(par_off_plugs, wts, f'{name}Up0{i}_WAM', tol=tol)
 
-            temp_mat = om.MMatrix(cmds.getAttr(f'{temp}.matrix'))
-            up_inverse = om.MMatrix(cmds.getAttr(f'{up}.matrixSum')).inverse()
-            up_off_val = temp_mat * up_inverse
-
             up_off = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
-            # cmds.setAttr(f'{up_off}.matrixIn[0]', list(up_off_val), type='matrix')
-            if axis_change and len(params)-1 == i:
-                cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
-                                                   0, 1, 0, 0,
-                                                   0, 0, 1, 0,
-                                                  -4, 0, 0, 0], type='matrix')
+
+
+            if axis_change:
+                blend_up = cmds.createNode('blendMatrix', n=f'{name}UpAxisChange0{i}_BM', ss=True)
+                cmds.connectAttr(f'{up}.matrixSum', f'{blend_up}.inputMatrix')
+                cmds.connectAttr(f'{cvs[0]}.outputMatrix', f'{blend_up}.target[0].targetMatrix')
+                cmds.setAttr(f'{blend_up}.target[0].translateWeight', 0)
+
+                parent_matrix = cmds.createNode("parentMatrix", n=f"{name}ParentMatrix0{i}_PM", ss=True)
+                cmds.connectAttr(f'{blend_up}.outputMatrix', f'{parent_matrix}.inputMatrix')
+                cmds.connectAttr(f'{up}.matrixSum', f'{parent_matrix}.target[0].targetMatrix')
+              
+                inverse_parent = cmds.createNode("inverseMatrix", n=f"{name}InverseParent0{i}_IM", ss=True)
+                mult_offset = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
+                cmds.connectAttr(f'{up}.matrixSum', f'{inverse_parent}.inputMatrix')
+                cmds.connectAttr(f'{inverse_parent}.outputMatrix', f'{mult_offset}.matrixIn[1]')
+                cmds.connectAttr(f'{blend_up}.outputMatrix', f'{mult_offset}.matrixIn[0]')
+                cmds.connectAttr(f'{mult_offset}.matrixSum', f'{parent_matrix}.target[0].offsetMatrix')
+
+
+
+                cmds.connectAttr(f'{parent_matrix}.outputMatrix', f'{up_off}.matrixIn[1]')
+
             else:
-                cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
-                                        0, 1, 0, 0,
-                                        0, 0, 1, 0,
-                                        0, 4, 0, 0], type='matrix')
-            cmds.connectAttr(f'{up}.matrixSum', f'{up_off}.matrixIn[1]')
+                cmds.connectAttr(f'{up}.matrixSum', f'{up_off}.matrixIn[1]')
+
+            cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
+                                    0, 1, 0, 0,
+                                    0, 0, 1, 0,
+                                    0, 4, 0, 0], type='matrix')
 
             up_plug = f'{up_off}.matrixSum'
 

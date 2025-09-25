@@ -66,7 +66,7 @@ def leg_pv_spaceswitch(localHip, legPv, footCtl, root):
     cmds.connectAttr(f"{legPv}.spaceSwitchValue", f"{foot_trn}.blendAim1")
     cmds.connectAttr(f"{legPv}.automaticPoleVector", f"{pv_SPC}.blendParent1")
 
-def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1):
+def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, sources_names = []):
     """
     Switch the matrix space of a target control to multiple source controls in Maya.
 
@@ -100,10 +100,11 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1):
     cmds.addAttr(target, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
     cmds.setAttr(f"{target}.SpaceSwitchSep", channelBox=True, lock=True)   
     spaces = [src.split("_")[1] for src in sources]
+    name_space = [src_name for src_name in sources_names]
 
 
     if len(sources) > 1:
-        cmds.addAttr(target, longName="SpaceFollow", attributeType="enum", enumName=":".join(spaces), keyable=True)
+        cmds.addAttr(target, longName="SpaceFollow", attributeType="enum", enumName=":".join(name_space), keyable=True)
 
         for i, driver in enumerate(sources):
 

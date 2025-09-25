@@ -166,6 +166,11 @@ class SpineModule():
             self.main_controllers.append(ctl)
             self.main_controllers_grp.append(ctl_grp)
 
+        cmds.addAttr(self.main_controllers[1], shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(self.main_controllers[1]+".tangents", channelBox=True, lock=True)
+        cmds.addAttr(self.main_controllers[1], shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
+        cmds.setAttr(self.main_controllers[1]+".tangentVisibility", channelBox=True)
+
         fk_switch(target= self.main_controllers[1], sources= [self.main_controllers[2], self.main_controllers[0]])
         cmds.setAttr(f"{self.main_controllers[1]}.RotateValue", lock=True, keyable=False)
 
@@ -319,9 +324,45 @@ class SpineModule():
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{spine_wm}.target[0].targetMatrix")
         cmds.setAttr(f"{spine_wm}.target[0].translateWeight", 0)
 
-        cvs = [f"{spine01_world_matrix}.outputMatrix", f"{tan01_world_matrix}.outputMatrix", f"{spine_wm}.outputMatrix"]
+        spine01_to_spine02_tan_1 = cmds.createNode("blendMatrix", name=f"{self.side}_spine01ToSpine02Tan01StartPos_BMX", ss=True)
+        cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{spine01_to_spine02_tan_1}.inputMatrix")
+        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{spine01_to_spine02_tan_1}.target[0].targetMatrix")
+        cmds.setAttr(f"{spine01_to_spine02_tan_1}.target[0].translateWeight", 0.2)
+        spine01_tan = cmds.createNode("multMatrix", name=f"{self.side}_spine01Tan_MMT", ss=True)
+        cmds.connectAttr(f"{spine01_to_spine02_tan_1}.outputMatrix", f"{spine01_tan}.matrixIn[0]")
+        cmds.connectAttr(f"{self.guides[-1]}.worldInverseMatrix[0]", f"{spine01_tan}.matrixIn[1]")
+        cmds.connectAttr(f"{spine_wm}.outputMatrix", f"{spine01_tan}.matrixIn[2]")
 
-        self.num_joints = 5
+        spine02_to_spine01_tan_2 = cmds.createNode("blendMatrix", name=f"{self.side}_spine02ToSpine01Tan02StartPos_BMX", ss=True)
+        cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{spine02_to_spine01_tan_2}.inputMatrix")
+        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{spine02_to_spine01_tan_2}.target[0].targetMatrix")
+        cmds.setAttr(f"{spine02_to_spine01_tan_2}.target[0].translateWeight", 0.8)
+        spine02_tan = cmds.createNode("multMatrix", name=f"{self.side}_spine02Tan_MMT", ss=True)
+        cmds.connectAttr(f"{spine02_to_spine01_tan_2}.outputMatrix", f"{spine02_tan}.matrixIn[0]")
+        cmds.connectAttr(f"{self.guides[0]}.worldInverseMatrix[0]", f"{spine02_tan}.matrixIn[1]")
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{spine02_tan}.matrixIn[2]")
+
+        ctls = []
+        for node, name in zip([spine02_tan, spine01_tan], ["spine02Tangent", "spine01Tangent"]):
+
+            ctl, controller_grp = controller_creator(
+                    name=f"{self.side}_{name}",
+                    suffixes=["GRP", "ANM"],
+                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                    ro=True,
+                    parent=self.controllers_trn
+                )
+        
+            cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
+
+            cmds.connectAttr(f"{node}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
+            cmds.connectAttr(f"{self.main_controllers[1]}.tangentVisibility", f"{controller_grp[0]}.visibility")
+            ctls.append(ctl)
+
+
+        cvs = [f"{spine01_world_matrix}.outputMatrix",f"{ctls[0]}.worldMatrix[0]", f"{tan01_world_matrix}.outputMatrix",f"{ctls[1]}.worldMatrix[0]", f"{spine_wm}.outputMatrix"]
+
+        self.num_joints = 10
 
         t_values = []
         for i in range(self.num_joints):

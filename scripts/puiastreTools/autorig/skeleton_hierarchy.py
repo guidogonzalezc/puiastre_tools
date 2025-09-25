@@ -213,21 +213,21 @@ def build_complete_hierarchy():
 
             parents = [data_exporter.get_data("C_spineModule", "localHip"), data_exporter.get_data("C_spineModule", "body_ctl")]
 
-            space_switch.fk_switch(target = fk, sources= parents)
-            space_switch.fk_switch(target = root, sources= parents)
-            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            space_switch.fk_switch(target = fk, sources= parents, sources_names=["LocalHip", "Body"])
+            space_switch.fk_switch(target = root, sources= parents, sources_names=["LocalHip", "Body"])
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalHip", "Body"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents)
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalHip", "Body"])
 
         if "tail" in skel_grps[i]:
             main_ctl= data_exporter.get_data(modules_name[i], "main_ctl")
             parents = [data_exporter.get_data("C_spineModule", "localHip"), data_exporter.get_data("C_spineModule", "body_ctl")]
-            space_switch.fk_switch(target = main_ctl, sources= parents)
+            space_switch.fk_switch(target = main_ctl, sources= parents, sources_names=["LocalHip", "Body"])
 
         if "neck" in skel_grps[i]:
             main_ctl= data_exporter.get_data(modules_name[i], "neck_ctl")
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
-            space_switch.fk_switch(target = main_ctl, sources= parents)
+            space_switch.fk_switch(target = main_ctl, sources= parents, sources_names=["LocalChest", "SpineEnd"])
 
         if "arm" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
@@ -238,15 +238,15 @@ def build_complete_hierarchy():
 
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
 
-            space_switch.fk_switch(target = scapula, sources= parents)
+            space_switch.fk_switch(target = scapula, sources= parents, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, scapula)
 
 
-            space_switch.fk_switch(target = fk, sources= parents)
-            space_switch.fk_switch(target = root, sources= parents)
-            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            space_switch.fk_switch(target = fk, sources= parents, sources_names=["Scapula", "LocalChest", "SpineEnd"])
+            space_switch.fk_switch(target = root, sources= parents, sources_names=["Scapula", "LocalChest", "SpineEnd"])
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["Scapula", "LocalChest", "SpineEnd"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents)
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["WristIK", "Scapula", "LocalChest", "SpineEnd"])
         
         if "Metacarpal" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctls")[0]
@@ -262,11 +262,10 @@ def build_complete_hierarchy():
             if hand_settings_value is None or hand_settings_value != modules_name[i].split("_")[0]:
                 space_switch.fk_switch(target = hand_settings, sources=[parent_joint])
                 hand_settings_value = modules_name[i].split("_")[0]
-            parents = [hand_settings, parent_joint]
+            parents = [parent_joint]
 
-            space_switch.fk_switch(target = fk, sources= parents)
-            space_switch.fk_switch(target = root, sources= parents)
-            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0)
+            space_switch.fk_switch(target = fk, sources= parents, sources_names=["Wrist"])
+            space_switch.fk_switch(target = root, sources= parents, sources_names=["Wrist"])
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=[ "Wrist"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents)
-
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"])
