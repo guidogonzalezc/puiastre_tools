@@ -65,6 +65,8 @@ class FalangeModule(object):
         cmds.setAttr(self.switch_ctl+".extraAttr", channelBox=True, lock=True)
         cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
         cmds.addAttr(self.switch_ctl, shortName="bendysVis", niceName="Bendys Visibility", attributeType="bool", keyable=False)
+        cmds.setAttr(self.switch_ctl+".bendysVis", channelBox=True)
+
         self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
 
@@ -645,19 +647,7 @@ class FalangeModule(object):
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
 
-        # Remove any kind of numbers from the name string
-        clean_name = ''.join([c for c in f"{self.side}_{self.names[i]}" if not c.isdigit()])
-        self.joints = de_boors_002.de_boor_ribbon(
-            aim_axis=self.primary_aim,
-            up_axis=self.secondary_aim,
-            cvs=self.blend_wm,
-            num_joints=20,
-            name=clean_name,
-            parent=self.skinnging_grp
-        )
-
-
-        # self.bendys()
+        self.bendys()
 
     def get_offset_matrix(self, child, parent):
         """
@@ -678,12 +668,41 @@ class FalangeModule(object):
 
         return offset_matrix
 
+    def getClosestParamToWorldMatrix(self, curveDagPath, worldMatrix):
+        """
+        Returns the closest parameter (u) on the curve to the given worldMatrix.
+        """
+        curveFn = om.MFnNurbsCurve(curveDagPath)
+
+        # Extract the translation as an MPoint
+        translation = om.MTransformationMatrix(worldMatrix).translation(om.MSpace.kWorld)
+        point = om.MPoint(translation)
+
+        # closestPoint() returns (MPoint, paramU)
+        closestPoint, paramU = curveFn.closestPoint(point, space=om.MSpace.kWorld)
+
+        return paramU
+
+
+
+
+
     def bendys(self):
         self.bendy_controllers = cmds.createNode("transform", name=f"{self.side}_{self.names[1]}BendyControllers_GRP", parent=self.individual_controllers_grp, ss=True)
         cmds.connectAttr(f"{self.switch_ctl}.bendysVis", f"{self.bendy_controllers}.visibility")
         cmds.setAttr(f"{self.bendy_controllers}.inheritsTransform", 0)
-        
+
+        curve = cmds.curve(d=3, p=[(0, 0, 0)] * 4, name=f"{self.side}_{self.names[1]}Bendy_CRV")
+        curve_shape = cmds.listRelatives(curve, shapes=True)[0]
+
+        for i, pos in enumerate(self.blend_wm):
+            decompose = cmds.createNode("decomposeMatrix", name=f"{pos.replace('.outputMatrix', '')}_DMT", ss=True)
+            cmds.connectAttr(f"{pos}", f"{decompose}.inputMatrix")
+            cmds.connectAttr(f"{decompose}.outputTranslate", f"{curve_shape}.controlPoints[{i}]")
+
         self.joints = []
+        parameters = []
+        bendy_ctls = []
         for i, bendy in enumerate(["UpperBendy", "MiddleBendy", "LowerBendy"]):
             ctl, ctl_grp = controller_creator(
                 name=f"{self.side}_{self.names[i]}{bendy}",
@@ -693,6 +712,7 @@ class FalangeModule(object):
             )
 
             cmds.parent(ctl_grp[0], self.bendy_controllers)
+            bendy_ctls.append(ctl)
 
             initial_matrix = self.shoulder_rotate_matrix if i == 0 else self.blend_wm[i]
 
@@ -731,10 +751,41 @@ class FalangeModule(object):
                 skinning_joints.append(joint)
 
 
-            self.joints.append(skinning_joints)
-        core.pv_locator(name=f"{self.side}_{self.names[i]}PVLocator", parents=[self.pv_ik_ctl, self.joints[1][0]], parent_append=self.ik_controllers)
+            for joint in skinning_joints:
 
-        self.attributes()
+                selection_list = om.MSelectionList()
+                selection_list.add(curve)
+                curve_dag_path = selection_list.getDagPath(0)
+
+                ctl_sel = om.MSelectionList()
+                ctl_sel.add(joint)
+                ctlDag = ctl_sel.getDagPath(0)
+                worldMatrix = ctlDag.inclusiveMatrix()
+
+                u = self.getClosestParamToWorldMatrix(curveDagPath=curve_dag_path, worldMatrix=worldMatrix)
+                parameters.append(u)
+
+        clean_name = ''.join([c for c in f"{self.side}_{self.names[1]}" if not c.isdigit()])
+        self.joints = de_boors_002.de_boor_ribbon(
+            aim_axis=self.primary_aim,
+            up_axis=self.secondary_aim,
+            cvs=self.blend_wm,
+            num_joints=len(parameters),
+            name=clean_name,
+            parent=self.skinnging_grp,
+            custom_parm=parameters
+        )
+
+        cmds.delete(curve)
+
+        # QUEDA HACER EL BLENDING
+
+
+
+            # self.joints.append(skinning_joints)
+        # core.pv_locator(name=f"{self.side}_{self.names[i]}PVLocator", parents=[self.pv_ik_ctl, self.joints[1][0]], parent_append=self.ik_controllers)
+
+        # self.attributes()
 
     def attributes(self):
 
