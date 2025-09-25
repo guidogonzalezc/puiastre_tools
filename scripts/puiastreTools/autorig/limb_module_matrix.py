@@ -325,7 +325,17 @@ class LimbModule(object):
 
         )
 
-        cmds.connectAttr(self.guides_matrix[2] + ".outputMatrix", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix") 
+        if self.side == "R":
+            hand_ctl_offset = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}HandIkOffset_MMX", ss=True)
+            cmds.connectAttr(f"{self.guides_matrix[2]}.outputMatrix", f"{hand_ctl_offset}.matrixIn[1]")
+            cmds.setAttr(f"{hand_ctl_offset}.matrixIn[0]",  -1, 0, 0, 0, 
+                                                            0, -1, 0, 0, 
+                                                            0, -0, -1, 0,
+                                                            0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(hand_ctl_offset + ".matrixSum", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+
+        else:
+            cmds.connectAttr(self.guides_matrix[2] + ".outputMatrix", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
 
         cmds.addAttr(self.pv_ik_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.pv_ik_ctl+".extraAttr", channelBox=True, lock=True)
@@ -628,8 +638,16 @@ class LimbModule(object):
         hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.module_name}EndLocal_F4X", ss=True)
 
         hand_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}EndWM_MMX", ss=True)
-        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[1]")
+        if self.side == "R":
+            cmds.setAttr(f"{hand_wm_multmatrix}.matrixIn[0]",  -1, 0, 0, 0,
+                                                    -0, -1, 0, 0,
+                                                    0, 0, -1, 0,
+                                                    0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[2]")
+        else:
+            cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[0]")
+            cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[1]")
 
 
         for i in range(0, 3):
@@ -816,7 +834,7 @@ class LimbModule(object):
                 t = 0.95 if i == self.twist_number - 1 else i / (float(self.twist_number) - 1)
                 t_values.append(t)
 
-            joint = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
+            joint = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change=True)
 
             if bendy == "LowerBendy":
                 joint_end = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
