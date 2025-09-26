@@ -96,6 +96,10 @@ def make(asset_name="dragon"):
     core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_006.guides")
     core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
+    #LAIA
+    core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_006.guides")
+    core.DataManager.set_ctls_data("C:/3ero/TFG/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+
     data_exporter = data_export.DataExport()
     data_exporter.new_build()
     if not asset_name:
