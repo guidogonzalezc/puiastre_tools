@@ -113,7 +113,6 @@ def parented_chain(skinning_joints, parent, hand_value=False):
 
     return end_joints
 
-
 def build_complete_hierarchy():
     """
     Reads the build and guide files, interprets the desired hierarchy, and
@@ -191,10 +190,16 @@ def build_complete_hierarchy():
             current_group = []
 
             for joint in skinning_joint_list:
-                if "00_JNT" in joint:
+                if "00_JNT" in joint and not "Secondary" in joint:
                     membrane_groups.append(current_group)
                     current_group = []
+
+                if "Secondary00" in joint:
+                    membrane_groups.append(current_group)
+                    current_group = []
+
                 current_group.append(joint)
+                
 
                 if joint == skinning_joint_list[-1]:
                     membrane_groups.append(current_group)

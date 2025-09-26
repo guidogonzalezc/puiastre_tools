@@ -667,6 +667,41 @@ class FootGuideCreation(GuideCreation):
         f"{ctl}{first_b_letter}ankOut": get_data(f"{self.sides}_{ctl}{first_b_letter}ankOut"),
         f"{ctl}{first_b_letter}ankIn": get_data(f"{self.sides}_{ctl}{first_b_letter}ankIn"),
         f"{ctl}{first_h_letter}eel": get_data(f"{self.sides}_{ctl}{first_h_letter}eel"),
+
+    }
+        
+class FootFingersGuideCreation(GuideCreation):
+    """
+    Guide creation for feet.
+    """
+    def __init__(self, side = "L", limb_name="foot"):
+        self.sides = side
+        self.reverse_foot_name = limb_name
+        self.limb_name = "backLegFoot"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = None
+        self.prefix = None
+        ctl = "" if self.reverse_foot_name == "foot" else self.reverse_foot_name
+        self.position_data = {
+
+        f"{ctl}thumb01": get_data(f"{self.sides}_{ctl}thumb01"),
+        f"{ctl}thumb02": get_data(f"{self.sides}_{ctl}thumb02"),
+        f"{ctl}thumb03": get_data(f"{self.sides}_{ctl}thumb03"),
+
+        f"{ctl}index01": get_data(f"{self.sides}_{ctl}index01"),
+        f"{ctl}index02": get_data(f"{self.sides}_{ctl}index02"),
+        f"{ctl}index03": get_data(f"{self.sides}_{ctl}index03"),
+
+        f"{ctl}middle01": get_data(f"{self.sides}_{ctl}middle01"),
+        f"{ctl}middle02": get_data(f"{self.sides}_{ctl}middle02"),
+        f"{ctl}middle03": get_data(f"{self.sides}_{ctl}middle03"),
+
+        f"{ctl}pinky01": get_data(f"{self.sides}_{ctl}pinky01"),
+        f"{ctl}pinky02": get_data(f"{self.sides}_{ctl}pinky02"),
+        f"{ctl}pinky03": get_data(f"{self.sides}_{ctl}pinky03"),
+
+
     }
         
 class JiggleJoint(GuideCreation):
@@ -801,6 +836,8 @@ def load_guides(path = ""):
                     MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "facial":
                     EyeGuideCreation(side=guide_name.split("_")[0], cvsPosition=guide_info.get("cvsPosition")).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "backLegFoot":
+                    FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
 
 def guides_export():
         """
@@ -1030,7 +1067,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
         return transforms_chain_export
 
 
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_006.guides")
 # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")

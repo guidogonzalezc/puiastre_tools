@@ -53,7 +53,7 @@ class FalangeModule(object):
         self.switch_ctl, self.switch_ctl_grp = controller_creator(
             name=f"{self.side}_hand",
             suffixes=["GRP", "SDK"],
-            lock=["sx", "sy", "sz", "visibility"],
+            lock=["tx", "ty", "tz" ,"sx", "sy", "sz", "visibility"],
             ro=False,
             parent=self.individual_controllers_grp
         )
@@ -66,6 +66,7 @@ class FalangeModule(object):
         cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
         cmds.addAttr(self.switch_ctl, shortName="bendysVis", niceName="Bendys Visibility", attributeType="bool", keyable=False)
         cmds.setAttr(self.switch_ctl+".bendysVis", channelBox=True)
+        cmds.addAttr(self.switch_ctl, shortName="curvature", niceName="Curvature", maxValue=1, minValue=0,defaultValue=0, keyable=True)
 
         self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
@@ -172,11 +173,12 @@ class FalangeModule(object):
         self.fk_ctls = []
         self.fk_grps = []
         self.fk_offset = []
+        self.fk_sdks = []
         for i, guide in enumerate(self.guides_matrix):
 
             ctl, ctl_grp = controller_creator(
                 name=self.guides[i].replace("_GUIDE", "Fk"),
-                suffixes=["GRP", "ANM"],
+                suffixes=["GRP", "SDK", "ANM"],
                 lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                 ro=True,
             )
@@ -223,6 +225,7 @@ class FalangeModule(object):
 
             self.fk_ctls.append(ctl)
             self.fk_grps.append(ctl_grp) 
+            self.fk_sdks.append(ctl_grp[1])
 
         self.fk_wm = [f"{ctl}.worldMatrix[0]" for ctl in self.fk_ctls]
 
@@ -571,12 +574,13 @@ class FalangeModule(object):
         # sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_sub{self.names[0]}Controllers_GRP", parent=self.individual_controllers_grp, ss=True)
 
         self.attached_fk_ctls = []
+        self.attached_fk_sdks = []
         for i, joint in enumerate(self.ik_wm):
             name = joint.split(".")[0].split("_")[1]
 
             ctl, controller_grp = controller_creator(
                 name=f"{self.side}_{name}AttachedFk",
-                suffixes=["GRP", "ANM"],
+                suffixes=["GRP", "SDK", "ANM"],
                 lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                 ro=True,
                 parent=ctls_sub_neck[-1] if ctls_sub_neck else self.individual_controllers_grp
@@ -601,6 +605,7 @@ class FalangeModule(object):
 
             ctls_sub_neck.append(ctl)
             self.attached_fk_ctls.append(ctl)
+            self.attached_fk_sdks.append(controller_grp[1])
 
         self.ik_wm = [f"{ctl}.worldMatrix[0]" for ctl in ctls_sub_neck]
 
@@ -700,9 +705,9 @@ class FalangeModule(object):
             cmds.connectAttr(f"{pos}", f"{decompose}.inputMatrix")
             cmds.connectAttr(f"{decompose}.outputTranslate", f"{curve_shape}.controlPoints[{i}]")
 
-        self.joints = []
         parameters = []
         bendy_ctls = []
+        stiff_joints = []
         for i, bendy in enumerate(["UpperBendy", "MiddleBendy", "LowerBendy"]):
             ctl, ctl_grp = controller_creator(
                 name=f"{self.side}_{self.names[i]}{bendy}",
@@ -753,6 +758,8 @@ class FalangeModule(object):
 
             for joint in skinning_joints:
 
+                stiff_joints.append(joint)
+
                 selection_list = om.MSelectionList()
                 selection_list.add(curve)
                 curve_dag_path = selection_list.getDagPath(0)
@@ -765,8 +772,8 @@ class FalangeModule(object):
                 u = self.getClosestParamToWorldMatrix(curveDagPath=curve_dag_path, worldMatrix=worldMatrix)
                 parameters.append(u)
 
-        clean_name = ''.join([c for c in f"{self.side}_{self.names[1]}" if not c.isdigit()])
-        self.joints = de_boors_002.de_boor_ribbon(
+        clean_name = ''.join([c for c in f"{self.side}_{self.names[1]}Curvature" if not c.isdigit()])
+        curvature_joints = de_boors_002.de_boor_ribbon(
             aim_axis=self.primary_aim,
             up_axis=self.secondary_aim,
             cvs=self.blend_wm,
@@ -777,15 +784,32 @@ class FalangeModule(object):
         )
 
         cmds.delete(curve)
+        self.joints = []
+
+        for i, (stiff, curvature) in enumerate(zip(stiff_joints, curvature_joints)):
+            stiff_input = cmds.listConnections(f"{stiff}.offsetParentMatrix", plugs=True, source=True, destination=False)
+            curvature_input = cmds.listConnections(f"{curvature}.offsetParentMatrix", plugs=True, source=True, destination=False)
+            # print(f"Connections for {stiff}: {stiff_input}")
+            # print(f"Connections for {curvature}: {curvature_input}")
+            name = curvature.replace("Curvature", "").replace("JNT", "")
+            blend_matrix = cmds.createNode("blendMatrix", n=f"{name}WM_BLM", ss=True)
+            cmds.connectAttr(f"{stiff_input[0]}", f"{blend_matrix}.inputMatrix")
+            cmds.connectAttr(f"{curvature_input[0]}", f"{blend_matrix}.target[0].targetMatrix")
+            cmds.connectAttr(f"{self.switch_ctl}.curvature", f"{blend_matrix}.target[0].weight")
+            joint = cmds.createNode("joint", name=f"{name}JNT", ss=True, parent=self.skinnging_grp)
+            cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
+            self.joints.append(joint)
+            cmds.delete(stiff, curvature)
 
         # QUEDA HACER EL BLENDING
 
-
+        index = int(len(self.joints)//3)
+        print(self.joints[index])
 
             # self.joints.append(skinning_joints)
-        # core.pv_locator(name=f"{self.side}_{self.names[i]}PVLocator", parents=[self.pv_ik_ctl, self.joints[1][0]], parent_append=self.ik_controllers)
+        core.pv_locator(name=f"{self.side}_{self.names[1]}PVLocator", parents=[self.pv_ik_ctl, self.joints[index]], parent_append=self.ik_controllers)
 
-        # self.attributes()
+        self.attributes()
 
     def attributes(self):
 
@@ -793,78 +817,62 @@ class FalangeModule(object):
         Add attributes to the hand controller for CURL, SPREAD, and FIST controls.
         """
 
-        # Set driven keys to hand_sdk offset grp rotation
-        for ctl in self.fk_ctls:
-            blend_two_attr_curl = cmds.createNode("blendTwoAttr", name=f"{self.side}_fingersCurl_B2A", ss=True)
-            blend_two_attr_spread = cmds.createNode("blendTwoAttr", name=f"{self.side}_fingersSpread_B2A", ss=True)
+        # Connect hand rotations to the fingers SDK (attached and FK)
 
-            for attatched_ctl in self.attached_fk_ctls:
+        for sdk in self.attached_fk_sdks:
+            cmds.connectAttr(f"{self.switch_ctl}.rx", f"{sdk}.rx")
+            cmds.connectAttr(f"{self.switch_ctl}.rz", f"{sdk}.rz")
 
-                #Curl
-                cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blend_two_attr_curl}.attributesBlender")
-                cmds.connectAttr(f"{ctl}.rz", f"{blend_two_attr_curl}.input[0]")
-                cmds.connectAttr(f"{attatched_ctl}.rz", f"{blend_two_attr_curl}.input[1]")
-
-                # Spread
-                cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blend_two_attr_spread}.attributesBlender")
-
-                if "first" or "second" in ctl:
-
-                    #Attatched ctl ry needs to be negated
-                    negate_node = cmds.createNode("negate", name=f"{self.side}_fingersSpread_NEG", ss=True)
-
-                    if "second" in ctl: # If the finger name is second rotate needs to be halved
-
-                        float_math_half_rotate = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalfRotate_MUL", ss=True)
-                        cmds.setAttr(f"{float_math_half_rotate}.input2", 0.5)
-                        cmds.connectAttr(f"{negate_node}.output", f"{float_math_half_rotate}.input1")
-                        cmds.connectAttr(f"{float_math_half_rotate}.output", f"{blend_two_attr_spread}.input[1]")
-
-                    elif "first" in ctl: # First finger
-
-                        cmds.connectAttr(f"{negate_node}.output", f"{blend_two_attr_spread}.input[1]")
+            if "01" in sdk or "02" in sdk or "03" in sdk:
+                continue
+            else:
+                if "first" in sdk or "fourth" in sdk:
+                    multiply = cmds.createNode("multiply", n=sdk.replace("SDK", "MLT"))
+                    cmds.connectAttr(f"{self.switch_ctl}.ry", f"{multiply}.input[0]")
+                    if "first" in sdk:
+                        condition_node = cmds.createNode("condition", n=sdk.replace("SDK", "CON"))
+                        cmds.setAttr(f"{condition_node}.operation", 4) # Less
+                        cmds.setAttr(f"{condition_node}.colorIfTrueR", 1.4)
+                        cmds.setAttr(f"{condition_node}.colorIfFalseR", 0.3)
+                        cmds.connectAttr(f"{self.switch_ctl}.ry", f"{condition_node}.firstTerm")
+                        cmds.connectAttr(f"{condition_node}.outColorR", f"{multiply}.input[1]")
 
                     else:
-                        if "third" in ctl: # If not first or second just connect normally
-                            half_multiply = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalf_MUL", ss=True)
-                            cmds.setAttr(f"{half_multiply}.input2", 0.5)
-                            cmds.connectAttr(f"{ctl}.ry", f"{half_multiply}.input1")
-                            cmds.connectAttr(f"{half_multiply}.output", f"{blend_two_attr_spread}.input[0]")
-                        else:
-                            cmds.connectAttr(f"{ctl}.ry", f"{blend_two_attr_spread}.input[0]")
+                        cmds.setAttr(f"{multiply}.input[1]", 0.8)
+                    cmds.connectAttr(f"{multiply}.output", f"{sdk}.ry")
+                else:
+                    cmds.connectAttr(f"{self.switch_ctl}.ry", f"{sdk}.ry")
+            
+            
 
-                elif "first" in attatched_ctl or "second" in attatched_ctl:
-                    
-                    if "second" in attatched_ctl:
+        for sdk in self.fk_sdks:
+            cmds.connectAttr(f"{self.switch_ctl}.rx", f"{sdk}.rx")
+            cmds.connectAttr(f"{self.switch_ctl}.rz", f"{sdk}.rz")
+            
+            if "01" in sdk or "02" in sdk or "03" in sdk:
+                continue
+            else:
+                if "first" in sdk or "fourth" in sdk:
+                    multiply = cmds.createNode("multiply", n=sdk.replace("SDK", "MLT"))
+                    cmds.connectAttr(f"{self.switch_ctl}.ry", f"{multiply}.input[0]")
+                    if "first" in sdk:
+                        condition_node = cmds.createNode("condition", n=sdk.replace("SDK", "CON"))
+                        cmds.setAttr(f"{condition_node}.operation", 4) # Less
+                        cmds.setAttr(f"{condition_node}.colorIfTrueR", 1.4)
+                        cmds.setAttr(f"{condition_node}.colorIfFalseR", 0.3)
+                        cmds.connectAttr(f"{self.switch_ctl}.ry", f"{condition_node}.firstTerm")
+                        cmds.connectAttr(f"{condition_node}.outColorR", f"{multiply}.input[1]")
 
-                        float_math_half_rotate = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalfRotate_MUL", ss=True)
-                        negate_node = cmds.createNode("negate", name=f"{self.side}_fingersSpread_NEG", ss=True)
-                        cmds.setAttr(f"{float_math_half_rotate}.input2", 0.5)
-                        cmds.connectAttr(f"{attatched_ctl}.ry", f"{negate_node}.input")
-                        cmds.connectAttr(f"{negate_node}.output", f"{float_math_half_rotate}.input1")
-                        cmds.connectAttr(f"{float_math_half_rotate}.output", f"{blend_two_attr_spread}.input[1]")
-
-                    elif "first" in attatched_ctl:
-
-                        negate_node = cmds.createNode("negate", name=f"{self.side}_fingersSpread_NEG", ss=True)
-                        cmds.connectAttr(f"{attatched_ctl}.ry", f"{negate_node}.input")
-                        cmds.connectAttr(f"{negate_node}.output", f"{blend_two_attr_spread}.input[1]")
                     else:
+                        cmds.setAttr(f"{multiply}.input[1]", 0.8)
+                    cmds.connectAttr(f"{multiply}.output", f"{sdk}.ry")
+                else:
+                    cmds.connectAttr(f"{self.switch_ctl}.ry", f"{sdk}.ry")
 
-                        if "third" in attatched_ctl:
-
-                            half_multiply = cmds.createNode("multiply", name=f"{self.side}_fingersSpreadHalf_MUL", ss=True)
-                            cmds.setAttr(f"{half_multiply}.input2", 0.5)
-                            cmds.connectAttr(f"{attatched_ctl}.ry", f"{half_multiply}.input1")
-                            cmds.connectAttr(f"{half_multiply}.output", f"{blend_two_attr_spread}.input[1]")
-
-                        else:
-
-                            cmds.connectAttr(f"{attatched_ctl}.ry", f"{blend_two_attr_spread}.input[1]")
+            
 
 
-            cmds.connectAttr(f"{blend_two_attr_curl}.output", f"{self.switch_ctl_grp[1]}.rz") # Connect curl to rz
-            cmds.connectAttr(f"{blend_two_attr_spread}.output", f"{self.switch_ctl_grp[1]}.ry") # Connect spread to ry
+        
 
 
 

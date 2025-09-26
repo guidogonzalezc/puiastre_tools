@@ -199,18 +199,20 @@ class MembraneModule(object):
                 cmds.setAttr(f"{pick_matrix}.useScale", 0)
                 cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
 
+                joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
-            self.joints = de_boors_002.de_boor_ribbon(
+                cvs = [joint_one, ctl, joint_two]
+
+                self.joints = de_boors_002.de_boor_ribbon(
                 aim_axis=self.primary_aim,
                 up_axis=self.secondary_aim,
-                cvs=ctls,
-                num_joints=20,
-                name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran",
-                parent=self.skinnging_grp
+                cvs=cvs,
+                num_joints=2,
+                name=f"{self.side}_{self.number_to_ordinal_word(i+1)}0{index+1}MembranSecondary",
+                parent=self.skinnging_grp,
+                custom_parm=[0.25, 0.75]
             )
-
-                # joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
-                # cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
 # cmds.file(new=True, force=True)
 

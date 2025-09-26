@@ -1256,6 +1256,7 @@ class BackLegModule(LimbModule):
                 "pv_ctl": self.pv_ik_ctl,   
                 "root_ctl": self.root_ik_ctl,
                 "end_ik": self.hand_ik_ctl,
+                "ball_blend_matrix": self.blend_wm[-1],
             }
         )
 
