@@ -98,10 +98,14 @@ class FingersModule(object):
 
                 aim_matrix_01 = cmds.createNode("aimMatrix", name=finger.replace("GUIDE", "AIM"))
                 aim_matrix_02 = cmds.createNode("aimMatrix", name=finger.replace("01_GUIDE", "02_AIM"))
-                cmds.setAttr(f"{aim_matrix_01}.primaryInputAxis", 0, 0, 1, type="double3")
-                cmds.setAttr(f"{aim_matrix_02}.primaryInputAxis", 0, 0, 1, type="double3")
+                cmds.setAttr(f"{aim_matrix_01}.primaryInputAxis", 1, 0, 0, type="double3")
+                cmds.setAttr(f"{aim_matrix_02}.primaryInputAxis", 1, 0, 0, type="double3")
                 cmds.setAttr(f"{aim_matrix_02}.secondaryInputAxis", 0, 1, 0, type="double3")
+                cmds.setAttr(f"{aim_matrix_01}.secondaryInputAxis", 0, 1, 0, type="double3")
+                cmds.setAttr(f"{aim_matrix_01}.secondaryTargetVector", 0, 1, 0, type="double3")
+                cmds.setAttr(f"{aim_matrix_02}.secondaryTargetVector", 0, 1, 0, type="double3")
                 cmds.setAttr(f"{aim_matrix_02}.secondaryMode", 1) # Aim
+                cmds.setAttr(f"{aim_matrix_01}.secondaryMode", 1) # Aim
                 cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_01}.inputMatrix")
                 cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_02}.secondaryTargetMatrix") # Connect the guide to the secondaryTargetMatrix of the aim matrix
                 blend_matrix_03 = cmds.createNode("blendMatrix", n=finger.replace("01_GUIDE", "03_BLM"))
@@ -109,30 +113,30 @@ class FingersModule(object):
                 cmds.setAttr(f"{blend_matrix_03}.target[0].rotateWeight", 0)
                 cmds.setAttr(f"{blend_matrix_03}.target[0].shearWeight", 0)
                 cmds.connectAttr(f"{aim_matrix_02}.outputMatrix", f"{blend_matrix_03}.inputMatrix")
-                mult_matrix = cmds.createNode("multMatrix", name=finger.replace("02_GUIDE", "02_MLT"))
+                mult_matrix = cmds.createNode("multMatrix", name=finger.replace("01_GUIDE", "02_MLT"))
                 cmds.connectAttr(f"{aim_matrix_02}.outputMatrix", f"{mult_matrix}.matrixIn[0]")
                 cmds.connectAttr(f"{grp[0]}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
-                mult_matrix_02 = cmds.createNode("multMatrix", name=finger.replace("02_GUIDE", "03_MLT"))
+                mult_matrix_02 = cmds.createNode("multMatrix", name=finger.replace("01_GUIDE", "03_MLT"))
                 cmds.connectAttr(f"{blend_matrix_03}.outputMatrix", f"{mult_matrix_02}.matrixIn[0]")
 
                 cmds.connectAttr(f"{aim_matrix_01}.outputMatrix", f"{grp[0]}.offsetParentMatrix") # Connect the aim matrix to the controller group offset parent matrix, to follow the finger movement
             
             if "02" in finger: # Middle joint of each finger, connect to the first aim matrix
 
+                cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_01}.primaryTargetMatrix")
                 cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_02}.inputMatrix")
                 cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{grp[0]}.offsetParentMatrix") # Connect the aim matrix02 to the controller group offset parent matrix, to follow the finger movement
                 cmds.connectAttr(f"{grp[0]}.worldInverseMatrix[0]", f"{mult_matrix_02}.matrixIn[1]")
             
             if "03" in finger: # Last joint of each finger, connect to the last aim matrix
                 
-                cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_01}.primaryTargetMatrix")
+                cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_01}.secondaryTargetMatrix")
                 cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{aim_matrix_02}.primaryTargetMatrix") # Connect the guide to the input matrix of the aim matrix
                 cmds.connectAttr(f"{finger}.worldMatrix[0]", f"{blend_matrix_03}.target[0].targetMatrix") # Connect the guide to the second input of the blend matrix
 
                 cmds.connectAttr(f"{mult_matrix_02}.matrixSum", f"{grp[0]}.offsetParentMatrix") # Connect the blend matrix to the controller group offset parent matrix, to follow the finger movement
 
-            
-
+            cmds.xform(grp[0], m=om.MMatrix.kIdentity)
             controllers.append(ctl)
             grps.append(grp)
 
