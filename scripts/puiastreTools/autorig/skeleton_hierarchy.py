@@ -189,24 +189,35 @@ def build_complete_hierarchy():
             membrane_groups = []
             current_group = []
 
-            for joint in skinning_joint_list:
-                if "00_JNT" in joint and not "Secondary" in joint:
+            for index, joint in enumerate(skinning_joint_list):
+                if "01_JNT" in joint and not "Secondary" in joint:
                     membrane_groups.append(current_group)
                     current_group = []
+                    current_group.append(joint)
 
-                if "Secondary00" in joint:
-                    membrane_groups.append(current_group)
-                    current_group = []
-
-                current_group.append(joint)
-                
+                elif not "Secondary" in joint:
+                    current_group.append(joint)
 
                 if joint == skinning_joint_list[-1]:
+                    membrane_groups.append(current_group)
+
+
+            for joint_list in membrane_groups:
+                if joint_list:
+                    parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
+
+            membrane_groups = []
+            current_group = []
+            for index, joint in enumerate(skinning_joint_list):
+                if "01MembranSecondary" in joint:
+                    current_group = [joint, skinning_joint_list[index + 2], skinning_joint_list[index + 4]]
                     membrane_groups.append(current_group)
 
             for joint_list in membrane_groups:
                 if joint_list:
                     parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
+
+
 
 
         # ===== SPACE SWITCHES ===== #

@@ -804,7 +804,6 @@ class FalangeModule(object):
         # QUEDA HACER EL BLENDING
 
         index = int(len(self.joints)//3)
-        print(self.joints[index])
 
             # self.joints.append(skinning_joints)
         core.pv_locator(name=f"{self.side}_{self.names[1]}PVLocator", parents=[self.pv_ik_ctl, self.joints[index]], parent_append=self.ik_controllers)

@@ -56,7 +56,6 @@ class FingersModule(object):
         :param guide_name: name of the guide to import"""
 
         self.fingers = guide_import(guide_name, all_descendents=True, path=None)
-        print(self.fingers)
         self.side = self.fingers[0].split("_")[0]
         self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_legFingersControllers_GRP", parent=self.masterWalk_ctl)
 

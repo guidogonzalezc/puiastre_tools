@@ -134,6 +134,7 @@ class MembraneModule(object):
                 split_points_two = [joint_list_two[idx] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
 
             ctls = []
+            secondary_ctls = []
             for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
                 y_axis_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_AMX", ss=True)
                 cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{y_axis_aim}.inputMatrix")
@@ -210,9 +211,26 @@ class MembraneModule(object):
                 cvs=cvs,
                 num_joints=2,
                 name=f"{self.side}_{self.number_to_ordinal_word(i+1)}0{index+1}MembranSecondary",
-                parent=self.skinnging_grp,
+                parent=self.modules_grp,
                 custom_parm=[0.25, 0.75]
             )
+                for joint in self.joints:
+                    input = cmds.listConnections(f"{joint}.offsetParentMatrix", plugs=True, source=True, destination=False)[0]
+
+                    ctl, ctl_grp = controller_creator(
+                    name=joint.replace("_JNT", ""),
+                    suffixes=["GRP", "ANM"],
+                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                    ro=True,
+                    parent=self.individual_controllers_grp,
+                    )
+                    cmds.connectAttr(f"{input}", f"{ctl_grp[0]}.offsetParentMatrix")
+                    secondary_ctls.append(ctl)
+                    cmds.delete(joint)
+
+            for ctl in secondary_ctls:
+                joint = cmds.createNode("joint", name=ctl.replace("CTL", "JNT"), ss=True, parent=self.skinnging_grp)
+                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
 # cmds.file(new=True, force=True)
 
