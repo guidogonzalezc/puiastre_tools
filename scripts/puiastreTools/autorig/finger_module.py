@@ -81,6 +81,7 @@ class FingersModule(object):
         self.fingers = guide_import(guide_name, all_descendents=True, path=None)
         self.side = self.fingers[0].split("_")[0]
         self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_legFingersControllers_GRP", parent=self.masterWalk_ctl)
+        cmds.setAttr(self.controllers_grp + ".inheritsTransform", 0)
     
     def get_offset_matrix(self, child, parent):
         """
