@@ -68,6 +68,8 @@ class FalangeModule(object):
         cmds.setAttr(self.switch_ctl+".bendysVis", channelBox=True)
         cmds.addAttr(self.switch_ctl, shortName="curvature", niceName="Curvature", maxValue=1, minValue=0,defaultValue=0, keyable=True)
 
+        
+
         self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
 
@@ -265,6 +267,13 @@ class FalangeModule(object):
         cmds.addAttr(self.hand_ik_ctl, shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.hand_ik_ctl+".attachedFk", channelBox=True, lock=True)
         cmds.addAttr(self.hand_ik_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+
+        self.attached_fk_vis = cmds.createNode("condition", name=f"{self.side}_{self.names[-1]}AttachedFk_VIS", ss=True)
+        cmds.setAttr(f"{self.attached_fk_vis}.operation", 0)
+        cmds.setAttr(f"{self.attached_fk_vis}.colorIfFalseR", 0)
+        cmds.setAttr(f"{self.attached_fk_vis}.secondTerm", 0)
+        cmds.connectAttr(f"{self.hand_ik_ctl}.attachedFKVis", f"{self.attached_fk_vis}.colorIfTrueR")
+        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.attached_fk_vis}.firstTerm")
 
         cmds.connectAttr(self.guides_matrix[-1] + ".outputMatrix", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
 
@@ -588,7 +597,8 @@ class FalangeModule(object):
 
             if i == 0:
                 cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
-                cmds.connectAttr(f"{self.hand_ik_ctl}.attachedFKVis", f"{controller_grp[0]}.visibility")
+                # cmds.connectAttr(f"{self.hand_ik_ctl}.attachedFKVis", f"{controller_grp[0]}.visibility")
+                cmds.connectAttr(f"{self.attached_fk_vis}.outColorR", f"{controller_grp[0]}.visibility")
                 cmds.connectAttr(f"{joint}", f"{controller_grp[0]}.offsetParentMatrix")
 
             else:

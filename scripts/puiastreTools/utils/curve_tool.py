@@ -463,6 +463,7 @@ def text_curve(ctl_name):
     return text_curve
 
 # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+# core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
 # get_all_ctl_curves_data()
