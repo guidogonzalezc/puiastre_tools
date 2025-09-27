@@ -272,6 +272,7 @@ class SpineModule():
         spine01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_spine01WM_AIM", ss=True)
         cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{spine01_world_matrix}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{spine01_world_matrix}.primaryTargetMatrix")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{spine01_world_matrix}.secondaryTargetMatrix")
         cmds.setAttr(f"{spine01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{spine01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{spine01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
@@ -308,6 +309,8 @@ class SpineModule():
         tan01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_tan01WM_AIM", ss=True)
         cmds.connectAttr(f"{tan01_wm_no_rot}.outputMatrix", f"{tan01_world_matrix}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{tan01_world_matrix}.primaryTargetMatrix")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{tan01_world_matrix}.secondaryTargetMatrix")
+
         cmds.setAttr(f"{tan01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{tan01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{tan01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
