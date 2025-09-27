@@ -1068,7 +1068,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_006.guides")
-# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
+# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_006.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
 # load_guides()
