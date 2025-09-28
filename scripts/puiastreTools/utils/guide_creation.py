@@ -702,8 +702,9 @@ class FootFingersGuideCreation(GuideCreation):
         f"{ctl}pinky03": get_data(f"{self.sides}_{ctl}pinky03"),
 
 
-    }
-        
+        }
+        print(self.position_data)
+            
 class JiggleJoint(GuideCreation):
     """
     Guide creation for jiggle joints.
@@ -720,6 +721,73 @@ class JiggleJoint(GuideCreation):
 
         }
         self.position_data.update(position_data)
+
+class MouthGuideCreation(GuideCreation):
+    """
+    Guide creation for mouth.
+    """
+    def __init__(self, side = "C", from_selection=False, input_name="mouthCurve"):
+        self.sides = side
+        self.limb_name = "mouth"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = None
+        self.prefix = None
+
+        if from_selection:
+            self.position_data, self.sides = mouth_curve_to_data()
+
+
+        else:
+
+            final_path = core.DataManager.get_guide_data()
+            try:
+                with open(final_path, "r") as infile:
+                    guides_data = json.load(infile)
+            except Exception as e:
+                om.MGlobal.displayError(f"Error loading guides data: {e}")
+
+            guide_set_name = next(iter(guides_data))
+            parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
+
+            def collect_descendants(parent, parent_map):
+                descendants = []
+                children = [joint for joint, p in parent_map.items() if p == parent]
+                for child in children:
+                    descendants.append(child)
+                    descendants.extend(collect_descendants(child, parent_map))
+                return descendants
+
+            all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+            self.position_data = {}
+
+            for guide in all_child_guides:
+                self.position_data.update({
+                    guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+            })
+
+
+            
+
+def mouth_curve_to_data():
+    mouth_curve = cmds.ls(selection=True)
+    side = mouth_curve[0].split("_")[0] if mouth_curve else ""
+
+    end_data = {}
+    for j, curve in enumerate(mouth_curve):
+        name = curve.split("_")[1]
+        for i, cv in enumerate(cmds.ls(f"{curve}.cv[*]", flatten=True)):
+            pos = cmds.xform(cv, query=True, translation=True, worldSpace=True)
+            if i == 0 and j == 0:
+                pos_array = (pos, "guides_GRP")
+            else:
+                pos_array = (pos, f"{side}_{name}0{i}_GUIDE")
+            data_append = {
+                f"{name}0{i+1}": pos_array,
+
+            }
+            end_data.update(data_append)
+    return end_data, side
 
 
 class EyeGuideCreation(GuideCreation):
@@ -749,8 +817,6 @@ class EyeGuideCreation(GuideCreation):
                     f"{self.sides}_{name}0{j+1}": pos,
                 }
             
-
-
 def dragon_rebuild_guides():
     """
     Rebuilds the guides for a quadruped character in the Maya scene.
@@ -780,8 +846,6 @@ def dragon_rebuild_guides():
     HandGuideCreation(controller_number=4).create_guides(guides_trn, buffers_trn)
     HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
     
-# dragon_rebuild_guides()
-
 def load_guides(path = ""):
     if not path or path == "_":
         path = "body_template_"
@@ -838,6 +902,8 @@ def load_guides(path = ""):
                     EyeGuideCreation(side=guide_name.split("_")[0], cvsPosition=guide_info.get("cvsPosition")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLegFoot":
                     FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "mouth":
+                    MouthGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
 
 def guides_export():
         """
@@ -1068,9 +1134,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_006.guides")
-# core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_006.guides")
-# core.DataManager.set_asset_name("Dragon")
-# core.DataManager.set_mesh_data("Puiastre")
-# load_guides()
+core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_007.guides")
+core.DataManager.set_asset_name("Dragon")
+core.DataManager.set_mesh_data("Puiastre")
+load_guides()
 
 # guides_export()
