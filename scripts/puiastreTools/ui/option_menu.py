@@ -7,6 +7,8 @@ from puiastreTools.ui import option_menu
 from puiastreTools.utils import guide_creation 
 from puiastreTools.autorig import rig_builder
 from puiastreTools.utils import curve_tool 
+from puiastreTools.utils import basic_structure
+from puiastreTools.utils import core
 
 reload(option_menu)
 reload(guide_creation)
@@ -53,6 +55,24 @@ def complete_rig(*args):
     """
     reload(rig_builder)
     rig_builder.make()
+
+def build_eye(*args):
+    """
+    Function to build an eye rig using the rig builder module.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+    from puiastreTools.autorig import eye_module_matrix
+    reload(eye_module_matrix)
+
+    cmds.file(new=True, force=True)
+
+    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_007.guides")
+    core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+
+    basic_structure.create_basic_structure()
+    eye_module_matrix.EyelidModule("L_eyeDown01_GUIDE").make()
 
 def export_curves(*args, curves_path): 
     """
@@ -108,6 +128,7 @@ def puiastre_ui():
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
     cmds.menuItem(label="   Complete Rig (dev only)", command=complete_rig)
+    cmds.menuItem(label="   Build eye", command=build_eye)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

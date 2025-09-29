@@ -446,29 +446,6 @@ def get_data(name, file_name=None):
                 return guide_info.get("worldPosition")
     return [0,0,0]
 
-def get_curve_cvs(curve_name, position):
-     
-    """
-     Get the CVs of a NURBS curve.
-    Args:
-        curve (str): The name of the NURBS curve.
-    """
-
-    curve = get_data(curve_name)
-    cmds.matchTransform(curve, position, pos=True, rot=False, scl=False) # and match it to the position
-    curve_shape = cmds.listRelatives(curve, shapes=True, fullPath=True)[0]
-    num_cvs = cmds.ls(f"{curve_shape}.cv[*]", flatten=True) # Get every CV of the curve
-    num_cvs = len(num_cvs)
-    ditc = {}
-    for i in range(num_cvs):
-        pos = cmds.xform(f"{curve_shape}.cv[{i}]", query=True, translation=True, worldSpace=True)
-        name = f"{curve_name}0{i+1}"
-        ditc.update({name : pos}) # Add the CV position to the dictionary with the name as key
-
-    cmds.delete(curve) # Delete the curve for the final scene.
-     
-    return ditc # Return the dictionary with the CV positions and the name of the GUIDES
-
 
 class ArmGuideCreation(GuideCreation):
     """
@@ -735,8 +712,7 @@ class MouthGuideCreation(GuideCreation):
         self.prefix = None
 
         if from_selection:
-            self.position_data, self.sides = mouth_curve_to_data()
-
+            self.position_data, self.sides = curve_to_data()
 
         else:
 
@@ -769,12 +745,12 @@ class MouthGuideCreation(GuideCreation):
 
             
 
-def mouth_curve_to_data():
-    mouth_curve = cmds.ls(selection=True)
-    side = mouth_curve[0].split("_")[0] if mouth_curve else ""
+def curve_to_data():
+    curve = cmds.ls(selection=True)
+    side = curve[0].split("_")[0] if curve else ""
 
     end_data = {}
-    for j, curve in enumerate(mouth_curve):
+    for j, curve in enumerate(curve):
         name = curve.split("_")[1]
         for i, cv in enumerate(cmds.ls(f"{curve}.cv[*]", flatten=True)):
             pos = cmds.xform(cv, query=True, translation=True, worldSpace=True)
@@ -794,28 +770,46 @@ class EyeGuideCreation(GuideCreation):
     """
     Guide creation for eyebrow.
     """
-
-    def __init__(self, side = "L"):
+    def __init__(self, side = "L", from_selection=False, input_name="eyeCurve"):
         self.sides = side
-        self.type = None
-        self.limb_name = "facial"
+        self.limb_name = "eye"
         self.aim_name = None
-        self.prefix = None
+        self.aim_offset = 0
         self.controller_number = None
+        self.prefix = None
 
-        eye_up_pos = get_data(f"{self.sides}_eyeUp") # Import each curve as guide from the template file.
-        eye_down_pos = get_data(f"{self.sides}_eyeDown")
-        eye_blink_pos = get_data(f"{self.sides}_eyeBlink")
-        eye_up_blink_pos = get_data(f"{self.sides}_eyeUpBlink")
-        eye_down_blink_pos = get_data(f"{self.sides}_eyeDownBlink")
-        curve_pos = [eye_up_pos, eye_down_pos, eye_blink_pos, eye_up_blink_pos, eye_down_blink_pos] # Put them all in a list.
+        if from_selection:
+            self.position_data, self.sides = curve_to_data()
 
-        for i, curve in enumerate([f"{self.sides}_eyeUp", f"{self.sides}_eyeDown", f"{self.sides}_eyeBlink", f"{self.sides}_eyeUpBlink", f"{self.sides}_eyeDownBlink"]):
-            curve_cvs = get_curve_cvs(curve)
-            for j, (name, pos) in enumerate(curve_cvs.items()):
-                self.position_data = {
-                    f"{self.sides}_{name}0{j+1}": pos,
-                }
+        else:
+
+            final_path = core.DataManager.get_guide_data()
+            try:
+                with open(final_path, "r") as infile:
+                    guides_data = json.load(infile)
+            except Exception as e:
+                om.MGlobal.displayError(f"Error loading guides data: {e}")
+
+            guide_set_name = next(iter(guides_data))
+            parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
+
+            def collect_descendants(parent, parent_map):
+                descendants = []
+                children = [joint for joint, p in parent_map.items() if p == parent]
+                for child in children:
+                    descendants.append(child)
+                    descendants.extend(collect_descendants(child, parent_map))
+                return descendants
+
+            all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+            self.position_data = {}
+
+            for i, guide in enumerate(all_child_guides):
+                self.position_data.update({
+                    guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+            })
+
+        
             
 def dragon_rebuild_guides():
     """
@@ -845,6 +839,8 @@ def dragon_rebuild_guides():
     ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)
     HandGuideCreation(controller_number=4).create_guides(guides_trn, buffers_trn)
     HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
+    EyeGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
+    EyeGuideCreation(side="R").create_guides(guides_trn, buffers_trn)
     
 def load_guides(path = ""):
     if not path or path == "_":
@@ -875,6 +871,8 @@ def load_guides(path = ""):
 
     cmds.setAttr(f"{buffers_trn}.hiddenInOutliner ", True)
 
+    EyeGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
+
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
             continue  # ignorar "hierarchy" u otros que no sean diccionarios de guías
@@ -898,8 +896,8 @@ def load_guides(path = ""):
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "membran":
                     MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
-                if guide_info.get("moduleName") == "facial":
-                    EyeGuideCreation(side=guide_name.split("_")[0], cvsPosition=guide_info.get("cvsPosition")).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "eye":
+                    EyeGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLegFoot":
                     FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "mouth":
@@ -1133,10 +1131,10 @@ def guide_import(joint_name, all_descendents=True, path=None):
         return transforms_chain_export
 
 
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_006.guides")
-core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_007.guides")
-core.DataManager.set_asset_name("Dragon")
-core.DataManager.set_mesh_data("Puiastre")
-load_guides()
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_007.guides")
+# # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_007.guides")
+# core.DataManager.set_asset_name("Dragon")
+# core.DataManager.set_mesh_data("Puiastre")
+# # load_guides()
 
 # guides_export()

@@ -203,34 +203,34 @@ class MembraneModule(object):
                 joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
                 cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
-                cvs = [joint_one, ctl, joint_two]
+            #     cvs = [joint_one, ctl, joint_two]
 
-                self.joints = de_boors_002.de_boor_ribbon(
-                aim_axis=self.primary_aim,
-                up_axis=self.secondary_aim,
-                cvs=cvs,
-                num_joints=2,
-                name=f"{self.side}_{self.number_to_ordinal_word(i+1)}0{index+1}MembranSecondary",
-                parent=self.modules_grp,
-                custom_parm=[0.25, 0.75]
-            )
-                for joint in self.joints:
-                    input = cmds.listConnections(f"{joint}.offsetParentMatrix", plugs=True, source=True, destination=False)[0]
+            #     self.joints = de_boors_002.de_boor_ribbon(
+            #     aim_axis=self.primary_aim,
+            #     up_axis=self.secondary_aim,
+            #     cvs=cvs,
+            #     num_joints=2,
+            #     name=f"{self.side}_{self.number_to_ordinal_word(i+1)}0{index+1}MembranSecondary",
+            #     parent=self.modules_grp,
+            #     custom_parm=[0.25, 0.75]
+            # )
+            #     for joint in self.joints:
+            #         input = cmds.listConnections(f"{joint}.offsetParentMatrix", plugs=True, source=True, destination=False)[0]
 
-                    ctl, ctl_grp = controller_creator(
-                    name=joint.replace("_JNT", ""),
-                    suffixes=["GRP", "ANM"],
-                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-                    ro=True,
-                    parent=self.individual_controllers_grp,
-                    )
-                    cmds.connectAttr(f"{input}", f"{ctl_grp[0]}.offsetParentMatrix")
-                    secondary_ctls.append(ctl)
-                    cmds.delete(joint)
+            #         ctl, ctl_grp = controller_creator(
+            #         name=joint.replace("_JNT", ""),
+            #         suffixes=["GRP", "ANM"],
+            #         lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+            #         ro=True,
+            #         parent=self.individual_controllers_grp,
+            #         )
+            #         cmds.connectAttr(f"{input}", f"{ctl_grp[0]}.offsetParentMatrix")
+            #         secondary_ctls.append(ctl)
+            #         cmds.delete(joint)
 
-            for ctl in secondary_ctls:
-                joint = cmds.createNode("joint", name=ctl.replace("CTL", "JNT"), ss=True, parent=self.skinnging_grp)
-                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+            # for ctl in secondary_ctls:
+            #     joint = cmds.createNode("joint", name=ctl.replace("CTL", "JNT"), ss=True, parent=self.skinnging_grp)
+            #     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
 # cmds.file(new=True, force=True)
 

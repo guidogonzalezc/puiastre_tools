@@ -1,907 +1,816 @@
 {
     "Dragon": {
-        "C_upperLipLinear035_GUIDE": {
+        "L_eyeUp010_GUIDE": {
             "worldPosition": [
-                7.14997673034668,
-                183.9982147216797,
-                17.249935150146484
+                20.604766845703125,
+                365.680419921875,
+                610.4909057617188
             ],
-            "parent": "C_upperLipLinear034_GUIDE",
+            "parent": "L_eyeUp09_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear034_GUIDE": {
+        "L_eyeUp09_GUIDE": {
             "worldPosition": [
-                7.083122253417969,
-                183.90631103515625,
-                17.420869827270508
+                20.72437858581543,
+                365.699951171875,
+                611.0203857421875
             ],
-            "parent": "C_upperLipLinear033_GUIDE",
+            "parent": "L_eyeUp08_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear033_GUIDE": {
+        "L_eyeUp08_GUIDE": {
             "worldPosition": [
-                6.970454692840576,
-                183.6212640546853,
-                17.7507266998291
+                21.055931091308594,
+                365.5483093261719,
+                612.4006958007812
             ],
-            "parent": "C_upperLipLinear032_GUIDE",
+            "parent": "L_eyeUp07_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear032_GUIDE": {
+        "L_eyeUp07_GUIDE": {
             "worldPosition": [
-                6.850318431854248,
-                183.27416188015584,
-                18.26351547241211
+                21.086103439331055,
+                365.2763671875,
+                614.5123901367188
             ],
-            "parent": "C_upperLipLinear031_GUIDE",
+            "parent": "L_eyeUp06_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear031_GUIDE": {
+        "L_eyeUp06_GUIDE": {
             "worldPosition": [
-                6.743072032928467,
-                183.04118304956765,
-                18.951515197753906
+                20.21482276916504,
+                364.8818054199219,
+                616.6295776367188
             ],
-            "parent": "C_upperLipLinear030_GUIDE",
+            "parent": "L_eyeUp05_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear030_GUIDE": {
+        "L_eyeUp05_GUIDE": {
             "worldPosition": [
-                6.6245622634887695,
-                183.1951763948487,
-                19.850723266601562
+                18.700471878051758,
+                364.1888732910156,
+                618.3355712890625
             ],
-            "parent": "C_upperLipLinear029_GUIDE",
+            "parent": "L_eyeUp04_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear029_GUIDE": {
+        "L_eyeUp04_GUIDE": {
             "worldPosition": [
-                6.394433975219727,
-                183.74589898619575,
-                21.086650848388672
+                17.951648712158203,
+                363.7383117675781,
+                619.0174560546875
             ],
-            "parent": "C_upperLipLinear028_GUIDE",
+            "parent": "L_eyeUp03_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear028_GUIDE": {
+        "L_eyeUp03_GUIDE": {
             "worldPosition": [
-                5.986549377441406,
-                184.68377152796978,
-                22.662275314331055
+                17.234800338745117,
+                363.3334045410156,
+                619.4835815429688
             ],
-            "parent": "C_upperLipLinear027_GUIDE",
+            "parent": "L_eyeUp02_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear027_GUIDE": {
+        "L_eyeUp02_GUIDE": {
             "worldPosition": [
-                5.512733459472656,
-                185.34558297630016,
-                24.364582061767578
+                16.10615348815918,
+                362.632080078125,
+                619.8179321289062
             ],
-            "parent": "C_upperLipLinear026_GUIDE",
+            "parent": "L_eyeUp01_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear026_GUIDE": {
+        "L_eyeUp01_GUIDE": {
             "worldPosition": [
-                4.981863021850586,
-                185.50830180538634,
-                25.918088912963867
+                15.483105659484863,
+                362.28668212890625,
+                619.6387939453125
             ],
-            "parent": "C_upperLipLinear025_GUIDE",
+            "parent": "L_eyeDown010_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear025_GUIDE": {
+        "L_eyeDown010_GUIDE": {
             "worldPosition": [
-                4.404967308044434,
-                185.71162156158294,
-                27.091299057006836
+                15.483105659484863,
+                362.28668212890625,
+                619.6387939453125
             ],
-            "parent": "C_upperLipLinear024_GUIDE",
+            "parent": "L_eyeDown09_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear024_GUIDE": {
+        "L_eyeDown09_GUIDE": {
             "worldPosition": [
-                3.75191330909729,
-                186.01934270988008,
-                28.11090087890625
+                15.732398986816406,
+                362.0725402832031,
+                619.5484008789062
             ],
-            "parent": "C_upperLipLinear023_GUIDE",
+            "parent": "L_eyeDown08_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear023_GUIDE": {
+        "L_eyeDown08_GUIDE": {
             "worldPosition": [
-                3.0833027362823486,
-                186.2242828731567,
-                28.89828872680664
+                16.80571746826172,
+                361.8980407714844,
+                619.24072265625
             ],
-            "parent": "C_upperLipLinear022_GUIDE",
+            "parent": "L_eyeDown07_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear022_GUIDE": {
+        "L_eyeDown07_GUIDE": {
             "worldPosition": [
-                2.376286745071411,
-                186.50737306504863,
-                29.382627487182617
+                17.5655460357666,
+                361.8617248535156,
+                618.71923828125
             ],
-            "parent": "C_upperLipLinear021_GUIDE",
+            "parent": "L_eyeDown06_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear021_GUIDE": {
+        "L_eyeDown06_GUIDE": {
             "worldPosition": [
-                1.774404525756836,
-                186.81894103991417,
-                29.682191848754883
+                18.592552185058594,
+                361.8630676269531,
+                617.954833984375
             ],
-            "parent": "C_upperLipLinear020_GUIDE",
+            "parent": "L_eyeDown05_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear020_GUIDE": {
+        "L_eyeDown05_GUIDE": {
             "worldPosition": [
-                1.1711716651916504,
-                187.07043087021492,
-                29.86604118347168
+                20.744274139404297,
+                362.6183776855469,
+                615.4324951171875
             ],
-            "parent": "C_upperLipLinear019_GUIDE",
+            "parent": "L_eyeDown04_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear019_GUIDE": {
+        "L_eyeDown04_GUIDE": {
             "worldPosition": [
-                0.5841128826141357,
-                187.2142900531364,
-                29.9484920501709
+                21.505802154541016,
+                364.0160217285156,
+                613.145751953125
             ],
-            "parent": "C_upperLipLinear018_GUIDE",
+            "parent": "L_eyeDown03_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear018_GUIDE": {
+        "L_eyeDown03_GUIDE": {
             "worldPosition": [
-                8.881784197001252e-16,
-                187.2707178629614,
-                29.983015060424805
+                20.960554122924805,
+                364.9154357910156,
+                611.4468994140625
             ],
-            "parent": "C_upperLipLinear017_GUIDE",
+            "parent": "L_eyeDown02_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear017_GUIDE": {
+        "L_eyeDown02_GUIDE": {
             "worldPosition": [
-                -0.5841128826141357,
-                187.2142900531364,
-                29.9484920501709
+                20.64807891845703,
+                365.4347229003906,
+                610.6456909179688
             ],
-            "parent": "C_upperLipLinear016_GUIDE",
+            "parent": "L_eyeDown01_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear016_GUIDE": {
+        "L_eyeDown01_GUIDE": {
             "worldPosition": [
-                -1.1711716651916504,
-                187.07043087021492,
-                29.86604118347168
+                20.604766845703125,
+                365.680419921875,
+                610.4909057617188
             ],
-            "parent": "C_upperLipLinear015_GUIDE",
+            "parent": "guides_GRP",
             "jointTwist": "Child",
             "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear015_GUIDE": {
-            "worldPosition": [
-                -1.774404525756836,
-                186.81894103991417,
-                29.682191848754883
-            ],
-            "parent": "C_upperLipLinear014_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear014_GUIDE": {
-            "worldPosition": [
-                -2.376286745071411,
-                186.50737306504863,
-                29.382627487182617
-            ],
-            "parent": "C_upperLipLinear013_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear013_GUIDE": {
-            "worldPosition": [
-                -3.0833027362823486,
-                186.2242828731567,
-                28.89828872680664
-            ],
-            "parent": "C_upperLipLinear012_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear012_GUIDE": {
-            "worldPosition": [
-                -3.75191330909729,
-                186.01934270988008,
-                28.11090087890625
-            ],
-            "parent": "C_upperLipLinear011_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear011_GUIDE": {
-            "worldPosition": [
-                -4.404967308044434,
-                185.71162156158294,
-                27.091299057006836
-            ],
-            "parent": "C_upperLipLinear010_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear010_GUIDE": {
-            "worldPosition": [
-                -4.981863021850586,
-                185.50830180538634,
-                25.918088912963867
-            ],
-            "parent": "C_upperLipLinear09_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child"
-        },
-        "C_upperLipLinear09_GUIDE": {
-            "worldPosition": [
-                -5.512733459472656,
-                185.34558297630016,
-                24.364582061767578
-            ],
-            "parent": "C_upperLipLinear08_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
+            "moduleName": "eye",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear08_GUIDE": {
+        "C_lowerLip012_GUIDE": {
             "worldPosition": [
-                -5.986549377441406,
-                184.68377152796978,
-                22.662275314331055
+                0.4117996699808799,
+                0.0,
+                3.0600961875407506
             ],
-            "parent": "C_upperLipLinear07_GUIDE",
+            "parent": "C_lowerLip011_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear07_GUIDE": {
+        "C_lowerLip011_GUIDE": {
             "worldPosition": [
-                -6.394433975219727,
-                183.74589898619575,
-                21.086650848388672
+                0.6531075182229991,
+                0.0,
+                3.690543013168508
             ],
-            "parent": "C_upperLipLinear06_GUIDE",
+            "parent": "C_lowerLip010_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear06_GUIDE": {
+        "C_lowerLip010_GUIDE": {
             "worldPosition": [
-                -6.6245622634887695,
-                183.1951763948487,
-                19.850723266601562
+                1.1439293022027037,
+                0.0,
+                4.773396264427792
             ],
-            "parent": "C_upperLipLinear05_GUIDE",
+            "parent": "C_lowerLip09_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear05_GUIDE": {
+        "C_lowerLip09_GUIDE": {
             "worldPosition": [
-                -6.743072032928467,
-                183.04118304956765,
-                18.951515197753906
+                1.5229383833962107,
+                0.0,
+                6.001175011239361
             ],
-            "parent": "C_upperLipLinear04_GUIDE",
+            "parent": "C_lowerLip08_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear04_GUIDE": {
+        "C_lowerLip08_GUIDE": {
             "worldPosition": [
-                -6.850318431854248,
-                183.27416188015584,
-                18.26351547241211
+                2.196348165103867,
+                0.0,
+                6.914656101734806
             ],
-            "parent": "C_upperLipLinear03_GUIDE",
+            "parent": "C_lowerLip07_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear03_GUIDE": {
+        "C_lowerLip07_GUIDE": {
             "worldPosition": [
-                -6.970454692840576,
-                183.6212640546853,
-                17.7507266998291
+                1.3099625768889194,
+                0.0,
+                7.507854730931511
             ],
-            "parent": "C_upperLipLinear02_GUIDE",
+            "parent": "C_lowerLip06_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear02_GUIDE": {
+        "C_lowerLip06_GUIDE": {
             "worldPosition": [
-                -7.083122253417969,
-                183.90631103515625,
-                17.420869827270508
+                0.49888500147807946,
+                0.0,
+                7.305072900633736
             ],
-            "parent": "C_upperLipLinear01_GUIDE",
+            "parent": "C_lowerLip05_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_upperLipLinear01_GUIDE": {
+        "C_lowerLip05_GUIDE": {
             "worldPosition": [
-                -7.14997673034668,
-                183.9982147216797,
-                17.249935150146484
+                -0.029854475825658255,
+                0.0,
+                7.858602748424927
             ],
-            "parent": "C_lowerLipLinear035_GUIDE",
+            "parent": "C_lowerLip04_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear035_GUIDE": {
+        "C_lowerLip04_GUIDE": {
             "worldPosition": [
-                7.14997673034668,
-                183.9982147216797,
-                17.249935150146484
+                -1.0919804065607401,
+                0.0,
+                8.404390904797223
             ],
-            "parent": "C_lowerLipLinear034_GUIDE",
+            "parent": "C_lowerLip03_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear034_GUIDE": {
+        "C_lowerLip03_GUIDE": {
             "worldPosition": [
-                7.083122253417969,
-                183.90631103515625,
-                17.420869827270508
+                -2.8655774485368877,
+                0.0,
+                6.75147589518161
             ],
-            "parent": "C_lowerLipLinear033_GUIDE",
+            "parent": "C_lowerLip02_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear033_GUIDE": {
+        "C_lowerLip02_GUIDE": {
             "worldPosition": [
-                6.970454692840576,
-                183.6060791015625,
-                17.7507266998291
+                -3.89734378341058,
+                0.0,
+                3.9436884916750223
             ],
-            "parent": "C_lowerLipLinear032_GUIDE",
+            "parent": "C_lowerLip01_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear032_GUIDE": {
+        "C_lowerLip01_GUIDE": {
             "worldPosition": [
-                6.850318431854248,
-                183.15463256835938,
-                18.26351547241211
+                0.4117996699808799,
+                0.0,
+                3.0600961875407506
             ],
-            "parent": "C_lowerLipLinear031_GUIDE",
+            "parent": "C_upperLip031_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear031_GUIDE": {
+        "C_upperLip031_GUIDE": {
             "worldPosition": [
-                6.743072032928467,
-                182.6741485595703,
-                18.951515197753906
+                4.400282768781705,
+                0.0,
+                1.7650697482671234
             ],
-            "parent": "C_lowerLipLinear030_GUIDE",
+            "parent": "C_upperLip030_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear030_GUIDE": {
+        "C_upperLip030_GUIDE": {
             "worldPosition": [
-                6.6245622634887695,
-                182.3821258544922,
-                19.850723266601562
+                4.535234762380973,
+                0.0,
+                1.9232173502737187
             ],
-            "parent": "C_lowerLipLinear029_GUIDE",
+            "parent": "C_upperLip029_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear029_GUIDE": {
+        "C_upperLip029_GUIDE": {
             "worldPosition": [
-                6.394433975219727,
-                182.22813415527344,
-                21.086650848388672
+                4.892839786927528,
+                0.0,
+                2.3615514670460622
             ],
-            "parent": "C_lowerLipLinear028_GUIDE",
+            "parent": "C_upperLip028_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear028_GUIDE": {
+        "C_upperLip028_GUIDE": {
             "worldPosition": [
-                5.986549377441406,
-                182.2377166748047,
-                22.662275314331055
+                5.55156087474197,
+                0.0,
+                3.212225554101873
             ],
-            "parent": "C_lowerLipLinear027_GUIDE",
+            "parent": "C_upperLip027_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear027_GUIDE": {
+        "C_upperLip027_GUIDE": {
             "worldPosition": [
-                5.512733459472656,
-                182.4608154296875,
-                24.364582061767578
+                6.14216677658395,
+                0.0,
+                4.173393256258315
             ],
-            "parent": "C_lowerLipLinear026_GUIDE",
+            "parent": "C_upperLip026_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear026_GUIDE": {
+        "C_upperLip026_GUIDE": {
             "worldPosition": [
-                4.981863021850586,
-                182.87319946289062,
-                25.918088912963867
+                6.828234673086299,
+                0.0,
+                4.905367960559187
             ],
-            "parent": "C_lowerLipLinear025_GUIDE",
+            "parent": "C_upperLip025_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear025_GUIDE": {
+        "C_upperLip025_GUIDE": {
             "worldPosition": [
-                4.404967308044434,
-                183.3094482421875,
-                27.091299057006836
+                7.085069958683093,
+                0.0,
+                5.50371139442253
             ],
-            "parent": "C_lowerLipLinear024_GUIDE",
+            "parent": "C_upperLip024_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear024_GUIDE": {
+        "C_upperLip024_GUIDE": {
             "worldPosition": [
-                3.75191330909729,
-                183.73818969726562,
-                28.11090087890625
+                7.3568943017120985,
+                0.0,
+                6.1178972037320865
             ],
-            "parent": "C_lowerLipLinear023_GUIDE",
+            "parent": "C_upperLip023_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear023_GUIDE": {
+        "C_upperLip023_GUIDE": {
             "worldPosition": [
-                3.0833027362823486,
-                184.07504272460938,
-                28.89828872680664
+                7.339388980665396,
+                0.0,
+                6.6840864481223985
             ],
-            "parent": "C_lowerLipLinear022_GUIDE",
+            "parent": "C_upperLip022_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear022_GUIDE": {
+        "C_upperLip022_GUIDE": {
             "worldPosition": [
-                2.376286745071411,
-                184.37864685058594,
-                29.382627487182617
+                7.2171192619712095,
+                0.0,
+                7.283480946752645
             ],
-            "parent": "C_lowerLipLinear021_GUIDE",
+            "parent": "C_upperLip021_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear021_GUIDE": {
+        "C_upperLip021_GUIDE": {
             "worldPosition": [
-                1.774404525756836,
-                184.6344451904297,
-                29.682191848754883
+                6.828432155348821,
+                0.0,
+                7.561804246772178
             ],
-            "parent": "C_lowerLipLinear020_GUIDE",
+            "parent": "C_upperLip020_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear020_GUIDE": {
+        "C_upperLip020_GUIDE": {
             "worldPosition": [
-                1.1711716651916504,
-                184.8250274658203,
-                29.86604118347168
+                6.382364968229455,
+                0.0,
+                7.915786771060367
             ],
-            "parent": "C_lowerLipLinear019_GUIDE",
+            "parent": "C_upperLip019_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear019_GUIDE": {
+        "C_upperLip019_GUIDE": {
             "worldPosition": [
-                0.5841128826141357,
-                184.9351348876953,
-                29.9484920501709
+                5.957793118639865,
+                0.0,
+                8.146751399182211
             ],
-            "parent": "C_lowerLipLinear018_GUIDE",
+            "parent": "C_upperLip018_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear018_GUIDE": {
+        "C_upperLip018_GUIDE": {
             "worldPosition": [
-                8.881784197001252e-16,
-                184.98057556152344,
-                29.983015060424805
+                5.38336992746931,
+                0.0,
+                8.536126521695401
             ],
-            "parent": "C_lowerLipLinear017_GUIDE",
+            "parent": "C_upperLip017_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear017_GUIDE": {
+        "C_upperLip017_GUIDE": {
             "worldPosition": [
-                -0.5841128826141357,
-                184.9351348876953,
-                29.9484920501709
+                4.809551659384517,
+                0.0,
+                8.250954748667738
             ],
-            "parent": "C_lowerLipLinear016_GUIDE",
+            "parent": "C_upperLip016_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear016_GUIDE": {
+        "C_upperLip016_GUIDE": {
             "worldPosition": [
-                -1.1711716651916504,
-                184.8250274658203,
-                29.86604118347168
+                4.0581764842874115,
+                0.0,
+                8.259288106112077
             ],
-            "parent": "C_lowerLipLinear015_GUIDE",
+            "parent": "C_upperLip015_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear015_GUIDE": {
+        "C_upperLip015_GUIDE": {
             "worldPosition": [
-                -1.774404525756836,
-                184.6344451904297,
-                29.682191848754883
+                3.4590715379777537,
+                0.0,
+                8.036689769316009
             ],
-            "parent": "C_lowerLipLinear014_GUIDE",
+            "parent": "C_upperLip014_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear014_GUIDE": {
+        "C_upperLip014_GUIDE": {
             "worldPosition": [
-                -2.376286745071411,
-                184.37864685058594,
-                29.382627487182617
+                2.645905570946468,
+                0.0,
+                8.032053112851107
             ],
-            "parent": "C_lowerLipLinear013_GUIDE",
+            "parent": "C_upperLip013_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear013_GUIDE": {
+        "C_upperLip013_GUIDE": {
             "worldPosition": [
-                -3.0833027362823486,
-                184.07504272460938,
-                28.89828872680664
+                2.0689756799608237,
+                0.0,
+                8.548182265546178
             ],
-            "parent": "C_lowerLipLinear012_GUIDE",
+            "parent": "C_upperLip012_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear012_GUIDE": {
+        "C_upperLip012_GUIDE": {
             "worldPosition": [
-                -3.75191330909729,
-                183.73818969726562,
-                28.11090087890625
+                1.3297595600001484,
+                0.0,
+                8.640902014804578
             ],
-            "parent": "C_lowerLipLinear011_GUIDE",
+            "parent": "C_upperLip011_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear011_GUIDE": {
+        "C_upperLip011_GUIDE": {
             "worldPosition": [
-                -4.404967308044434,
-                183.3094482421875,
-                27.091299057006836
+                0.6502605260481057,
+                0.0,
+                8.726183345387458
             ],
-            "parent": "C_lowerLipLinear010_GUIDE",
+            "parent": "C_upperLip010_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear010_GUIDE": {
+        "C_upperLip010_GUIDE": {
             "worldPosition": [
-                -4.981863021850586,
-                182.87319946289062,
-                25.918088912963867
+                -0.10791412270297829,
+                0.0,
+                9.094750054812414
             ],
-            "parent": "C_lowerLipLinear09_GUIDE",
+            "parent": "C_upperLip09_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear09_GUIDE": {
+        "C_upperLip09_GUIDE": {
             "worldPosition": [
-                -5.512733459472656,
-                182.4608154296875,
-                24.364582061767578
+                -1.1703085316697077,
+                0.0,
+                8.884622710102542
             ],
-            "parent": "C_lowerLipLinear08_GUIDE",
+            "parent": "C_upperLip08_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear08_GUIDE": {
+        "C_upperLip08_GUIDE": {
             "worldPosition": [
-                -5.986549377441406,
-                182.2377166748047,
-                22.662275314331055
+                -2.3578961530085674,
+                0.0,
+                8.604197868454058
             ],
-            "parent": "C_lowerLipLinear07_GUIDE",
+            "parent": "C_upperLip07_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear07_GUIDE": {
+        "C_upperLip07_GUIDE": {
             "worldPosition": [
-                -6.394433975219727,
-                182.22813415527344,
-                21.086650848388672
+                -3.601811253069027,
+                0.0,
+                7.982913819444837
             ],
-            "parent": "C_lowerLipLinear06_GUIDE",
+            "parent": "C_upperLip06_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear06_GUIDE": {
+        "C_upperLip06_GUIDE": {
             "worldPosition": [
-                -6.6245622634887695,
-                182.3821258544922,
-                19.850723266601562
+                -5.168122626993238,
+                0.0,
+                7.187917584328589
             ],
-            "parent": "C_lowerLipLinear05_GUIDE",
+            "parent": "C_upperLip05_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear05_GUIDE": {
+        "C_upperLip05_GUIDE": {
             "worldPosition": [
-                -6.743072032928467,
-                182.6741485595703,
-                18.951515197753906
+                -6.635498481467589,
+                0.0,
+                5.91782342615425
             ],
-            "parent": "C_lowerLipLinear04_GUIDE",
+            "parent": "C_upperLip04_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear04_GUIDE": {
+        "C_upperLip04_GUIDE": {
             "worldPosition": [
-                -6.850318431854248,
-                183.15463256835938,
-                18.26351547241211
+                -7.93895306596757,
+                0.0,
+                4.360693442579932
             ],
-            "parent": "C_lowerLipLinear03_GUIDE",
+            "parent": "C_upperLip03_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear03_GUIDE": {
+        "C_upperLip03_GUIDE": {
             "worldPosition": [
-                -6.970454692840576,
-                183.6060791015625,
-                17.7507266998291
+                4.400282768781705,
+                0.0,
+                1.7650697482671234
             ],
-            "parent": "C_lowerLipLinear02_GUIDE",
+            "parent": "C_upperLip02_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear02_GUIDE": {
+        "C_upperLip02_GUIDE": {
             "worldPosition": [
-                -7.083122253417969,
-                183.90631103515625,
-                17.420869827270508
+                4.892839786927528,
+                0.0,
+                2.3615514670460627
             ],
-            "parent": "C_lowerLipLinear01_GUIDE",
+            "parent": "C_upperLip01_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child"
         },
-        "C_lowerLipLinear01_GUIDE": {
+        "C_upperLip01_GUIDE": {
             "worldPosition": [
-                -7.14997673034668,
-                183.9982147216797,
-                17.249935150146484
+                5.957793118639865,
+                0.0,
+                8.146751399182211
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -1213,7 +1122,7 @@
             "worldPosition": [
                 0.0,
                 298.42280017187875,
-                -125.25859173378936
+                -67.634
             ],
             "parent": "guides_GRP",
             "jointTwist": 5.0,
