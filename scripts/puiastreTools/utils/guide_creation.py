@@ -871,7 +871,7 @@ def load_guides(path = ""):
 
     cmds.setAttr(f"{buffers_trn}.hiddenInOutliner ", True)
 
-    EyeGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
+    # EyeGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
 
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
@@ -1133,6 +1133,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_007.guides")
 # # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_007.guides")
+# core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
 # # load_guides()
