@@ -5,15 +5,13 @@ from importlib import reload
 import json
 import re
 
-
 from puiastreTools.utils import core
 from puiastreTools.utils import data_export
 import maya.api.OpenMaya as om
+from puiastreTools.utils import curve_tool
 
+reload(curve_tool)
 reload(core)
-
-
-
 
 class GuideCreation(object):
     """
@@ -302,17 +300,10 @@ class GuideCreation(object):
     def create_guides(self, guides_trn, buffers_trn):
         self.guides_trn = guides_trn
         self.buffers_trn = buffers_trn
-
         for side in self.sides:
             color = {"L": 6, "R": 13}.get(side, 17)
             self.guides = []
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
-                temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
-                type = "joint"
-                if not positions[0] :
-                    positions = ([0, 0, 0], positions[1])
-               
-                cmds.setAttr(temp_pos + ".translate", positions[0][0], positions[0][1], positions[0][2], type="double3")
 
                 parent = self.guides_trn if not self.guides else self.guides[-1]
                 if "Settings" in joint_name:
@@ -324,15 +315,23 @@ class GuideCreation(object):
 
                 if "Distance" in joint_name:
                     parent = self.guides_trn
-
-
-                guide = self.controller_creator(
-                    f"{side}_{joint_name}",
-                    type=type,
-                    parent=parent,
-                    match=temp_pos,
-                    color=color,
-                )
+                if not "Sliding" in joint_name:
+                    temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
+                    type = "joint"
+                    if not positions[0] :
+                        positions = ([0, 0, 0], positions[1])
+               
+                    cmds.setAttr(temp_pos + ".translate", positions[0][0], positions[0][1], positions[0][2], type="double3")
+                    guide = self.controller_creator(
+                        f"{side}_{joint_name}",
+                        type=type,
+                        parent=parent,
+                        match=temp_pos,
+                        color=color,
+                    )
+                else:
+                    guide = curve_tool.build_surfaces_from_template(core.DataManager.get_guide_data(), target_transform_name=f"{side}_{joint_name}_GUIDE")
+                    cmds.parent(guide, parent)
 
                 if i == 0:
                     if hasattr(self, "twist_joints"):
@@ -358,8 +357,10 @@ class GuideCreation(object):
 
 
 
+                if temp_pos:
+                    cmds.delete(temp_pos)
+                    temp_pos = None
 
-                cmds.delete(temp_pos)
                 self.guides.append(guide)
             enum_name = ":".join(self.guides)
             cmds.addAttr(self.guides[0], longName="guide_name", attributeType="enum", enumName=enum_name, keyable=False)
@@ -445,7 +446,6 @@ def get_data(name, file_name=None):
             if name in guide_name:
                 return guide_info.get("worldPosition")
     return [0,0,0]
-
 
 class ArmGuideCreation(GuideCreation):
     """
@@ -563,8 +563,6 @@ class MemmbranCreation(GuideCreation):
             "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
         }
 
-
-
 def number_to_ordinal_word(n):
     base_ordinal = {
         1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth',
@@ -680,7 +678,6 @@ class FootFingersGuideCreation(GuideCreation):
 
 
         }
-        print(self.position_data)
             
 class JiggleJoint(GuideCreation):
     """
@@ -712,7 +709,15 @@ class MouthGuideCreation(GuideCreation):
         self.prefix = None
 
         if from_selection:
-            self.position_data, self.sides = curve_to_data()
+            position_data, self.sides = curve_to_data()
+
+            self.position_data = {
+                    "jaw": get_data(f"{self.sides}_jaw"),
+                    "mouthSliding": get_data(f"{self.sides}_mouthSliding"),
+            }
+
+            self.position_data.update(position_data)
+           
 
         else:
 
@@ -735,15 +740,16 @@ class MouthGuideCreation(GuideCreation):
                 return descendants
 
             all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
-            self.position_data = {}
+            self.position_data = {
+                    "jaw": get_data(f"{self.sides}_jaw"),
+                    "mouthSliding": get_data(f"{self.sides}_mouthSliding"),
+
+            }
 
             for guide in all_child_guides:
                 self.position_data.update({
                     guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
             })
-
-
-            
 
 def curve_to_data():
     curve = cmds.ls(selection=True)
@@ -765,7 +771,6 @@ def curve_to_data():
             end_data.update(data_append)
     return end_data, side
 
-
 class EyeGuideCreation(GuideCreation):
     """
     Guide creation for eyebrow.
@@ -779,7 +784,13 @@ class EyeGuideCreation(GuideCreation):
         self.prefix = None
 
         if from_selection:
-            self.position_data, self.sides = curve_to_data()
+            position_data, self.sides = curve_to_data()
+
+            self.position_data = {
+                    "eye": get_data(f"{self.sides}_eye"),
+            }
+
+            self.position_data.update(position_data)
 
         else:
 
@@ -802,15 +813,15 @@ class EyeGuideCreation(GuideCreation):
                 return descendants
 
             all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
-            self.position_data = {}
+            self.position_data = {
+                    "eye": get_data(f"{self.sides}_eye"),
+            }
 
             for i, guide in enumerate(all_child_guides):
                 self.position_data.update({
                     guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
             })
-
         
-            
 def dragon_rebuild_guides():
     """
     Rebuilds the guides for a quadruped character in the Maya scene.
@@ -872,6 +883,7 @@ def load_guides(path = ""):
     cmds.setAttr(f"{buffers_trn}.hiddenInOutliner ", True)
 
     # EyeGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
+    # MouthGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
 
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
@@ -996,23 +1008,33 @@ def guides_export():
         guides_name = core.DataManager.get_asset_name() if core.DataManager.get_asset_name() else os.path.splitext(os.path.basename(TEMPLATE_FILE))[0]
         ctl_path = core.DataManager.get_ctls_data() if core.DataManager.get_ctls_data() else None
         mesh_path = core.DataManager.get_mesh_data() if core.DataManager.get_mesh_data() else None
-
         guides_data = {guides_name: {},
-                       "controls": ctl_path,
-                       "meshes": mesh_path,
-                       }
+                    "controls": ctl_path,
+                    "meshes": mesh_path,
+                    }
 
         for i, guide in enumerate(guides_descendents):
-                guides_data[guides_name][guide] = {
-                        "worldPosition": guides_get_translation[i],
+                if "Sliding" in guide:
+                    guides_data[guides_name][guide] = curve_tool.get_all_nurbs_surfaces_data(guide)
+
+                    guides_data[guides_name][guide].update({
                         "parent": guides_parents[i],
                         "jointTwist": guides_joint_twist[i],
                         "type": guides_type[i],
                         "moduleName": guides_module_name[i],
                         "prefix": guides_prefix_name[i],
                         "controllerNumber": guides_ctl_number[i],
-                        # "cvsPosition": guides_cvs[i] if guides_cvs else "Child",
-                }
+                    })
+                else:
+                    guides_data[guides_name][guide] = {
+                            "worldPosition": guides_get_translation[i],
+                            "parent": guides_parents[i],
+                            "jointTwist": guides_joint_twist[i],
+                            "type": guides_type[i],
+                            "moduleName": guides_module_name[i],
+                            "prefix": guides_prefix_name[i],
+                            "controllerNumber": guides_ctl_number[i],
+                    }
 
 
         with open(os.path.join(TEMPLATE_FILE), "w") as outfile:
@@ -1043,9 +1065,6 @@ def get_data(name, module_name=False, cv=False):
                 if module_name:
                         moduleName = guide_info.get("moduleName")
                         prefix = guide_info.get("prefix")
-                        cv = guide_info.get("cvsPosition")
-                        if cv:
-                            return world_position, parent, moduleName, prefix, cv
                         return world_position, parent, moduleName, prefix
                 else:
                     return world_position, parent
@@ -1080,9 +1099,13 @@ def guide_import(joint_name, all_descendents=True, path=None):
                 
                 if all_descendents is True:
                         world_position, parent, moduleName, prefix = get_data(joint_name, module_name=True)
-                        guide_transform = cmds.createNode('transform', name=joint_name)
-                        cmds.xform(guide_transform, ws=True, t=world_position)
+                        if not "Sliding" in joint_name:
+                            guide_transform = cmds.createNode('transform', name=joint_name)
+                            cmds.xform(guide_transform, ws=True, t=world_position)
+                        else:
+                            curve_tool.build_surfaces_from_template(joint_name, path=core.DataManager.get_guide_data())
                         cmds.parent(guide_transform, guide_grp)
+
                         transforms_chain_export.append(guide_transform)
                         if moduleName != "Child":
                                cmds.addAttr(guide_transform, longName="moduleName", attributeType="enum", enumName=moduleName, keyable=False)
@@ -1104,9 +1127,15 @@ def guide_import(joint_name, all_descendents=True, path=None):
                                 if "Settings" in joint:
                                         continue
                                 cmds.select(clear=True)
-                                imported_transform = cmds.createNode('transform', name=joint)
-                                position = guides_data[guide_set_name][joint]["worldPosition"]
-                                cmds.xform(imported_transform, ws=True, t=position)
+                                
+
+                                if not "Sliding" in joint_name:
+                                    imported_transform = cmds.createNode('transform', name=joint)
+                                    position = guides_data[guide_set_name][joint]["worldPosition"]
+                                    cmds.xform(imported_transform, ws=True, t=position)
+                                else:
+                                    imported_transform=curve_tool.build_surfaces_from_template(joint_name, path=core.DataManager.get_guide_data())
+
                                 parent = parent_map[joint]
                                 if parent and parent != "C_root_JNT":
                                                 cmds.parent(imported_transform, parent)
@@ -1119,8 +1148,11 @@ def guide_import(joint_name, all_descendents=True, path=None):
         
         else:
                 world_position, parent, moduleName, prefix = get_data(joint_name, module_name=True)
-                guide_transform = cmds.createNode('transform', name=joint_name)
-                cmds.xform(guide_transform, ws=True, t=world_position)
+                if not "Sliding" in joint_name:
+                    guide_transform = cmds.createNode('transform', name=joint_name)
+                    cmds.xform(guide_transform, ws=True, t=world_position)
+                else:
+                    curve_tool.build_surfaces_from_template(joint_name, path=core.DataManager.get_guide_data())
                 cmds.parent(guide_transform, guide_grp)
                 transforms_chain_export.append(guide_transform)
                 if moduleName != "Child":
@@ -1131,11 +1163,11 @@ def guide_import(joint_name, all_descendents=True, path=None):
         return transforms_chain_export
 
 
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_007.guides")
-# # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_007.guides")
-# core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_010.guides")
+# # # # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_007.guides")
+# # # core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
-# # load_guides()
+# load_guides()
 
 # guides_export()

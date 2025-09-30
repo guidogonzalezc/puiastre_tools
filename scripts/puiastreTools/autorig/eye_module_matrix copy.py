@@ -57,23 +57,12 @@ class EyelidModule(object):
         self.skeleton_grp = cmds.createNode("transform", name=f"{self.module_name}Skinning_GRP", ss=True, p=self.skel_grp)
         self.controllers_grp = cmds.createNode("transform", name=f"{self.module_name}Controllers_GRP", ss=True)
 
-        self.create_curves()
+
         self.create_main_eye_setup()
         self.create_controllers()
         self.attributes()
         self.out_skinning_joints()
         # self.create_blink_setup()
-
-    def create_curves(self):
-
-        """
-        Create NURBS curves for the upper and lower eyelids based on the guide positions.
-        """
-        self.linear_upper_curve = cmds.curve(name=f"{self.side}_upperEyelid_CRV", degree=1, p=[cmds.xform(guide, q=True, ws=True, t=True) for guide in self.upper_guides[1:]]) # Create linear curve through upper guides
-        self.linear_lower_curve = cmds.curve(name=f"{self.side}_lowerEyelid_CRV", degree=1, p=[cmds.xform(guide, q=True, ws=True, t=True) for guide in self.lower_guides[1:]]) # Create linear curve through lower guides
-
-        self.rebuild_upper_curve = cmds.rebuildCurve(self.linear_upper_curve, ch=False, rpo=False, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=2, d=3) # Rebuild upper curve to degree 3
-        self.rebuild_lower_curve = cmds.rebuildCurve(self.linear_lower_curve, ch=False, rpo=False, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=2, d=3) # Rebuild lower curve to degree 3
 
 
     def create_main_eye_setup(self):
@@ -129,23 +118,29 @@ class EyelidModule(object):
                     cmds.connectAttr(f"{pos}.worldMatrix[0]", f"{nodes[0]}.offsetParentMatrix", force=True)
                 else:
                     cmds.matchTransform(nodes[0], pos)
+                local_grp, local_trn = self.local(ctl)
             else:
                 ctl, nodes = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
                 cmds.connectAttr(f"{pos}.worldMatrix[0]", f"{nodes[0]}.offsetParentMatrix", force=True)
+                local_grp, local_trn = self.local(ctl)
 
             if i == 0 or i == 2 or i == 4:
                 if i == 2:
                     ctlSub, nodesSub = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}SubUp", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
                     localSub_grp, localSub_trn = self.local(ctlSub)
-
+                    cmds.parent(localSub_grp, local_trn)
+                    cmds.matchTransform(localSub_grp, local_trn)
                 else:
                     ctlSub, nodesSub = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}Sub", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
                     localSub_grp, localSub_trn = self.local(ctlSub)
+                    cmds.parent(localSub_grp, local_trn)
                     
                 cmds.parent(nodesSub[0], ctl)
                 cmds.xform(nodesSub[0], m=om.MMatrix.kIdentity)
 
             cmds.parent(nodes[0], self.controllers_grp)
+            
+            self.upper_local_trn.append(local_trn)
             self.upper_controllers.append(ctl)
             self.upper_nodes.append(nodes[0])
 
@@ -163,10 +158,14 @@ class EyelidModule(object):
                         cmds.connectAttr(f"{pos}.worldMatrix[0]", f"{nodes[0]}.offsetParentMatrix", force=True)
                     else:
                         cmds.matchTransform(nodes[0], pos)
+                    local_grp, local_trn = self.local(ctl)
+                    self.lower_local_trn.append(local_trn)
                     self.lower_nodes.append(nodes[0])
                     self.lower_controllers.append(ctl)
                 if i == 2:
                     ctlSub, nodesSub = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}SubDown", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
+                    localSub_grp, localSub_trn = self.local(ctlSub)
+                    cmds.parent(localSub_grp, self.lower_local_trn[-1])
                     cmds.parent(nodesSub[0], ctl)
                     cmds.xform(nodesSub[0], m=om.MMatrix.kIdentity)
 
@@ -179,6 +178,26 @@ class EyelidModule(object):
         self.constraints_callback(self.upper_nodes[-2], [self.upper_controllers[2], self.upper_controllers[-1]])
         self.constraints_callback(self.lower_nodes[1], [self.lower_controllers[2], self.lower_controllers[0]])
         self.constraints_callback(self.lower_nodes[-2], [self.lower_controllers[2], self.lower_controllers[-1]])
+
+        #Constraints between local groups
+        up_in_pm = self.constraints_callback(self.upper_local_trn[1], [self.upper_local_trn[2], self.upper_local_trn[0]])
+        up_out_pm = self.constraints_callback(self.upper_local_trn[-2], [self.upper_local_trn[2], self.upper_local_trn[-1]])
+        low_in_pm = self.constraints_callback(self.lower_local_trn[1], [self.lower_local_trn[2], self.lower_local_trn[0]])
+        low_out_pm = self.constraints_callback(self.lower_local_trn[-2], [self.lower_local_trn[2], self.lower_local_trn[-1]])
+
+        indices = [1, -2, 1, -2]
+        for i, (local_trn, pm) in enumerate(zip([self.upper_local_trn[1], self.upper_local_trn[-2], self.lower_local_trn[1], self.lower_local_trn[-2]], [up_in_pm, up_out_pm, low_in_pm, low_out_pm])): # Connect the rest of the local groups to the respective parentMatrix nodes
+            
+            mult_matrix = cmds.createNode("multMatrix", name=local_trn.replace("Local_TRN", "Local_MMT"))
+            if i < 2:
+                cmds.connectAttr(f"{self.upper_controllers[indices[i]]}.worldMatrix[0]", f"{mult_matrix}.matrixIn[0]")
+                cmds.connectAttr(f"{self.upper_nodes[indices[i]]}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
+            else:
+                cmds.connectAttr(f"{self.lower_controllers[indices[i]]}.worldMatrix[0]", f"{mult_matrix}.matrixIn[0]")
+                cmds.connectAttr(f"{self.lower_nodes[indices[i]]}.worldInverseMatrix[0]", f"{mult_matrix}.matrixIn[1]")
+            cmds.connectAttr(f"{pm}.outputMatrix", f"{mult_matrix}.matrixIn[2]")
+            cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{local_trn}.offsetParentMatrix", force=True)
+            cmds.setAttr(f"{local_trn}.inheritsTransform", 1)
 
 
     def out_skinning_joints(self):
@@ -264,23 +283,6 @@ class EyelidModule(object):
 
                 
 
-    def getClosestParamToWorldMatrix(self, curveDagPath, worldMatrix):
-        """
-        Returns the closest parameter (u) on the curve to the given worldMatrix.
-        """
-        curveFn = om.MFnNurbsCurve(curveDagPath)
-
-        # Extract the translation as an MPoint
-        translation = om.MTransformationMatrix(worldMatrix).translation(om.MSpace.kWorld)
-        point = om.MPoint(translation)
-
-        # closestPoint() returns (MPoint, paramU)
-        closestPoint, paramU = curveFn.closestPoint(point, space=om.MSpace.kWorld)
-
-        return paramU
-    
-    
-    
     def get_offset_matrix(self, child, parent):
 
         """

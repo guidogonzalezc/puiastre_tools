@@ -776,7 +776,7 @@ class jawModule():
 
 
 
-jaw = jawModule()
-jaw.joint_selector("C_jaw_JNT")
+# jaw = jawModule()
+# jaw.joint_selector("C_jaw_JNT")
 
 

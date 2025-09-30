@@ -23,7 +23,9 @@ def lock_attr(ctl, attrs = ["scaleX", "scaleY", "scaleZ", "visibility"], ro=True
         cmds.setAttr(f"{ctl}.{attr}", keyable=False, channelBox=False, lock=True)
     
     if ro:
-        cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=True)
+        cmds.addAttr(ctl, longName="rotate_order", nn="Rotate Order", attributeType="enum", enumName="xyz:yzx:zxy:xzy:yxz:zyx", keyable=False)
+        cmds.setAttr(f"{ctl}.rotate_order", keyable=False, channelBox=True)
+
         cmds.connectAttr(f"{ctl}.rotate_order", f"{ctl}.rotateOrder")
 
 def get_all_ctl_curves_data(path = "",prefix="CTL"):
@@ -140,7 +142,6 @@ def get_all_ctl_curves_data(path = "",prefix="CTL"):
 
     print(f"Controller curves data saved to {TEMPLATE_FILE}")
 
-
 def build_curves_from_template(target_transform_name=None, path=None):
     """
     Builds controller curves from a predefined template JSON file.
@@ -239,7 +240,6 @@ def build_curves_from_template(target_transform_name=None, path=None):
 
     return created_transforms
 
-
 def controller_creator(name, suffixes=["GRP", "ANM"], mirror=False, parent=None, match=None, lock=["scaleX", "scaleY", "scaleZ", "visibility"], ro=True, prefix="CTL"):
     """
     Creates a controller with a specific name and offset transforms and returns the controller and the groups.
@@ -314,8 +314,6 @@ def controller_creator(name, suffixes=["GRP", "ANM"], mirror=False, parent=None,
     else:
         return ctl[0]
 
-
-
 def force_behavior_mirror(node):
 
     """Mirrors the transform of a given node along the X-axis.
@@ -345,7 +343,6 @@ def force_behavior_mirror(node):
         cmds.parent(mirror_transform, parent[0])
 
     cmds.parent(node, mirror_transform)
-
 
 def mirror_shapes():
     left_side = 'L_'
@@ -421,7 +418,6 @@ def mirror_shapes():
 
         print(f"Mirrored {len(src_shapes)} shapes from {src} → {tgt}")
 
-
 def text_curve(ctl_name):
     """
     Creates a text curve for a given controller name and letter.
@@ -462,9 +458,349 @@ def text_curve(ctl_name):
 
     return text_curve
 
+def _get_override_info_from_mobj(node_obj):
+    fn_dep = om.MFnDependencyNode(node_obj)
+    try:
+        override_enabled = fn_dep.findPlug('overrideEnabled', False).asBool()
+        override_color = fn_dep.findPlug('overrideColor', False) if override_enabled else None
+        override_color_value = override_color.asInt() if override_color else None
+    except:
+        override_enabled = False
+        override_color_value = None
+    return override_enabled, override_color_value
+
+def get_all_nurbs_surfaces_data(transform_name=None):
+    """
+    Export all nurbsSurface shapes in the scene to a JSON template.
+    Stores: transform name, shape name, override info, degreeInU/V, formInU/V,
+    knots arrays, nested CVs (U-major: cvs[u][v] -> (x,y,z) or (x,y,z,w) if rational).
+    """
+    srf_data = {}
+
+    # get parent transform
+    shape = cmds.listRelatives(transform_name, shapes=True, type="nurbsSurface")[0]
+
+    sel = om.MSelectionList()
+    sel.add(shape)
+    shape_obj = sel.getDependNode(0)
+
+    fn_surf = om.MFnNurbsSurface(shape_obj)
+
+    # degrees and forms
+    degree_u = int(fn_surf.degreeInU)
+    degree_v = int(fn_surf.degreeInV)
+
+    form_map = {
+        om.MFnNurbsSurface.kOpen: "open",
+        om.MFnNurbsSurface.kClosed: "closed",
+        om.MFnNurbsSurface.kPeriodic: "periodic",
+        om.MFnNurbsSurface.kInvalid: "invalid"
+    }
+    form_u = form_map.get(fn_surf.formInU, "unknown")
+    form_v = form_map.get(fn_surf.formInV, "unknown")
+
+    # knots
+    knots_u = list(fn_surf.knotsInU())
+    knots_v = list(fn_surf.knotsInV())
+
+    # cvs: we export as cvs[u][v] (U-major)
+    num_u = int(fn_surf.numCVsInU)
+    num_v = int(fn_surf.numCVsInV)
+
+    cvs = []
+    is_rational = False
+    for u in range(num_u):
+        row = []
+        for v in range(num_v):
+            pt = fn_surf.cvPosition(u, v)  # MPoint
+            # store w only if != 1.0 to keep JSON compact
+            if abs(pt.w - 1.0) > 1e-6:
+                row.append((pt.x, pt.y, pt.z, pt.w))
+                is_rational = True
+            else:
+                row.append((pt.x, pt.y, pt.z))
+        cvs.append(row)
+
+    srf_data_key = (transform_name or shape).split("|")[-1]
+    srf_data[srf_data_key] = {
+        "shapeName": shape.split("|")[-1],
+        "surface": {
+            "degreeInU": degree_u,
+            "degreeInV": degree_v,
+            "formInU": form_u,
+            "formInV": form_v,
+            "knotsInU": knots_u,
+            "knotsInV": knots_v,
+            "numCVsInU": num_u,
+            "numCVsInV": num_v,
+            "isRational": is_rational,
+            "cvs": cvs
+        }
+    }
+
+
+    return srf_data
+
+def build_surfaces_from_template(path=None, target_transform_name=None):
+    """
+    Read a surface template (as exported by get_all_nurbs_surfaces_data) and recreate transforms + nurbsSurface shapes.
+    If target_transform_name is provided, only rebuild that surface.
+    Returns list of created transform names.
+    NOTE: trimmed surfaces (trims) are NOT handled here.
+    """
+    if not path or not os.path.exists(path):
+        om.MGlobal.displayError("Template file does not exist.")
+        return
+
+    with open(path, "r") as f:
+        srf_data = json.load(f)
+
+    fallback_surface = {
+        "C_mouthSliding_GUIDE": {
+            "C_mouthSliding_GUIDE": {
+                "shapeName": "C_mouthSliding_GUIDEShape",
+                "surface": {
+                    "degreeInU": 3,
+                    "degreeInV": 3,
+                    "formInU": "open",
+                    "formInV": "open",
+                    "knotsInU": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.5,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "knotsInV": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "numCVsInU": 5,
+                    "numCVsInV": 4,
+                    "isRational": False,
+                    "cvs": [
+                        [
+                            [
+                                -21.06217571392214,
+                                325.087579121645,
+                                629.8056276915859
+                            ],
+                            [
+                                -21.06217571392214,
+                                339.1290295975931,
+                                629.8056276915859
+                            ],
+                            [
+                                -21.06217571392214,
+                                353.17048007354117,
+                                629.8056276915859
+                            ],
+                            [
+                                -21.06217571392214,
+                                367.21193054948935,
+                                629.8056276915859
+                            ]
+                        ],
+                        [
+                            [
+                                -14.0414504759481,
+                                325.087579121645,
+                                645.106302542441
+                            ],
+                            [
+                                -14.0414504759481,
+                                339.1290295975931,
+                                645.106302542441
+                            ],
+                            [
+                                -14.0414504759481,
+                                353.17048007354117,
+                                645.106302542441
+                            ],
+                            [
+                                -14.0414504759481,
+                                367.21193054948935,
+                                645.106302542441
+                            ]
+                        ],
+                        [
+                            [
+                                -1.3954698182843127e-14,
+                                325.087579121645,
+                                659.3337980993169
+                            ],
+                            [
+                                -1.3954698182843127e-14,
+                                339.1290295975931,
+                                659.3337980993169
+                            ],
+                            [
+                                -1.3954698182843127e-14,
+                                353.17048007354117,
+                                659.3337980993169
+                            ],
+                            [
+                                -1.3954698182843127e-14,
+                                367.21193054948935,
+                                659.3337980993169
+                            ]
+                        ],
+                        [
+                            [
+                                14.041450475948102,
+                                325.087579121645,
+                                645.106302542441
+                            ],
+                            [
+                                14.041450475948102,
+                                339.1290295975931,
+                                645.106302542441
+                            ],
+                            [
+                                14.041450475948102,
+                                353.17048007354117,
+                                645.106302542441
+                            ],
+                            [
+                                14.041450475948102,
+                                367.21193054948935,
+                                645.106302542441
+                            ]
+                        ],
+                        [
+                            [
+                                21.062175713922137,
+                                325.087579121645,
+                                629.8056276915859
+                            ],
+                            [
+                                21.062175713922137,
+                                339.1290295975931,
+                                629.8056276915859
+                            ],
+                            [
+                                21.062175713922137,
+                                353.17048007354117,
+                                629.8056276915859
+                            ],
+                            [
+                                21.062175713922137,
+                                367.21193054948935,
+                                629.8056276915859
+                            ]
+                        ]
+                    ]
+                }
+            },
+            "parent": "C_jaw_GUIDE",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child"
+        }
+    }
+
+    if target_transform_name:
+        found = None
+        for key, data in srf_data.items():
+            for k, v in data.items():
+                if k == target_transform_name:
+                    print(f"values: {v}")
+                    shapes = v["C_mouthSliding_GUIDE"]
+                    break
+
+
+    for i, z in shapes.items():
+        print(i)
+        print(z)
+
+    created_transforms = []
+
+    form_flags = {
+        "open": om.MFnNurbsSurface.kOpen,
+        "closed": om.MFnNurbsSurface.kClosed,
+        "periodic": om.MFnNurbsSurface.kPeriodic,
+        "invalid": om.MFnNurbsSurface.kInvalid,
+        "unknown": om.MFnNurbsSurface.kOpen
+    }
+
+
+    transform_name = target_transform_name
+
+    # create transform
+    dag_mod = om.MDagModifier()
+    t_obj = dag_mod.createNode("transform")
+    dag_mod.doIt()
+
+    t_fn = om.MFnDagNode(t_obj)
+    try:
+        t_fn.setName(transform_name)
+        created_transforms.append(transform_name)
+    except:
+        transform_name = t_fn.name()
+        created_transforms.append(transform_name)
+    surf_info = data["surface"]
+    degree_u = int(surf_info["degreeInU"])
+    degree_v = int(surf_info["degreeInV"])
+    form_u = form_flags.get(surf_info.get("formInU", "open"), om.MFnNurbsSurface.kOpen)
+    form_v = form_flags.get(surf_info.get("formInV", "open"), om.MFnNurbsSurface.kOpen)
+    knots_u = surf_info.get("knotsInU", [])
+    knots_v = surf_info.get("knotsInV", [])
+    cvs_nested = surf_info["cvs"]
+    num_u = int(surf_info["numCVsInU"])
+    num_v = int(surf_info["numCVsInV"])
+    is_rational = surf_info.get("isRational", False)
+
+    # flatten into MPointArray row-major U-major order
+    pts = om.MPointArray()
+    for u in range(num_u):
+        for v in range(num_v):
+            cv = cvs_nested[u][v]
+            if len(cv) == 4:
+                pts.append(om.MPoint(cv[0], cv[1], cv[2], cv[3]))
+            else:
+                pts.append(om.MPoint(cv[0], cv[1], cv[2], 1.0))
+
+    fn_surf = om.MFnNurbsSurface()
+    try:
+        shape_obj = fn_surf.create(
+            pts,
+            om.MDoubleArray(knots_u),
+            om.MDoubleArray(knots_v),
+            degree_u,
+            degree_v,
+            form_u,
+            form_v,
+            bool(is_rational),
+            t_obj
+        )
+    except Exception as e:
+        om.MGlobal.displayError(f"Failed to create surface {key}: {e}")
+        return
+
+    shape_fn = om.MFnDagNode(shape_obj)
+    try:
+        shape_fn.setName(shape_name)
+    except:
+        pass
+
+    return created_transforms[0]
+
+# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
+
 # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 # core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 # core.DataManager.set_asset_name("Dragon")
 # core.DataManager.set_mesh_data("Puiastre")
+# aa = get_all_nurbs_surfaces_data(transform_name="tt")
+# print(aa)
+# build_surfaces_from_template(core.DataManager.get_guide_data(), target_transform_name="tt")
 # get_all_ctl_curves_data()
 # # mirror_shapes()
