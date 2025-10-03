@@ -796,7 +796,6 @@ def curve_to_data():
             end_data.update(data_append)
     return end_data, side
 
-
 def curve_data_extractor(curve):
 
     shapes = cmds.listRelatives(curve, shapes=True, fullPath=True)[0] or []
@@ -850,8 +849,6 @@ def curve_data_extractor(curve):
     }
 
     return shape_data_list
-
-  
 
 class EyeGuideCreation(GuideCreation):
     """
@@ -997,6 +994,62 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "mouth":
                     MouthGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
 
+def curve_data():
+    for shape in nurbs_shapes:
+        sel_list.clear()
+        sel_list.add(shape)
+        shape_obj = sel_list.getDependNode(0)
+
+        shape_override_enabled, shape_override_color = get_override_info(shape_obj)
+
+        fn_shape_dep = om.MFnDependencyNode(shape_obj)
+        try:
+            always_on_top = fn_shape_dep.findPlug('alwaysDrawOnTop', False).asBool()
+        except:
+            always_on_top = False
+
+        curve_fn = om.MFnNurbsCurve(shape_obj)
+
+        cvs = []
+        for i in range(curve_fn.numCVs):
+            pt = curve_fn.cvPosition(i)
+            cvs.append((pt.x, pt.y, pt.z))
+
+        form_types = {
+            om.MFnNurbsCurve.kOpen: "open",
+            om.MFnNurbsCurve.kClosed: "closed",
+            om.MFnNurbsCurve.kPeriodic: "periodic"
+        }
+
+        line_width = None
+        if cmds.attributeQuery("lineWidth", node=shape, exists=True):
+            try:
+                line_width = cmds.getAttr(shape + ".lineWidth")
+            except:
+                pass 
+
+        form = form_types.get(curve_fn.form, "unknown")
+        if form == "unknown":
+            om.MGlobal.displayWarning(f"Curve form unknown for {shape}")
+
+        knots = curve_fn.knots()
+        degree = curve_fn.degree
+
+        shape_data_list.append({
+            "name": shape.split("|")[-1],
+            "overrideEnabled": shape_override_enabled,
+            "overrideColor": shape_override_color,
+            "alwaysDrawOnTop": always_on_top,
+            "lineWidth": line_width,
+            "curve": {
+                "cvs": cvs,
+                "form": form,
+                "knots": list(knots),
+                "degree": degree
+            }
+        })
+
+
 def guides_export():
         """
         Exports the guides from the selected folder in the Maya scene to a JSON file.
@@ -1069,16 +1122,6 @@ def guides_export():
                             enum_list = enum_string.split(":")
                             module_name = enum_list[index]
 
-                            if module_name == "facial":
-                                    shapes = cmds.listRelatives(guide, shapes=True, fullPath=True)
-                                    if shapes:
-                                            for shape in shapes:
-                                                if cmds.nodeType(shape) == "nurbsCurve":
-                                                    cvs = cmds.ls(f"{shape}.cv[*]", flatten=True)
-                                                    if cvs:
-                                                        for cv in cvs:
-                                                            pos = cmds.xform(cv, query=True, translation=True, worldSpace=True)
-                                                            guides_cvs.append(pos)
                         else:
                                 module_name = "Child"
                         guides_module_name.append(module_name)
@@ -1279,7 +1322,7 @@ core.DataManager.set_asset_name("Dragon")
 core.DataManager.set_mesh_data("Puiastre")
 
 
-#guide_creation.load_guides()
+guide_creation.load_guides()
 
 guide_creation.guide_import("C_lipsTransform_GUIDE", all_descendents=True)
 
