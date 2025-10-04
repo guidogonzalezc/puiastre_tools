@@ -799,8 +799,7 @@ class FalangeModule(object):
         for i, (stiff, curvature) in enumerate(zip(stiff_joints, curvature_joints)):
             stiff_input = cmds.listConnections(f"{stiff}.offsetParentMatrix", plugs=True, source=True, destination=False)
             curvature_input = cmds.listConnections(f"{curvature}.offsetParentMatrix", plugs=True, source=True, destination=False)
-            # print(f"Connections for {stiff}: {stiff_input}")
-            # print(f"Connections for {curvature}: {curvature_input}")
+
             name = curvature.replace("Curvature", "").replace("JNT", "")
             blend_matrix = cmds.createNode("blendMatrix", n=f"{name}WM_BLM", ss=True)
             cmds.connectAttr(f"{stiff_input[0]}", f"{blend_matrix}.inputMatrix")
