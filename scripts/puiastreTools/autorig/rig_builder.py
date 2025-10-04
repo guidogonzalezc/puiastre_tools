@@ -88,14 +88,14 @@ def make(asset_name="dragon"):
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
     """   
-    # cmds.file(new=True, force=True)
+    cmds.file(new=True, force=True)
     #UNI
-    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
-    core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+    # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
+    # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
-    # #CASA
-    # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_006.guides")
-    # core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+    # GUIDO
+    core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_009.guides")
+    core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
     # LAIA
     # core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
@@ -153,10 +153,11 @@ def make(asset_name="dragon"):
 
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
+
                 if guide_info.get("moduleName") == "membran":
                     mm.MembraneModule().make(guide_name)
         
-        for guide_name, guide_info in guides.items():
+        # for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "backLegFoot":
                     fm.FingersModule().make(guide_name)
