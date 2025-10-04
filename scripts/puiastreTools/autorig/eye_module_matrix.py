@@ -187,7 +187,6 @@ class EyelidModule(object):
 
         
         self.upper_local_jnts = [jnt for jnt in self.upper_local_jnts if jnt != None]
-        print(self.upper_local_jnts)
 
         self.lower_controllers = []
         self.lower_nodes = []
@@ -219,7 +218,6 @@ class EyelidModule(object):
         self.lower_local_jnt.append(self.upper_local_jnts[-1])
 
         self.lower_local_jnt = [jnt for jnt in self.lower_local_jnt if jnt != None]
-        print(self.lower_local_jnt)
         self.lower_local_jnts = []
 
 
