@@ -45,6 +45,7 @@ class FingersModule(object):
         Make the fingers module
         :param guide_name: name of the guide to import
         """
+
         data_exporter = data_export.DataExport()
         self.import_guides(guide_name)
         leg_skinning = data_exporter.get_data(f"{self.side}_backLegModule", "skinning_transform")
@@ -71,16 +72,27 @@ class FingersModule(object):
         self.primary_aim_vector = om.MVector(AXIS_VECTOR[self.primary_aim])
         self.secondary_aim_vector = om.MVector(AXIS_VECTOR[self.secondary_aim])
         self.create_controller()
+
+        self.data_exporter.append_data(
+            f"{self.side}_footFingersModule",
+            {
+                "skinning_transform": self.skinning_grp,
+            }
+        )
     
     def import_guides(self, guide_name):
 
         """
         Import the guides for the fingers module
-        :param guide_name: name of the guide to import"""
+        :param guide_name: name of the guide to import
+        """
 
         self.fingers = guide_import(guide_name, all_descendents=True, path=None)
         self.side = self.fingers[0].split("_")[0]
         self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_legFingersControllers_GRP", parent=self.masterWalk_ctl)
+        self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_footFingerModule_GRP", parent=self.modules_grp, ss=True)
+        self.skinning_grp = cmds.createNode("transform", name=f"{self.side}_footFingerSkinningJoints_GRP", parent=self.skel_grp, ss=True)
+
         cmds.setAttr(self.controllers_grp + ".inheritsTransform", 0)
     
     def get_offset_matrix(self, child, parent):
@@ -133,8 +145,7 @@ class FingersModule(object):
                 cmds.setAttr(aim_matrix + ".secondaryMode", 1)
 
                 next_index = index + 2 if (index + 2) < len(finger) else 0
-                print(index+2)
-                print(len(finger))
+
 
                 cmds.connectAttr(finger[index] + ".worldMatrix[0]", aim_matrix + ".inputMatrix")
                 cmds.connectAttr(finger[index+1] + ".worldMatrix[0]", aim_matrix + ".primaryTargetMatrix")
@@ -147,6 +158,7 @@ class FingersModule(object):
             cmds.connectAttr(aim_matrix_guides[1] + ".outputMatrix", aim_matrix_guides[-1] + ".target[0].targetMatrix")
             cmds.setAttr(aim_matrix_guides[-1] + ".target[0].translateWeight", 0)
 
+            joints = []
             for j, guide in enumerate(aim_matrix_guides):
                 finger_name = f"{guide.split('_')[1]}"
 
@@ -155,23 +167,28 @@ class FingersModule(object):
                     suffixes=["GRP", "ANM"],
                     lock=["tx", "ty", "tz" ,"sx", "sy", "sz", "visibility"],
                     ro=False,
-                    parent=controllers[-1] if controllers else self.controllers_grp 
+                    parent= controllers[-1] if controllers else self.controllers_grp 
                 )
 
                 if controllers:
                     offset_matrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}_MLT", ss=True)
                     inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{finger_name}_INV", ss=True)
-                    cmds.connectAttr(guide + ".outputMatrix", offset_matrix + ".matrixIn[1]")
                     cmds.connectAttr(aim_matrix_guides[j-1] + ".outputMatrix", inverse + ".inputMatrix")
-                    cmds.connectAttr(inverse + ".outputMatrix", offset_matrix + ".matrixIn[2]")
-                    cmds.connectAttr(controllers[-1] + ".matrix", offset_matrix + ".matrixIn[0]")
+                    cmds.connectAttr(guide + ".outputMatrix", offset_matrix + ".matrixIn[0]")
+                    cmds.connectAttr(controllers[-1] + ".worldInverseMatrix[0]", offset_matrix + ".matrixIn[1]")
+                    cmds.connectAttr(controllers[-1] + ".worldMatrix[0]", offset_matrix + ".matrixIn[2]")
+                    cmds.connectAttr(inverse + ".outputMatrix", offset_matrix + ".matrixIn[3]")
                     cmds.connectAttr(offset_matrix + ".matrixSum", grp[0] + ".offsetParentMatrix")
                 else:
-                    cmds.connectAttr(guide + ".outputMatrix", grp[0] + ".offsetParentMatrix")
+                    cmds.connectAttr(guide + ".outputMatrix", grp[0] + ".offsetParentMatrix")                
 
 
                 cmds.setAttr(f"{grp[0]}.rotate", 0,0,0, type="double3")
                 cmds.setAttr(f"{grp[0]}.translate", 0,0,0, type="double3")
+
+                joint = cmds.createNode("joint", name=f"{self.side}_{finger_name.replace('Guide', '')}_JNT", parent=self.skinning_grp, ss=True)
+                cmds.connectAttr(ctl + ".worldMatrix[0]", joint + ".offsetParentMatrix")
+                joints.append(joint)
 
                 controllers.append(ctl)
 
