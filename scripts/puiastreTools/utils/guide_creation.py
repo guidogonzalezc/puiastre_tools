@@ -321,8 +321,7 @@ class GuideCreation(object):
                 if self.limb_name == "mouth":
                     parent = self.guides_trn if not self.guides else self.guides[0]
 
-
-                if not "Sliding" in joint_name:
+                if not "Sliding" in joint_name and not "Curve" in joint_name:
                     temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                     type = "joint"
                     if not positions :
@@ -343,6 +342,10 @@ class GuideCreation(object):
                             match=temp_pos,
                             color=color,
                         )
+
+                elif "Curve" in joint_name:
+                    guide = create_curve_guide(f"{side}_{joint_name}_GUIDE")
+                    cmds.parent(guide, parent)
 
                 else:
                     guide = curve_tool.build_surfaces_from_template(core.DataManager.get_guide_data(), target_transform_name=f"{side}_{joint_name}_GUIDE")
@@ -421,9 +424,6 @@ class GuideCreation(object):
                     cmds.setAttr(curve + ".overrideEnabled", 1)
                     cmds.setAttr(curve + ".overrideDisplayType", 1)
                 
-                    
-
-
             if self.aim_name:
                 arrrow_buffer = self.controller_creator(
                     f"{side}_{self.limb_name}Buffer",
@@ -961,13 +961,9 @@ def load_guides(path = ""):
 
     cmds.setAttr(f"{buffers_trn}.hiddenInOutliner ", True)
 
-    # EyeGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
-    # MouthGuideCreation(from_selection=True).create_guides(guides_trn, buffers_trn)
-
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
-            continue  # ignorar "hierarchy" u otros que no sean diccionarios de guías
-
+            continue  
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "arm":
@@ -994,61 +990,104 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "mouth":
                     MouthGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
 
-def curve_data():
-    for shape in nurbs_shapes:
-        sel_list.clear()
-        sel_list.add(shape)
-        shape_obj = sel_list.getDependNode(0)
+def create_curve_guide(name=""):
 
-        shape_override_enabled, shape_override_color = get_override_info(shape_obj)
+    path = core.DataManager.get_guide_data()
 
-        fn_shape_dep = om.MFnDependencyNode(shape_obj)
-        try:
-            always_on_top = fn_shape_dep.findPlug('alwaysDrawOnTop', False).asBool()
-        except:
-            always_on_top = False
+    with open(path, "r") as f:
+        guide_data = json.load(f)
 
-        curve_fn = om.MFnNurbsCurve(shape_obj)
+    data = None
 
-        cvs = []
-        for i in range(curve_fn.numCVs):
-            pt = curve_fn.cvPosition(i)
-            cvs.append((pt.x, pt.y, pt.z))
+    for key, index_data in guide_data[next(iter(guide_data))].items():
+        if key == name:
+            data = index_data
 
-        form_types = {
-            om.MFnNurbsCurve.kOpen: "open",
-            om.MFnNurbsCurve.kClosed: "closed",
-            om.MFnNurbsCurve.kPeriodic: "periodic"
+    if data is None:
+        om.MGlobal.displayError(f"Guide data for {name} not found.")
+        return None
+
+    dag_modifier = om.MDagModifier()
+    transform_obj = dag_modifier.createNode("transform")
+    dag_modifier.doIt()
+    transform_fn = om.MFnDagNode(transform_obj)
+    transform_fn.setName(name)
+    dag_modifier.doIt()
+
+    created_shapes = []
+
+    # curve_info = guide_data["curve"]
+    cvs = data.get("cvs")
+    degree = data.get("degree")
+    knots = data.get("knots")
+    form = data.get("form")
+
+    form_flags = {
+        "open": om.MFnNurbsCurve.kOpen,
+        "closed": om.MFnNurbsCurve.kClosed,
+        "periodic": om.MFnNurbsCurve.kPeriodic
+    }
+    form_flag = form_flags.get(form, om.MFnNurbsCurve.kOpen)
+
+    points = om.MPointArray()
+    for pt in cvs:
+        points.append(om.MPoint(pt[0], pt[1], pt[2]))
+
+    curve_fn = om.MFnNurbsCurve()
+    shape_obj = curve_fn.create(
+        points,
+        knots,
+        degree,
+        form_flag,
+        False,    
+        True,     
+        transform_obj
+    )
+
+    shape_fn = om.MFnDagNode(shape_obj)
+    shape_fn.setName(name + "Shape")
+    created_shapes.append(shape_obj)
+
+    return transform_fn.name()
+
+def curve_data(curve):
+    shape = cmds.listRelatives(curve, shapes=True, fullPath=True, type="nurbsCurve")[0] or []
+    sel_list = om.MSelectionList()
+    shape_data_list = []
+
+    sel_list.clear()
+    sel_list.add(shape)
+    shape_obj = sel_list.getDependNode(0)
+
+    curve_fn = om.MFnNurbsCurve(shape_obj)
+
+    cvs = []
+    for i in range(curve_fn.numCVs):
+        pt = curve_fn.cvPosition(i)
+        cvs.append((pt.x, pt.y, pt.z))
+
+    form_types = {
+        om.MFnNurbsCurve.kOpen: "open",
+        om.MFnNurbsCurve.kClosed: "closed",
+        om.MFnNurbsCurve.kPeriodic: "periodic"
+    }
+
+    form = form_types.get(curve_fn.form, "unknown")
+    if form == "unknown":
+        om.MGlobal.displayWarning(f"Curve form unknown for {shape}")
+
+    knots = curve_fn.knots()
+    degree = curve_fn.degree
+
+    shape_data_list = {
+        "cvs": cvs,
+        "form": form,
+        "knots": list(knots),
+        "degree": degree
         }
 
-        line_width = None
-        if cmds.attributeQuery("lineWidth", node=shape, exists=True):
-            try:
-                line_width = cmds.getAttr(shape + ".lineWidth")
-            except:
-                pass 
 
-        form = form_types.get(curve_fn.form, "unknown")
-        if form == "unknown":
-            om.MGlobal.displayWarning(f"Curve form unknown for {shape}")
-
-        knots = curve_fn.knots()
-        degree = curve_fn.degree
-
-        shape_data_list.append({
-            "name": shape.split("|")[-1],
-            "overrideEnabled": shape_override_enabled,
-            "overrideColor": shape_override_color,
-            "alwaysDrawOnTop": always_on_top,
-            "lineWidth": line_width,
-            "curve": {
-                "cvs": cvs,
-                "form": form,
-                "knots": list(knots),
-                "degree": degree
-            }
-        })
-
+    return shape_data_list
 
 def guides_export():
         """
@@ -1163,6 +1202,22 @@ def guides_export():
                         "controllerNumber": guides_ctl_number[i],
                         "guide_type_object": guides_type_object[i],
                     })
+                elif guides_type_object[i] == "Curve" or "Curve" in guide:
+
+                    if guides_type_object[i] != "Curve":
+                         guides_type_object[i] = "Curve"
+
+                    guides_data[guides_name][guide] = curve_data(guide)
+
+                    guides_data[guides_name][guide].update({
+                        "parent": guides_parents[i],
+                        "jointTwist": guides_joint_twist[i],
+                        "type": guides_type[i],
+                        "moduleName": guides_module_name[i],
+                        "prefix": guides_prefix_name[i],
+                        "controllerNumber": guides_ctl_number[i],
+                        "guide_type_object": guides_type_object[i],
+                    })
                 else:
                     guides_data[guides_name][guide] = {
                             "worldPosition": guides_get_translation[i],
@@ -1249,6 +1304,8 @@ def guide_import(joint_name, all_descendents=True, path=None):
                     cmds.xform(guide_transform, ws=True, t=world_position)
                 elif guideType == "NurbsSurface":
                     guide_transform = curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint_name)
+                elif guideType == "Curve":
+                    guide_transform = create_curve_guide(name=joint_name)
                 cmds.parent(guide_transform, guide_grp)
 
                 transforms_chain_export.append(guide_transform)
@@ -1276,12 +1333,15 @@ def guide_import(joint_name, all_descendents=True, path=None):
                         cmds.select(clear=True)
                         world_position, parent, moduleName, prefix, guideType = get_data(joint, module_name=True)
 
-                        if not "NurbsSurface" in guideType:
+                        if guideType == "Guide" or guideType == "Transform":
                             imported_transform = cmds.createNode('transform', name=joint)
                             position = guides_data[guide_set_name][joint]["worldPosition"]
                             cmds.xform(imported_transform, ws=True, t=position)
-                        else:
+                        elif guideType == "NurbsSurface":
                             imported_transform=curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint)
+
+                        elif guideType == "Curve":
+                            imported_transform = create_curve_guide(name=joint)
 
                         parent = parent_map[joint]
 
@@ -1294,11 +1354,24 @@ def guide_import(joint_name, all_descendents=True, path=None):
                                                     
         else:
                 world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
-                if not "NurbsSurface" in guideType:
+                # if not "NurbsSurface" in guideType:
+                #     guide_transform = cmds.createNode('transform', name=joint_name)
+                #     cmds.xform(guide_transform, ws=True, t=world_position)
+                # else:
+                #     guide_transform = curve_tool.build_surfaces_from_template(target_transform_name=joint_name, path=core.DataManager.get_guide_data())
+
+                if guideType == "Guide" or guideType == "Transform":
                     guide_transform = cmds.createNode('transform', name=joint_name)
-                    cmds.xform(guide_transform, ws=True, t=world_position)
-                else:
-                    guide_transform = curve_tool.build_surfaces_from_template(target_transform_name=joint_name, path=core.DataManager.get_guide_data())
+                    position = guides_data[guide_set_name][joint]["worldPosition"]
+                    cmds.xform(guide_transform, ws=True, t=position)
+                elif guideType == "NurbsSurface":
+                    guide_transform=curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint_name)
+
+                elif guideType == "Curve":
+                    guide_transform = create_curve_guide(name=joint_name)
+
+
+
                 cmds.parent(guide_transform, guide_grp)
                 transforms_chain_export.append(guide_transform)
                 if moduleName != "Child":
