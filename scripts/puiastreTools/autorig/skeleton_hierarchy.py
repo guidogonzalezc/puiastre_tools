@@ -202,12 +202,12 @@ def build_complete_hierarchy():
             current_group = []
 
             for index, joint in enumerate(skinning_joint_list):
-                if "01_JNT" in joint and not "Secondary" in joint:
+                if "Membran01" in joint:
                     membrane_groups.append(current_group)
                     current_group = []
                     current_group.append(joint)
 
-                elif not "Secondary" in joint:
+                else:
                     current_group.append(joint)
 
                 if joint == skinning_joint_list[-1]:
