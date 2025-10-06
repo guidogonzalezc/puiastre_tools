@@ -173,5 +173,17 @@
         "root_ctl": "R_fourthMetacarpalRootIk_CTL",
         "end_ik": "R_fourthFinger03Ik_CTL",
         "settings_ctl": "R_hand_CTL"
+    },
+    "R_footFingersModule": {
+        "skinning_transform": "R_footFingerSkinningJoints_GRP"
+    },
+    "L_membraneModule": {
+        "skinning_transform": "L_membraneSkinningJoints_GRP"
+    },
+    "R_membraneModule": {
+        "skinning_transform": "R_membraneSkinningJoints_GRP"
+    },
+    "L_footFingersModule": {
+        "skinning_transform": "L_footFingerSkinningJoints_GRP"
     }
 }

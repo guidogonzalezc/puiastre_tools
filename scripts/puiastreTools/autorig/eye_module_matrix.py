@@ -34,13 +34,14 @@ class EyelidModule(object):
         self.masterwalk_ctl = data_export.DataExport().get_data("basic_structure", "masterWalk_CTL")
         # self.head_ctl = data_export.DataExport().get_data("neck_module", "head_ctl")
         self.guides_grp = data_export.DataExport().get_data("basic_structure", "guides_GRP")
-        self.guides = guide_creation.guide_import(guide_name, all_descendents=True) # Get self.side_eye_GUIDE and its children
+        self.eye_guide = guide_creation.guide_import(guide_name, all_descendents=True) # Get self.side_eye_GUIDE and its children
 
-        self.upper_guides = [guide for guide in self.guides if "Up" in guide and "Blink" not in guide] # Upper guides
-        self.lower_guides = [guide for guide in self.guides if "Down" in guide and "Blink" not in guide] # Lower guides
-        self.blink_guides = [guide for guide in self.guides if "eyeBlink" in guide] # Blink ref guides
-        self.up_blink_guides = [guide for guide in self.guides if "UpBlink" in guide] # Upper blink guides
-        self.down_blink_guides = [guide for guide in self.guides if "DownBlink" in guide] # Lower blink guides
+        # Curve guides
+        self.upper_curve = guide_creation.guide_import(f"{self.side}_upperEyelidCurve_GUIDE")
+        self.lower_curve = guide_creation.guide_import(f"{self.side}_lowerEyelidCurve_GUIDE")
+        self.blink_curve = guide_creation.guide_import(f"{self.side}_eyeBlinkCurve_GUIDE")
+        self.upper_n_blink = guide_creation.guide_import(f"{self.side}_upperNegativeBlinkCurve_GUIDE")
+        self.lower_n_blink = guide_creation.guide_import(f"{self.side}_lowerNegativeBlinkCurve_GUIDE")
 
     def make(self):
 
@@ -70,21 +71,32 @@ class EyelidModule(object):
         """
         Create NURBS curves for the upper and lower eyelids based on the guide positions.
         """
-        self.linear_upper_curve = cmds.curve(name=f"{self.side}_upperEyelid_CRV", degree=1, p=[cmds.xform(guide, q=True, ws=True, t=True) for guide in self.upper_guides[1:]]) # Create linear curve through upper guides
-        self.linear_lower_curve = cmds.curve(name=f"{self.side}_lowerEyelid_CRV", degree=1, p=[cmds.xform(guide, q=True, ws=True, t=True) for guide in self.lower_guides[1:]]) # Create linear curve through lower guides
+        self.linear_upper_curve = cmds.rebuildCurve(self.upper_curve, ch=False, rpo=False, rt=0, end=1, kr=0, kcp=False, kep=True, kt=False, s=15, d=1, tol=0.01, name=f"{self.side}_upperEyelidLinear_CRV")[0]
+        self.linear_lower_curve = cmds.rebuildCurve(self.lower_curve, ch=False, rpo=False, rt=0, end=1, kr=0, kcp=False, kep=True, kt=False, s=15, d=1, tol=0.01, name=f"{self.side}_lowerEyelidLinear_CRV")[0]
 
-        self.rebuild_upper_curve = cmds.rebuildCurve(self.linear_upper_curve, ch=False, rpo=False, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=4, d=3)[0] # Rebuild upper curve to degree 3
-        self.rebuild_lower_curve = cmds.rebuildCurve(self.linear_lower_curve, ch=False, rpo=False, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=4, d=3)[0] # Rebuild lower curve to degree 3
+        cmds.parent(self.linear_upper_curve, self.module_trn)
+        cmds.parent(self.linear_lower_curve, self.module_trn)
 
-        self.rebuild_upper_curve = cmds.rename(self.rebuild_upper_curve, f"{self.side}_upperEyelidRef_CRV")
-        self.rebuild_lower_curve = cmds.rename(self.rebuild_lower_curve, f"{self.side}_lowerEyelidRef_CRV")
+        self.upper_rebuild_curve = cmds.duplicate(self.upper_curve, name=f"{self.side}_upperBlinkRebuild_CRV")[0]
+        self.lower_rebuild_curve = cmds.duplicate(self.lower_curve, name=f"{self.side}_lowerBlinkRebuild_CRV")[0]
+        
 
-        self.blinked_upper_curve = cmds.duplicate(self.rebuild_upper_curve, name=f"{self.side}_upperEyelidBlink_CRV")[0]
-        self.blinked_lower_curve = cmds.duplicate(self.rebuild_lower_curve, name=f"{self.side}_lowerEyelidBlink_CRV")[0]
-
-        for crv in [self.linear_lower_curve, self.linear_upper_curve, self.rebuild_lower_curve, self.rebuild_upper_curve]:
-            cmds.parent(crv, self.module_trn)
-
+        self.upper_guides = [] # Store upper eyelid guide transforms
+        up_cvs = cmds.ls(self.linear_upper_curve + ".cv[*]", fl=True)
+        for i, cv in enumerate(up_cvs):
+            pos = cmds.xform(cv, q=True, ws=True, t=True)
+            guide_trn = cmds.createNode("transform", name=f"{self.side}_upperEyelid0{i}_GUIDE", ss=True, p=self.module_trn)
+            cmds.xform(guide_trn, ws=True, t=pos)
+            self.upper_guides.append(guide_trn)
+        
+        self.lower_guides = [] # Store lower eyelid guide transforms
+        down_cvs = cmds.ls(self.linear_lower_curve + ".cv[*]", fl=True)
+        for i, cv in enumerate(down_cvs):
+            pos = cmds.xform(cv, q=True, ws=True, t=True)
+            guide_trn = cmds.createNode("transform", name=f"{self.side}_lowerEyelid0{i}_GUIDE", ss=True, p=self.module_trn)
+            cmds.xform(guide_trn, ws=True, t=pos)
+            self.lower_guides.append(guide_trn)
+        
 
     def create_main_eye_setup(self):
 
@@ -92,18 +104,18 @@ class EyelidModule(object):
         Create the main eye setup for the eyelid module.
         """
         self.eye_joint = cmds.joint(name=f"{self.side}_eye_JNT")
-        cmds.matchTransform(self.eye_joint, self.guides[0])
+        cmds.matchTransform(self.eye_joint, self.eye_guide)
         cmds.parent(self.eye_joint, self.skeleton_grp)
 
         self.side_aim_ctl, side_aim_nodes = curve_tool.controller_creator(name=f"{self.side}_eye", suffixes=["GRP"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
         cmds.parent(side_aim_nodes[0], self.controllers_grp)
         cmds.matchTransform(side_aim_nodes[0], self.eye_joint)
         cmds.select(side_aim_nodes[0])
-        cmds.move(50, 0, 0, relative=True, objectSpace=True, worldSpaceDistance=True)
+        cmds.move(0, 0, 50, relative=True, objectSpace=True, worldSpaceDistance=True)
 
 
         # Aim setup
-        self.eye_jnt_matrix = cmds.xform(self.eye_joint, q=True, m=True, ws=True)
+        self.eye_jnt_matrix = cmds.xform(self.eye_guide, q=True, m=True, ws=True)
         self.aim = cmds.createNode("aimMatrix", name=f"{self.side}_eye_AIM", ss=True)
         cmds.setAttr(f"{self.aim}.primaryInputAxis", 0, 0, 1)
         cmds.setAttr(f"{self.aim}.secondaryInputAxis", 0, 1, 0)
@@ -127,12 +139,12 @@ class EyelidModule(object):
         upper_local_trns = []
         self.upper_local_jnts = []
 
-        up_positions = cmds.ls(self.rebuild_upper_curve + ".cv[*]", fl=True) # Get CV positions of the rebuilt curves
-        down_positions = cmds.ls(self.rebuild_lower_curve + ".cv[*]", fl=True) # Get CV positions of the rebuilt curves
+        up_positions = cmds.ls(self.upper_rebuild_curve + ".cv[*]", fl=True) # Get CV positions of the rebuilt curves
+        down_positions = cmds.ls(self.lower_rebuild_curve + ".cv[*]", fl=True) # Get CV positions of the rebuilt curves
 
         
         upper_guides = [
-            self.upper_guides[1],
+            self.upper_guides[0],
             self.upper_guides[len(self.upper_guides) // 4],
             self.upper_guides[len(self.upper_guides) // 2],
             self.upper_guides[(len(self.upper_guides) * 3) // 4],
@@ -140,7 +152,7 @@ class EyelidModule(object):
         ]
         
         lower_guides = [
-            self.lower_guides[1],
+            self.lower_guides[0],
             self.lower_guides[len(self.lower_guides) // 4],
             self.lower_guides[len(self.lower_guides) // 2],
             self.lower_guides[(len(self.lower_guides) * 3) // 4],
@@ -153,15 +165,17 @@ class EyelidModule(object):
             
             if i == 1 or i == 2 or i == 3:
                 ctl, nodes = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}Up", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
-                cmds.xform(nodes[0], t=cmds.xform(up_positions[i+1], q=True, ws=True, t=True), ws=True)
+                if i == 2:
+                    cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{nodes[0]}.offsetParentMatrix", force=True) # Directly connect the mid guide to the middle controller
                 local_trn, joint_local = self.local(ctl, guide)
 
             else:
                 ctl, nodes = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
-                if i == 0:
-                    cmds.xform(nodes[0], t=cmds.xform(up_positions[0], q=True, ws=True, t=True), ws=True)
-                else:
-                    cmds.xform(nodes[0], t=cmds.xform(up_positions[-1], q=True, ws=True, t=True), ws=True)
+                blend_matrix = cmds.createNode("blendMatrix", name=ctl.replace("CTL", "BLM"), ss=True) # create a blend matrix to blend between the upper00 and lower00 guides
+                cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{blend_matrix}.inputMatrix")
+                cmds.connectAttr(f"{lower_guides[i]}.worldMatrix[0]", f"{blend_matrix}.target[0].targetMatrix")
+                cmds.setAttr(f"{blend_matrix}.target[0].weight", 0.5) # Set weight to 0.5 for equal influence
+                cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{nodes[0]}.offsetParentMatrix", force=True) # Connect the blend matrix to the controller
                 local_trn, joint_local = self.local(ctl, guide)
 
             upper_local_trns.append(local_trn)
@@ -191,41 +205,51 @@ class EyelidModule(object):
         self.lower_controllers = []
         self.lower_nodes = []
         lower_local_trns = []
-        self.lower_local_jnt = []
+        self.lower_local_jnts = []
 
         self.lower_nodes.append(self.upper_nodes[0])
+        lower_local_trns.append(upper_local_trns[0])
         self.lower_controllers.append(self.upper_controllers[0])
-        self.lower_local_jnt.append(self.upper_local_jnts[0])
+        self.lower_local_jnts.append(self.upper_local_jnts[0])
 
         for i, pos in enumerate(down_positions): # Create lower eyelid controllers
             if i != 0 or i != 4:
                 if i == 1 or i == 2 or i == 3:
                     ctl, nodes = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}Down", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"], parent=self.controllers_grp)
-                    cmds.xform(nodes[0], t=cmds.xform(down_positions[i+1], q=True, ws=True, t=True), ws=True)
+                    # cmds.xform(nodes[0], t=cmds.xform(down_positions[i+1], q=True, ws=True, t=True), ws=True)
+                    if i == 2:
+                        cmds.connectAttr(f"{lower_guides[i]}.worldMatrix[0]", f"{nodes[0]}.offsetParentMatrix", force=True) # Directly connect the mid guide to the middle controller
                     self.lower_nodes.append(nodes[0])
                     self.lower_controllers.append(ctl)
                     local_trn, joint_local = self.local(ctl, lower_guides[i]) # Create local transform for the controller
+                    lower_local_trns.append(local_trn)
+                    self.lower_local_jnts.append(joint_local)
                 if i == 2:
                     ctlSub, nodesSub = curve_tool.controller_creator(name=f"{self.side}_{ctl_names[i]}Down01", suffixes=["GRP", "ANM"], lock=["scaleX", "scaleY", "scaleZ", "visibility"])
                     cmds.parent(nodesSub[0], self.lower_controllers[-1])
                     local_trn_01, joint_local = self.local(ctlSub, lower_guides[i], sub=True) # Create local transform for the controller
-                
-            lower_local_trns.append(local_trn)
-            self.lower_local_jnt.append(joint_local)
+                    lower_local_trns.append(local_trn_01)
+                    self.lower_local_jnts.append(joint_local)
 
         self.lower_nodes.append(self.upper_nodes[-1])
         self.lower_controllers.append(self.upper_controllers[-1])
-        self.lower_local_jnt.append(self.upper_local_jnts[-1])
+        self.lower_local_jnts.append(self.upper_local_jnts[-1])
+        lower_local_trns.append(upper_local_trns[-2])
 
-        self.lower_local_jnt = [jnt for jnt in self.lower_local_jnt if jnt != None]
-        self.lower_local_jnts = []
+        self.lower_local_jnts.remove(self.lower_local_jnts[2]) # Remove duplicate joint
 
 
         #Constraints between controllers
-        self.constraints_callback(self.upper_nodes[1], [self.upper_controllers[2], self.upper_controllers[0]])
-        self.constraints_callback(self.upper_nodes[-2], [self.upper_controllers[2], self.upper_controllers[-1]])
-        self.constraints_callback(self.lower_nodes[1], [self.lower_controllers[2], self.lower_controllers[0]])
-        self.constraints_callback(self.lower_nodes[-2], [self.lower_controllers[2], self.lower_controllers[-1]])
+        self.constraints_callback(guide = upper_guides[1], driven=self.upper_nodes[1], drivers=[self.upper_controllers[2], self.upper_controllers[0]]) # Must change the offset matrix to work
+        self.constraints_callback(guide=self.upper_guides[-2], driven=self.upper_nodes[-2], drivers=[self.upper_controllers[2], self.upper_controllers[-1]]) # Must change the offset matrix to work
+        self.constraints_callback(guide=self.lower_guides[1], driven=self.lower_nodes[1], drivers=[self.lower_controllers[2], self.lower_controllers[0]]) # Must change the offset matrix to work
+        self.constraints_callback(guide=self.lower_guides[-2], driven=self.lower_nodes[-2], drivers=[self.lower_controllers[2], self.lower_controllers[-1]]) # Must change the offset matrix to work
+
+        # Local constraints between local transforms
+        self.local_constraints_callback(cmds.listConnections(f"{upper_local_trns[2]}.offsetParentMatrix", type="multMatrix")[0], upper_local_trns[2], [upper_local_trns[3], upper_local_trns[0]]) # Must change the offset matrix to work
+        self.local_constraints_callback(cmds.listConnections(f"{upper_local_trns[-3]}.offsetParentMatrix", type="multMatrix")[0], upper_local_trns[-3], [upper_local_trns[3], upper_local_trns[-1]]) # Must change the offset matrix to work
+        self.local_constraints_callback(cmds.listConnections(f"{lower_local_trns[1]}.offsetParentMatrix", type="multMatrix")[0], lower_local_trns[1], [lower_local_trns[2], lower_local_trns[0]]) # Must change the offset matrix to work
+        self.local_constraints_callback(cmds.listConnections(f"{lower_local_trns[-2]}.offsetParentMatrix", type="multMatrix")[0], lower_local_trns[-2], [lower_local_trns[2], lower_local_trns[-1]]) # Must change the offset matrix to work
 
     def eye_direct_attributes(self):
 
@@ -235,7 +259,7 @@ class EyelidModule(object):
 
         self.eye_direct_ctl, self.eye_direct_nodes = curve_tool.controller_creator(name=f"{self.side}_eyeDirect", suffixes=["GRP"], parent=self.controllers_grp, lock=["scaleX", "scaleY", "scaleZ", "visibility"])
         # cmds.parent(self.eye_direct_nodes[0], self.head_ctl)
-        cmds.matchTransform(self.eye_direct_nodes[0], self.eye_joint)
+        cmds.matchTransform(self.eye_direct_nodes[0], self.eye_guide)
         cmds.select(self.eye_direct_nodes[0])
         cmds.move(0, 0, 3, relative=True, objectSpace=True, worldSpaceDistance=True)
 
@@ -271,16 +295,21 @@ class EyelidModule(object):
         """
         Create a tracking system for the eyelid module.
         """
-        
         # Skin the linear curves with the local joints
-        self.upper_skin_cluster = cmds.skinCluster(*self.upper_local_jnts, self.blinked_upper_curve, toSelectedBones=True, bindMethod=0, skinMethod=0, normalizeWeights=1, name=f"{self.side}_upperEyelid_SKIN")[0]
-        self.lower_skin_cluster = cmds.skinCluster(*self.lower_local_jnts, self.blinked_lower_curve, toSelectedBones=True, bindMethod=0, skinMethod=0, normalizeWeights=1, name=f"{self.side}_lowerEyelid_SKIN")[0]
+        self.upper_skin_cluster = cmds.skinCluster(*self.upper_local_jnts, self.upper_curve, toSelectedBones=True, bindMethod=0, skinMethod=0, normalizeWeights=1, name=f"{self.side}_upperEyelid_SKIN")[0]
+        self.lower_skin_cluster = cmds.skinCluster(*self.lower_local_jnts, self.lower_curve, toSelectedBones=True, bindMethod=0, skinMethod=0, normalizeWeights=1, name=f"{self.side}_lowerEyelid_SKIN")[0]
 
         for i, jnt in enumerate(self.upper_local_jnts):
-            cmds.skinPercent(self.upper_skin_cluster, f"{self.blinked_upper_curve}.cv[{i}]", transformValue=[(jnt, 1.0)]) # Assign full weight to each joint for its corresponding CV
+            if i == 0 or i == len(self.upper_local_jnts) - 1:
+                cmds.skinPercent(self.upper_skin_cluster, f"{self.upper_curve[0]}.cv[{i}]", transformValue=[(jnt, 1.0)]) # Assign full weight to each joint for its corresponding CV
+            else:
+                cmds.skinPercent(self.upper_skin_cluster, f"{self.upper_curve[0]}.cv[{i+1}]", transformValue=[(jnt, 1.0)])
 
         for i, jnt in enumerate(self.lower_local_jnts):
-            cmds.skinPercent(self.lower_skin_cluster, f"{self.blinked_lower_curve}.cv[{i}]", transformValue=[(jnt, 1.0)]) # Assign full weight to each joint for its corresponding CV
+            if i == 0 or i == len(self.lower_local_jnts) - 1:
+                cmds.skinPercent(self.lower_skin_cluster, f"{self.lower_curve[0]}.cv[{i}]", transformValue=[(jnt, 1.0)]) # Assign full weight to each joint for its corresponding CV
+            else:
+                cmds.skinPercent(self.lower_skin_cluster, f"{self.lower_curve[0]}.cv[{i+1}]", transformValue=[(jnt, 1.0)])
 
         
         # Create tracker for the rebuilt curves
@@ -292,7 +321,7 @@ class EyelidModule(object):
             cmds.setAttr(f"{motion_path}.worldUpType", 3) # Vector
             cmds.setAttr(f"{motion_path}.frontAxis", 1) # Y
             cmds.setAttr(f"{motion_path}.upAxis", 2) # Z
-            cmds.connectAttr(f"{self.rebuild_upper_curve}.worldSpace[0]", f"{motion_path}.geometryPath") # Connect curve to motion path
+            cmds.connectAttr(f"{self.upper_curve[0]}.worldSpace[0]", f"{motion_path}.geometryPath") # Connect curve to motion path
             
 
             four_by_four = cmds.createNode("fourByFourMatrix", name=f"{self.side}_upperEyelid0{i}_F4X4", ss=True) # Create four by four matrix to extract translation
@@ -374,7 +403,7 @@ class EyelidModule(object):
 
         return local_trn, joint_local
     
-    def constraints_callback(self, driven, drivers=[]):
+    def constraints_callback(self, guide, driven, drivers=[]):
 
         """
         Create a parent constraint between a driven object and multiple driver objects with equal weights.
@@ -384,6 +413,29 @@ class EyelidModule(object):
         """
         suffix = driven.split("_")[-1]
         parent_matrix = cmds.createNode("parentMatrix", name=driven.replace(suffix, "PMT"), ss=True)
+        cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{parent_matrix}.inputMatrix")
+        cmds.connectAttr(f"{drivers[0]}.worldMatrix[0]", f"{parent_matrix}.target[0].targetMatrix")
+        cmds.connectAttr(f"{drivers[1]}.worldMatrix[0]", f"{parent_matrix}.target[1].targetMatrix")
+        cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", self.get_offset_matrix(driven, drivers[0]), type="matrix")
+        cmds.setAttr(f"{parent_matrix}.target[1].offsetMatrix", self.get_offset_matrix(driven, drivers[1]), type="matrix")
+        cmds.setAttr(f"{parent_matrix}.target[0].weight", 0.7)
+        cmds.setAttr(f"{parent_matrix}.target[1].weight", 0.3)
+        cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{driven}.offsetParentMatrix", force=True)
+        cmds.setAttr(f"{driven}.inheritsTransform", 0)
+
+        return parent_matrix
+    
+    def local_constraints_callback(self, mult_matrix, driven, drivers=[]):
+
+        """
+        Create a parent constraint between a driven object and multiple driver objects with equal weights.
+        Args:
+            driven (str): The name of the driven object.
+            drivers (list): A list of driver objects.
+        """
+        suffix = driven.split("_")[-1]
+        parent_matrix = cmds.createNode("parentMatrix", name=driven.replace(suffix, "PMT"), ss=True)
+        cmds.connectAttr(f"{mult_matrix}.matrixSum", f"{parent_matrix}.inputMatrix")
         cmds.connectAttr(f"{drivers[0]}.worldMatrix[0]", f"{parent_matrix}.target[0].targetMatrix")
         cmds.connectAttr(f"{drivers[1]}.worldMatrix[0]", f"{parent_matrix}.target[1].targetMatrix")
         cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", cmds.getAttr(f"{drivers[0]}.worldInverseMatrix"), type="matrix")
@@ -391,18 +443,18 @@ class EyelidModule(object):
         cmds.setAttr(f"{parent_matrix}.target[0].weight", 0.7)
         cmds.setAttr(f"{parent_matrix}.target[1].weight", 0.3)
         cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{driven}.offsetParentMatrix", force=True)
-        cmds.setAttr(f"{driven}.inheritsTransform", 0)
+        # cmds.setAttr(f"{driven}.inheritsTransform", 0)
 
         return parent_matrix
 
 
             
 cmds.file(new=True, force=True)
-core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_009.guides")
-core.DataManager.set_ctls_data("C:/3ero/TFG/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+# core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_009.guides")
+# core.DataManager.set_ctls_data("C:/3ero/TFG/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
-# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_015.guides")
+core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
 
 basic_structure.create_basic_structure()

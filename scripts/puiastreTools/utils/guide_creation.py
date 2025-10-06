@@ -318,7 +318,7 @@ class GuideCreation(object):
                 if "Distance" in joint_name:
                     parent = self.guides_trn
 
-                if self.limb_name == "mouth":
+                if self.limb_name == "mouth" or self.limb_name == "eye":
                     parent = self.guides_trn if not self.guides else self.guides[0]
 
                 if not "Sliding" in joint_name and not "Curve" in joint_name:
@@ -850,9 +850,9 @@ def curve_data_extractor(curve):
 
     return shape_data_list
 
-class EyeGuideCreation(GuideCreation):
+class EyesGuideCreation(GuideCreation):
     """
-    Guide creation for eyebrow.
+    Guide creation for eye.
     """
     def __init__(self, side = "L", from_selection=False, input_name="eyeCurve"):
         self.sides = side
@@ -866,10 +866,12 @@ class EyeGuideCreation(GuideCreation):
             position_data, self.sides = curve_to_data()
 
             self.position_data = {
+                    "eyesTransform": get_data(f"{self.sides}_eyesTransform"),
                     "eye": get_data(f"{self.sides}_eye"),
             }
 
             self.position_data.update(position_data)
+           
 
         else:
 
@@ -893,14 +895,15 @@ class EyeGuideCreation(GuideCreation):
 
             all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
             self.position_data = {
+                    "eyesTransform": get_data(f"{self.sides}_eyesTransform"),
                     "eye": get_data(f"{self.sides}_eye"),
             }
 
-            for i, guide in enumerate(all_child_guides):
+            for guide in all_child_guides:
                 self.position_data.update({
                     guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
             })
-        
+
 def dragon_rebuild_guides():
     """
     Rebuilds the guides for a quadruped character in the Maya scene.
@@ -929,8 +932,8 @@ def dragon_rebuild_guides():
     ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)
     HandGuideCreation(controller_number=4).create_guides(guides_trn, buffers_trn)
     HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
-    EyeGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
-    EyeGuideCreation(side="R").create_guides(guides_trn, buffers_trn)
+    EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
+    EyesGuideCreation(side="R").create_guides(guides_trn, buffers_trn)
     
 def load_guides(path = ""):
     if not path or path == "_":
@@ -984,7 +987,7 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "membran":
                     MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "eye":
-                    EyeGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
+                    EyesGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLegFoot":
                     FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "mouth":
@@ -1266,6 +1269,8 @@ def get_data(name, module_name=False):
                         moduleName = guide_info.get("moduleName")
                         prefix = guide_info.get("prefix")
                         return world_position, parent, moduleName, prefix, guideTyep
+                
+
                 else:
                     return world_position, parent, guideTyep
     if module_name:
@@ -1299,6 +1304,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
                 
             if all_descendents is True:
                 world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
+                print(world_position, parent, moduleName, prefix, guideType)
                 if guideType == "Guide" or guideType == "Transform":
                     guide_transform = cmds.createNode('transform', name=joint_name)
                     cmds.xform(guide_transform, ws=True, t=world_position)
@@ -1318,8 +1324,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
 
                 final_path = core.init_template_file(ext=".guides", export=False)
+
                 with open(final_path, "r") as infile:
-                                guides_data = json.load(infile)
+                    guides_data = json.load(infile)
 
                 guide_set_name = next(iter(guides_data))
                 parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
@@ -1332,6 +1339,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
                                 continue
                         cmds.select(clear=True)
                         world_position, parent, moduleName, prefix, guideType = get_data(joint, module_name=True)
+
 
                         if guideType == "Guide" or guideType == "Transform":
                             imported_transform = cmds.createNode('transform', name=joint)
@@ -1353,31 +1361,27 @@ def guide_import(joint_name, all_descendents=True, path=None):
                         transforms_chain_export.append(imported_transform)
                                                     
         else:
-                world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
-                # if not "NurbsSurface" in guideType:
-                #     guide_transform = cmds.createNode('transform', name=joint_name)
-                #     cmds.xform(guide_transform, ws=True, t=world_position)
-                # else:
-                #     guide_transform = curve_tool.build_surfaces_from_template(target_transform_name=joint_name, path=core.DataManager.get_guide_data())
 
-                if guideType == "Guide" or guideType == "Transform":
-                    guide_transform = cmds.createNode('transform', name=joint_name)
-                    position = guides_data[guide_set_name][joint]["worldPosition"]
-                    cmds.xform(guide_transform, ws=True, t=position)
-                elif guideType == "NurbsSurface":
-                    guide_transform=curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint_name)
 
-                elif guideType == "Curve":
-                    guide_transform = create_curve_guide(name=joint_name)
+            world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
+
+            if guideType == "Guide" or guideType == "Transform":
+                guide_transform = cmds.createNode('transform', name=joint_name)
+                cmds.xform(guide_transform, ws=True, t=world_position)
+            elif guideType == "NurbsSurface":
+                guide_transform=curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint_name)
+
+            elif guideType == "Curve":
+                guide_transform = create_curve_guide(name=joint_name)
 
 
 
-                cmds.parent(guide_transform, guide_grp)
-                transforms_chain_export.append(guide_transform)
-                if moduleName != "Child":
-                        cmds.addAttr(guide_transform, longName="moduleName", attributeType="enum", enumName=moduleName, keyable=False)
-                if prefix != "Child":
-                        cmds.addAttr(guide_transform, longName="prefix", attributeType="enum", enumName=prefix, keyable=False)
+            cmds.parent(guide_transform, guide_grp)
+            transforms_chain_export.append(guide_transform)
+            if moduleName != "Child":
+                    cmds.addAttr(guide_transform, longName="moduleName", attributeType="enum", enumName=moduleName, keyable=False)
+            if prefix != "Child":
+                    cmds.addAttr(guide_transform, longName="prefix", attributeType="enum", enumName=prefix, keyable=False)
 
         return transforms_chain_export
 
@@ -1395,10 +1399,10 @@ core.DataManager.set_asset_name("Dragon")
 core.DataManager.set_mesh_data("Puiastre")
 
 
-guide_creation.load_guides()
+# guide_creation.load_guides()
 
 guide_creation.guide_import("C_lipsTransform_GUIDE", all_descendents=True)
 
-#guide_creation.guides_export()
+guide_creation.guides_export()
 """
 

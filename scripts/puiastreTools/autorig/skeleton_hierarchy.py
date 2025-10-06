@@ -229,7 +229,6 @@ def build_complete_hierarchy():
                 if joint_list:
                     parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
 
-        print(skel_grps)
         # ===== SPACE SWITCHES ===== #
         if "Leg" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]

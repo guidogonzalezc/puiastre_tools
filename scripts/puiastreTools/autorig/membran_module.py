@@ -137,7 +137,6 @@ class MembraneModule(object):
 
                 ctls = []
                 secondary_ctls = []
-                print(values)
                 for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
                     if values == 0.25:
                         name = "FirstSecondary"
