@@ -736,7 +736,6 @@ class MouthGuideCreation(GuideCreation):
             position_data, self.sides = curve_to_data()
 
             self.position_data = {
-                    "lipsTransform": get_data(f"{self.sides}_lipsTransform"),
                     "jaw": get_data(f"{self.sides}_jaw"),
                     "mouthSliding": get_data(f"{self.sides}_mouthSliding"),
             }
@@ -766,7 +765,6 @@ class MouthGuideCreation(GuideCreation):
 
             all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
             self.position_data = {
-                    "lipsTransform": get_data(f"{self.sides}_lipsTransform"),
                     "jaw": get_data(f"{self.sides}_jaw"),
                     "mouthSliding": get_data(f"{self.sides}_mouthSliding"),
             }
@@ -1304,7 +1302,6 @@ def guide_import(joint_name, all_descendents=True, path=None):
                 
             if all_descendents is True:
                 world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
-                print(world_position, parent, moduleName, prefix, guideType)
                 if guideType == "Guide" or guideType == "Transform":
                     guide_transform = cmds.createNode('transform', name=joint_name)
                     cmds.xform(guide_transform, ws=True, t=world_position)
