@@ -292,6 +292,6 @@ def build_complete_hierarchy():
 
             space_switch.fk_switch(target = fk, sources= parents, sources_names=["Wrist"])
             space_switch.fk_switch(target = root, sources= parents, sources_names=["Wrist"])
-            space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=[ "Wrist"])
+            space_switch.fk_switch(target = ik, sources= parents, default_rotate=1, default_translate=1, sources_names=[ "Wrist"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"])
