@@ -224,9 +224,10 @@ class NeckModule():
         cmds.connectAttr(f"{neck02_translate_offset}.output", f"{neck02_end_pos}.matrixIn[0]")
         cmds.connectAttr(f"{tan01_world_matrix}.outputMatrix", f"{neck02_end_pos}.matrixIn[1]")
 
-        neck_wm = cmds.createNode("blendMatrix", name=f"{self.side}_neck02WM_BMX", ss=True)
+        neck_wm = cmds.createNode("blendMatrix", name=f"{self.side}_headWM_BMX", ss=True)
         cmds.connectAttr(f"{neck02_end_pos}.matrixSum", f"{neck_wm}.inputMatrix")
-        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck_wm}.target[0].targetMatrix")
+        print(self.main_controllers)
+        cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{neck_wm}.target[0].targetMatrix")
         cmds.setAttr(f"{neck_wm}.target[0].translateWeight", 0)
 
         head_to_neck_tan_1 = cmds.createNode("blendMatrix", name=f"{self.side}_headToNeckTan01StartPos_BMX", ss=True)
