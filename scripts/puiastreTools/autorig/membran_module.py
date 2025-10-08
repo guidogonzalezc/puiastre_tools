@@ -124,11 +124,10 @@ class MembraneModule(object):
 
             if joint_list_one and joint_list_two:
                 len_one = len(joint_list_one)
-                # Split into 4 indices: 1 (first), equally spaced, and len_one-1 (last)
                 split_indices = [
-                    2,
+                    len_one // 4,
                     len_one // 2,
-                    len_one - 3
+                    3 * len_one // 4
                 ]
                 split_points_one = [joint_list_one[idx] for idx in split_indices if idx > 0 and idx <= len_one]
                 split_points_two = [joint_list_two[idx] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
@@ -136,7 +135,9 @@ class MembraneModule(object):
             for values in [0.25, 0.5, 0.75]:
 
                 ctls = []
+                ctls_grp = []
                 secondary_ctls = []
+                pick_matrix_nodes = []
                 for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
                     if values == 0.25:
                         name = "FirstSecondary"
@@ -198,52 +199,39 @@ class MembraneModule(object):
                     suffixes=["GRP", "ANM"],
                     lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                     ro=True,
-                    parent=self.individual_controllers_grp,
+                    parent=self.individual_controllers_grp #if not ctls else ctls[-1],
                     )
-                    ctls.append(ctl)
+                    
 
                     pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}_PMX", ss=True)
 
                     cmds.connectAttr(f"{membran_wm_aim}.outputMatrix", f"{pick_matrix}.inputMatrix")
                     cmds.setAttr(f"{pick_matrix}.useScale", 0)
-                    cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
 
                     joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}_JNT", ss=True, parent=self.skinnging_grp)
+                    
+
+                    if ctls:
+                        multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}Offset_MMX", ss=True)
+                        multMatrix_wm = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}WM_MMX", ss=True)
+                        inverseMatrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}_IMX", ss=True)
+                        cmds.connectAttr(f"{pick_matrix_nodes[-1]}.outputMatrix", f"{inverseMatrix}.inputMatrix")
+
+                        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{multMatrix}.matrixIn[0]")
+                        cmds.connectAttr(f"{inverseMatrix}.outputMatrix", f"{multMatrix}.matrixIn[1]")
+                        cmds.connectAttr(f"{multMatrix}.matrixSum", f"{multMatrix_wm}.matrixIn[0]")
+                        cmds.connectAttr(f"{ctls[-1]}.worldMatrix[0]", f"{multMatrix_wm}.matrixIn[1]")
+                        cmds.connectAttr(f"{multMatrix_wm}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix")
+
+                    else:
+                        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
+
+                    # if ctls:
+                    #     cmds.parent(ctl_grp[0], ctls[-1])
+
+                    ctls_grp.append(ctl_grp)
+                    ctls.append(ctl)
+                    pick_matrix_nodes.append(pick_matrix)
+
+
                     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
-
-            #     cvs = [joint_one, ctl, joint_two]
-
-            #     self.joints = de_boors_002.de_boor_ribbon(
-            #     aim_axis=self.primary_aim,
-            #     up_axis=self.secondary_aim,
-            #     cvs=cvs,
-            #     num_joints=2,
-            #     name=f"{self.side}_{self.number_to_ordinal_word(i+1)}0{index+1}MembranSecondary",
-            #     parent=self.modules_grp,
-            #     custom_parm=[0.25, 0.75]
-            # )
-            #     for joint in self.joints:
-            #         input = cmds.listConnections(f"{joint}.offsetParentMatrix", plugs=True, source=True, destination=False)[0]
-
-            #         ctl, ctl_grp = controller_creator(
-            #         name=joint.replace("_JNT", ""),
-            #         suffixes=["GRP", "ANM"],
-            #         lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-            #         ro=True,
-            #         parent=self.individual_controllers_grp,
-            #         )
-            #         cmds.connectAttr(f"{input}", f"{ctl_grp[0]}.offsetParentMatrix")
-            #         secondary_ctls.append(ctl)
-            #         cmds.delete(joint)
-
-            # for ctl in secondary_ctls:
-            #     joint = cmds.createNode("joint", name=ctl.replace("CTL", "JNT"), ss=True, parent=self.skinnging_grp)
-            #     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
-
-# cmds.file(new=True, force=True)
-
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_002.guides")
-# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
-
-# basic_structure.create_basic_structure(asset_name="dragon")
-# a = MembraneModule().make("L_primaryMembran01_GUIDE")
