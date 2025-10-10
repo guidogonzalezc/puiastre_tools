@@ -91,9 +91,7 @@ class LimbModule(object):
 
             aim_matrix_guides.append(aim_matrix)  
 
-        print(aim_matrix_guides)
 
-        # Multiply secondary aim vector by -1 before setting
         neg_secondary_aim_vector = tuple(-v for v in self.secondary_aim_vector)
         cmds.setAttr(aim_matrix_guides[-1] + ".secondaryInputAxis", *neg_secondary_aim_vector, type="double3")
 
