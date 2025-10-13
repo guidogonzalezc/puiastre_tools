@@ -185,5 +185,8 @@
     },
     "L_footFingersModule": {
         "skinning_transform": "L_footFingerSkinningJoints_GRP"
+    },
+    "C_jawModule": {
+        "skinning_transform": "C_jawSkinning_GRP"
     }
 }
