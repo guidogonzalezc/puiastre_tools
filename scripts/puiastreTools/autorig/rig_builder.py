@@ -91,6 +91,7 @@ def make(asset_name="dragon"):
     cmds.file(new=True, force=True)
     #UNI
     core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_015.guides")
+    # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/MAIASAURA_001.guides")
     core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
     # GUIDO
@@ -130,6 +131,9 @@ def make(asset_name="dragon"):
                 if guide_info.get("moduleName") == "backLeg":
                     dlm.BackLegModule(guide_name).make()
 
+                if guide_info.get("moduleName") == "frontLeg":
+                    dlm.FrontLegModule(guide_name).make()
+
                 if guide_info.get("moduleName") == "hand":
                     dfl.FalangeModule().hand_distribution(guide_name=guide_name)
 
@@ -157,8 +161,6 @@ def make(asset_name="dragon"):
                 if guide_info.get("moduleName") == "membran":
                     mm.MembraneModule().make(guide_name)
         
-        # for guide_name, guide_info in guides.items():
-            if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "backLegFoot":
                     fm.FingersModule().make(guide_name)
 

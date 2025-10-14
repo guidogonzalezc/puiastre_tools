@@ -304,29 +304,38 @@ class GuideCreation(object):
             color = {"L": 6, "R": 13}.get(side, 17)
             self.guides = []
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
-                parent = positions[1]
-                positions = positions[0]
+                print(joint_name, positions)
+                if len(positions) >= 3 or None in positions:
+                    parent = positions[1]
+                    type = positions[-1]
+                    positions = positions[0]
+                 
 
-                parent = self.guides_trn if not self.guides else self.guides[-1]
-                if "Settings" in joint_name:
-                    parent = self.guides[0]
-                    type = "settings"
-                
-                if "localHip" in joint_name:
-                    parent = self.guides_trn
+                positions = [0,0,0] if positions is None else positions
+                parent = None if parent == None else parent
+                type = "joint" if type == None else type
 
-                if "Distance" in joint_name:
-                    parent = self.guides_trn
+                print(positions)
 
-                if self.limb_name == "mouth" or self.limb_name == "eye":
-                    parent = self.guides_trn if not self.guides else self.guides[0]
+                if parent is None and type == "joint":
+                    parent = self.guides_trn if not self.guides else self.guides[-1]
+                    if "Settings" in joint_name:
+                        parent = self.guides[0]
+                        type = "settings"
+                    
+                    if "localHip" in joint_name:
+                        parent = self.guides_trn
+
+                    if "Distance" in joint_name:
+                        parent = self.guides_trn
+
+                    if self.limb_name == "mouth" or self.limb_name == "eye":
+                        parent = self.guides_trn if not self.guides else self.guides[0]
 
                 if not "Sliding" in joint_name and not "Curve" in joint_name:
                     temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                     type = "joint"
-                    if not positions :
-                        positions = [0, 0, 0]
-               
+                    print(positions)
                     cmds.setAttr(temp_pos + ".translate", positions[0], positions[1], positions[2], type="double3")
                     if "Transform" in joint_name:
                         guide = cmds.createNode("transform", name=f"{side}_{joint_name}_GUIDE")
@@ -450,26 +459,64 @@ class GuideCreation(object):
         cmds.select(self.guides[0])
         return self.guides
 
-def get_data(name, file_name=None):
-    if not file_name or file_name == "_":
-        file_name = "body_template_"
+# def get_data(name, file_name=None):
+#     if not file_name or file_name == "_":
+#         file_name = "body_template_"
 
-    # final_path = core.init_template_file(ext=".guides", export=False)
+#     # final_path = core.init_template_file(ext=".guides", export=False)
+#     final_path = core.init_template_file(ext=".guides", export=False)
+
+#     try:
+#         with open(final_path, "r") as infile:
+#             guides_data = json.load(infile)
+#     except Exception as e:
+#         return [0,0,0]
+
+#     for template_name, guides in guides_data.items():
+#         if not isinstance(guides, dict):
+#             continue
+#         for guide_name, guide_info in guides.items():
+#             if name in guide_name:
+#                 return guide_info.get("worldPosition")
+#     return [0,0,0]
+
+def get_data(name, module_name=False):
+
     final_path = core.init_template_file(ext=".guides", export=False)
 
     try:
         with open(final_path, "r") as infile:
             guides_data = json.load(infile)
     except Exception as e:
-        return [0,0,0]
+        if module_name:
+            return None, None, None, None
+        else:
+            return None, None
 
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
             continue
         for guide_name, guide_info in guides.items():
             if name in guide_name:
-                return guide_info.get("worldPosition")
-    return [0,0,0]
+                try: 
+                    world_position = guide_info.get("worldPosition")
+                except:
+                    world_position = None
+                parent = guide_info.get("parent")
+                guideTyep = guide_info.get("guide_type_object")
+
+                if module_name:
+                        moduleName = guide_info.get("moduleName")
+                        prefix = guide_info.get("prefix")
+                        return world_position, parent, moduleName, prefix, guideTyep
+                
+
+                else:
+                    return world_position, parent, guideTyep
+    if module_name:
+        return None, None, None, None, None
+    else:
+        return None, None, None
 
 class ArmGuideCreation(GuideCreation):
     """
@@ -505,13 +552,36 @@ class BackLegGuideCreation(GuideCreation):
         self.controller_number = None
         self.prefix = None
         self.position_data = {
-        "hip": get_data(f"{self.sides}_hip"),
+        "hip": get_data(f"{self.sides}_hip", module_name=True),
         "backKnee": get_data(f"{self.sides}_backKnee"),
         "backAnkle": get_data(f"{self.sides}_backAnkle"),
         "backFoot": get_data(f"{self.sides}_backFoot"),
         "backToe": get_data(f"{self.sides}_backToe"),
         "backLegSettings": get_data(f"{self.sides}_backLegSettings"),
         "backLegFrontDistance": get_data(f"{self.sides}_backLegFrontDistance"),
+    }
+        
+class FrontLegGuideCreation(GuideCreation):
+    """
+    Guide creation for front legs.
+    """
+    def __init__(self, side = "L", twist_joints=5):
+        self.sides = side
+        self.twist_joints = twist_joints
+        self.limb_name = "frontLeg"
+        self.aim_name = "hip"
+        self.aim_offset = -1
+        self.controller_number = None
+        self.prefix = None
+        self.position_data = {
+        "frontScapula": get_data(f"{self.sides}_frontScapula", module_name=True),
+        "frontHip": get_data(f"{self.sides}_frontHip", module_name=True),
+        "frontKnee": get_data(f"{self.sides}_frontKnee"),
+        "frontAnkle": get_data(f"{self.sides}_frontAnkle"),
+        "frontFoot": get_data(f"{self.sides}_frontFoot"),
+        "frontToe": get_data(f"{self.sides}_frontToe"),
+        "frontLegSettings": get_data(f"{self.sides}_frontLegSettings"),
+        "frontLegFrontDistance": get_data(f"{self.sides}_frontLegFrontDistance"),
     }
 
 class SpineGuideCreation(GuideCreation):
@@ -932,7 +1002,36 @@ def dragon_rebuild_guides():
     HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
     EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
     EyesGuideCreation(side="R").create_guides(guides_trn, buffers_trn)
-    
+
+def dino_rebuild_guides():
+    """
+    Rebuilds the guides for a quadruped character in the Maya scene.
+    This function creates a new guides group and populates it with guides for front legs, back legs, spine, neck, hands, and feet.
+    """
+
+    # cmds.file(new=True, force=True)
+
+    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_015.guides")
+    # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
+
+    guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
+    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
+    cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
+
+    BackLegGuideCreation().create_guides(guides_trn, buffers_trn)   
+    BackLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
+    FrontLegGuideCreation().create_guides(guides_trn, buffers_trn)   
+    FrontLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
+    SpineGuideCreation().create_guides(guides_trn, buffers_trn)
+    NeckGuideCreation().create_guides(guides_trn, buffers_trn)
+    TailGuideCreation().create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="L", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+
+# dino_rebuild_guides()
+
 def load_guides(path = ""):
     if not path or path == "_":
         path = "body_template_"
@@ -1238,43 +1337,7 @@ def guides_export():
 
         om.MGlobal.displayInfo(f"Guides data exported to {TEMPLATE_FILE}")
 
-def get_data(name, module_name=False):
 
-    final_path = core.init_template_file(ext=".guides", export=False)
-
-    try:
-        with open(final_path, "r") as infile:
-            guides_data = json.load(infile)
-    except Exception as e:
-        if module_name:
-            return None, None, None, None
-        else:
-            return None, None
-
-    for template_name, guides in guides_data.items():
-        if not isinstance(guides, dict):
-            continue
-        for guide_name, guide_info in guides.items():
-            if name in guide_name:
-                try: 
-                    world_position = guide_info.get("worldPosition")
-                except:
-                    world_position = None
-                parent = guide_info.get("parent")
-                guideTyep = guide_info.get("guide_type_object")
-
-                if module_name:
-                        moduleName = guide_info.get("moduleName")
-                        prefix = guide_info.get("prefix")
-                        return world_position, parent, moduleName, prefix, guideTyep
-                
-
-                else:
-                    return world_position, parent, guideTyep
-    if module_name:
-        return None, None, None, None, None
-    else:
-        return None, None, None
 
 def guide_import(joint_name, all_descendents=True, path=None):
         """
@@ -1301,7 +1364,9 @@ def guide_import(joint_name, all_descendents=True, path=None):
         if all_descendents:
                 
             if all_descendents is True:
+                print(joint_name)
                 world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
+                print(guideType)
                 if guideType == "Guide" or guideType == "Transform":
                     guide_transform = cmds.createNode('transform', name=joint_name)
                     cmds.xform(guide_transform, ws=True, t=world_position)
@@ -1391,7 +1456,7 @@ from puiastreTools.utils import data_export
 from puiastreTools.utils import guide_creation
 reload(guide_creation)
 
-core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
+core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_015.guides")
 core.DataManager.set_asset_name("Dragon")
 core.DataManager.set_mesh_data("Puiastre")
 

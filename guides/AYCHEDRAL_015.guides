@@ -1209,13 +1209,13 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "L_heel_GUIDE": {
+        "L_backFootHeel_GUIDE": {
             "worldPosition": [
                 78.28494166777531,
                 0.0,
                 -43.09489689992629
             ],
-            "parent": "L_bankIn_GUIDE",
+            "parent": "L_backFootBankIn_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
@@ -1223,13 +1223,13 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "L_bankIn_GUIDE": {
+        "L_backFootBankIn_GUIDE": {
             "worldPosition": [
                 38.35557556152344,
                 0.0,
                 -7.424864768981934
             ],
-            "parent": "L_bankOut_GUIDE",
+            "parent": "L_backFootBankOut_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
@@ -1237,7 +1237,7 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "L_bankOut_GUIDE": {
+        "L_backFootBankOut_GUIDE": {
             "worldPosition": [
                 114.91361999511719,
                 0.0,
@@ -1741,13 +1741,13 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "R_heel_GUIDE": {
+        "R_backFootHeel_GUIDE": {
             "worldPosition": [
                 -78.28494166777531,
                 0.0,
                 -43.09489689992629
             ],
-            "parent": "R_bankIn_GUIDE",
+            "parent": "R_backFootBankIn_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
@@ -1755,13 +1755,13 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "R_bankIn_GUIDE": {
+        "R_backFootBankIn_GUIDE": {
             "worldPosition": [
                 -38.35557556152344,
                 0.0,
                 -7.424864768981934
             ],
-            "parent": "R_bankOut_GUIDE",
+            "parent": "R_backFootBankOut_GUIDE",
             "jointTwist": "Child",
             "type": "Child",
             "moduleName": "Child",
@@ -1769,7 +1769,7 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "R_bankOut_GUIDE": {
+        "R_backFootBankOut_GUIDE": {
             "worldPosition": [
                 -114.91361999511719,
                 0.0,

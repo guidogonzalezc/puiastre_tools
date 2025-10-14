@@ -866,7 +866,7 @@ class LimbModule(object):
 
         # IK CONTROLLERS
 
-        self.leg_ik_guides = guide_import(f"{self.side}_bankOut_GUIDE", all_descendents=True, path=None)
+        self.leg_ik_guides = guide_import(f"{self.side}_{self.module_name.replace('Leg', 'Foot')}BankOut_GUIDE", all_descendents=True, path=None)
 
         self.ik_leg_guides = [f"{self.leg_ik_guides[0]}.worldMatrix[0]", f"{self.leg_ik_guides[1]}.worldMatrix[0]", f"{self.leg_ik_guides[2]}.worldMatrix[0]", self.leg_guides[1], self.leg_guides[0]]
 
@@ -1099,6 +1099,76 @@ class BackLegModule(LimbModule):
         self.ikHandleEnabled = True
 
         # Leg-specific setup
+        if self.side == "L":
+            self.primary_aim = "x"
+            self.secondary_aim = "-y"
+
+        elif self.side == "R":
+            self.primary_aim = "-x"
+            self.secondary_aim = "y"
+
+        self.default_ik = 0
+
+
+
+    def make(self):
+        super().make()
+        self.reverse_foot()
+        skinning_joints = self.bendys()
+        self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
+
+        pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
+        cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+
+        inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
+        cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+        distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
+        cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
+
+
+
+        self.data_exporter.append_data(
+            f"{self.side}_{self.module_name}Module",
+            {
+                "skinning_transform": self.skinnging_grp,
+                "fk_ctl": self.fk_ctls,
+                "pv_ctl": self.pv_ik_ctl,   
+                "root_ctl": self.root_ik_ctl,
+                "end_ik": self.hand_ik_ctl,
+            }
+        )
+
+class FrontLegModule(LimbModule):
+    """
+    Class for moditifying limb module specific to legs.
+    Inherits from LimbModule.
+    """
+
+    def __init__(self, guide_name):
+        side = guide_name.split("_")[0]
+        super().__init__(side)
+
+        self.module_name = "frontLeg"
+
+        self.guides = guide_import(guide_name, all_descendents=True, path=None)
+        if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
+            self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
+
+        self.scapula = self.guides[0]
+
+        self.guides = self.guides[1:]
+
+        # self.guides.pop(0)
+
+        if len(self.guides) > 3:
+            self.leg_guides = [f"{self.guides[3]}.worldMatrix[0]", f"{self.guides[4]}.worldMatrix[0]"]
+            self.guides = [self.guides[0], self.guides[1], self.guides[2]]
+
+        self.oriented_ik = True
+        self.ikHandleEnabled = True
+
         if self.side == "L":
             self.primary_aim = "x"
             self.secondary_aim = "-y"
