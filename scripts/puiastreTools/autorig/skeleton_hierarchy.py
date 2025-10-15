@@ -50,9 +50,8 @@ def parented_chain(skinning_joints, parent, hand_value=False):
     for index, chain in enumerate(complete_chain):
         joints = []
         for joint in chain:
-            cmds.select(clear=True)
             joint_env = cmds.createNode("joint", n=joint.replace("_JNT", "_ENV"), ss=True)
-
+            cmds.setAttr(joint_env + ".inheritsTransform", 0)
 
 
             if "localHip" in joint_env:
@@ -77,38 +76,8 @@ def parented_chain(skinning_joints, parent, hand_value=False):
 
         for i, joint in enumerate(joints):
             
-            if parent is None:
-                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", joint + ".offsetParentMatrix", force=True)
-            
-            elif parent:
-                mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "_MMX"), ss=True)
-                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
-                cmds.connectAttr(parent + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
-                cmds.connectAttr(mult_matrix + ".matrixSum", joint + ".offsetParentMatrix", force=True)
-
-                for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
-                    cmds.setAttr(joint + "." + attr, 0)
-                
-            
-
-            if "localHip" in joint:
-                mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "_MMX"), ss=True)
-                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
-                cmds.connectAttr(joints[0] + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
-                cmds.connectAttr(mult_matrix + ".matrixSum", joint + ".offsetParentMatrix", force=True)
-
-                for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
-                    cmds.setAttr(joint + "." + attr, 0)
-
-            elif i != 0:
-                mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "_MMX"), ss=True)
-                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
-                cmds.connectAttr(joints[i-1] + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
-                cmds.connectAttr(mult_matrix + ".matrixSum", joint + ".offsetParentMatrix", force=True)
-
-                for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
-                    cmds.setAttr(joint + "." + attr, 0)
-
+            cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", joint + ".offsetParentMatrix", force=True)
+        
             cmds.setAttr(joint + ".jointOrient", 0, 0, 0, type="double3")
 
     return end_joints
