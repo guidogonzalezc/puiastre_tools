@@ -814,7 +814,6 @@ class FalangeModule(object):
 
         index = int(len(self.joints)//3)
 
-            # self.joints.append(skinning_joints)
         core.pv_locator(name=f"{self.side}_{self.names[1]}PVLocator", parents=[self.pv_ik_ctl, self.joints[index]], parent_append=self.ik_controllers)
 
         self.attributes()
