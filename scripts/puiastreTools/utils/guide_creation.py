@@ -418,7 +418,7 @@ class GuideCreation(object):
                     cmds.connectAttr(dcmp02 + ".outputTranslate", curve + ".controlPoints[1]")
                     cmds.parent(curve, self.buffers_trn)
                     cmds.setAttr(curve + ".overrideEnabled", 1)
-                    cmds.setAttr(curve + ".overrideDisplayType", 1)
+                    cmds.setAttr(curve + ".overrideDisplayType", 2)
 
                 if not "Metacarpal" in self.guides[i+1]:
                     number = i+1 if not "Distance" in self.guides[i] else 1
@@ -431,7 +431,7 @@ class GuideCreation(object):
                     cmds.connectAttr(dcmp02 + ".outputTranslate", curve + ".controlPoints[1]")
                     cmds.parent(curve, self.buffers_trn)
                     cmds.setAttr(curve + ".overrideEnabled", 1)
-                    cmds.setAttr(curve + ".overrideDisplayType", 1)
+                    cmds.setAttr(curve + ".overrideDisplayType", 2)
                 
             if self.aim_name:
                 arrrow_buffer = self.controller_creator(
