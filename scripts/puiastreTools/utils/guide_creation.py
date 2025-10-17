@@ -304,7 +304,6 @@ class GuideCreation(object):
             color = {"L": 6, "R": 13}.get(side, 17)
             self.guides = []
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
-                print(joint_name, positions)
                 if len(positions) >= 3 or None in positions:
                     parent = positions[1]
                     type = positions[-1]
@@ -314,8 +313,6 @@ class GuideCreation(object):
                 positions = [0,0,0] if positions is None else positions
                 parent = None if parent == None else parent
                 type = "joint" if type == None else type
-
-                print(positions)
 
                 if parent is None and type == "joint":
                     parent = self.guides_trn if not self.guides else self.guides[-1]
@@ -335,7 +332,6 @@ class GuideCreation(object):
                 if not "Sliding" in joint_name and not "Curve" in joint_name:
                     temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                     type = "joint"
-                    print(positions)
                     cmds.setAttr(temp_pos + ".translate", positions[0], positions[1], positions[2], type="double3")
                     if "Transform" in joint_name:
                         guide = cmds.createNode("transform", name=f"{side}_{joint_name}_GUIDE")
@@ -1364,9 +1360,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
         if all_descendents:
                 
             if all_descendents is True:
-                print(joint_name)
                 world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
-                print(guideType)
                 if guideType == "Guide" or guideType == "Transform":
                     guide_transform = cmds.createNode('transform', name=joint_name)
                     cmds.xform(guide_transform, ws=True, t=world_position)

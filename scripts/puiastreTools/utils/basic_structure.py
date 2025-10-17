@@ -49,6 +49,7 @@ def create_basic_structure(asset_name = "assetName"):
             "clothSim_GRP": {},
             "muscleLocators_GRP": {},
             "muscleSystems_GRP": {},
+            "adonis_GRP": {},
         }
     }
 
@@ -92,7 +93,9 @@ def create_basic_structure(asset_name = "assetName"):
                                                   "masterWalk_CTL": ctls[1],
                                                   "guides_GRP": rig_transforms[1],
                                                   "skeletonHierarchy_GRP": rig_transforms[4],
-                                                  "muscleLocators_GRP": secondary_transforms[-2]})
+                                                  "muscleLocators_GRP": secondary_transforms[-2],
+                                                  "adonis_GRP" : secondary_transforms[-1],
+                                                  })
 
     cmds.setAttr(secondary_transforms[-2]+".visibility", 0)
 

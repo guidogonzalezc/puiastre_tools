@@ -101,6 +101,8 @@ class NeckModule():
         cmds.setAttr(f"{blend_matrix}.target[0].scaleWeight", 0)
         cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", 0)
         cmds.setAttr(f"{blend_matrix}.target[0].shearWeight", 0)
+        
+        self.blend_head = blend_matrix
 
         self.blend_matrix02 = cmds.createNode("blendMatrix", name=f"{self.side}_neck02Guide_BMX", ss=True)
         cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{self.blend_matrix02}.inputMatrix")
@@ -358,7 +360,7 @@ class NeckModule():
             cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
 
             inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{name}HeadDistanceInverse_MTX", ss=True)
-            cmds.connectAttr(f"{self.blend_matrix02}.outputMatrix", f"{inverse}.inputMatrix")
+            cmds.connectAttr(f"{self.blend_head}.outputMatrix", f"{inverse}.inputMatrix")
             cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
             cmds.connectAttr(f"{skinning_joints[-1]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
             distance_joints = cmds.createNode("joint", name=f"{self.side}_{name}HeadDistance_JNT", ss=True, parent = self.muscle_locators)

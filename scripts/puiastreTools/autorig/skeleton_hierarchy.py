@@ -12,6 +12,37 @@ from puiastreTools.utils import space_switch
 
 reload(core)
 
+def get_closest_transform(main_transform, transform_list):
+    """
+    Returns the transform from transform_list that is closest to main_transform.
+    
+    Args:
+        main_transform (str): Name of the main transform.
+        transform_list (list): List of transform names to compare.
+
+    Returns:
+        str: Name of the closest transform.
+    """
+                    
+    # Get main transform position
+    main_pos = om.MVector(cmds.xform(main_transform, q=True, ws=True, t=True))
+    
+    closest_obj = None
+    closest_dist = float('inf')
+    
+    for t in transform_list:
+        if not cmds.objExists(t):
+            continue
+        
+        pos = om.MVector(cmds.xform(t, q=True, ws=True, t=True))
+        dist = (pos - main_pos).length()
+        
+        if dist < closest_dist:
+            closest_dist = dist
+            closest_obj = t
+
+    return closest_obj
+
 def parented_chain(skinning_joints, parent, hand_value=False):
 
     data_exporter = data_export.DataExport()
@@ -171,21 +202,34 @@ def build_complete_hierarchy():
             current_group = []
 
             for index, joint in enumerate(skinning_joint_list):
-                if "Membran01" in joint:
-                    membrane_groups.append(current_group)
-                    current_group = []
-                    current_group.append(joint)
+                if not "primaryMembran" in joint:
+                    if "Membran01" in joint:
+                        membrane_groups.append(current_group)
+                        current_group = []
+                        current_group.append(joint)
 
-                else:
-                    current_group.append(joint)
+                    else:
+                        current_group.append(joint)
 
-                if joint == skinning_joint_list[-1]:
-                    membrane_groups.append(current_group)
+                    if joint == skinning_joint_list[-1]:
+                        membrane_groups.append(current_group)
 
 
             for joint_list in membrane_groups:
                 if joint_list:
                     parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
+
+            side = skinning_joint_list[-1].split("_")[0]
+
+            arm_joints = cmds.listRelatives(data_exporter.get_data(f"{side}_armModule", "skinning_transform"), allDescendents=True, type="joint")
+
+            closest01 = get_closest_transform(skinning_joint_list[-1], arm_joints)
+            closest02 = get_closest_transform(skinning_joint_list[-3], arm_joints)
+
+            parented_chain(skinning_joints=[skinning_joint_list[-4], skinning_joint_list[-3]], parent=arm_joints[4], hand_value=True)
+            parented_chain(skinning_joints=[skinning_joint_list[-2], skinning_joint_list[-1]], parent=arm_joints[8], hand_value=True)
+
+
 
             membrane_groups = []
             current_group = []

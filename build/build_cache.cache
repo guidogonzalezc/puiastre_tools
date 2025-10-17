@@ -5,7 +5,8 @@
         "masterWalk_CTL": "C_masterWalk_CTL",
         "guides_GRP": "guides_GRP",
         "skeletonHierarchy_GRP": "skeletonHierarchy_GRP",
-        "muscleLocators_GRP": "muscleLocators_GRP"
+        "muscleLocators_GRP": "muscleSystems_GRP",
+        "adonis_GRP": "adonis_GRP"
     },
     "L_backLegModule": {
         "skinning_transform": "L_backLegSkinningJoints_GRP",
@@ -17,7 +18,8 @@
         ],
         "pv_ctl": "L_backLegPV_CTL",
         "root_ctl": "L_backLegRootIk_CTL",
-        "end_ik": "L_backLegIk_CTL"
+        "end_ik": "L_backLegIk_CTL",
+        "toe_ctl": "L_backToeIk_CTL"
     },
     "R_backLegModule": {
         "skinning_transform": "R_backLegSkinningJoints_GRP",
@@ -29,7 +31,8 @@
         ],
         "pv_ctl": "R_backLegPV_CTL",
         "root_ctl": "R_backLegRootIk_CTL",
-        "end_ik": "R_backLegIk_CTL"
+        "end_ik": "R_backLegIk_CTL",
+        "toe_ctl": "R_backToeIk_CTL"
     },
     "C_spineModule": {
         "skinning_transform": "C_spineSkinning_GRP",

@@ -891,6 +891,8 @@ class LimbModule(object):
             self.reverse_ctl.append(ctl)
             self.reverse_ctl_grp.append(ctl_grp)
 
+        print(self.reverse_ctl)
+
         cmds.connectAttr(f"{self.reverse_ctl[-1]}.worldMatrix[0]", f"{self.ikHandleManager.replace('matrixSum', 'matrixIn[2]')}", force=True)
 
         # cmds.transformLimits(self.reverse_ctl[-1], rx=(0, 45), erx=(1, 0))
@@ -1137,6 +1139,8 @@ class BackLegModule(LimbModule):
                 "pv_ctl": self.pv_ik_ctl,   
                 "root_ctl": self.root_ik_ctl,
                 "end_ik": self.hand_ik_ctl,
+                "toe_ctl": self.reverse_ctl[-2],
+
             }
         )
 
@@ -1207,6 +1211,7 @@ class FrontLegModule(LimbModule):
                 "pv_ctl": self.pv_ik_ctl,   
                 "root_ctl": self.root_ik_ctl,
                 "end_ik": self.hand_ik_ctl,
+                "toe_ctl": self.reverse_ctl[-2],
             }
         )
 

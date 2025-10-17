@@ -97,12 +97,89 @@ class MembraneModule(object):
 
         self.secondary_membranes()
 
+        self.main_membrane()
+
+
         self.data_exporter.append_data(
             f"{self.side}_membraneModule",
             {
                 "skinning_transform": self.skinnging_grp,
             }
         )
+
+    def get_closest_transform(self, main_transform, transform_list):
+        """
+        Returns the transform from transform_list that is closest to main_transform.
+        
+        Args:
+            main_transform (str): Name of the main transform.
+            transform_list (list): List of transform names to compare.
+
+        Returns:
+            str: Name of the closest transform.
+        """
+        main_pos = om.MVector(cmds.xform(main_transform, q=True, ws=True, t=True))
+        
+        closest_obj = None
+        closest_dist = float('inf')
+        
+        for t in transform_list:
+            if not cmds.objExists(t):
+                continue
+            
+            pos = om.MVector(cmds.xform(t, q=True, ws=True, t=True))
+            dist = (pos - main_pos).length()
+            
+            if dist < closest_dist:
+                closest_dist = dist
+                closest_obj = t
+
+        return closest_obj
+
+    def main_membrane(self):
+        data_exporter = data_export.DataExport()
+
+        spine_joints = cmds.listRelatives(data_exporter.get_data("C_spineModule", "skinning_transform"), allDescendents=True, type="joint")
+        tail_joints = cmds.listRelatives(data_exporter.get_data("C_tailModule", "skinning_transform"), allDescendents=True, type="joint")
+        arm_joints = cmds.listRelatives(data_exporter.get_data(f"{self.side}_armModule", "skinning_transform"), allDescendents=True, type="joint")
+        membran_joints = cmds.listRelatives(data_exporter.get_data(f"{self.side}_firstMetacarpalModule", "skinning_transform"), allDescendents=True, type="joint")
+
+        ctls = []
+
+
+        for i, guide in enumerate(self.guides):
+            ctl, ctl_grp = controller_creator(
+                        name=guide.replace("_GUIDE", ""),
+                        suffixes=["GRP", "ANM"],
+                        lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                        ro=True,
+                        parent=self.individual_controllers_grp
+                        )
+
+            closest_spine = self.get_closest_transform(guide, spine_joints)
+            closest_arm = self.get_closest_transform(guide, arm_joints)
+            closest_membran = self.get_closest_transform(guide, membran_joints)
+            closest_tail = self.get_closest_transform(guide, tail_joints)
+
+
+
+            joint = cmds.createNode("joint", n=guide.replace("_GUIDE", "_JNT"), ss=True, parent = self.skinnging_grp)
+            cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{ctl_grp[0]}.offsetParentMatrix")
+            cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+            if i == 0:
+                parent_list = [arm_joints[1], arm_joints[0],closest_arm, closest_spine, closest_membran]
+                names = ["Shoulder", "Scapula", "Closest Arm", "Closest Spine", "Closest Membran"]
+        
+            if i == 2:
+                parent_list = [arm_joints[6], closest_arm, closest_spine, closest_membran]
+                names = ["Elbow", "Closest Arm", "Closest Spine", "Closest Membran"]
+
+            elif i == 1 or i == 3:
+                parent_list = [ctls[-1], closest_arm, closest_spine, closest_membran, closest_tail]
+                names = ["Membran Controller", "Closest Arm", "Closest Spine", "Closest Membran", "Closest Tail"]
+
+            ctls.append(ctl)
+            ss.fk_switch(target = ctl, sources= parent_list, sources_names=names)
 
 
 
@@ -125,12 +202,14 @@ class MembraneModule(object):
             if joint_list_one and joint_list_two:
                 len_one = len(joint_list_one)
                 split_indices = [
+                    1,
                     len_one // 4,
                     len_one // 2,
                     3 * len_one // 4
                 ]
                 split_points_one = [joint_list_one[idx] for idx in split_indices if idx > 0 and idx <= len_one]
                 split_points_two = [joint_list_two[idx] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
+                
 
             for values in [0.25, 0.5, 0.75]:
 
@@ -194,13 +273,14 @@ class MembraneModule(object):
                     cmds.setAttr(f"{membran_wm_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
                     cmds.setAttr(f"{membran_wm_aim}.secondaryMode", 1)
 
-                    ctl, ctl_grp = controller_creator(
-                    name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}",
-                    suffixes=["GRP", "ANM"],
-                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-                    ro=True,
-                    parent=self.individual_controllers_grp #if not ctls else ctls[-1],
-                    )
+                    if index != 0:
+                        ctl, ctl_grp = controller_creator(
+                        name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}",
+                        suffixes=["GRP", "ANM"],
+                        lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                        ro=True,
+                        parent=self.individual_controllers_grp
+                        )
                     
 
                     pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}_PMX", ss=True)
@@ -223,15 +303,17 @@ class MembraneModule(object):
                         cmds.connectAttr(f"{ctls[-1]}.worldMatrix[0]", f"{multMatrix_wm}.matrixIn[1]")
                         cmds.connectAttr(f"{multMatrix_wm}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix")
 
-                    else:
+                    elif not ctls and index != 0:
                         cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix")
 
-                    # if ctls:
-                    #     cmds.parent(ctl_grp[0], ctls[-1])
+                    else:
+                        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
 
-                    ctls_grp.append(ctl_grp)
-                    ctls.append(ctl)
+                    if index != 0:
+                        ctls_grp.append(ctl_grp)
+                        ctls.append(ctl)
+                        cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+
                     pick_matrix_nodes.append(pick_matrix)
 
 
-                    cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
