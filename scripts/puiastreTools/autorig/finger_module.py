@@ -50,14 +50,26 @@ class FingersModule(object):
         self.import_guides(guide_name)
         leg_skinning = data_exporter.get_data(f"{self.side}_backLegModule", "skinning_transform")
         self.leg_ball_blm = cmds.listRelatives(leg_skinning, children=True)[-1]
+        self.foot_rotation = data_exporter.get_data(f"{self.side}_backLegModule", "frontRoll")
+        self.ikSwitch_ctl = data_exporter.get_data(f"{self.side}_backLegModule", "ikFkSwitch")
+
 
         parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_legFingersParent_PMX", ss=True)
         # cmds.connectAttr(self.masterWalk_ctl + ".worldMatrix[0]", parent_matrix + ".inputMatrix")
         cmds.connectAttr(self.leg_ball_blm + ".worldMatrix[0]", parent_matrix + ".target[0].targetMatrix")
+        cmds.connectAttr(self.foot_rotation + ".worldMatrix[0]", parent_matrix + ".target[1].targetMatrix")
+        cmds.connectAttr(self.ikSwitch_ctl + ".switchIkFk", parent_matrix + ".target[0].weight")
+        reverse = cmds.createNode("reverse", name=f"{self.side}_legFingers_IKFK_REV", ss=True)
+        cmds.connectAttr(self.ikSwitch_ctl + ".switchIkFk", reverse + ".inputX")
+        cmds.connectAttr(reverse + ".outputX", parent_matrix + ".target[1].weight")
 
         offset_matrix = self.get_offset_matrix(self.controllers_grp, self.leg_ball_blm)
+        temp_transform = cmds.createNode("transform", name=f"{self.side}_legFingersTempOffset_GRP", parent=self.controllers_grp, ss=True)
+        cmds.connectAttr(self.foot_rotation + ".worldMatrix[0]", temp_transform + ".offsetParentMatrix")
+        offset_matrix02 = self.get_offset_matrix(self.controllers_grp, temp_transform)
 
         cmds.setAttr(parent_matrix + ".target[0].offsetMatrix", *offset_matrix, type="matrix")
+        cmds.setAttr(parent_matrix + ".target[1].offsetMatrix", *offset_matrix02, type="matrix")
 
         cmds.connectAttr(parent_matrix + ".outputMatrix", self.controllers_grp + ".offsetParentMatrix")
 
@@ -197,25 +209,6 @@ class FingersModule(object):
     def attributes(self, controller):
 
         pass
-    
-    def get_offset_matrix(self, child, parent):
-        """
-        Calculate the offset matrix between a child and parent transform in Maya.
-        Args:
-            child (str): The name of the child transform.
-            parent (str): The name of the parent transform. 
-        Returns:
-            om.MMatrix: The offset matrix that transforms the child into the parent's space.
-        """
-        child_dag = om.MSelectionList().add(child).getDagPath(0)
-        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-        
-        child_world_matrix = child_dag.inclusiveMatrix()
-        parent_world_matrix = parent_dag.inclusiveMatrix()
-        
-        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-        return offset_matrix
 
         
     

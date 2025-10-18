@@ -415,6 +415,8 @@ class GuideCreation(object):
                     cmds.parent(curve, self.buffers_trn)
                     cmds.setAttr(curve + ".overrideEnabled", 1)
                     cmds.setAttr(curve + ".overrideDisplayType", 2)
+                    cmds.setAttr(cmds.listRelatives(curve, shapes=True)[0] + ".alwaysDrawOnTop", 1)
+
 
                 if not "Metacarpal" in self.guides[i+1]:
                     number = i+1 if not "Distance" in self.guides[i] else 1
@@ -428,6 +430,7 @@ class GuideCreation(object):
                     cmds.parent(curve, self.buffers_trn)
                     cmds.setAttr(curve + ".overrideEnabled", 1)
                     cmds.setAttr(curve + ".overrideDisplayType", 2)
+                    cmds.setAttr(cmds.listRelatives(curve, shapes=True)[0] + ".alwaysDrawOnTop", 1)
                 
             if self.aim_name:
                 arrrow_buffer = self.controller_creator(
@@ -728,9 +731,11 @@ class FootGuideCreation(GuideCreation):
         ctl = "" if self.reverse_foot_name == "foot" else self.reverse_foot_name
         first_b_letter = "b" if ctl == "" else "B"
         first_h_letter = "h" if ctl == "" else "H"
+        first_r_letter = "r" if ctl == "" else "R"
         self.position_data = {
         f"{ctl}{first_b_letter}ankOut": get_data(f"{self.sides}_{ctl}{first_b_letter}ankOut"),
         f"{ctl}{first_b_letter}ankIn": get_data(f"{self.sides}_{ctl}{first_b_letter}ankIn"),
+        f"{ctl}{first_r_letter}oll": get_data(f"{self.sides}_{ctl}{first_r_letter}oll"),
         f"{ctl}{first_h_letter}eel": get_data(f"{self.sides}_{ctl}{first_h_letter}eel"),
 
     }
@@ -1074,7 +1079,7 @@ def load_guides(path = ""):
                     TailGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "foot":
                     limb_name = guide_name.split("_")[1].split("BankOut")[0]
-                    FootGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
+                    FootGuideCreation(side=guide_name.split("_")[0], limb_name=limb_name).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "hand":
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "membran":

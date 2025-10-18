@@ -843,11 +843,19 @@ class LimbModule(object):
         for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
             cmds.setAttr(f"{ctl_grp[0]}.{attr}", 0)
 
+        # fk_blend_matrix = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}FkBlendMatrix0{1}_BLM", ss=True)
+        # cmds.connectAttr(f"{self.guides_matrix[-1]}.outputMatrix", f"{fk_blend_matrix}.inputMatrix")
+        # cmds.connectAttr(f"{self.leg_guides[0]}.worldMatrix[0]", f"{fk_blend_matrix}.target[0].targetMatrix", force=True)
+        # cmds.setAttr(f"{fk_blend_matrix}.target[0].rotateWeight", 0)
+
+        self.leg_ik_guides = guide_import(f"{self.side}_{self.module_name.replace('Leg', 'Foot')}BankOut_GUIDE", all_descendents=True, path=None)
+
+
         fk_end_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}FkEnd_AIM", ss=True)
         fk_end_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FkEnd_MMX", ss=True)
         cmds.connectAttr(f"{self.leg_guides[0]}", f"{fk_end_aim}.inputMatrix")
-        cmds.connectAttr(f"{self.leg_guides[1]}", f"{fk_end_aim}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.leg_guides[1]}", f"{fk_end_aim}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.leg_ik_guides[-1]}.worldMatrix[0]", f"{fk_end_aim}.primaryTargetMatrix")
+        cmds.connectAttr(f"{self.leg_ik_guides[-1]}.worldMatrix[0]", f"{fk_end_aim}.secondaryTargetMatrix")
         cmds.setAttr(f"{fk_end_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{fk_end_aim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{fk_end_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
@@ -866,12 +874,13 @@ class LimbModule(object):
 
         # IK CONTROLLERS
 
-        self.leg_ik_guides = guide_import(f"{self.side}_{self.module_name.replace('Leg', 'Foot')}BankOut_GUIDE", all_descendents=True, path=None)
 
-        self.ik_leg_guides = [f"{self.leg_ik_guides[0]}.worldMatrix[0]", f"{self.leg_ik_guides[1]}.worldMatrix[0]", f"{self.leg_ik_guides[2]}.worldMatrix[0]", self.leg_guides[1], self.leg_guides[0]]
+        self.ik_leg_guides = [f"{self.leg_ik_guides[0]}.worldMatrix[0]", f"{self.leg_ik_guides[1]}.worldMatrix[0]", f"{self.leg_ik_guides[2]}.worldMatrix[0]",self.leg_guides[1],f"{self.leg_ik_guides[3]}.worldMatrix[0]",  self.leg_guides[0]]
 
         self.reverse_ctl = []
         self.reverse_ctl_grp = []
+
+        self.foot_rotation_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FootRotation_MMX", ss=True)
 
         for guide in self.ik_leg_guides:
 
@@ -891,8 +900,6 @@ class LimbModule(object):
             self.reverse_ctl.append(ctl)
             self.reverse_ctl_grp.append(ctl_grp)
 
-        print(self.reverse_ctl)
-
         cmds.connectAttr(f"{self.reverse_ctl[-1]}.worldMatrix[0]", f"{self.ikHandleManager.replace('matrixSum', 'matrixIn[2]')}", force=True)
 
         # cmds.transformLimits(self.reverse_ctl[-1], rx=(0, 45), erx=(1, 0))
@@ -908,8 +915,13 @@ class LimbModule(object):
             )
         for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
             cmds.setAttr(f"{self.frontRoll_grp[0]}.{attr}", 0)
-
+        cmds.parent(self.frontRoll_grp[0], self.reverse_ctl[-3])
         
+
+
+        cmds.connectAttr(f"{self.frontRoll_ctl}.worldMatrix[0]", f"{self.foot_rotation_multmatrix}.matrixIn[0]")
+        cmds.connectAttr(f"{self.reverse_ctl_grp[4][-1]}.worldInverseMatrix[0]", f"{self.foot_rotation_multmatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{self.reverse_ctl_grp[4][0]}.worldMatrix[0]", f"{self.foot_rotation_multmatrix}.matrixIn[2]")
 
         ball_distance = cmds.createNode("distanceBetween", name=f"{self.side}_{self.module_name}BallDistance", ss=True)
         cmds.connectAttr(f"{self.leg_guides[0]}", f"{ball_distance}.inMatrix1")
@@ -1043,7 +1055,8 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.hand_ik_ctl}.ankleTwist", self.hand_ik_ctl_grp[1] + ".rotateY")
 
         blendMatrix = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}Ball_BLM", ss=True)
-        cmds.connectAttr(f"{front_roll_wm}.matrixSum", f"{blendMatrix}.inputMatrix")
+        # cmds.connectAttr(f"{front_roll_wm}.matrixSum", f"{blendMatrix}.inputMatrix")
+        cmds.connectAttr(f"{ball_wm}.outputMatrix", f"{blendMatrix}.inputMatrix")
         cmds.connectAttr(f"{fk_end_multMatrix}.matrixSum", f"{blendMatrix}.target[0].targetMatrix")
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blendMatrix}.target[0].weight")
 
@@ -1139,7 +1152,9 @@ class BackLegModule(LimbModule):
                 "pv_ctl": self.pv_ik_ctl,   
                 "root_ctl": self.root_ik_ctl,
                 "end_ik": self.hand_ik_ctl,
-                "toe_ctl": self.reverse_ctl[-2],
+                "foot_rotation": self.foot_rotation_multmatrix,
+                "ikFkSwitch": self.switch_ctl,
+                "frontRoll": self.frontRoll_ctl,
 
             }
         )
@@ -1211,7 +1226,8 @@ class FrontLegModule(LimbModule):
                 "pv_ctl": self.pv_ik_ctl,   
                 "root_ctl": self.root_ik_ctl,
                 "end_ik": self.hand_ik_ctl,
-                "toe_ctl": self.reverse_ctl[-2],
+                "foot_rotation": self.foot_rotation_multmatrix,
+                "ikFkSwitch": self.switch_ctl,
             }
         )
 

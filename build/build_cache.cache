@@ -19,7 +19,9 @@
         "pv_ctl": "L_backLegPV_CTL",
         "root_ctl": "L_backLegRootIk_CTL",
         "end_ik": "L_backLegIk_CTL",
-        "toe_ctl": "L_backToeIk_CTL"
+        "foot_rotation": "L_backLegFootRotation_MMX",
+        "ikFkSwitch": "L_backLegSwitch_CTL",
+        "frontRoll": "L_backLegfrontRoll_CTL"
     },
     "R_backLegModule": {
         "skinning_transform": "R_backLegSkinningJoints_GRP",
@@ -32,7 +34,9 @@
         "pv_ctl": "R_backLegPV_CTL",
         "root_ctl": "R_backLegRootIk_CTL",
         "end_ik": "R_backLegIk_CTL",
-        "toe_ctl": "R_backToeIk_CTL"
+        "foot_rotation": "R_backLegFootRotation_MMX",
+        "ikFkSwitch": "R_backLegSwitch_CTL",
+        "frontRoll": "R_backLegfrontRoll_CTL"
     },
     "C_spineModule": {
         "skinning_transform": "C_spineSkinning_GRP",
