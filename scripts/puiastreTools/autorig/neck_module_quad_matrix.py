@@ -97,10 +97,10 @@ class NeckModule():
 
         blend_matrix = cmds.createNode("blendMatrix", name=f"{self.side}_neck03Guide_BMX", ss=True)
         cmds.connectAttr(f"{self.guides[1]}.worldMatrix[0]", f"{blend_matrix}.inputMatrix")
-        cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{blend_matrix}.target[0].targetMatrix")
-        cmds.setAttr(f"{blend_matrix}.target[0].scaleWeight", 0)
-        cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", 0)
-        cmds.setAttr(f"{blend_matrix}.target[0].shearWeight", 0)
+        # cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{blend_matrix}.target[0].targetMatrix")
+        # cmds.setAttr(f"{blend_matrix}.target[0].scaleWeight", 0)
+        # cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", 0)
+        # cmds.setAttr(f"{blend_matrix}.target[0].shearWeight", 0)
         
         self.blend_head = blend_matrix
 
