@@ -8666,15 +8666,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_backLegControllers_GRP|L_backLegIkControllers_GRP|L_backLegIk_GRP|L_backLegIk_ANM|L_backLegIk_CTL|L_backFootBankOutIk_GRP|L_backFootBankOutIk_SDK|L_backFootBankOutIk_ANM|L_backFootBankOutIk_CTL|L_backFootBankInIk_GRP|L_backFootBankInIk_SDK|L_backFootBankInIk_ANM|L_backFootBankInIk_CTL|L_backFootHeelIk_GRP|L_backFootHeelIk_SDK|L_backFootHeelIk_ANM|L_backFootHeelIk_CTL|L_backToeIk_GRP|L_backToeIk_SDK|L_backToeIk_ANM|L_backToeIk_CTL|L_backFootIk_GRP|L_backFootIk_SDK|L_backFootIk_ANM|L_backFootIk_CTL|L_backLegfrontRoll_GRP|L_backLegfrontRoll_ANM|L_backLegfrontRoll_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_backLegControllers_GRP|L_backLegIkControllers_GRP|L_backLegIk_GRP|L_backLegIk_ANM|L_backLegIk_CTL|L_backFootBankOutIk_GRP|L_backFootBankOutIk_SDK|L_backFootBankOutIk_ANM|L_backFootBankOutIk_CTL|L_backFootBankInIk_GRP|L_backFootBankInIk_SDK|L_backFootBankInIk_ANM|L_backFootBankInIk_CTL|L_backFootHeelIk_GRP|L_backFootHeelIk_SDK|L_backFootHeelIk_ANM|L_backFootHeelIk_CTL|L_backToeIk_GRP|L_backToeIk_SDK|L_backToeIk_ANM|L_backToeIk_CTL|L_backFootIk_GRP|L_backFootIk_SDK|L_backFootIk_ANM|L_backFootIk_CTL|L_backLegFrontRoll_GRP|L_backLegFrontRoll_ANM|L_backLegFrontRoll_CTL": {
         "transform": {
-            "name": "L_backLegfrontRoll_CTL",
+            "name": "L_backLegFrontRoll_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_backLegfrontRoll_CTLShape",
+                "name": "L_backLegFrontRoll_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -30248,15 +30248,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_backLegControllers_GRP|R_backLegIkControllers_GRP|R_backLegIk_GRP|R_backLegIk_ANM|R_backLegIk_CTL|R_backFootBankOutIk_GRP|R_backFootBankOutIk_SDK|R_backFootBankOutIk_ANM|R_backFootBankOutIk_CTL|R_backFootBankInIk_GRP|R_backFootBankInIk_SDK|R_backFootBankInIk_ANM|R_backFootBankInIk_CTL|R_backFootHeelIk_GRP|R_backFootHeelIk_SDK|R_backFootHeelIk_ANM|R_backFootHeelIk_CTL|R_backToeIk_GRP|R_backToeIk_SDK|R_backToeIk_ANM|R_backToeIk_CTL|R_backFootIk_GRP|R_backFootIk_SDK|R_backFootIk_ANM|R_backFootIk_CTL|R_backLegfrontRoll_GRP|R_backLegfrontRoll_ANM|R_backLegfrontRoll_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_backLegControllers_GRP|R_backLegIkControllers_GRP|R_backLegIk_GRP|R_backLegIk_ANM|R_backLegIk_CTL|R_backFootBankOutIk_GRP|R_backFootBankOutIk_SDK|R_backFootBankOutIk_ANM|R_backFootBankOutIk_CTL|R_backFootBankInIk_GRP|R_backFootBankInIk_SDK|R_backFootBankInIk_ANM|R_backFootBankInIk_CTL|R_backFootHeelIk_GRP|R_backFootHeelIk_SDK|R_backFootHeelIk_ANM|R_backFootHeelIk_CTL|R_backToeIk_GRP|R_backToeIk_SDK|R_backToeIk_ANM|R_backToeIk_CTL|R_backFootIk_GRP|R_backFootIk_SDK|R_backFootIk_ANM|R_backFootIk_CTL|R_backLegFrontRoll_GRP|R_backLegFrontRoll_ANM|R_backLegFrontRoll_CTL": {
         "transform": {
-            "name": "R_backLegfrontRoll_CTL",
+            "name": "R_backLegFrontRoll_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_backLegfrontRoll_CTLShape",
+                "name": "R_backLegFrontRoll_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
