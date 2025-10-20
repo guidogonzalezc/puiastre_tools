@@ -1012,7 +1012,7 @@ def dino_rebuild_guides():
 
     # cmds.file(new=True, force=True)
 
-    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_015.guides")
+    core.DataManager.set_guide_data("D:/rigs/cheeta/CHEETAH_001.guides")
     # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
@@ -1030,8 +1030,16 @@ def dino_rebuild_guides():
     FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
     FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
     FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="R", limb_name="footFront").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    
 
-# dino_rebuild_guides()
+
+
+
+dino_rebuild_guides()
 
 def load_guides(path = ""):
     if not path or path == "_":
