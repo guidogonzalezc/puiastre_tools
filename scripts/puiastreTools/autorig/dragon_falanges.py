@@ -4,6 +4,8 @@ from maya import cmds
 from importlib import reload
 import maya.api.OpenMaya as om
 import math
+import maya.mel as mel
+
 
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
@@ -73,7 +75,6 @@ class FalangeModule(object):
         self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_handFkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
 
-        # Arm-specific setup
         if self.side == "L":
             self.primary_aim = "x"
             self.secondary_aim = "y"
@@ -131,7 +132,6 @@ class FalangeModule(object):
 
         cmds.addAttr(self.skinnging_grp, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
-        #Position Joints
         order = [[self.guides[0], self.guides[1], self.guides[2]], [self.guides[1], self.guides[2], self.guides[0]], [self.guides[2], self.guides[3], self.guides[1]]]
 
         aim_matrix_guides = []
@@ -289,284 +289,54 @@ class FalangeModule(object):
         pv_pos_4b4 = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[1]}PVPosition_F4X", ss=True)
         cmds.connectAttr(f"{pv_pos_4b4}.output", f"{pv_pos_multMatrix}.matrixIn[0]")
 
+        pos1 = cmds.xform(self.guides[0], q=True, ws=True, t=True)
+        pos2 = cmds.xform(self.guides[1], q=True, ws=True, t=True)
 
-        name = [f"{self.side}_{self.names[1]}SecondaryUpperInitialLength", f"{self.side}_{self.names[2]}SecondaryLowerInitialLength", f"{self.side}_{self.names[3]}SecondaryCurrentLength"]
+        distance01 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos1, pos2)]))
 
+        pos3 = cmds.xform(self.guides[0], q=True, ws=True, t=True)
+        pos4 = cmds.xform(self.guides[1], q=True, ws=True, t=True)
 
-        secondary_root_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}SecondaryRoot_MMX", ss=True)
-        inverse_secondary_root = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[3]}SecondaryRoot_IMX", ss=True)
-        cmds.connectAttr(f"{self.guides_matrix[1]}.outputMatrix", f"{secondary_root_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{self.guides_matrix[2]}.outputMatrix", f"{inverse_secondary_root}.inputMatrix")
-        cmds.connectAttr(f"{inverse_secondary_root}.outputMatrix", f"{secondary_root_multmatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{secondary_root_multmatrix}.matrixIn[2]")
-
-        self.ikHandleManager = f"{secondary_root_multmatrix}.matrixSum"
-
-
-        self.distance_between_output = []
-        for i, (first, second) in enumerate(zip([f"{self.guides[0]}.worldMatrix[0]", f"{self.guides[1]}.worldMatrix[0]", f"{self.root_ik_ctl}.worldMatrix[0]"], [f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
-            distance = cmds.createNode("distanceBetween", name=f"{name[i]}_DB", ss=True)
-            cmds.connectAttr(f"{first}", f"{distance}.inMatrix1")
-            cmds.connectAttr(f"{second}", f"{distance}.inMatrix2")
-
-            if i == 2:
-                global_scale_divide = cmds.createNode("divide", name=f"{self.side}_{self.names[1]}SecondaryGlobalScaleFactor_DIV", ss=True)
-                cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{global_scale_divide}.input2")
-                cmds.connectAttr(f"{distance}.distance", f"{global_scale_divide}.input1")
-                self.distance_between_output.append(f"{global_scale_divide}.output")
-            else:
-                self.distance_between_output.append(f"{distance}.distance")
-
-        distance_1 = cmds.getAttr(self.distance_between_output[0])
-        distance_2 = cmds.getAttr(self.distance_between_output[1])
-
-        pv_pos_sum = cmds.createNode("sum", name=f"{self.side}_{self.names[1]}PVPosition_SUM", ss=True)
-        cmds.connectAttr(f"{self.distance_between_output[0]}", f"{pv_pos_sum}.input[0]")
-        cmds.connectAttr(f"{self.distance_between_output[1]}", f"{pv_pos_sum}.input[1]")
+        distance02 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos3, pos4)]))
 
         if self.side == "R":
-            negate = cmds.createNode("negate", name=f"{self.side}_{self.names[1]}PVPosition_NEG", ss=True)
-            cmds.connectAttr(f"{pv_pos_sum}.output", f"{negate}.input")
-            cmds.connectAttr(f"{negate}.output", f"{pv_pos_4b4}.in31")
+            cmds.setAttr(f"{pv_pos_4b4}.in31",(distance01+distance02)*-1)
         else:
-            cmds.connectAttr(f"{pv_pos_sum}.output", f"{pv_pos_4b4}.in31")
-
-        # --- STRETCH --- #
-
-        arm_length = cmds.createNode("sum", name=f"{self.side}_{self.names[1]}SecondaryLength_SUM", ss=True)
-        cmds.connectAttr(f"{self.distance_between_output[0]}", f"{arm_length}.input[0]")
-        cmds.connectAttr(f"{self.distance_between_output[1]}", f"{arm_length}.input[1]")
-
-        arm_length_min = cmds.createNode("min", name=f"{self.side}_{self.names[1]}SecondaryClampedLength_MIN", ss=True)
-        cmds.connectAttr(f"{arm_length}.output", f"{arm_length_min}.input[0]")
-        cmds.connectAttr(f"{self.distance_between_output[2]}", f"{arm_length_min}.input[1]")
+            cmds.setAttr(f"{pv_pos_4b4}.in31", (distance01+distance02))
 
 
-        # --- CUSTOM SOLVER --- #
-
-        upper_divide, upper_arm_acos, power_mults = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{self.distance_between_output[1]}", f"{arm_length_min}.output"], name = f"{self.side}_{self.names[1]}Upper", acos=True)
-        lower_divide, lower_power_mults, negate_cos_value = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{arm_length_min}.output", f"{self.distance_between_output[1]}"],
-                                                                            power = [power_mults[0], power_mults[2], power_mults[1]],
-                                                                            name = f"{self.side}_{self.names[1]}Lower", 
-                                                                            negate=True)
-
-        # --- Aligns --- #
-
-        upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIk_AIM", ss=True)
-        cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.pv_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{upper_arm_ik_aim_matrix}.inputMatrix")
-        cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-
-        self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIkWM_MMX", ss=True)
-        fourByfour = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[1]}SecondaryUpperIkLocal_F4X", ss=True)
-        sin = cmds.createNode("sin", name=f"{self.side}_{self.names[1]}SecondaryUpperIkWM_SIN", ss=True)
-        negate = cmds.createNode("negate", name=f"{self.side}_{self.names[1]}SecondaryUpperIkWM_NEGATE", ss=True)
-
-        cmds.connectAttr(f"{upper_arm_ik_aim_matrix}.outputMatrix", f"{self.upperArmIkWM}.matrixIn[1]")
-        cmds.connectAttr(f"{fourByfour}.output", f"{self.upperArmIkWM}.matrixIn[0]")
-
-        cmds.connectAttr(f"{upper_divide}.output", f"{fourByfour}.in11")
-        cmds.connectAttr(f"{upper_divide}.output", f"{fourByfour}.in00")
-        cmds.connectAttr(f"{sin}.output", f"{fourByfour}.in01")
-        cmds.connectAttr(f"{negate}.output", f"{fourByfour}.in10")
-
-        cmds.connectAttr(f"{upper_arm_acos}.output", f"{sin}.input")
-        cmds.connectAttr(f"{sin}.output", f"{negate}.input")
-
-        cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryMode", 1)
-            
-        # Lower
-
-        cosValueSquared = cmds.createNode("multiply", name=f"{self.side}_{self.names[2]}SecondaryLowerCosValueSquared_MUL", ss=True)
-        cmds.connectAttr(f"{lower_divide}.output", f"{cosValueSquared}.input[0]")
-        cmds.connectAttr(f"{lower_divide}.output", f"{cosValueSquared}.input[1]")
-
-        lower_sin_value_squared = cmds.createNode("subtract", name=f"{self.side}_{self.names[2]}SecondaryLowerSinValueSquared_SUB", ss=True)
-        cmds.connectAttr(f"{cosValueSquared}.output", f"{lower_sin_value_squared}.input2")
-        cmds.setAttr(f"{lower_sin_value_squared}.input1", 1)
-
-        lower_sin_value_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.names[2]}SecondaryLowerSinValueSquared_MAX", ss=True)
-        cmds.connectAttr(f"{lower_sin_value_squared}.output", f"{lower_sin_value_squared_clamped}.input[1]")
-        self.floatConstant_zero = cmds.createNode("floatConstant", name=f"{self.side}_zero{self.names[2]}_FLC", ss=True)
-        cmds.setAttr(f"{self.floatConstant_zero}.inFloat", 0)
-        cmds.connectAttr(f"{self.floatConstant_zero}.outFloat", f"{lower_sin_value_squared_clamped}.input[0]")
-
-        lower_sin = cmds.createNode("power", name=f"{self.side}_{self.names[2]}SecondaryLowerSin_POW", ss=True)
-        cmds.connectAttr(f"{lower_sin_value_squared_clamped}.output", f"{lower_sin}.input")
-        cmds.setAttr(f"{lower_sin}.exponent", 0.5)
-
-        negate = cmds.createNode("negate", name=f"{self.side}_{self.names[2]}SecondaryLowerSin_NEGATE", ss=True)
-        cmds.connectAttr(f"{lower_sin}.output", f"{negate}.input")
-
-        fourByfour = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[2]}SecondaryLowerIkLocal_F4X", ss=True)
-    
-        cmds.connectAttr(f"{negate_cos_value}.output", f"{fourByfour}.in11")
-        cmds.connectAttr(f"{negate_cos_value}.output", f"{fourByfour}.in00")
-        cmds.connectAttr(f"{lower_sin}.output", f"{fourByfour}.in10")
-        cmds.connectAttr(f"{negate}.output", f"{fourByfour}.in01")
-
-        if self.side == "R":
-            translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.names[2]}SecondaryUpperTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{translate_negate}.input")
-            cmds.connectAttr(f"{translate_negate}.output", f"{fourByfour}.in30")
-            cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, -1, 0, type="double3") ########################## CAMBIO QUIZAS
-
-        else:
-            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{fourByfour}.in30")
-            cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, 1, 0, type="double3") ########################## CAMBIO QUIZAS
-
-
-        lower_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[2]}WM_MMX", ss=True)
-        cmds.connectAttr(f"{fourByfour}.output", f"{lower_wm_multmatrix_end}.matrixIn[0]")
-        cmds.connectAttr(f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix_end}.matrixIn[1]")
-
-        self.end_end_test = self.upperArmIkWM
-
-        name = [f"{self.side}_{self.names[0]}UpperInitialLength", f"{self.side}_{self.names[1]}LowerInitialLength", f"{self.side}_{self.names[0]}CurrentLength"]
-
-        self.ikHandleManager = f"{lower_wm_multmatrix_end}.matrixSum"
-        self.ikHandleManager = f"{self.hand_ik_ctl}.worldMatrix[0]"
+        if not cmds.pluginInfo("ikSpringSolver", query=True, loaded=True):
+            cmds.loadPlugin("ikSpringSolver")
         
-        self.distance_between_output = []
-        for i, (first, second) in enumerate(zip([f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{lower_wm_multmatrix_end}.matrixSum"], [f"{self.guides[2]}.worldMatrix[0]", f"{self.guides[3]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
-            distance = cmds.createNode("distanceBetween", name=f"{name[i]}_DB", ss=True)
-            cmds.connectAttr(f"{first}", f"{distance}.inMatrix1")
-            cmds.connectAttr(f"{second}", f"{distance}.inMatrix2")
-
-            if i == 2:
-                global_scale_divide = cmds.createNode("divide", name=f"{self.side}_{self.names[0]}GlobalScaleFactor_DIV", ss=True)
-                cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{global_scale_divide}.input2")
-                cmds.connectAttr(f"{distance}.distance", f"{global_scale_divide}.input1")
-                self.distance_between_output.append(f"{global_scale_divide}.output")
+        mel.eval("ikSpringSolver")
+        joints = []
+        for i, guide in enumerate(self.guides_matrix):
+            joint = cmds.createNode("joint", name=guide.replace("Guide_AMX", "Ik_JNT").replace("Guide_BLM", "Ik_JNT"), ss=True, parent=self.individual_module_grp if not joints else joints[-1])
+            if i == 0:
+                cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
             else:
-                self.distance_between_output.append(f"{distance}.distance")
-            
+                temp_trn = cmds.createNode("transform", name=guide.replace("Guide_AMX", "Ik_Temp_TRN").replace("Guide_BLM", "Ik_Temp_TRN"), ss=True)
+                cmds.connectAttr(f"{guide}.outputMatrix", f"{temp_trn}.offsetParentMatrix")
+                cmds.matchTransform(joint, temp_trn, position=True, rotation=True)
+                cmds.delete(temp_trn)
 
-        # --- STRETCH --- #
+            joints.append(joint)
 
-        arm_length = cmds.createNode("sum", name=f"{self.side}_{self.names[0]}Length_SUM", ss=True)
-        cmds.connectAttr(f"{self.distance_between_output[0]}", f"{arm_length}.input[0]")
-        cmds.connectAttr(f"{self.distance_between_output[1]}", f"{arm_length}.input[1]")
+        for joint in joints:
+            cmds.setAttr(f"{joint}.ry", 5)
 
-        arm_length_min = cmds.createNode("min", name=f"{self.side}_{self.names[0]}ClampedLength_MIN", ss=True)
-        cmds.connectAttr(f"{arm_length}.output", f"{arm_length_min}.input[0]")
-        cmds.connectAttr(f"{self.distance_between_output[2]}", f"{arm_length_min}.input[1]")
+        spring_solver = cmds.ikHandle(n=f"{self.side}_{self.names[0]}IkHandle", sj=joints[0], ee=joints[-1], sol="ikSpringSolver")
+        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{spring_solver[0]}.offsetParentMatrix")
+        zero_value = cmds.createNode("floatConstant", name=f"{self.side}_{self.names[0]}IkHandle0_FC", ss=True)
+        cmds.setAttr(f"{zero_value}.inFloat", 0)
 
+        for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
+            cmds.connectAttr(f"{zero_value}.outFloat", f"{spring_solver[0]}.{attr}")
+        cmds.parent(spring_solver[0], self.individual_module_grp)
+        cmds.poleVectorConstraint(f"{self.pv_ik_ctl}", spring_solver[0])
 
+        self.ik_wm = [f"{joint}.worldMatrix[0]" for joint in joints]
 
-        # --- CUSTOM SOLVER --- #
-
-        upper_divide, upper_arm_acos, power_mults = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{self.distance_between_output[1]}", f"{arm_length_min}.output"], name = f"{self.side}_{self.names[0]}Upper", acos=True)
-        lower_divide, lower_power_mults, negate_cos_value = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{arm_length_min}.output", f"{self.distance_between_output[1]}"],
-                                                                             power = [power_mults[0], power_mults[2], power_mults[1]],
-                                                                             name = f"{self.side}_{self.names[0]}Lower", 
-                                                                             negate=True)
-
-        # --- Aligns --- #
- 
-        upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.names[0]}UpperIk_AIM", ss=True)
-        cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.pv_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{lower_wm_multmatrix_end}.matrixSum", f"{upper_arm_ik_aim_matrix}.inputMatrix")
-        cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-
-        self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[0]}WM_MMX", ss=True)
-        fourByfour = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[0]}UpperIkLocal_F4X", ss=True)
-        sin = cmds.createNode("sin", name=f"{self.side}_{self.names[0]}UpperIkWM_SIN", ss=True)
-        negate = cmds.createNode("negate", name=f"{self.side}_{self.names[0]}UpperIkWM_NEGATE", ss=True)
-
-        cmds.connectAttr(f"{upper_arm_ik_aim_matrix}.outputMatrix", f"{self.upperArmIkWM}.matrixIn[1]")
-        cmds.connectAttr(f"{fourByfour}.output", f"{self.upperArmIkWM}.matrixIn[0]")
-
-        cmds.connectAttr(f"{upper_divide}.output", f"{fourByfour}.in11")
-        cmds.connectAttr(f"{upper_divide}.output", f"{fourByfour}.in00")
-        cmds.connectAttr(f"{sin}.output", f"{fourByfour}.in01")
-        cmds.connectAttr(f"{negate}.output", f"{fourByfour}.in10")
-
-        cmds.connectAttr(f"{upper_arm_acos}.output", f"{sin}.input")
-        cmds.connectAttr(f"{sin}.output", f"{negate}.input")
-
-        cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryMode", 1)
-            
-        # Lower
-
-        cosValueSquared = cmds.createNode("multiply", name=f"{self.side}_{self.names[1]}LowerCosValueSquared_MUL", ss=True)
-        cmds.connectAttr(f"{lower_divide}.output", f"{cosValueSquared}.input[0]")
-        cmds.connectAttr(f"{lower_divide}.output", f"{cosValueSquared}.input[1]")
-
-        lower_sin_value_squared = cmds.createNode("subtract", name=f"{self.side}_{self.names[1]}LowerSinValueSquared_SUB", ss=True)
-        cmds.connectAttr(f"{cosValueSquared}.output", f"{lower_sin_value_squared}.input2")
-        cmds.setAttr(f"{lower_sin_value_squared}.input1", 1)
-
-        lower_sin_value_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.names[1]}LowerSinValueSquared_MAX", ss=True)
-        cmds.connectAttr(f"{lower_sin_value_squared}.output", f"{lower_sin_value_squared_clamped}.input[1]")
-        cmds.connectAttr(f"{self.floatConstant_zero}.outFloat", f"{lower_sin_value_squared_clamped}.input[0]")
-
-
-        lower_sin = cmds.createNode("power", name=f"{self.side}_{self.names[1]}LowerSin_POW", ss=True)
-        cmds.connectAttr(f"{lower_sin_value_squared_clamped}.output", f"{lower_sin}.input")
-        cmds.setAttr(f"{lower_sin}.exponent", 0.5)
-
-        negate = cmds.createNode("negate", name=f"{self.side}_{self.names[1]}LowerSin_NEGATE", ss=True)
-        cmds.connectAttr(f"{lower_sin}.output", f"{negate}.input")
-
-        fourByfour = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[1]}LowerIkLocal_F4X", ss=True)
-      
-        cmds.connectAttr(f"{negate_cos_value}.output", f"{fourByfour}.in11")
-        cmds.connectAttr(f"{negate_cos_value}.output", f"{fourByfour}.in00")
-        cmds.connectAttr(f"{lower_sin}.output", f"{fourByfour}.in10")
-        cmds.connectAttr(f"{negate}.output", f"{fourByfour}.in01")
-
-        if self.side == "R":
-            translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.names[1]}UpperTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{translate_negate}.input")
-            cmds.connectAttr(f"{translate_negate}.output", f"{fourByfour}.in30")
-            cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, -1, 0, type="double3") ########################## CAMBIO QUIZAS
-
-        else:
-            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{fourByfour}.in30")
-            cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, 1, 0, type="double3") ########################## CAMBIO QUIZAS
-
-
-        lower_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[1]}WM_MMX", ss=True)
-        cmds.connectAttr(f"{fourByfour}.output", f"{lower_wm_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixIn[1]")
-
-        # Hand
-        lower_inverse_matrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.names[3]}LowerIkInverse_MTX", ss=True)
-        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{lower_inverse_matrix}.inputMatrix")
-
-        hand_local_matrix_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}EndBaseLocal_MMX", ss=True)
-        cmds.connectAttr(f"{self.ikHandleManager}", f"{hand_local_matrix_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_inverse_matrix}.outputMatrix", f"{hand_local_matrix_multmatrix}.matrixIn[1]")
-
-        hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.names[3]}EndLocal_F4X", ss=True)
-
-        hand_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{self.names[3]}WM_MMX", ss=True)
-        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix_end}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix_end}.matrixIn[1]")
-
-
-        for i in range(0, 3):
-            row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{self.side}_{self.names[3]}EndLocalAxis{i}_RFM", ss=True)
-            cmds.connectAttr(f"{hand_local_matrix_multmatrix}.matrixSum", f"{row_from_matrix}.matrix")
-            cmds.setAttr(f"{row_from_matrix}.input", i)
-            for z, attr in enumerate(["X", "Y", "Z", "W"]):
-                cmds.connectAttr(f"{row_from_matrix}.output{attr}", f"{hand_local_matrix}.in{i}{z}")
-
-        if self.side == "R":
-            translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.names[3]}LowerTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{translate_negate}.input")
-            cmds.connectAttr(f"{translate_negate}.output", f"{hand_local_matrix}.in30")
-        else:
-            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{hand_local_matrix}.in30")    
-
-       
-        self.ik_wm = [f"{self.end_end_test}.matrixSum",  f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum",f"{hand_wm_multmatrix_end}.matrixSum"]
-
-
-        
         self.attached_fk()
 
     def attached_fk(self):
@@ -580,7 +350,6 @@ class FalangeModule(object):
         """
         
         ctls_sub_neck = []
-        # sub_neck_ctl_trn = cmds.createNode("transform", n=f"{self.side}_sub{self.names[0]}Controllers_GRP", parent=self.individual_controllers_grp, ss=True)
 
         self.attached_fk_ctls = []
         self.attached_fk_sdks = []
