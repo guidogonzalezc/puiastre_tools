@@ -19443,15 +19443,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_indexGuide01_GRP|L_indexGuide01_ANM|L_indexGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_index01_GRP|L_index01_ANM|L_index01_CTL": {
         "transform": {
-            "name": "L_indexGuide01_CTL",
+            "name": "L_index01_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_indexGuide01_CTLShape",
+                "name": "L_index01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19535,15 +19535,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_indexGuide01_GRP|L_indexGuide01_ANM|L_indexGuide01_CTL|L_indexGuide02_GRP|L_indexGuide02_ANM|L_indexGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_index01_GRP|L_index01_ANM|L_index01_CTL|L_index02_GRP|L_index02_ANM|L_index02_CTL": {
         "transform": {
-            "name": "L_indexGuide02_CTL",
+            "name": "L_index02_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_indexGuide02_CTLShape",
+                "name": "L_index02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19627,15 +19627,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_indexGuide01_GRP|L_indexGuide01_ANM|L_indexGuide01_CTL|L_indexGuide02_GRP|L_indexGuide02_ANM|L_indexGuide02_CTL|L_indexGuide03_GRP|L_indexGuide03_ANM|L_indexGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_index01_GRP|L_index01_ANM|L_index01_CTL|L_index02_GRP|L_index02_ANM|L_index02_CTL|L_index03_GRP|L_index03_ANM|L_index03_CTL": {
         "transform": {
-            "name": "L_indexGuide03_CTL",
+            "name": "L_index03_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_indexGuide03_CTLShape",
+                "name": "L_index03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19719,15 +19719,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_middleGuide01_GRP|L_middleGuide01_ANM|L_middleGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_middle01_GRP|L_middle01_ANM|L_middle01_CTL": {
         "transform": {
-            "name": "L_middleGuide01_CTL",
+            "name": "L_middle01_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_middleGuide01_CTLShape",
+                "name": "L_middle01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19811,15 +19811,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_middleGuide01_GRP|L_middleGuide01_ANM|L_middleGuide01_CTL|L_middleGuide02_GRP|L_middleGuide02_ANM|L_middleGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_middle01_GRP|L_middle01_ANM|L_middle01_CTL|L_middle02_GRP|L_middle02_ANM|L_middle02_CTL": {
         "transform": {
-            "name": "L_middleGuide02_CTL",
+            "name": "L_middle02_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_middleGuide02_CTLShape",
+                "name": "L_middle02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19903,15 +19903,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_middleGuide01_GRP|L_middleGuide01_ANM|L_middleGuide01_CTL|L_middleGuide02_GRP|L_middleGuide02_ANM|L_middleGuide02_CTL|L_middleGuide03_GRP|L_middleGuide03_ANM|L_middleGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_middle01_GRP|L_middle01_ANM|L_middle01_CTL|L_middle02_GRP|L_middle02_ANM|L_middle02_CTL|L_middle03_GRP|L_middle03_ANM|L_middle03_CTL": {
         "transform": {
-            "name": "L_middleGuide03_CTL",
+            "name": "L_middle03_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_middleGuide03_CTLShape",
+                "name": "L_middle03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -19995,15 +19995,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_pinkyGuide01_GRP|L_pinkyGuide01_ANM|L_pinkyGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_pinky01_GRP|L_pinky01_ANM|L_pinky01_CTL": {
         "transform": {
-            "name": "L_pinkyGuide01_CTL",
+            "name": "L_pinky01_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_pinkyGuide01_CTLShape",
+                "name": "L_pinky01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20087,15 +20087,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_pinkyGuide01_GRP|L_pinkyGuide01_ANM|L_pinkyGuide01_CTL|L_pinkyGuide02_GRP|L_pinkyGuide02_ANM|L_pinkyGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_pinky01_GRP|L_pinky01_ANM|L_pinky01_CTL|L_pinky02_GRP|L_pinky02_ANM|L_pinky02_CTL": {
         "transform": {
-            "name": "L_pinkyGuide02_CTL",
+            "name": "L_pinky02_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_pinkyGuide02_CTLShape",
+                "name": "L_pinky02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20179,15 +20179,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_pinkyGuide01_GRP|L_pinkyGuide01_ANM|L_pinkyGuide01_CTL|L_pinkyGuide02_GRP|L_pinkyGuide02_ANM|L_pinkyGuide02_CTL|L_pinkyGuide03_GRP|L_pinkyGuide03_ANM|L_pinkyGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_pinky01_GRP|L_pinky01_ANM|L_pinky01_CTL|L_pinky02_GRP|L_pinky02_ANM|L_pinky02_CTL|L_pinky03_GRP|L_pinky03_ANM|L_pinky03_CTL": {
         "transform": {
-            "name": "L_pinkyGuide03_CTL",
+            "name": "L_pinky03_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_pinkyGuide03_CTLShape",
+                "name": "L_pinky03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26186,15 +26186,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_thumbGuide01_GRP|L_thumbGuide01_ANM|L_thumbGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_thumb01_GRP|L_thumb01_ANM|L_thumb01_CTL": {
         "transform": {
-            "name": "L_thumbGuide01_CTL",
+            "name": "L_thumb01_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_thumbGuide01_CTLShape",
+                "name": "L_thumb01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26278,15 +26278,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_thumbGuide01_GRP|L_thumbGuide01_ANM|L_thumbGuide01_CTL|L_thumbGuide02_GRP|L_thumbGuide02_ANM|L_thumbGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_thumb01_GRP|L_thumb01_ANM|L_thumb01_CTL|L_thumb02_GRP|L_thumb02_ANM|L_thumb02_CTL": {
         "transform": {
-            "name": "L_thumbGuide02_CTL",
+            "name": "L_thumb02_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_thumbGuide02_CTLShape",
+                "name": "L_thumb02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26370,15 +26370,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_thumbGuide01_GRP|L_thumbGuide01_ANM|L_thumbGuide01_CTL|L_thumbGuide02_GRP|L_thumbGuide02_ANM|L_thumbGuide02_CTL|L_thumbGuide03_GRP|L_thumbGuide03_ANM|L_thumbGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_thumb01_GRP|L_thumb01_ANM|L_thumb01_CTL|L_thumb02_GRP|L_thumb02_ANM|L_thumb02_CTL|L_thumb03_GRP|L_thumb03_ANM|L_thumb03_CTL": {
         "transform": {
-            "name": "L_thumbGuide03_CTL",
+            "name": "L_thumb03_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_thumbGuide03_CTLShape",
+                "name": "L_thumb03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41025,15 +41025,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_indexGuide01_GRP|R_indexGuide01_ANM|R_indexGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_index01_GRP|R_index01_ANM|R_index01_CTL": {
         "transform": {
-            "name": "R_indexGuide01_CTL",
+            "name": "R_index01_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_indexGuide01_CTLShape",
+                "name": "R_index01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41117,15 +41117,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_indexGuide01_GRP|R_indexGuide01_ANM|R_indexGuide01_CTL|R_indexGuide02_GRP|R_indexGuide02_ANM|R_indexGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_index01_GRP|R_index01_ANM|R_index01_CTL|R_index02_GRP|R_index02_ANM|R_index02_CTL": {
         "transform": {
-            "name": "R_indexGuide02_CTL",
+            "name": "R_index02_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_indexGuide02_CTLShape",
+                "name": "R_index02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41209,15 +41209,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_indexGuide01_GRP|R_indexGuide01_ANM|R_indexGuide01_CTL|R_indexGuide02_GRP|R_indexGuide02_ANM|R_indexGuide02_CTL|R_indexGuide03_GRP|R_indexGuide03_ANM|R_indexGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_index01_GRP|R_index01_ANM|R_index01_CTL|R_index02_GRP|R_index02_ANM|R_index02_CTL|R_index03_GRP|R_index03_ANM|R_index03_CTL": {
         "transform": {
-            "name": "R_indexGuide03_CTL",
+            "name": "R_index03_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_indexGuide03_CTLShape",
+                "name": "R_index03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41301,15 +41301,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_middleGuide01_GRP|R_middleGuide01_ANM|R_middleGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_middle01_GRP|R_middle01_ANM|R_middle01_CTL": {
         "transform": {
-            "name": "R_middleGuide01_CTL",
+            "name": "R_middle01_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_middleGuide01_CTLShape",
+                "name": "R_middle01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41393,15 +41393,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_middleGuide01_GRP|R_middleGuide01_ANM|R_middleGuide01_CTL|R_middleGuide02_GRP|R_middleGuide02_ANM|R_middleGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_middle01_GRP|R_middle01_ANM|R_middle01_CTL|R_middle02_GRP|R_middle02_ANM|R_middle02_CTL": {
         "transform": {
-            "name": "R_middleGuide02_CTL",
+            "name": "R_middle02_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_middleGuide02_CTLShape",
+                "name": "R_middle02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41485,15 +41485,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_middleGuide01_GRP|R_middleGuide01_ANM|R_middleGuide01_CTL|R_middleGuide02_GRP|R_middleGuide02_ANM|R_middleGuide02_CTL|R_middleGuide03_GRP|R_middleGuide03_ANM|R_middleGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_middle01_GRP|R_middle01_ANM|R_middle01_CTL|R_middle02_GRP|R_middle02_ANM|R_middle02_CTL|R_middle03_GRP|R_middle03_ANM|R_middle03_CTL": {
         "transform": {
-            "name": "R_middleGuide03_CTL",
+            "name": "R_middle03_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_middleGuide03_CTLShape",
+                "name": "R_middle03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41577,15 +41577,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_pinkyGuide01_GRP|R_pinkyGuide01_ANM|R_pinkyGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_pinky01_GRP|R_pinky01_ANM|R_pinky01_CTL": {
         "transform": {
-            "name": "R_pinkyGuide01_CTL",
+            "name": "R_pinky01_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_pinkyGuide01_CTLShape",
+                "name": "R_pinky01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41669,15 +41669,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_pinkyGuide01_GRP|R_pinkyGuide01_ANM|R_pinkyGuide01_CTL|R_pinkyGuide02_GRP|R_pinkyGuide02_ANM|R_pinkyGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_pinky01_GRP|R_pinky01_ANM|R_pinky01_CTL|R_pinky02_GRP|R_pinky02_ANM|R_pinky02_CTL": {
         "transform": {
-            "name": "R_pinkyGuide02_CTL",
+            "name": "R_pinky02_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_pinkyGuide02_CTLShape",
+                "name": "R_pinky02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41761,15 +41761,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_pinkyGuide01_GRP|R_pinkyGuide01_ANM|R_pinkyGuide01_CTL|R_pinkyGuide02_GRP|R_pinkyGuide02_ANM|R_pinkyGuide02_CTL|R_pinkyGuide03_GRP|R_pinkyGuide03_ANM|R_pinkyGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_pinky01_GRP|R_pinky01_ANM|R_pinky01_CTL|R_pinky02_GRP|R_pinky02_ANM|R_pinky02_CTL|R_pinky03_GRP|R_pinky03_ANM|R_pinky03_CTL": {
         "transform": {
-            "name": "R_pinkyGuide03_CTL",
+            "name": "R_pinky03_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_pinkyGuide03_CTLShape",
+                "name": "R_pinky03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47768,15 +47768,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_thumbGuide01_GRP|R_thumbGuide01_ANM|R_thumbGuide01_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_thumb01_GRP|R_thumb01_ANM|R_thumb01_CTL": {
         "transform": {
-            "name": "R_thumbGuide01_CTL",
+            "name": "R_thumb01_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_thumbGuide01_CTLShape",
+                "name": "R_thumb01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47860,15 +47860,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_thumbGuide01_GRP|R_thumbGuide01_ANM|R_thumbGuide01_CTL|R_thumbGuide02_GRP|R_thumbGuide02_ANM|R_thumbGuide02_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_thumb01_GRP|R_thumb01_ANM|R_thumb01_CTL|R_thumb02_GRP|R_thumb02_ANM|R_thumb02_CTL": {
         "transform": {
-            "name": "R_thumbGuide02_CTL",
+            "name": "R_thumb02_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_thumbGuide02_CTLShape",
+                "name": "R_thumb02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47952,15 +47952,15 @@
             }
         ]
     },
-    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_thumbGuide01_GRP|R_thumbGuide01_ANM|R_thumbGuide01_CTL|R_thumbGuide02_GRP|R_thumbGuide02_ANM|R_thumbGuide02_CTL|R_thumbGuide03_GRP|R_thumbGuide03_ANM|R_thumbGuide03_CTL": {
+    "|dragon|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_thumb01_GRP|R_thumb01_ANM|R_thumb01_CTL|R_thumb02_GRP|R_thumb02_ANM|R_thumb02_CTL|R_thumb03_GRP|R_thumb03_ANM|R_thumb03_CTL": {
         "transform": {
-            "name": "R_thumbGuide03_CTL",
+            "name": "R_thumb03_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_thumbGuide03_CTLShape",
+                "name": "R_thumb03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,

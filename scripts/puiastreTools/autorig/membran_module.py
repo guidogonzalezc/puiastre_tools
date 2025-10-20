@@ -217,6 +217,8 @@ class MembraneModule(object):
                 ctls_grp = []
                 secondary_ctls = []
                 pick_matrix_nodes = []
+                membranes_wm_aim = []
+                mid_positions = []
                 for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
                     if values == 0.25:
                         name = "FirstSecondary"
@@ -265,7 +267,6 @@ class MembraneModule(object):
 
                     membran_wm_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}End_AMX", ss=True)
                     cmds.connectAttr(f"{mid_position}.matrixSum", f"{membran_wm_aim}.inputMatrix")
-                    cmds.connectAttr(f"{front_offset_multMatrix}.matrixSum", f"{membran_wm_aim}.primaryTargetMatrix")
                     cmds.connectAttr(f"{y_axis_aim_end_pos}.matrixSum", f"{membran_wm_aim}.secondaryTargetMatrix")
 
                     cmds.setAttr(f"{membran_wm_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
@@ -315,5 +316,15 @@ class MembraneModule(object):
                         cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
                     pick_matrix_nodes.append(pick_matrix)
+                    membranes_wm_aim.append(membran_wm_aim)
+                    mid_positions.append(mid_position)
+
+                for aim_loop, wm_aim in enumerate(membranes_wm_aim):
+                    try:
+                        cmds.connectAttr(f"{mid_positions[aim_loop+1]}.matrixSum", f"{wm_aim}.primaryTargetMatrix")
+                    except IndexError:
+                        cmds.connectAttr(f"{mid_positions[aim_loop-1]}.matrixSum", f"{wm_aim}.primaryTargetMatrix")
+                        pv = self.primary_aim_vector * -1
+                        cmds.setAttr(f"{membran_wm_aim}.primaryInputAxis", pv.x, pv.y, pv.z, type="double3")
 
 

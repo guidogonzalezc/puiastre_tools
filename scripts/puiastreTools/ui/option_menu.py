@@ -69,12 +69,12 @@ def build_eye(*args):
     cmds.file(new=True, force=True)
 
     #Uni
-    # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_007.guides")
-    # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_007.guides")
+    core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
     #Laia
-    core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
-    core.DataManager.set_ctls_data("C:/3ero/TFG/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+    # core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
+    # core.DataManager.set_ctls_data("C:/3ero/TFG/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
 
     basic_structure.create_basic_structure()
@@ -87,7 +87,7 @@ def export_curves(*args, curves_path):
     Args:
         *args: Variable length argument list, not used in this function.
     """
-    curve_tool.init_template_file(curves_path)
+    # curve_tool.init_template_file(curves_path)
     curve_tool.get_all_ctl_curves_data()
 
 def mirror_ctl(*args): 
