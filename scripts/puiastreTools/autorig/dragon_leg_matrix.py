@@ -853,9 +853,10 @@ class LimbModule(object):
 
         fk_end_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}FkEnd_AIM", ss=True)
         fk_end_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FkEnd_MMX", ss=True)
+        print(self.leg_guides)
         cmds.connectAttr(f"{self.leg_guides[0]}", f"{fk_end_aim}.inputMatrix")
-        cmds.connectAttr(f"{self.leg_ik_guides[-1]}.worldMatrix[0]", f"{fk_end_aim}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.leg_ik_guides[-1]}.worldMatrix[0]", f"{fk_end_aim}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.leg_guides[1]}", f"{fk_end_aim}.primaryTargetMatrix")
+        cmds.connectAttr(f"{self.leg_guides[1]}", f"{fk_end_aim}.secondaryTargetMatrix")
         cmds.setAttr(f"{fk_end_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{fk_end_aim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{fk_end_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
@@ -951,8 +952,8 @@ class LimbModule(object):
 
         ball_wm = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}BallWM_AIM", ss=True)
         cmds.connectAttr(f"{ball_wm_no_rotation}.matrixSum", f"{ball_wm}.inputMatrix")
-        cmds.connectAttr(f"{self.reverse_ctl[-2]}.worldMatrix[0]", f"{ball_wm}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.reverse_ctl[-2]}.worldMatrix[0]", f"{ball_wm}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.reverse_ctl[-3]}.worldMatrix[0]", f"{ball_wm}.primaryTargetMatrix") ##### -2
+        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{ball_wm}.secondaryTargetMatrix")
         cmds.setAttr(f"{ball_wm}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{ball_wm}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{ball_wm}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
