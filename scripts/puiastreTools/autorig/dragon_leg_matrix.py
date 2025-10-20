@@ -902,22 +902,22 @@ class LimbModule(object):
 
         cmds.connectAttr(f"{self.reverse_ctl[-1]}.worldMatrix[0]", f"{self.ikHandleManager.replace('matrixSum', 'matrixIn[2]')}", force=True)
 
-        # cmds.transformLimits(self.reverse_ctl[-1], rx=(0, 45), erx=(1, 0))
-
         # IK HANDLE WIP
 
         self.frontRoll_ctl, self.frontRoll_grp = controller_creator(
-                name=f"{self.side}_{self.module_name}frontRoll",
+                name=f"{self.side}_{self.module_name}FrontRoll",
                 suffixes=["GRP", "ANM"],
                 lock=["sx","sz","sy","visibility"],
                 ro=True,
-                parent=self.reverse_ctl[-1]
-            )
-        for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
-            cmds.setAttr(f"{self.frontRoll_grp[0]}.{attr}", 0)
-        cmds.parent(self.frontRoll_grp[0], self.reverse_ctl[-3])
-        
+                parent=self.ik_controllers
+            )    
 
+        cmds.setAttr(f"{self.frontRoll_grp[0]}.inheritsTransform", 0)
+        
+        blendMatrix_frontRoll = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}FrontRoll_BLM", ss=True)
+        cmds.connectAttr(f"{self.reverse_ctl[3]}.worldMatrix[0]", f"{blendMatrix_frontRoll}.target[0].targetMatrix")
+        cmds.connectAttr(f"{blendMatrix_frontRoll}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+        cmds.setAttr(f"{blendMatrix_frontRoll}.target[0].translateWeight", 0)
 
         cmds.connectAttr(f"{self.frontRoll_ctl}.worldMatrix[0]", f"{self.foot_rotation_multmatrix}.matrixIn[0]")
         cmds.connectAttr(f"{self.reverse_ctl_grp[4][-1]}.worldInverseMatrix[0]", f"{self.foot_rotation_multmatrix}.matrixIn[1]")
@@ -1059,6 +1059,9 @@ class LimbModule(object):
         cmds.connectAttr(f"{ball_wm}.outputMatrix", f"{blendMatrix}.inputMatrix")
         cmds.connectAttr(f"{fk_end_multMatrix}.matrixSum", f"{blendMatrix}.target[0].targetMatrix")
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blendMatrix}.target[0].weight")
+
+        cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{blendMatrix_frontRoll}.inputMatrix")
+
 
         self.blend_wm.append(f"{blendMatrix}.outputMatrix")
 
