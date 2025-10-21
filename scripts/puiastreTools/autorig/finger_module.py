@@ -293,9 +293,50 @@ class FingersModule(object):
 
             joint = cmds.createNode("joint", name=f"{self.side}_{finger_name.replace('Guide', '')}0{i+1}_JNT", parent=self.skinning_grp, ss=True)
             cmds.connectAttr(blendMatrix + ".outputMatrix", joint + ".offsetParentMatrix")
-        
-    
-  
+   
+    def get_translation_from_matrix_attr(self, matrixAttr):
+        """
+        Returns an MVector translation from a matrix attribute (e.g. 'joint1.worldMatrix[0]')
+        """
+        matrix = cmds.getAttr(matrixAttr)
+        if not matrix:
+            raise RuntimeError(f"Could not get matrix from {matrixAttr}")
+        mMatrix = om.MMatrix(matrix)
+        transform = om.MTransformationMatrix(mMatrix)
+        trans = transform.translation(om.MSpace.kWorld)
+        return om.MVector(trans.x, trans.y, trans.z)
+
+
+    def calculate_pole_vector_from_matrices(self, p1_matrix_attr, p2_matrix_attr, p3_matrix_attr, poleDistance=1.0):
+        """
+        Calculates pole vector position using matrix attributes (e.g. worldMatrix[0]).
+        Returns an MVector world position.
+        """
+        # Get positions
+        vec1 = self.get_translation_from_matrix_attr(p1_matrix_attr)
+        vec2 = self.get_translation_from_matrix_attr(p2_matrix_attr)
+        vec3 = self.get_translation_from_matrix_attr(p3_matrix_attr)
+
+        # 1. "Nice" average distance
+        legLength = (vec2 - vec1).length()
+        kneeLength = (vec3 - vec2).length()
+        distance = (legLength + kneeLength) * 0.5 * poleDistance
+
+        # 2. Normalize bone directions
+        vec1norm = ((vec1 - vec2).normalize() * distance) + vec2
+        vec3norm = ((vec3 - vec2).normalize() * distance) + vec2
+
+        # 3. Compute projection manually
+        a = vec2 - vec1norm
+        b = vec3norm - vec1norm
+        proj = (a * b) / (b * b) * b  # (dot product) / (magnitude squared) * direction
+        mid = vec1norm + proj
+
+        # 4. Move pole vector out in front of the knee
+        midPointer = vec2 - mid
+        poleVector = (midPointer.normalize() * distance) + vec2
+
+        return poleVector
 
     def ik_setup(self, guides_list, finger_name):
         self.side = guides_list[0].split("_")[0]
@@ -327,6 +368,25 @@ class FingersModule(object):
                     ro=False,
                     parent= self.controllers_grp_ik
                 )
+        
+        """WIP WIP WIP"""
+
+        # print("Ik Created")
+
+
+        # self.pv_ik_ctl, self.pv_ik_ctl_grp = controller_creator(
+        #     name=f"{self.side}_{finger_name}PV",
+        #     suffixes=["GRP", "ANM"],
+        #     lock=["rx", "ry", "rz", "sx","sz","sy","visibility"],
+        #     ro=False,
+        #     parent=self.ik_controllers
+
+        # )
+
+        # print("PV Created")
+
+        # polePos = self.calculate_pole_vector_from_matrices(guides_list[0]+ ".outputMatrix", guides_list[1]+ ".outputMatrix", guides_list[2]+ ".outputMatrix", 1)
+        # cmds.xform(self.pv_ik_ctl_grp, ws=True, t=(polePos.x, polePos.y, polePos.z))
         
         self.ik_controllers.append(ctl)
         
