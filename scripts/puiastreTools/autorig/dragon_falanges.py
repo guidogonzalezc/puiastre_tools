@@ -323,17 +323,27 @@ class FalangeModule(object):
             joints.append(joint)
 
         for joint in joints:
-            cmds.setAttr(f"{joint}.ry", 5)
+            cmds.setAttr(f"{joint}.rz", -5)
 
         spring_solver = cmds.ikHandle(n=f"{self.side}_{self.names[0]}IkHandle", sj=joints[0], ee=joints[-1], sol="ikSpringSolver")
-        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{spring_solver[0]}.offsetParentMatrix")
+        cmds.poleVectorConstraint(f"{self.pv_ik_ctl}", spring_solver[0])
+
         zero_value = cmds.createNode("floatConstant", name=f"{self.side}_{self.names[0]}IkHandle0_FC", ss=True)
         cmds.setAttr(f"{zero_value}.inFloat", 0)
 
-        for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
+        pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.names[0]}IkHandle_PIM", ss=True)
+        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{pick_matrix}.inputMatrix")
+        cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+
+        for attr in ["tx", "ty", "tz"]:
             cmds.connectAttr(f"{zero_value}.outFloat", f"{spring_solver[0]}.{attr}")
+
+        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{spring_solver[0]}.offsetParentMatrix")
+        
+        cmds.setAttr(f"{joints[-1]}.rz", 0)
+
+
         cmds.parent(spring_solver[0], self.individual_module_grp)
-        cmds.poleVectorConstraint(f"{self.pv_ik_ctl}", spring_solver[0])
 
         self.ik_wm = [f"{joint}.worldMatrix[0]" for joint in joints]
 
