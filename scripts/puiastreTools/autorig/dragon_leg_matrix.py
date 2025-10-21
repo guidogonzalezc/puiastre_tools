@@ -853,7 +853,6 @@ class LimbModule(object):
 
         fk_end_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}FkEnd_AIM", ss=True)
         fk_end_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FkEnd_MMX", ss=True)
-        print(self.leg_guides)
         cmds.connectAttr(f"{self.leg_guides[0]}", f"{fk_end_aim}.inputMatrix")
         cmds.connectAttr(f"{self.leg_guides[1]}", f"{fk_end_aim}.primaryTargetMatrix")
         cmds.connectAttr(f"{self.leg_guides[1]}", f"{fk_end_aim}.secondaryTargetMatrix")
@@ -883,13 +882,13 @@ class LimbModule(object):
 
         self.foot_rotation_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FootRotation_MMX", ss=True)
 
-        for guide in self.ik_leg_guides:
+        for i, guide in enumerate(self.ik_leg_guides):
 
 
             ctl, ctl_grp = controller_creator(
                 name=guide.replace("_GUIDE.worldMatrix[0]", "Ik"),
                 suffixes=["GRP", "SDK","ANM"],
-                lock=["tx","tz","ty","sx","sz","sy","visibility"],
+                lock=["tx","tz","ty","sx","sz","sy","visibility"] if i != len(self.ik_leg_guides)-2 else ["sx","sy","sz","visibility"],
                 ro=True,
                 parent=self.ik_controllers
             )
@@ -902,6 +901,9 @@ class LimbModule(object):
             self.reverse_ctl_grp.append(ctl_grp)
 
         cmds.connectAttr(f"{self.reverse_ctl[-1]}.worldMatrix[0]", f"{self.ikHandleManager.replace('matrixSum', 'matrixIn[2]')}", force=True)
+
+
+        print(self.reverse_ctl)
 
         # IK HANDLE WIP
 
