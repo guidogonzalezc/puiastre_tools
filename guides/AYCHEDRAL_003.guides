@@ -336,20 +336,6 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "L_backFootRoll_GUIDE": {
-            "worldPosition": [
-                78.28494166777531,
-                10.0,
-                -7.424864768981934
-            ],
-            "parent": "L_backFootHeel_GUIDE",
-            "jointTwist": "Child",
-            "type": "Child",
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
         "L_backFootHeel_GUIDE": {
             "worldPosition": [
                 78.28494166777531,
@@ -364,6 +350,21 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
+        "L_backFootRoll_GUIDE": {
+            "worldPosition": [
+                78.28494166777531,
+                10.0,
+                -7.424864768981934
+            ],
+            "parent": "L_backFootHeel_GUIDE",
+            "jointTwist": "Child",
+            "type": "Child",
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+
         "L_backFootBankIn_GUIDE": {
             "worldPosition": [
                 38.35557556152344,

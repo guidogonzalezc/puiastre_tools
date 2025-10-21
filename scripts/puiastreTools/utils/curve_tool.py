@@ -783,4 +783,4 @@ def build_surfaces_from_template(path=None, target_transform_name=None):
 # print(aa)
 # build_surfaces_from_template(core.DataManager.get_guide_data(), target_transform_name="tt")
 # get_all_ctl_curves_data()
-# # mirror_shapes()
+# mirror_shapes()

@@ -329,6 +329,7 @@ class GuideCreation(object):
                     if self.limb_name == "mouth" or self.limb_name == "eye":
                         parent = self.guides_trn if not self.guides else self.guides[0]
 
+
                 if not "Sliding" in joint_name and not "Curve" in joint_name:
                     temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                     type = "joint"
@@ -735,8 +736,9 @@ class FootGuideCreation(GuideCreation):
         self.position_data = {
         f"{ctl}{first_b_letter}ankOut": get_data(f"{self.sides}_{ctl}{first_b_letter}ankOut"),
         f"{ctl}{first_b_letter}ankIn": get_data(f"{self.sides}_{ctl}{first_b_letter}ankIn"),
-        f"{ctl}{first_r_letter}oll": get_data(f"{self.sides}_{ctl}{first_r_letter}oll"),
         f"{ctl}{first_h_letter}eel": get_data(f"{self.sides}_{ctl}{first_h_letter}eel"),
+        f"{ctl}{first_r_letter}oll": get_data(f"{self.sides}_{ctl}{first_r_letter}oll"),
+
 
     }
         
@@ -1039,7 +1041,7 @@ def dino_rebuild_guides():
 
 
 
-dino_rebuild_guides()
+# dino_rebuild_guides()
 
 def load_guides(path = ""):
     if not path or path == "_":
@@ -1092,8 +1094,8 @@ def load_guides(path = ""):
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "membran":
                     MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
-                if guide_info.get("moduleName") == "eye":
-                    EyesGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
+                # if guide_info.get("moduleName") == "eye":
+                #     EyesGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLegFoot":
                     FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "mouth":

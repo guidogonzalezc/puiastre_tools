@@ -631,29 +631,30 @@ class FalangeModule(object):
             
             
 
-        for sdk in self.fk_sdks:
-            cmds.connectAttr(f"{self.switch_ctl}.rx", f"{sdk}.rx")
-            cmds.connectAttr(f"{self.switch_ctl}.rz", f"{sdk}.rz")
-            
-            if "01" in sdk or "02" in sdk or "03" in sdk:
-                continue
-            else:
-                if "first" in sdk or "fourth" in sdk:
-                    multiply = cmds.createNode("multiply", n=sdk.replace("SDK", "MLT"))
-                    cmds.connectAttr(f"{self.switch_ctl}.ry", f"{multiply}.input[0]")
-                    if "first" in sdk:
-                        condition_node = cmds.createNode("condition", n=sdk.replace("SDK", "CON"))
-                        cmds.setAttr(f"{condition_node}.operation", 4) # Less
-                        cmds.setAttr(f"{condition_node}.colorIfTrueR", 1.4)
-                        cmds.setAttr(f"{condition_node}.colorIfFalseR", 0.3)
-                        cmds.connectAttr(f"{self.switch_ctl}.ry", f"{condition_node}.firstTerm")
-                        cmds.connectAttr(f"{condition_node}.outColorR", f"{multiply}.input[1]")
-
-                    else:
-                        cmds.setAttr(f"{multiply}.input[1]", 0.8)
-                    cmds.connectAttr(f"{multiply}.output", f"{sdk}.ry")
+        for sdk in self.fk_sdks: 
+            if "03" not in sdk: # Avoid last controller
+                cmds.connectAttr(f"{self.switch_ctl}.rx", f"{sdk}.rx")
+                cmds.connectAttr(f"{self.switch_ctl}.rz", f"{sdk}.rz")
+                
+                if "01" in sdk or "02" in sdk or "03" in sdk:
+                    continue
                 else:
-                    cmds.connectAttr(f"{self.switch_ctl}.ry", f"{sdk}.ry")
+                    if "first" in sdk or "fourth" in sdk:
+                        multiply = cmds.createNode("multiply", n=sdk.replace("SDK", "MLT"))
+                        cmds.connectAttr(f"{self.switch_ctl}.ry", f"{multiply}.input[0]")
+                        if "first" in sdk:
+                            condition_node = cmds.createNode("condition", n=sdk.replace("SDK", "CON"))
+                            cmds.setAttr(f"{condition_node}.operation", 4) # Less
+                            cmds.setAttr(f"{condition_node}.colorIfTrueR", 1.4)
+                            cmds.setAttr(f"{condition_node}.colorIfFalseR", 0.3)
+                            cmds.connectAttr(f"{self.switch_ctl}.ry", f"{condition_node}.firstTerm")
+                            cmds.connectAttr(f"{condition_node}.outColorR", f"{multiply}.input[1]")
+
+                        else:
+                            cmds.setAttr(f"{multiply}.input[1]", 0.8)
+                        cmds.connectAttr(f"{multiply}.output", f"{sdk}.ry")
+                    else:
+                        cmds.connectAttr(f"{self.switch_ctl}.ry", f"{sdk}.ry")
 
             
 
