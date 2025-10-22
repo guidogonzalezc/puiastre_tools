@@ -37,9 +37,6 @@ class FingersModule(object):
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
 
-
-        
-
     def make(self, guide_name):
 
         """
@@ -139,6 +136,30 @@ class FingersModule(object):
         :param guide_name: name of the guide to import
         """
         self.finger_attributes_ctl, self.finger_attributes_nodes, = controller_creator(name=f"{self.side}_fingersAttributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
+
+        self.finger_plane, self.finger_plane_grp = controller_creator(
+                    name=f"{self.side}_fingersPlaneIk",
+                    suffixes=["GRP", "ANM"],
+                    lock=["sx", "sy", "sz", "visibility"],
+                    ro=False,
+                    parent= self.controllers_grp_ik
+                )
+        
+
+        self.leg_ik_main_controller = self.data_exporter.get_data(f"{self.side}_backLegModule", "end_ik")
+
+
+        finger_plane_guide = cmds.createNode("transform", name = f"{self.side}_fingerPlaneIk_GUIDE", parent=self.guides_grp, ss=True)
+        cmds.matchTransform(finger_plane_guide, self.leg_ball_blm, pos=True)
+
+        cmds.setAttr(f"{finger_plane_guide}.ty", 0)
+
+        cmds.connectAttr(f"{finger_plane_guide}.worldMatrix[0]", f"{self.finger_plane_grp[0]}.offsetParentMatrix")
+
+        ss.fk_switch(target = self.finger_plane, sources= [self.leg_ik_main_controller, self.leg_ball_blm], sources_names=["Leg IK Controller", "Foot"])
+
+
+
 
         cmds.addAttr(self.finger_attributes_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.finger_attributes_ctl+".extraAttr", channelBox=True, lock=True)
@@ -265,8 +286,7 @@ class FingersModule(object):
 
             self.pairblends(ik_matrices, controller_matrices, fk_grps, finger_name, grp_ik)
 
-        point_temp = cmds.pointConstraint(self.controllers[3], self.controllers[4], self.controllers[6], self.controllers[7], self.finger_attributes_nodes[0], mo=False) # Position the main attr grp
-        cmds.delete(point_temp)
+        cmds.delete(cmds.pointConstraint(self.controllers[3], self.controllers[4], self.controllers[6], self.controllers[7], self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
 
     def pairblends(self, ik, fk, fk_grp, finger_name, ctl_ik):
 
@@ -294,9 +314,6 @@ class FingersModule(object):
             joint = cmds.createNode("joint", name=f"{self.side}_{finger_name.replace('Guide', '')}0{i+1}_JNT", parent=self.skinning_grp, ss=True)
             cmds.connectAttr(blendMatrix + ".outputMatrix", joint + ".offsetParentMatrix")
         
-    
-  
-
     def ik_setup(self, guides_list, finger_name):
         self.side = guides_list[0].split("_")[0]
 
@@ -328,9 +345,55 @@ class FingersModule(object):
                     parent= self.controllers_grp_ik
                 )
         
+        pv, pv_grp = controller_creator(
+                    name=f"{self.side}_{finger_name}Pv",
+                    suffixes=["GRP", "SDK", "ANM"],
+                    lock=["sx", "sy", "sz", "visibility"],
+                    ro=False,
+                    parent= self.controllers_grp_ik
+                )
+        
+        pv_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}PVPosition_MMX", ss=True)
+        cmds.connectAttr(f"{guides_list[1]}.outputMatrix", f"{pv_pos_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{pv_pos_multMatrix}.matrixSum", f"{pv_grp[0]}.offsetParentMatrix")
+
+        pv_pos_4b4 = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{finger_name}PVPosition_F4X", ss=True)
+        cmds.connectAttr(f"{pv_pos_4b4}.output", f"{pv_pos_multMatrix}.matrixIn[0]")
+
+        # temp_pos01 = cmds.createNode("transform",n = "temp01", ss=True)
+        # temp_pos02 = cmds.createNode("transform",n = "temp02", ss=True)
+        # temp_pos03 = cmds.createNode("transform",n = "temp03", ss=True)
+
+        # cmds.connectAttr(f"{guides_list[0]}.outputMatrix", f"{temp_pos01}.offsetParentMatrix")
+        # cmds.connectAttr(f"{guides_list[1]}.outputMatrix", f"{temp_pos02}.offsetParentMatrix")
+        # cmds.connectAttr(f"{guides_list[2]}.outputMatrix", f"{temp_pos03}.offsetParentMatrix")
+
+        # pos1 = cmds.xform(temp_pos01, q=True, ws=True, t=True)
+        # pos2 = cmds.xform(temp_pos02, q=True, ws=True, t=True)
+
+        # distance01 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos1, pos2)]))
+
+        # pos3 = cmds.xform(temp_pos02, q=True, ws=True, t=True)
+        # pos4 = cmds.xform(temp_pos03, q=True, ws=True, t=True)
+
+        # distance02 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos3, pos4)]))
+
+        if self.side == "R":
+            cmds.setAttr(f"{pv_pos_4b4}.in31", -20)#(distance01+distance02)*-1)
+        else:
+            cmds.setAttr(f"{pv_pos_4b4}.in31", 20)#(distance01+distance02))
+        
+
+        
         self.ik_controllers.append(ctl)
         
         cmds.connectAttr(guides_list[-1] + ".outputMatrix", grp[0] + ".offsetParentMatrix")
+
+        ss.fk_switch(target = ctl, sources= [self.finger_plane, self.leg_ball_blm], sources_names=["Finger Plane", "Foot"])
+
+
+        ss.fk_switch(target = pv, sources= [self.leg_ball_blm, ctl, self.finger_plane], sources_names=["Foot", "Ik Controller", "Finger Plane"])
+
 
         self.ikHandleManager = f"{ctl}.worldMatrix[0]"
 
@@ -373,7 +436,7 @@ class FingersModule(object):
  
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{finger_name}UpperIk_AIM", ss=True)
         cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
-        # cmds.connectAttr(f"{self.pv_ik_ctl}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{pv}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
         cmds.connectAttr(f"{root_wm}.outputMatrix", f"{upper_arm_ik_aim_matrix}.inputMatrix")
         cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
@@ -393,7 +456,7 @@ class FingersModule(object):
         cmds.connectAttr(f"{upper_arm_acos}.output", f"{sin}.input")
         cmds.connectAttr(f"{sin}.output", f"{negate}.input")
 
-        # cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryMode", 1)
+        cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryMode", 1)
             
         # Lower
 
@@ -474,6 +537,10 @@ class FingersModule(object):
         return self.ik_wm, grp[0]
 
         
+
+
+
+        
     def attributes_setup(self):
 
         """
@@ -532,6 +599,7 @@ class FingersModule(object):
         cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Thumb_Fan", v=0)
         cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Thumb_Fan", v=thumb_values[6])
         cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Thumb_Fan", v=thumb_values[7])
+
         
     
 

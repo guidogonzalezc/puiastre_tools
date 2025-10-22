@@ -97,7 +97,7 @@ class MembraneModule(object):
 
         self.secondary_membranes()
 
-        self.main_membrane()
+        # self.main_membrane()
 
 
         self.data_exporter.append_data(
@@ -211,7 +211,7 @@ class MembraneModule(object):
                 split_points_two = [joint_list_two[idx] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
                 
 
-            for values in [0.25, 0.5, 0.75]:
+            for values in [0.33, 0.66]:
 
                 ctls = []
                 ctls_grp = []
@@ -220,12 +220,10 @@ class MembraneModule(object):
                 membranes_wm_aim = []
                 mid_positions = []
                 for index, (joint_one, joint_two) in enumerate(zip(split_points_one, split_points_two)):
-                    if values == 0.25:
-                        name = "FirstSecondary"
-                    elif values == 0.5:
-                        name = ""
-                    elif values == 0.75:
-                        name = "SecondSecondary"
+                    if values == 0.33:
+                        name = "Inner"
+                    elif values == 0.66:
+                        name = "Outer"
                     y_axis_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membran0{index+1}{name}_AMX", ss=True)
                     cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{y_axis_aim}.inputMatrix")
                     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim}.primaryTargetMatrix")

@@ -332,7 +332,7 @@ class GuideCreation(object):
 
                 if not "Sliding" in joint_name and not "Curve" in joint_name:
                     temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
-                    type = "joint"
+                    # type = "joint"
                     cmds.setAttr(temp_pos + ".translate", positions[0], positions[1], positions[2], type="double3")
                     if "Transform" in joint_name:
                         guide = cmds.createNode("transform", name=f"{side}_{joint_name}_GUIDE")
@@ -341,13 +341,23 @@ class GuideCreation(object):
 
 
                     else:
-                        guide = self.controller_creator(
-                            f"{side}_{joint_name}",
-                            type=type,
-                            parent=parent,
-                            match=temp_pos,
-                            color=color,
-                        )
+                        if type == "settings":
+                            
+                            guide = self.controller_creator(
+                                f"{side}_{joint_name}",
+                                type=type,
+                                parent=parent,
+                                match=temp_pos,
+                                color=color,
+                            )
+                        # else:
+
+                        guide = cmds.createNode("joint", name=f"{side}_{joint_name}_GUIDE", parent=parent, ss=True)
+                        cmds.setAttr(guide + ".overrideEnabled", 1)
+                        cmds.setAttr(guide + ".overrideColor", color)
+                        cmds.matchTransform(guide, temp_pos)
+                        cmds.setAttr(f"{guide}.drawStyle", 3)
+                        cmds.setAttr(f"{guide}.radius", 10)
 
                 elif "Curve" in joint_name:
                     guide = create_curve_guide(f"{side}_{joint_name}_GUIDE")
@@ -381,10 +391,10 @@ class GuideCreation(object):
                         enum_name = "prefix"
                         cmds.addAttr(guide, longName=enum_name, attributeType="enum", enumName=self.prefix, keyable=False)
 
-                    if hasattr(self, "type"):
-                        enum_name = "type"
-                        cmds.addAttr(guide, longName=enum_name, attributeType="enum", enumName="biped:quadruped", keyable=False)
-                        cmds.setAttr(f"{guide}.{enum_name}", 0 if self.type == "biped" else 1)
+                    # if hasattr(self, "type"):
+                    #     enum_name = "type"
+                    #     cmds.addAttr(guide, longName=enum_name, attributeType="enum", enumName="biped:quadruped", keyable=False)
+                    #     cmds.setAttr(f"{guide}.{enum_name}", 0 if self.type == "biped" else 1)
 
                     cmds.addAttr(guide, longName="moduleName", attributeType="enum", enumName=self.limb_name, keyable=False)
 
@@ -760,18 +770,22 @@ class FootFingersGuideCreation(GuideCreation):
         f"{ctl}thumb01": get_data(f"{self.sides}_{ctl}thumb01"),
         f"{ctl}thumb02": get_data(f"{self.sides}_{ctl}thumb02"),
         f"{ctl}thumb03": get_data(f"{self.sides}_{ctl}thumb03"),
+        f"{ctl}thumb04": get_data(f"{self.sides}_{ctl}thumb04"),
 
         f"{ctl}index01": get_data(f"{self.sides}_{ctl}index01"),
         f"{ctl}index02": get_data(f"{self.sides}_{ctl}index02"),
         f"{ctl}index03": get_data(f"{self.sides}_{ctl}index03"),
+        f"{ctl}index04": get_data(f"{self.sides}_{ctl}index04"),
 
         f"{ctl}middle01": get_data(f"{self.sides}_{ctl}middle01"),
         f"{ctl}middle02": get_data(f"{self.sides}_{ctl}middle02"),
         f"{ctl}middle03": get_data(f"{self.sides}_{ctl}middle03"),
+        f"{ctl}middle04": get_data(f"{self.sides}_{ctl}middle04"),
 
         f"{ctl}pinky01": get_data(f"{self.sides}_{ctl}pinky01"),
         f"{ctl}pinky02": get_data(f"{self.sides}_{ctl}pinky02"),
         f"{ctl}pinky03": get_data(f"{self.sides}_{ctl}pinky03"),
+        f"{ctl}pinky04": get_data(f"{self.sides}_{ctl}pinky04"),
 
 
         }
@@ -1200,7 +1214,7 @@ def curve_data(curve):
 
     return shape_data_list
 
-def guides_export():
+def guides_export(mirror=False):
         """
         Exports the guides from the selected folder in the Maya scene to a JSON file.
         """
@@ -1222,7 +1236,22 @@ def guides_export():
                         om.MGlobal.displayError("No guides found in the scene.")
                         return
 
-                guides_get_translation = [cmds.xform(guide, q=True, ws=True, translation=True) for guide in guides_descendents]
+
+                guides_get_translation = []
+                if mirror == True:
+                    for guide in guides_descendents:
+                        if "R_" in guide:
+                            guide_l = guide.replace("R_", "L_")
+                            xform_value = cmds.xform(guide_l, q=True, ws=True, translation=True)
+                            xform_value = [xform_value[0]*-1, xform_value[1], xform_value[2]]
+                        elif "L_" in guide:
+                            xform_value = cmds.xform(guide, q=True, ws=True, translation=True)
+
+                        guides_get_translation.append(xform_value)
+
+                else:
+                    guides_get_translation = [cmds.xform(guide, q=True, ws=True, translation=True) for guide in guides_descendents]
+              
                 guides_parents = [cmds.listRelatives(guide, parent=True)[0] for guide in guides_descendents]
                 guides_joint_twist = []
                 guides_type = []
