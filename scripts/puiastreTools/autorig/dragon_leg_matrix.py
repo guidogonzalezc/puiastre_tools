@@ -888,7 +888,7 @@ class LimbModule(object):
             ctl, ctl_grp = controller_creator(
                 name=guide.replace("_GUIDE.worldMatrix[0]", "Ik"),
                 suffixes=["GRP", "SDK","ANM"],
-                lock=["tx","tz","ty","sx","sz","sy","visibility"] if i != len(self.ik_leg_guides) -2 else ["sx","sz","sy","visibility"],
+                lock=["tx","tz","ty","sx","sz","sy","visibility"],
                 ro=True,
                 parent=self.ik_controllers
             )
@@ -901,6 +901,9 @@ class LimbModule(object):
             self.reverse_ctl_grp.append(ctl_grp)
 
         cmds.connectAttr(f"{self.reverse_ctl[-1]}.worldMatrix[0]", f"{self.ikHandleManager.replace('matrixSum', 'matrixIn[2]')}", force=True)
+
+
+        print(self.reverse_ctl)
 
         # IK HANDLE WIP
 
