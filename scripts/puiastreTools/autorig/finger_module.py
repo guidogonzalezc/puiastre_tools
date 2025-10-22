@@ -314,9 +314,6 @@ class FingersModule(object):
             joint = cmds.createNode("joint", name=f"{self.side}_{finger_name.replace('Guide', '')}0{i+1}_JNT", parent=self.skinning_grp, ss=True)
             cmds.connectAttr(blendMatrix + ".outputMatrix", joint + ".offsetParentMatrix")
         
-    
-  
-
     def ik_setup(self, guides_list, finger_name):
         self.side = guides_list[0].split("_")[0]
 
@@ -347,6 +344,46 @@ class FingersModule(object):
                     ro=False,
                     parent= self.controllers_grp_ik
                 )
+        
+        pv, pv_grp = controller_creator(
+                    name=f"{self.side}_{finger_name}Pv",
+                    suffixes=["GRP", "SDK", "ANM"],
+                    lock=["sx", "sy", "sz", "visibility"],
+                    ro=False,
+                    parent= self.controllers_grp_ik
+                )
+        
+        pv_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}PVPosition_MMX", ss=True)
+        cmds.connectAttr(f"{guides_list[1]}.outputMatrix", f"{pv_pos_multMatrix}.matrixIn[1]")
+        cmds.connectAttr(f"{pv_pos_multMatrix}.matrixSum", f"{pv_grp[0]}.offsetParentMatrix")
+
+        pv_pos_4b4 = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{finger_name}PVPosition_F4X", ss=True)
+        cmds.connectAttr(f"{pv_pos_4b4}.output", f"{pv_pos_multMatrix}.matrixIn[0]")
+
+        # temp_pos01 = cmds.createNode("transform",n = "temp01", ss=True)
+        # temp_pos02 = cmds.createNode("transform",n = "temp02", ss=True)
+        # temp_pos03 = cmds.createNode("transform",n = "temp03", ss=True)
+
+        # cmds.connectAttr(f"{guides_list[0]}.outputMatrix", f"{temp_pos01}.offsetParentMatrix")
+        # cmds.connectAttr(f"{guides_list[1]}.outputMatrix", f"{temp_pos02}.offsetParentMatrix")
+        # cmds.connectAttr(f"{guides_list[2]}.outputMatrix", f"{temp_pos03}.offsetParentMatrix")
+
+        # pos1 = cmds.xform(temp_pos01, q=True, ws=True, t=True)
+        # pos2 = cmds.xform(temp_pos02, q=True, ws=True, t=True)
+
+        # distance01 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos1, pos2)]))
+
+        # pos3 = cmds.xform(temp_pos02, q=True, ws=True, t=True)
+        # pos4 = cmds.xform(temp_pos03, q=True, ws=True, t=True)
+
+        # distance02 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos3, pos4)]))
+
+        if self.side == "R":
+            cmds.setAttr(f"{pv_pos_4b4}.in31", -20)#(distance01+distance02)*-1)
+        else:
+            cmds.setAttr(f"{pv_pos_4b4}.in31", 20)#(distance01+distance02))
+        
+
         
         self.ik_controllers.append(ctl)
         
