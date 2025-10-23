@@ -302,6 +302,7 @@ class FingersModule(object):
 
 
         self.blend_wm = []
+        end_joints = []
         for i, (fk, ik) in enumerate(zip(fk, ik)):
 
             blendMatrix = cmds.createNode("blendMatrix", name=f"{self.side}_{finger_name.replace('Guide', '')}0{i+1}_BLM", ss=True)
@@ -313,6 +314,11 @@ class FingersModule(object):
 
             joint = cmds.createNode("joint", name=f"{self.side}_{finger_name.replace('Guide', '')}0{i+1}_JNT", parent=self.skinning_grp, ss=True)
             cmds.connectAttr(blendMatrix + ".outputMatrix", joint + ".offsetParentMatrix")
+            end_joints.append(joint)
+
+
+        core.pv_locator(name=f"{self.side}_{finger_name.replace('Guide', '')}PVLocator", parents=[self.pv, end_joints[1]], parent_append=self.controllers_grp_ik)
+        
         
     def ik_setup(self, guides_list, finger_name):
         self.side = guides_list[0].split("_")[0]
@@ -345,7 +351,7 @@ class FingersModule(object):
                     parent= self.controllers_grp_ik
                 )
         
-        pv, pv_grp = controller_creator(
+        self.pv, pv_grp = controller_creator(
                     name=f"{self.side}_{finger_name}Pv",
                     suffixes=["GRP", "SDK", "ANM"],
                     lock=["sx", "sy", "sz", "visibility"],
@@ -392,7 +398,7 @@ class FingersModule(object):
         ss.fk_switch(target = ctl, sources= [self.finger_plane, self.leg_ball_blm], sources_names=["Finger Plane", "Foot"])
 
 
-        ss.fk_switch(target = pv, sources= [self.leg_ball_blm, ctl, self.finger_plane], sources_names=["Foot", "Ik Controller", "Finger Plane"])
+        ss.fk_switch(target = self.pv, sources= [self.leg_ball_blm, ctl, self.finger_plane], sources_names=["Foot", "Ik Controller", "Finger Plane"])
 
 
         self.ikHandleManager = f"{ctl}.worldMatrix[0]"
@@ -436,7 +442,7 @@ class FingersModule(object):
  
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{finger_name}UpperIk_AIM", ss=True)
         cmds.connectAttr(f"{self.ikHandleManager}", f"{upper_arm_ik_aim_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f"{pv}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.pv}.worldMatrix", f"{upper_arm_ik_aim_matrix}.secondaryTargetMatrix")
         cmds.connectAttr(f"{root_wm}.outputMatrix", f"{upper_arm_ik_aim_matrix}.inputMatrix")
         cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
