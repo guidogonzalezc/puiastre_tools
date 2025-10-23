@@ -303,16 +303,18 @@ class GuideCreation(object):
         for side in self.sides:
             color = {"L": 6, "R": 13}.get(side, 17)
             self.guides = []
+            print(self.position_data)
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
                 if len(positions) >= 3 or None in positions:
                     parent = positions[1]
                     type = positions[-1]
                     positions = positions[0]
                  
-
                 positions = [0,0,0] if positions is None else positions
                 parent = None if parent == None else parent
                 type = "joint" if type == None else type
+
+                temp_pos = None
 
                 if parent is None and type == "joint":
                     parent = self.guides_trn if not self.guides else self.guides[-1]
@@ -507,7 +509,8 @@ def get_data(name, module_name=False):
         if not isinstance(guides, dict):
             continue
         for guide_name, guide_info in guides.items():
-            if name in guide_name:
+            name = name.replace("_GUIDE", "")   
+            if f"{name}_GUIDE" == guide_name:
                 try: 
                     world_position = guide_info.get("worldPosition")
                 except:
@@ -570,7 +573,7 @@ class BackLegGuideCreation(GuideCreation):
         "backLegSettings": get_data(f"{self.sides}_backLegSettings"),
         "backLegFrontDistance": get_data(f"{self.sides}_backLegFrontDistance"),
     }
-        
+                
 class FrontLegGuideCreation(GuideCreation):
     """
     Guide creation for front legs.
@@ -649,7 +652,7 @@ class TailGuideCreation(GuideCreation):
             "tail02": get_data(f"{self.sides}_tail02"),
         }
 
-class MemmbranCreation(GuideCreation):
+class MembraneCreation(GuideCreation):
     """
     Guide creation for neck.
     """
@@ -661,10 +664,13 @@ class MemmbranCreation(GuideCreation):
         self.prefix = None
         self.controller_number = None
         self.position_data = {
-            "primaryMembran01": get_data(f"{self.sides}_primaryMembran01"),
-            "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
-            "primaryMembran03": get_data(f"{self.sides}_primaryMembran03"),
-            "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
+             
+            "wingSliding": get_data(f"{self.sides}_mouthSliding"),
+
+            # "primaryMembran01": get_data(f"{self.sides}_primaryMembran01"),
+            # "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
+            # "primaryMembran03": get_data(f"{self.sides}_primaryMembran03"),
+            # "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
         }
 
 def number_to_ordinal_word(n):
@@ -756,38 +762,38 @@ class FootFingersGuideCreation(GuideCreation):
     """
     Guide creation for feet.
     """
-    def __init__(self, side = "L", limb_name="foot"):
+    def __init__(self, side = "L", limb_name="foot", prefix=False):
         self.sides = side
         self.reverse_foot_name = limb_name
-        self.limb_name = "backLegFoot"
+        self.limb_name = limb_name
         self.aim_name = None
         self.aim_offset = 0
         self.controller_number = None
         self.prefix = None
-        ctl = "" if self.reverse_foot_name == "foot" else self.reverse_foot_name
+        ctl = "" if prefix == False else self.reverse_foot_name
+        def maybe_cap(s):
+            return s.capitalize() if ctl else s
+
         self.position_data = {
+            f"{ctl}{maybe_cap('thumb')}01": get_data(f"{self.sides}_{ctl}{maybe_cap('thumb')}01"),
+            f"{ctl}{maybe_cap('thumb')}02": get_data(f"{self.sides}_{ctl}{maybe_cap('thumb')}02"),
+            f"{ctl}{maybe_cap('thumb')}03": get_data(f"{self.sides}_{ctl}{maybe_cap('thumb')}03"),
+            # f"{ctl}{maybe_cap('thumb')}04": get_data(f"{self.sides}_{ctl}{maybe_cap('thumb')}04"),
 
-        f"{ctl}thumb01": get_data(f"{self.sides}_{ctl}thumb01"),
-        f"{ctl}thumb02": get_data(f"{self.sides}_{ctl}thumb02"),
-        f"{ctl}thumb03": get_data(f"{self.sides}_{ctl}thumb03"),
-        f"{ctl}thumb04": get_data(f"{self.sides}_{ctl}thumb04"),
+            f"{ctl}{maybe_cap('index')}01": get_data(f"{self.sides}_{ctl}{maybe_cap('index')}01"),
+            f"{ctl}{maybe_cap('index')}02": get_data(f"{self.sides}_{ctl}{maybe_cap('index')}02"),
+            f"{ctl}{maybe_cap('index')}03": get_data(f"{self.sides}_{ctl}{maybe_cap('index')}03"),
+            # f"{ctl}{maybe_cap('index')}04": get_data(f"{self.sides}_{ctl}{maybe_cap('index')}04"),
 
-        f"{ctl}index01": get_data(f"{self.sides}_{ctl}index01"),
-        f"{ctl}index02": get_data(f"{self.sides}_{ctl}index02"),
-        f"{ctl}index03": get_data(f"{self.sides}_{ctl}index03"),
-        f"{ctl}index04": get_data(f"{self.sides}_{ctl}index04"),
+            f"{ctl}{maybe_cap('middle')}01": get_data(f"{self.sides}_{ctl}{maybe_cap('middle')}01"),
+            f"{ctl}{maybe_cap('middle')}02": get_data(f"{self.sides}_{ctl}{maybe_cap('middle')}02"),
+            f"{ctl}{maybe_cap('middle')}03": get_data(f"{self.sides}_{ctl}{maybe_cap('middle')}03"),
+            # f"{ctl}{maybe_cap('middle')}04": get_data(f"{self.sides}_{ctl}{maybe_cap('middle')}04"),
 
-        f"{ctl}middle01": get_data(f"{self.sides}_{ctl}middle01"),
-        f"{ctl}middle02": get_data(f"{self.sides}_{ctl}middle02"),
-        f"{ctl}middle03": get_data(f"{self.sides}_{ctl}middle03"),
-        f"{ctl}middle04": get_data(f"{self.sides}_{ctl}middle04"),
-
-        f"{ctl}pinky01": get_data(f"{self.sides}_{ctl}pinky01"),
-        f"{ctl}pinky02": get_data(f"{self.sides}_{ctl}pinky02"),
-        f"{ctl}pinky03": get_data(f"{self.sides}_{ctl}pinky03"),
-        f"{ctl}pinky04": get_data(f"{self.sides}_{ctl}pinky04"),
-
-
+            f"{ctl}{maybe_cap('pinky')}01": get_data(f"{self.sides}_{ctl}{maybe_cap('pinky')}01"),
+            f"{ctl}{maybe_cap('pinky')}02": get_data(f"{self.sides}_{ctl}{maybe_cap('pinky')}02"),
+            f"{ctl}{maybe_cap('pinky')}03": get_data(f"{self.sides}_{ctl}{maybe_cap('pinky')}03"),
+            # f"{ctl}{maybe_cap('pinky')}04": get_data(f"{self.sides}_{ctl}{maybe_cap('pinky')}04"),
         }
             
 class JiggleJoint(GuideCreation):
@@ -1028,7 +1034,7 @@ def dino_rebuild_guides():
 
     # cmds.file(new=True, force=True)
 
-    core.DataManager.set_guide_data("D:/rigs/cheeta/CHEETAH_001.guides")
+    core.DataManager.set_guide_data("D:/rigs/cheeta/CHEETAH_002.guides")
     # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
@@ -1051,9 +1057,6 @@ def dino_rebuild_guides():
     FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
     FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
     
-
-
-
 
 # dino_rebuild_guides()
 
@@ -1095,6 +1098,8 @@ def load_guides(path = ""):
                     ArmGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLeg":
                     BackLegGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "frontLeg":
+                    FrontLegGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "spine":
                     SpineGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "neck":
@@ -1107,11 +1112,14 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "hand":
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "membran":
-                    MemmbranCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
+                    MembraneCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
                 # if guide_info.get("moduleName") == "eye":
                 #     EyesGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
-                if guide_info.get("moduleName") == "backLegFoot":
-                    FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name="foot").create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "frontLegFoot":
+                    if "backLegFoot" in guide_name or "frontLegFoot" in guide_name:
+                        FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name=guide_info.get("moduleName"), prefix=True).create_guides(guides_trn, buffers_trn)
+                    else:
+                        FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name=guide_info.get("moduleName"), prefix=False).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "mouth":
                     MouthGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
 
@@ -1121,7 +1129,7 @@ def create_curve_guide(name=""):
 
     with open(path, "r") as f:
         guide_data = json.load(f)
-
+    
     data = None
 
     for key, index_data in guide_data[next(iter(guide_data))].items():
@@ -1245,6 +1253,9 @@ def guides_export(mirror=False):
                             xform_value = cmds.xform(guide_l, q=True, ws=True, translation=True)
                             xform_value = [xform_value[0]*-1, xform_value[1], xform_value[2]]
                         elif "L_" in guide:
+                            xform_value = cmds.xform(guide, q=True, ws=True, translation=True)
+
+                        elif "C_" in guide:
                             xform_value = cmds.xform(guide, q=True, ws=True, translation=True)
 
                         guides_get_translation.append(xform_value)
