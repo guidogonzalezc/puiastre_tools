@@ -95,9 +95,9 @@ class MembraneModule(object):
 
         cmds.addAttr(self.skinnging_grp, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
-        self.secondary_membranes()
+        # self.secondary_membranes()
 
-        # self.main_membrane()
+        self.main_membrane()
 
 
         self.data_exporter.append_data(
@@ -118,7 +118,7 @@ class MembraneModule(object):
         Returns:
             str: Name of the closest transform.
         """
-        main_pos = om.MVector(cmds.xform(main_transform, q=True, ws=True, t=True))
+        main_pos = om.MVector(main_transform)
         
         closest_obj = None
         closest_dist = float('inf')
@@ -136,6 +136,26 @@ class MembraneModule(object):
 
         return closest_obj
 
+
+    def get_offset_matrix(self, child, parent):
+        """
+        Calculate the offset matrix between a child and parent transform in Maya.
+        Args:
+            child (str): The name of the child transform.
+            parent (str): The name of the parent transform. 
+        Returns:
+            om.MMatrix: The offset matrix that transforms the child into the parent's space.
+        """
+        child_dag = om.MSelectionList().add(child).getDagPath(0)
+        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
+        
+        child_world_matrix = child_dag.inclusiveMatrix()
+        parent_world_matrix = parent_dag.inclusiveMatrix()
+        
+        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
+
+        return offset_matrix
+
     def main_membrane(self):
         data_exporter = data_export.DataExport()
 
@@ -146,42 +166,101 @@ class MembraneModule(object):
 
         ctls = []
 
+        shapes = cmds.listRelatives(self.guides[0], shapes=True, noIntermediate=True) or []
+        guide_shape = shapes[0] if shapes else self.guides[0]
+        main_controller_guide_pos = cmds.pointPosition(f"{guide_shape}.cv[1][3]", world=True)
+        main_controller_guide = cmds.createNode("transform", name=f"{self.side}_MainMembrane_GUIDE", parent=self.guides_grp, ss=True)
+        cmds.xform(main_controller_guide, ws=True, t=main_controller_guide_pos)
 
-        for i, guide in enumerate(self.guides):
-            ctl, ctl_grp = controller_creator(
-                        name=guide.replace("_GUIDE", ""),
-                        suffixes=["GRP", "ANM"],
-                        lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-                        ro=True,
-                        parent=self.individual_controllers_grp
-                        )
+        main_controller, main_controller_grp = controller_creator(
+            name=f"{self.side}_MainMembrane",
+            suffixes=["GRP", "ANM"],
+            lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+            ro=True,
+            parent=self.individual_controllers_grp
+        )
 
-            closest_spine = self.get_closest_transform(guide, spine_joints)
-            closest_arm = self.get_closest_transform(guide, arm_joints)
-            closest_membran = self.get_closest_transform(guide, membran_joints)
-            closest_tail = self.get_closest_transform(guide, tail_joints)
+        first_row_closest = [arm_joints[1]]
 
+        for i in range(1, 4):
 
+            closest_pos = cmds.pointPosition(f"{guide_shape}.cv[0][{i}]", world=True)
+            search_list = spine_joints
+            search_list.extend(tail_joints)
 
-            joint = cmds.createNode("joint", n=guide.replace("_GUIDE", "_JNT"), ss=True, parent = self.skinnging_grp)
-            cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{ctl_grp[0]}.offsetParentMatrix")
-            cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
-            if i == 0:
-                parent_list = [arm_joints[1], arm_joints[0],closest_arm, closest_spine, closest_membran]
-                names = ["Shoulder", "Scapula", "Closest Arm", "Closest Spine", "Closest Membran"]
-        
-            if i == 2:
-                parent_list = [arm_joints[6], closest_arm, closest_spine, closest_membran]
-                names = ["Elbow", "Closest Arm", "Closest Spine", "Closest Membran"]
-
-            elif i == 1 or i == 3:
-                parent_list = [ctls[-1], closest_arm, closest_spine, closest_membran, closest_tail]
-                names = ["Membran Controller", "Closest Arm", "Closest Spine", "Closest Membran", "Closest Tail"]
-
-            ctls.append(ctl)
-            ss.fk_switch(target = ctl, sources= parent_list, sources_names=names)
+            closest_transform = self.get_closest_transform(closest_pos, search_list)
+            first_row_closest.append(closest_transform)
 
 
+        parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_MainMembrane_PM", ss=True)
+        cmds.connectAttr(f"{main_controller_guide}.worldMatrix[0]", f"{parentMatrix}.inputMatrix")
+        cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{main_controller_grp[0]}.offsetParentMatrix")
+
+        temp_transform = cmds.createNode("transform", name=f"{self.side}_MainMembrane_TEMP", ss=True)
+        for i, joint in enumerate([membran_joints[-1], first_row_closest[-1]]):
+
+            pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_MainMembraneNoRotation0{i}_PMX", ss=True)
+
+            cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{parentMatrix}.target[{i}].targetMatrix")
+            cmds.connectAttr(f"{joint}.worldMatrix[0]", f"{pickMatrix}.inputMatrix")
+            cmds.setAttr(f"{pickMatrix}.useRotate", 0)
+
+            cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{temp_transform}.offsetParentMatrix", f=True)
+            offset_masterwalk = self.get_offset_matrix(main_controller_guide, temp_transform)
+            cmds.setAttr(f"{parentMatrix}.target[{i}].offsetMatrix", offset_masterwalk, type="matrix")
+
+
+        main_joint = cmds.createNode("joint", name=f"{self.side}_MainMembrane_JNT", ss=True, parent=self.modules_grp)
+        cmds.connectAttr(f"{main_controller}.worldMatrix[0]", f"{main_joint}.offsetParentMatrix")
+
+        third_row_closest = [arm_joints[-1]]
+
+        for i in range(1, 4):
+
+            closest_pos = cmds.pointPosition(f"{guide_shape}.cv[2][{i}]", world=True)
+            search_list = membran_joints
+
+            closest_transform = self.get_closest_transform(closest_pos, search_list)
+            third_row_closest.append(closest_transform)
+
+        skinning_list = first_row_closest
+        skinning_list.extend(third_row_closest)
+        skinning_list.append(arm_joints[6])
+        skinning_list.append(main_joint)
+
+        nurbs_skincluster = cmds.skinCluster(skinning_list, self.guides[0], toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_MainMembrane_SKN")[0]
+
+        cmds.skinPercent(nurbs_skincluster, f"{self.guides[0]}.cv[1][1]", transformValue=[(arm_joints[6], 0.75), (main_joint, 0.25)])
+        cmds.skinPercent(nurbs_skincluster, f"{self.guides[0]}.cv[1][2]", transformValue=[(arm_joints[6], 0.25), (main_joint, 0.75)])
+
+        for i, (u_value, name) in enumerate([(0.25, "Inner"), (0.5, "Middle"), (0.75, "Outer")]):
+            for index, v_value in enumerate([0.25, 0.5, 0.75]):
+                point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{name}Membrane0{index}_POSI", ss=True)
+                cmds.setAttr(f"{point_on_surface}.parameterU", u_value)
+                cmds.setAttr(f"{point_on_surface}.parameterV", v_value)
+
+                cmds.connectAttr(f"{guide_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
+
+                matrix_node = cmds.createNode('fourByFourMatrix', name=f"Joint_4B4M_{self.side}_{name}Membrane0{index}", ss=True)
+
+                cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
+                cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
+                cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
+
+                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
+                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
+                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
+
+                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
+                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
+                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
+
+                cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
+                cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
+                cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
+
+                joint = cmds.createNode("joint", name=f"{self.side}_{name}Membrane0{index}_JNT", ss=True, parent=self.skinnging_grp)
+                cmds.connectAttr(f"{matrix_node}.output", f"{joint}.offsetParentMatrix", force=True)
 
     def secondary_membranes(self):
 
