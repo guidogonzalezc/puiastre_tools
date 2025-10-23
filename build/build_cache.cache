@@ -23,21 +23,6 @@
         "ikFkSwitch": "L_backLegSwitch_CTL",
         "frontRoll": "L_backLegFrontRoll_CTL"
     },
-    "R_backLegModule": {
-        "skinning_transform": "R_backLegSkinningJoints_GRP",
-        "fk_ctl": [
-            "R_hipFk_CTL",
-            "R_backKneeFk_CTL",
-            "R_backAnkleFk_CTL",
-            "R_backFootFk_CTL"
-        ],
-        "pv_ctl": "R_backLegPV_CTL",
-        "root_ctl": "R_backLegRootIk_CTL",
-        "end_ik": "R_backLegIk_CTL",
-        "foot_rotation": "R_backLegFootRotation_MMX",
-        "ikFkSwitch": "R_backLegSwitch_CTL",
-        "frontRoll": "R_backLegFrontRoll_CTL"
-    },
     "C_spineModule": {
         "skinning_transform": "C_spineSkinning_GRP",
         "body_ctl": "C_body_CTL",
@@ -117,18 +102,6 @@
         "end_ik": "L_fourthFinger03Ik_CTL",
         "settings_ctl": "L_hand_CTL"
     },
-    "R_armModule": {
-        "skinning_transform": "R_armSkinningJoints_GRP",
-        "fk_ctl": [
-            "R_shoulderFk_CTL",
-            "R_elbowFk_CTL",
-            "R_wristFk_CTL"
-        ],
-        "pv_ctl": "R_armPV_CTL",
-        "root_ctl": "R_armRootIk_CTL",
-        "end_ik": "R_armIk_CTL",
-        "scapula_ctl": "R_scapula_CTL"
-    },
     "R_firstMetacarpalModule": {
         "skinning_transform": "R_firstMetacarpalSkinningJoints_GRP",
         "fk_ctls": [
@@ -181,20 +154,38 @@
         "end_ik": "R_fourthFinger03Ik_CTL",
         "settings_ctl": "R_hand_CTL"
     },
-    "R_footFingersModule": {
-        "skinning_transform": "R_footFingerSkinningJoints_GRP",
-        "ik_controllers": [
-            "R_thumb03Ik_CTL",
-            "R_index03Ik_CTL",
-            "R_middle03Ik_CTL",
-            "R_pinky03Ik_CTL"
-        ]
+    "R_armModule": {
+        "skinning_transform": "R_armSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_shoulderFk_CTL",
+            "R_elbowFk_CTL",
+            "R_wristFk_CTL"
+        ],
+        "pv_ctl": "R_armPV_CTL",
+        "root_ctl": "R_armRootIk_CTL",
+        "end_ik": "R_armIk_CTL",
+        "scapula_ctl": "R_scapula_CTL"
     },
-    "L_membraneModule": {
-        "skinning_transform": "L_membraneSkinningJoints_GRP"
+    "R_backLegModule": {
+        "skinning_transform": "R_backLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_hipFk_CTL",
+            "R_backKneeFk_CTL",
+            "R_backAnkleFk_CTL",
+            "R_backFootFk_CTL"
+        ],
+        "pv_ctl": "R_backLegPV_CTL",
+        "root_ctl": "R_backLegRootIk_CTL",
+        "end_ik": "R_backLegIk_CTL",
+        "foot_rotation": "R_backLegFootRotation_MMX",
+        "ikFkSwitch": "R_backLegSwitch_CTL",
+        "frontRoll": "R_backLegFrontRoll_CTL"
     },
     "R_membraneModule": {
         "skinning_transform": "R_membraneSkinningJoints_GRP"
+    },
+    "L_membraneModule": {
+        "skinning_transform": "L_membraneSkinningJoints_GRP"
     },
     "L_footFingersModule": {
         "skinning_transform": "L_footFingerSkinningJoints_GRP",
@@ -203,6 +194,15 @@
             "L_index03Ik_CTL",
             "L_middle03Ik_CTL",
             "L_pinky03Ik_CTL"
+        ]
+    },
+    "R_footFingersModule": {
+        "skinning_transform": "R_footFingerSkinningJoints_GRP",
+        "ik_controllers": [
+            "R_thumb03Ik_CTL",
+            "R_index03Ik_CTL",
+            "R_middle03Ik_CTL",
+            "R_pinky03Ik_CTL"
         ]
     }
 }
