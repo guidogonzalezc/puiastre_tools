@@ -87,16 +87,25 @@ def make(asset_name="dragon"):
     Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
-    """   
-    # cmds.file(new=True, force=True)
+    """
+
+
+    # DEV COMMANDS
+    cmds.file(new=True, force=True)
+    # cmds.scriptEditorInfo(ch=True)
+
+
+
     #UNI
-    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
+    # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_003.guides")
     # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/MAIASAURA_001.guides")
-    core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+    # core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
     # GUIDO
-    # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_003.guides")
-    # core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+    core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_010.guides")
+    # core.DataManager.set_guide_data("D:/rigs/cheeta/CHEETAH_002.guides")
+    # core.DataManager.set_ctls_data("D:/rigs/cheeta/CHEETAH_001.ctls")
+    core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
 
     # LAIA
     # core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
@@ -126,24 +135,31 @@ def make(asset_name="dragon"):
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
                 if guide_info.get("moduleName") == "arm":
+
                     lbm.ArmModule(guide_name).make()
 
                 if guide_info.get("moduleName") == "backLeg":
+ 
                     dlm.BackLegModule(guide_name).make()
 
                 if guide_info.get("moduleName") == "frontLeg":
+
                     dlm.FrontLegModule(guide_name).make()
 
                 if guide_info.get("moduleName") == "hand":
+
                     dfl.FalangeModule().hand_distribution(guide_name=guide_name)
 
                 if guide_info.get("moduleName") == "spine":
+                    
                     spmm.SpineModule().make(guide_name)
 
                 if guide_info.get("moduleName") == "neck":
+
                     nmm.NeckModule().make(guide_name)
 
                 if guide_info.get("moduleName") == "tail":
+
                     tmm.TailModule().make(guide_name)
                 
                 # if guide_info.get("moduleName") == "facial":
