@@ -172,11 +172,10 @@ def build_complete_hierarchy():
                 pass
             else:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
-                if "clavicle" in skinning_joint_list[0]:
+                if "clavicle" in skinning_joint_list[0] or "scapula" in skinning_joint_list[0]:
                     arm_joints.append(joints[-1])
 
     hand_settings_value = None
-
     for i, skinning_joint_list in enumerate(skinning_joints):
         if "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
             side = skinning_joint_list[0].split("_")[0]
@@ -196,8 +195,17 @@ def build_complete_hierarchy():
 
         if "Membran" in skinning_joint_list[0]:
             side = skinning_joint_list[0].split("_")[0]
-            index = l_arm_index if side == "L" else r_arm_index
-            parent_joint = next((j for j in arm_joints if side in j), None)
+
+            parent_joint = None
+
+            for joint_arm in arm_joints:
+                side_arm = joint_arm.split("_")[0]
+                if side == side_arm:
+                    parent_joint = joint_arm
+                    break
+
+            # index = l_arm_index if side == "L" else r_arm_index
+            # parent_joint = next((j for j in arm_joints if side in j), None)
             membrane_groups = []
             current_group = []
 
@@ -215,7 +223,6 @@ def build_complete_hierarchy():
 
 
             for joint_list in membrane_groups:
-                print(membrane_groups)
                 if joint_list:
                     parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
 
@@ -262,11 +269,16 @@ def build_complete_hierarchy():
             pv = data_exporter.get_data(modules_name[i], "pv_ctl")
             root = data_exporter.get_data(modules_name[i], "root_ctl")
             ik = data_exporter.get_data(modules_name[i], "end_ik")
+            scapula = data_exporter.get_data(modules_name[i], "scapula_ctl")
+            first_bendy = data_exporter.get_data(modules_name[i], "first_bendy_joints")
 
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
 
             space_switch.fk_switch(target = fk, sources= parents, sources_names=["LocalChest", "SpineEnd"])
             space_switch.fk_switch(target = root, sources= parents, sources_names=["LocalChest", "SpineEnd"])
+            parents.insert(0, first_bendy)
+            space_switch.fk_switch(target = scapula, sources= parents, sources_names=["Front Leg", "LocalChest", "SpineEnd"])
+            parents.pop(0)
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"])
