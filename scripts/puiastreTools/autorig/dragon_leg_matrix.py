@@ -812,6 +812,37 @@ class LimbModule(object):
 
 
         return joints
+    
+    def scapula(self):
+
+        self.scapula_ctl, self.scapula_ctl_grp = controller_creator(
+            name=f"{self.side}_scapula",
+            suffixes=["GRP", "OFF", "ANM"],
+            lock=["sx", "sz", "sy", "visibility"],
+            ro=True,
+            parent=self.masterWalk_ctl
+        )
+
+        aim_matrix_scapula = cmds.createNode("aimMatrix", name=f"{self.side}_scapula_AIM", ss=True)
+        cmds.connectAttr(f"{self.scapula_guide}.worldMatrix[0]", f"{aim_matrix_scapula}.inputMatrix")
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{aim_matrix_scapula}.primaryTargetMatrix")
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{aim_matrix_scapula}.secondaryTargetMatrix")
+        cmds.setAttr(f"{aim_matrix_scapula}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        cmds.setAttr(f"{aim_matrix_scapula}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{aim_matrix_scapula}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{aim_matrix_scapula}.secondaryMode", 1)
+
+        cmds.connectAttr(f"{aim_matrix_scapula}.outputMatrix", f"{self.scapula_ctl_grp[0]}.offsetParentMatrix")
+
+        module_joint = cmds.createNode("joint", name=self.scapula_guide.replace('_GUIDE', '_JNT'), ss=True, parent=self.skinnging_grp)
+
+        cmds.connectAttr(f"{self.scapula_ctl}.worldMatrix[0]", f"{module_joint}.offsetParentMatrix")
+
+        cmds.reorder(module_joint, front=True)
+
+
+
+
     def reverse_foot(self):
         """
         Reverse foot setup for leg module.  
@@ -1108,7 +1139,6 @@ class BackLegModule(LimbModule):
         self.guides = guide_import(guide_name, all_descendents=True, path=None)
         if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
             self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
-
         if len(self.guides) > 3:
             self.leg_guides = [f"{self.guides[3]}.worldMatrix[0]", f"{self.guides[4]}.worldMatrix[0]"]
             self.guides = [self.guides[0], self.guides[1], self.guides[2]]
@@ -1178,11 +1208,9 @@ class FrontLegModule(LimbModule):
         if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
             self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
 
-        self.scapula = self.guides[0]
+        self.scapula_guide = self.guides[0]
 
         self.guides = self.guides[1:]
-
-        # self.guides.pop(0)
 
         if len(self.guides) > 3:
             self.leg_guides = [f"{self.guides[3]}.worldMatrix[0]", f"{self.guides[4]}.worldMatrix[0]"]
@@ -1207,6 +1235,7 @@ class FrontLegModule(LimbModule):
         super().make()
         self.reverse_foot()
         skinning_joints = self.bendys()
+        self.scapula()
         self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
 
         pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
@@ -1231,6 +1260,8 @@ class FrontLegModule(LimbModule):
                 "end_ik": self.hand_ik_ctl,
                 "foot_rotation": self.foot_rotation_multmatrix,
                 "ikFkSwitch": self.switch_ctl,
+                "scapula_ctl": self.scapula_ctl,
+                "first_bendy_joints": skinning_joints[0][0],
             }
         )
 
