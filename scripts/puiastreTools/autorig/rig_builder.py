@@ -91,7 +91,7 @@ def make(asset_name="dragon"):
 
 
     # DEV COMMANDS
-    cmds.file(new=True, force=True)
+    # cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
 
 

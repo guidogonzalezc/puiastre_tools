@@ -347,11 +347,26 @@ class NeckModule():
 
         skinning_joints = []
 
-        for i, ctl in enumerate(ctls_sub_neck):
+        for ctl in ctls_sub_neck[:-1]:
             name = ctl.replace("AttachedFk_CTL", "_JNT")
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
-            skinning_joints.append((joint_skin))
+            skinning_joints.append(joint_skin)
+
+
+
+        ctl, controller_grp = controller_creator(
+                name=f"{self.side}_localHead",
+                suffixes=["GRP", "ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                ro=True,
+                parent=self.controllers_trn
+            )
+        cmds.connectAttr(f"{self.guide_matrix[-1]}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix")
+        fk_switch(target = ctl, sources= [ctls_sub_neck[-1], self.main_controllers[-1]], sources_names=["Neck", "Main Head"])
+        joint_skin = cmds.createNode("joint", n=f"{self.side}_localHead_JNT", parent=self.skinning_trn, ss=True)
+        cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
+        
 
         for name in ["center", "left", "right"]:
             self.distance = guide_import(f"{self.side}_{name}HeadDistance_GUIDE", all_descendents=False)[0]

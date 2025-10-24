@@ -303,7 +303,6 @@ class GuideCreation(object):
         for side in self.sides:
             color = {"L": 6, "R": 13}.get(side, 17)
             self.guides = []
-            print(self.position_data)
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
                 if len(positions) >= 3 or None in positions:
                     parent = positions[1]

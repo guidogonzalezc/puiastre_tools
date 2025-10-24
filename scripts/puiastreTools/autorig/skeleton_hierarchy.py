@@ -161,6 +161,8 @@ def build_complete_hierarchy():
     arm_joints = []
     leg_joints = []
 
+    complete_arm_chain = []
+
     spine_joints = parented_chain(skinning_joints=skinning_joints[spine_index], parent=None, hand_value=False)
 
     for i, skinning_joint_list in enumerate(skinning_joints):
@@ -174,6 +176,8 @@ def build_complete_hierarchy():
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
                 if "clavicle" in skinning_joint_list[0] or "scapula" in skinning_joint_list[0]:
                     arm_joints.append(joints[-1])
+                    complete_arm_chain.extend(skinning_joint_list)
+
 
     hand_settings_value = None
     for i, skinning_joint_list in enumerate(skinning_joints):
@@ -204,50 +208,49 @@ def build_complete_hierarchy():
                     parent_joint = joint_arm
                     break
 
-            # index = l_arm_index if side == "L" else r_arm_index
-            # parent_joint = next((j for j in arm_joints if side in j), None)
             membrane_groups = []
             current_group = []
 
+            # for index, joint in enumerate(skinning_joint_list):
+            #     print(joint)
+            #     if not "PrimaryMembrane" in joint:
+            #         if "Membrane01" in joint:
+            #             membrane_groups.append(current_group)
+            #             current_group = []
+            #             current_group.append(joint)
+
+            #         else:
+            #             current_group.append(joint)
+
+            #         if joint == skinning_joint_list[-1]:
+            #             membrane_groups.append(current_group)
+
+            #     elif "PrimaryMembrane01" in joint:
+            #         current_group = [joint, skinning_joint_list[index + 1], skinning_joint_list[index + 2]]
+            #         membrane_groups.append(current_group)
+
+
             for index, joint in enumerate(skinning_joint_list):
-                if "Membran01" in joint:
-                    membrane_groups.append(current_group)
-                    current_group = []
-                    current_group.append(joint)
-
-                else:
-                    current_group.append(joint)
-
-                if joint == skinning_joint_list[-1]:
+                if "Membrane01" in joint and not "PrimaryMembrane01" in joint:
+                    current_group = [joint, skinning_joint_list[index + 1], skinning_joint_list[index + 2], skinning_joint_list[index + 3]]
                     membrane_groups.append(current_group)
 
+
+                elif "PrimaryMembrane01" in joint:
+                    current_group = [joint, skinning_joint_list[index + 1], skinning_joint_list[index + 2]]
+                    membrane_groups.append(current_group)
+
+
+            # for index, joint in enumerate(skinning_joint_list):
+                
 
             for joint_list in membrane_groups:
                 if joint_list:
-                    parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
-
-            # side = skinning_joint_list[-1].split("_")[0]
-
-            # arm_joints = cmds.listRelatives(data_exporter.get_data(f"{side}_armModule", "skinning_transform"), allDescendents=True, type="joint")
-
-            # closest01 = get_closest_transform(skinning_joint_list[-1], arm_joints)
-            # closest02 = get_closest_transform(skinning_joint_list[-3], arm_joints)
-
-            # parented_chain(skinning_joints=[skinning_joint_list[-4], skinning_joint_list[-3]], parent=arm_joints[4], hand_value=True)
-            # parented_chain(skinning_joints=[skinning_joint_list[-2], skinning_joint_list[-1]], parent=arm_joints[8], hand_value=True)
-
-
-
-            membrane_groups = []
-            current_group = []
-            for index, joint in enumerate(skinning_joint_list):
-                if "01MembranSecondary" in joint:
-                    current_group = [joint, skinning_joint_list[index + 2], skinning_joint_list[index + 4]]
-                    membrane_groups.append(current_group)
-
-            for joint_list in membrane_groups:
-                if joint_list:
-                    parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
+                    if "PrimaryMembrane01" in joint_list[0]:
+                        closest01 = get_closest_transform(joint_list[0], complete_arm_chain)
+                        parented_chain(skinning_joints=joint_list, parent=closest01, hand_value=False)
+                    else:
+                        parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
 
         # ===== SPACE SWITCHES ===== #
         if "backLeg" in skel_grps[i]:
