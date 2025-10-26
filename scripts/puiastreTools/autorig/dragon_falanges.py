@@ -419,27 +419,27 @@ class FalangeModule(object):
 
         name = self.blend_wm[0].replace("_BLM.outputMatrix", "")
         
-        nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
-        nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
-        nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
+        # nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
+        # nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
+        # nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
 
-        cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollAlign}.inputMatrix")
-        cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollAlign}.target[0].targetMatrix")
-        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollAlign}.target[0].weight")
+        # cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollAlign}.inputMatrix")
+        # cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollAlign}.target[0].targetMatrix")
+        # cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollAlign}.target[0].weight")
 
-        cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollPick}.inputMatrix")
-        cmds.connectAttr(f"{nonRollPick}.outputMatrix", f"{nonRollAim}.inputMatrix")
-        cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
-        cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
+        # cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollPick}.inputMatrix")
+        # cmds.connectAttr(f"{nonRollPick}.outputMatrix", f"{nonRollAim}.inputMatrix")
+        # cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.secondaryTargetMatrix")
+        # cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
+        # cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        # cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        # cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+        # cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
 
-        cmds.setAttr(f"{nonRollPick}.useRotate", 0)
+        # cmds.setAttr(f"{nonRollPick}.useRotate", 0)
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
-        self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
+        # self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
 
         self.bendys()
 

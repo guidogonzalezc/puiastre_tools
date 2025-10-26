@@ -211,25 +211,6 @@ def build_complete_hierarchy():
             membrane_groups = []
             current_group = []
 
-            # for index, joint in enumerate(skinning_joint_list):
-            #     print(joint)
-            #     if not "PrimaryMembrane" in joint:
-            #         if "Membrane01" in joint:
-            #             membrane_groups.append(current_group)
-            #             current_group = []
-            #             current_group.append(joint)
-
-            #         else:
-            #             current_group.append(joint)
-
-            #         if joint == skinning_joint_list[-1]:
-            #             membrane_groups.append(current_group)
-
-            #     elif "PrimaryMembrane01" in joint:
-            #         current_group = [joint, skinning_joint_list[index + 1], skinning_joint_list[index + 2]]
-            #         membrane_groups.append(current_group)
-
-
             for index, joint in enumerate(skinning_joint_list):
                 if "Membrane01" in joint and not "PrimaryMembrane01" in joint:
                     current_group = [joint, skinning_joint_list[index + 1], skinning_joint_list[index + 2], skinning_joint_list[index + 3]]
@@ -237,12 +218,8 @@ def build_complete_hierarchy():
 
 
                 elif "PrimaryMembrane01" in joint:
-                    current_group = [joint, skinning_joint_list[index + 1], skinning_joint_list[index + 2]]
-                    membrane_groups.append(current_group)
-
-
-            # for index, joint in enumerate(skinning_joint_list):
-                
+                    current_group = [joint, skinning_joint_list[index + 1]]#, skinning_joint_list[index + 2]]
+                    membrane_groups.append(current_group)                
 
             for joint_list in membrane_groups:
                 if joint_list:
