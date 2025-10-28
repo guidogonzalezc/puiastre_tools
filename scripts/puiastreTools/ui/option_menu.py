@@ -16,6 +16,17 @@ reload(rig_builder)
 reload(curve_tool)
 
 
+def vectorify_ui_call(*args):
+    """
+    Function to launch the Vectorify UI.
+
+    This function imports the vectorify module, reloads it to ensure the latest version is used,
+    and then calls the vectorify_ui function to display the UI.
+    """
+    from puiastreTools.tools import vectorify
+    reload(vectorify)
+    vectorify.vectorify_ui()
+
 def reload_ui(*args):
     """
     Function to reload the Puiastre Productions UI.
@@ -139,6 +150,7 @@ def puiastre_ui():
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Animation", subMenu=True, tearOff=True, boldFont=True)
+    cmds.menuItem(label="   Vectorify", command=vectorify_ui_call)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

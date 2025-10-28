@@ -15,46 +15,29 @@ def open_vs_code_ports():
         cmds.commandPort(name="localhost:7001")
 
 def init_puiastre_ui():
-    user = getpass.getuser()
-    main_path = "P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/allowed_users.json"
+    try:
+        import puiastreTools.ui.option_menu as option_menu
+        option_menu.puiastre_ui()
+        print("Puiastre Productions UI loaded successfully.")
+    except ImportError as e:
+        cmds.warning(f"Could not load Puiastre Productions UI: {e}")
+    open_vs_code_ports()
 
-    if os.path.isdir("P:/VFX_Project_20") is False:
-        try:
-            import puiastreTools.ui.option_menu as option_menu
-            option_menu.puiastre_ui()
-        except ImportError as e:
-            cmds.warning(f"Could not load Puiastre Productions UI: {e}")
-        open_vs_code_ports()
-        return
-        
 
-    if not os.path.exists(main_path):
-        cmds.warning("allowed_users.json not found.")
-        return
-
-    with open(main_path, "r") as file:
-        allowed_users = json.load(file)
-
-    allowed = None
-    for allowed, users in allowed_users.items():
-        if user == users:
-            allowed = True
-            break
-
-    if allowed is None:
-        cmds.warning(f"User '{user}' is not authorized to access Puiastre Productions tools.")
-        return
-
+def plugin_loader():
+    if cmds.pluginInfo("ragdoll", query=True, loaded=True):
+        cmds.unloadPlugin("ragdoll")
+        cmds.loadPlugin("ragdoll")
     else:
-        print(f"User '{user}' is authorized. Loading Puiastre Productions tools.")
+        cmds.loadPlugin("ragdoll")
 
-        try:
-            import puiastreTools.ui.option_menu as option_menu
-            option_menu.puiastre_ui()
-            print("Puiastre Productions UI loaded successfully.")
-        except ImportError as e:
-            cmds.warning(f"Could not load Puiastre Productions UI: {e}")
-        open_vs_code_ports()
+    if not cmds.pluginInfo("AdonisFX", query=True, loaded=True):
+        cmds.unloadPlugin("AdonisFX")
+        cmds.loadPlugin("AdonisFX")
+    else:
+        cmds.loadPlugin("AdonisFX")
 
 mu.executeDeferred(init_puiastre_ui)
+
+plugin_loader()
 

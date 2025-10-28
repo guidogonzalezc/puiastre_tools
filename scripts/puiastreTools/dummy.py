@@ -1,25 +1,30 @@
 import maya.cmds as cmds
 
-mirror_transform = cmds.createNode("transform", name="mirror_transform")
+selection = cmds.ls(sl=True)
 
-dupes = []
+if len(selection) < 2:
+    cmds.warning("Please select at least two objects to run the dummy script.")
 
-for item in cmds.listRelatives("guides_GRP", children=True) or []:
-    if "L_" in item:
-        dupe = cmds.duplicate(item, name=item + "_mirror")
-        print(dupe)
-        cmds.parent(dupe[0], mirror_transform)
-        dupes.append(dupe[0])
+else:
+    orginal = selection[0]
+    replaced = selection[1]
+
+    replaced_children = cmds.listRelatives(replaced, shapes=True, fullPath=True) or []
+
+    original_dupe = cmds.duplicate(orginal, name=orginal + "_TEMP_DUPLICATE", renameChildren=True)[0]
+
+    dupe_children = cmds.listRelatives(original_dupe, shapes=True, fullPath=True) or []
+
+    cmds.delete(replaced_children)
+
+    for i, item in enumerate(dupe_children):
+        name = f"{replaced}Shape0{i}"
+        renamed = cmds.rename(item, name)
+        cmds.parent(renamed, replaced, shape=True, relative=True)
+
+    cmds.delete(original_dupe)
 
 
-# print(mirror_transform)
-cmds.setAttr(f"{mirror_transform}.scaleX", -1)
-# r_side = []
-# for item in cmds.ls(sl=True) or []:
-#     if "R_" in item:
-#         r_side.append(item)
-
-# for item in r_side:
-#     for dupe_item in dupes:
-#         if item.replace("R_", "L_").replace("_mirror", "") == dupe_item:
-#             cmds.matchTransform(dupe_item, item, pos=True, rot=False)
+# for item in cmds.ls(sl=True):
+#     cmds.setAttr(f"{item}.overrideEnabled", 1)
+#     cmds.setAttr(f"{item}.overrideColor", 6)

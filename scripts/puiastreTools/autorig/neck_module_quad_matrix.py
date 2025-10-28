@@ -142,9 +142,9 @@ class NeckModule():
         cmds.setAttr(self.main_controllers[1]+".tangentVisibility", channelBox=True)
 
 
-        fk_switch(target= self.main_controllers[1], sources= [self.main_controllers[2], self.main_controllers[0]])
+        fk_switch(target= self.main_controllers[1], sources= [self.main_controllers[2], self.main_controllers[0]], sources_names=["Head", "Neck Base"])
         fk_switch(target= self.main_controllers[2], sources= [self.main_controllers[0]])
-        cmds.setAttr(f"{self.main_controllers[1]}.RotateValue", lock=True, keyable=False)
+        # cmds.setAttr(f"{self.main_controllers[1]}.RotateValue", lock=True, keyable=False)
 
         cmds.addAttr(self.main_controllers[-1], shortName="STRETCH", niceName="Stretch ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.main_controllers[-1]+".STRETCH", channelBox=True, lock=True)
@@ -347,25 +347,41 @@ class NeckModule():
 
         skinning_joints = []
 
-        for ctl in ctls_sub_neck[:-1]:
+        for ctl in ctls_sub_neck:
             name = ctl.replace("AttachedFk_CTL", "_JNT")
             joint_skin = cmds.createNode("joint", n=name, parent=self.skinning_trn, ss=True)
             cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
             skinning_joints.append(joint_skin)
 
+        # movable_ctl = controller_creator(f"{self.side}_movablePivotHead", 
+        #                                                   suffixes=[], 
+        #                                                   lock=["scaleX", "scaleY", "scaleZ", "visibility"], 
+        #                                                   ro=True, 
+        #                                                   parent=self.main_controllers[-1])
+        
+        # for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
+        #     cmds.setAttr(f"{movable_ctl}.{attr}", 0)
+        
+
+        # cmds.connectAttr(f"{movable_ctl}.translate", f"{self.main_controllers[-1]}.rotatePivot") 
+        # cmds.connectAttr(f"{movable_ctl}.translate", f"{self.main_controllers[-1]}.scalePivot") 
+
+        # dummy_body = cmds.createNode("transform", n=f"{self.side}_dummyBody_TRN", p=self.body_ctl) 
 
 
-        ctl, controller_grp = controller_creator(
-                name=f"{self.side}_localHead",
-                suffixes=["GRP", "ANM"],
-                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-                ro=True,
-                parent=self.controllers_trn
-            )
-        cmds.connectAttr(f"{self.guide_matrix[-1]}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix")
-        fk_switch(target = ctl, sources= [ctls_sub_neck[-1], self.main_controllers[-1]], sources_names=["Neck", "Main Head"])
-        joint_skin = cmds.createNode("joint", n=f"{self.side}_localHead_JNT", parent=self.skinning_trn, ss=True)
-        cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
+
+
+        # ctl, controller_grp = controller_creator(
+        #         name=f"{self.side}_localHead",
+        #         suffixes=["GRP", "ANM"],
+        #         lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+        #         ro=True,
+        #         parent=self.controllers_trn
+        #     )
+        # cmds.connectAttr(f"{self.guide_matrix[-1]}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix")
+        # fk_switch(target = ctl, sources= [ctls_sub_neck[-1], self.main_controllers[-1]], sources_names=["Neck", "Main Head"])
+        # joint_skin = cmds.createNode("joint", n=f"{self.side}_localHead_JNT", parent=self.skinning_trn, ss=True)
+        # cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint_skin}.offsetParentMatrix")
         
 
         for name in ["center", "left", "right"]:
