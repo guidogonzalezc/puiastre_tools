@@ -956,7 +956,6 @@ class EyesGuideCreation(GuideCreation):
             position_data, self.sides = curve_to_data()
 
             self.position_data = {
-                    "eyesTransform": get_data(f"{self.sides}_eyesTransform"),
                     "eye": get_data(f"{self.sides}_eye"),
             }
 
@@ -985,7 +984,6 @@ class EyesGuideCreation(GuideCreation):
 
             all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
             self.position_data = {
-                    "eyesTransform": get_data(f"{self.sides}_eyesTransform"),
                     "eye": get_data(f"{self.sides}_eye"),
             }
 
@@ -1036,25 +1034,27 @@ def dino_rebuild_guides():
     core.DataManager.set_guide_data("D:/rigs/cheeta/CHEETAH_002.guides")
     # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
-    guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
-    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
-    cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
-
-    BackLegGuideCreation().create_guides(guides_trn, buffers_trn)   
-    BackLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
-    FrontLegGuideCreation().create_guides(guides_trn, buffers_trn)   
-    FrontLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
-    SpineGuideCreation().create_guides(guides_trn, buffers_trn)
-    NeckGuideCreation().create_guides(guides_trn, buffers_trn)
-    TailGuideCreation().create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="L", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footBack").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="R", limb_name="footFront").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    # guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
+    # buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
+    # cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
+    guides_trn = "guides_GRP"
+    buffers_trn = "buffers_GRP"
+    EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
+    # BackLegGuideCreation().create_guides(guides_trn, buffers_trn)   
+    # BackLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
+    # FrontLegGuideCreation().create_guides(guides_trn, buffers_trn)   
+    # FrontLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
+    # SpineGuideCreation().create_guides(guides_trn, buffers_trn)
+    # NeckGuideCreation().create_guides(guides_trn, buffers_trn)
+    # TailGuideCreation().create_guides(guides_trn, buffers_trn)
+    # FootGuideCreation(side="L", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
+    # FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
+    # FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+    # FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+    # FootFingersGuideCreation(side="L", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    # FootFingersGuideCreation(side="R", limb_name="footFront").create_guides(guides_trn, buffers_trn)
+    # FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
+    # FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
     
 
 # dino_rebuild_guides()
@@ -1112,8 +1112,8 @@ def load_guides(path = ""):
                     HandGuideCreation(side=guide_name.split("_")[0], controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "membran":
                     MembraneCreation(side=guide_name.split("_")[0]).create_guides(guides_trn, buffers_trn)
-                # if guide_info.get("moduleName") == "eye":
-                #     EyesGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "eye":
+                    EyesGuideCreation(side=guide_name.split("_")[0], from_selection=False, input_name=guide_name).create_guides(guides_trn, buffers_trn)
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "frontLegFoot":
                     if "backLegFoot" in guide_name or "frontLegFoot" in guide_name:
                         FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name=guide_info.get("moduleName"), prefix=True).create_guides(guides_trn, buffers_trn)

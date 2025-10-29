@@ -15,7 +15,7 @@ from puiastreTools.autorig import tail_module_matrix as tmm
 from puiastreTools.autorig import skeleton_hierarchy as skh
 from puiastreTools.autorig import membran_module as mm
 from puiastreTools.autorig import finger_module as fm
-# from puiastreTools.autorig import eye_module_matrix as emm
+from puiastreTools.autorig import eye_module as em
 
 
 # Python libraries import
@@ -36,6 +36,7 @@ reload(tmm)
 reload(skh)
 reload(mm)
 reload(fm)
+reload(em)
 
 def rename_ctl_shapes():
     """
@@ -91,15 +92,20 @@ def make(asset_name="dragon"):
 
 
     # DEV COMMANDS
-    # cmds.file(new=True, force=True)
+    cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
 
 
 
-    #UNI
-    core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\MAIASAURA_003.guides")
-    # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/MAIASAURA_001.guides")
+    # UNI
+    core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\AYCHEDRAL_002.guides")
     core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\curves\AYCHEDRAL_curves_001.json")
+    
+    
+    # core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\MAIASAURA_003.guides")
+    # core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\curves\MAIASAURA_curves_001.json")
+
+
 
     # GUIDO
     # core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_010.guides")
@@ -127,13 +133,14 @@ def make(asset_name="dragon"):
 
     except Exception as e:
         om.MGlobal.displayError(f"Error loading guides data: {e}")
-
+    
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
             continue
 
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
+
                 if guide_info.get("moduleName") == "arm":
 
                     lbm.ArmModule(guide_name).make()
@@ -162,8 +169,9 @@ def make(asset_name="dragon"):
 
                     tmm.TailModule().make(guide_name)
                 
-                # if guide_info.get("moduleName") == "facial":
-                #     emm.EyelidModule(guide_name).make()
+                # if guide_info.get("moduleName") == "eye":
+
+                #     em.EyeModule().make(guide_name)
 
                 
 

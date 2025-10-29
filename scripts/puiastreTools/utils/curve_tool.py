@@ -775,10 +775,10 @@ def build_surfaces_from_template(path=None, target_transform_name=None):
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
 
-# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+# core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\curves\AYCHEDRAL_curves_001.json")
 # core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
-# core.DataManager.set_asset_name("Dragon")
-# core.DataManager.set_mesh_data("Puiastre")
+# core.DataManager.set_asset_name("Aychedral")
+# core.DataManager.set_mesh_data("Aychedral")
 # aa = get_all_nurbs_surfaces_data(transform_name="tt")
 # print(aa)
 # build_surfaces_from_template(core.DataManager.get_guide_data(), target_transform_name="tt")

@@ -207,25 +207,21 @@ class MembraneModule(object):
         cmds.connectAttr(f"{main_controller}.Influence", f"{rev}.inputX")
         cmds.connectAttr(f"{rev}.outputX", f"{parentMatrix}.target[{1}].weight")
 
-
-        temp_transform = cmds.createNode("transform", name=f"{self.side}_MainMembrane_TEMP", ss=True)
         for i, joint in enumerate([membran_joints[-1], first_row_closest[-1]]):
 
-            pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_MainMembraneNoRotation0{i}_PMX", ss=True)
+            # pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_MainMembraneNoRotation0{i}_PMX", ss=True)
 
-            cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{parentMatrix}.target[{i}].targetMatrix")
-            cmds.connectAttr(f"{joint}.worldMatrix[0]", f"{pickMatrix}.inputMatrix")
-            cmds.setAttr(f"{pickMatrix}.useRotate", 0)
+            cmds.connectAttr(f"{joint}.worldMatrix[0]", f"{parentMatrix}.target[{i}].targetMatrix")
+            # cmds.connectAttr(f"{joint}.worldMatrix[0]", f"{pickMatrix}.inputMatrix")
+            # cmds.setAttr(f"{pickMatrix}.useRotate", 0)
 
-            cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{temp_transform}.offsetParentMatrix", f=True)
-            offset_masterwalk = self.get_offset_matrix(main_controller_guide, temp_transform)
+            offset_masterwalk = self.get_offset_matrix(main_controller_guide, joint)
             cmds.setAttr(f"{parentMatrix}.target[{i}].offsetMatrix", offset_masterwalk, type="matrix")
 
 
         main_joint = cmds.createNode("joint", name=f"{self.side}_MainMembrane_JNT", ss=True, parent=self.individual_module_grp)
         cmds.connectAttr(f"{main_controller}.worldMatrix[0]", f"{main_joint}.offsetParentMatrix")
 
-        cmds.delete(temp_transform)
 
         third_row_closest = [arm_joints[-1]]
 
@@ -248,6 +244,7 @@ class MembraneModule(object):
         cmds.skinPercent(nurbs_skincluster, f"{self.guides[0]}.cv[1][2]", transformValue=[(arm_joints[6], 0.25), (main_joint, 0.75)])
 
         for i, (u_value, name) in enumerate([(0.33, "Inner"), (0.66, "Outer")]): # (0.5, "Middle")
+            secondary_controllers = []
             for index, v_value in enumerate([0.33, 0.66]):
                 point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{name}Membrane0{index+1}_POSI", ss=True)
                 cmds.setAttr(f"{point_on_surface}.parameterU", u_value)
@@ -278,8 +275,51 @@ class MembraneModule(object):
                 cmds.setAttr(f"{pickMatrix}.useScale", 0)
                 cmds.setAttr(f"{pickMatrix}.useShear", 0)
 
+                main_controller, main_controller_grp = controller_creator(
+                    name=f"{self.side}_{name}PrimaryMembrane0{index+1}",
+                    suffixes=["GRP", "ANM"],
+                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                    ro=True,
+                    parent=self.individual_controllers_grp
+                )
+
+                cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
+
                 joint = cmds.createNode("joint", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
-                cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
+                cmds.connectAttr(f"{main_controller}.worldMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
+
+                if secondary_controllers:
+
+                    # parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_PMX", ss=True)
+                    grp = secondary_controllers[0].replace("_CTL", "_GRP")
+
+                    # cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{parentMatrix}.inputMatrix", force=True)
+                    # cmds.connectAttr(f"{secondary_controllers[0]}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
+                    # cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", self.get_offset_matrix(grp, secondary_controllers[0]), type="matrix")
+
+                    # cmds.addAttr(main_controller, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
+                    # cmds.setAttr(f"{main_controller}.SpaceSwitchSep", channelBox=True, lock=True)   
+
+                    # cmds.addAttr(main_controller, longName="SpaceFollow", attributeType="float", min=0, max=1, defaultValue=1, keyable=True)
+                    # cmds.connectAttr(f"{main_controller}.SpaceFollow", f"{parentMatrix}.target[0].weight", force=True)
+
+                    # multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_MMX", ss=True)
+                    # cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
+                    # cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+                    # cmds.connectAttr(f"{multmatrix}.matrixSum", f"{main_controller_grp[1]}.offsetParentMatrix", force=True)
+
+                    multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_MMX", ss=True)
+                    cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
+                    cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+                    cmds.connectAttr(f"{secondary_controllers[0]}.worldMatrix[0]", f"{multmatrix}.matrixIn[2]", force=True)
+                    cmds.connectAttr(f"{multmatrix}.matrixSum", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
+
+                    # cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
+
+
+                secondary_controllers.append(main_controller)
+                
+
 
 
 

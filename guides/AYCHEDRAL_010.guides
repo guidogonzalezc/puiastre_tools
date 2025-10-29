@@ -1,5 +1,33 @@
 {
-    "Cheetah": {
+    "Aychedral": {
+        "L_eye_GUIDE": {
+            "worldPosition": [
+                83.50188318298953,
+                5.1069977404354425,
+                68.25684892218874
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "eye",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_eye_GUIDE": {
+            "worldPosition": [
+                83.50188318298953,
+                5.1069977404354425,
+                68.25684892218874
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "eye",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
         "L_backToe_GUIDE": {
             "worldPosition": [
                 83.50188318298953,

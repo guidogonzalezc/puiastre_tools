@@ -313,7 +313,17 @@ class FalangeModule(object):
         for i, guide in enumerate(self.guides_matrix):
             joint = cmds.createNode("joint", name=guide.replace("Guide_AMX", "Ik_JNT").replace("Guide_BLM", "Ik_JNT"), ss=True, parent=self.individual_module_grp if not joints else joints[-1])
             if i == 0:
-                cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+                # pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.names[0]}RootIk_PIM", ss=True)
+                # cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{pick_matrix}.inputMatrix")
+                # cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+                # cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
+                blend_matrix = cmds.createNode("blendMatrix", name=f"{self.side}_{self.names[0]}RootIk_BLM", ss=True)
+                cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{blend_matrix}.target[0].targetMatrix")
+                cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{blend_matrix}.inputMatrix")
+                cmds.setAttr(f"{blend_matrix}.target[0].rotateWeight", 0)
+                cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{joint}.offsetParentMatrix")
+
+                # cmds.connectAttr(f"{self.root_ik_ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
             else:
                 temp_trn = cmds.createNode("transform", name=guide.replace("Guide_AMX", "Ik_Temp_TRN").replace("Guide_BLM", "Ik_Temp_TRN"), ss=True)
                 cmds.connectAttr(f"{guide}.outputMatrix", f"{temp_trn}.offsetParentMatrix")
