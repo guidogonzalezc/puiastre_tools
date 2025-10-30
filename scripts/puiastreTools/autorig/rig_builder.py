@@ -141,54 +141,54 @@ def make(asset_name="dragon"):
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
 
-                if guide_info.get("moduleName") == "arm":
+                # if guide_info.get("moduleName") == "arm":
 
-                    lbm.ArmModule(guide_name).make()
+                #     lbm.ArmModule(guide_name).make()
 
-                if guide_info.get("moduleName") == "backLeg":
+                # if guide_info.get("moduleName") == "backLeg":
  
-                    dlm.BackLegModule(guide_name).make()
+                #     dlm.BackLegModule(guide_name).make()
 
-                if guide_info.get("moduleName") == "frontLeg":
+                # if guide_info.get("moduleName") == "frontLeg":
 
-                    dlm.FrontLegModule(guide_name).make()
+                #     dlm.FrontLegModule(guide_name).make()
 
-                if guide_info.get("moduleName") == "hand":
+                # if guide_info.get("moduleName") == "hand":
 
-                    dfl.FalangeModule().hand_distribution(guide_name=guide_name)
+                #     dfl.FalangeModule().hand_distribution(guide_name=guide_name)
 
-                if guide_info.get("moduleName") == "spine":
+                # if guide_info.get("moduleName") == "spine":
                     
-                    spmm.SpineModule().make(guide_name)
+                #     spmm.SpineModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "neck":
+                # if guide_info.get("moduleName") == "neck":
 
-                    nmm.NeckModule().make(guide_name)
+                #     nmm.NeckModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "tail":
+                # if guide_info.get("moduleName") == "tail":
 
-                    tmm.TailModule().make(guide_name)
+                #     tmm.TailModule().make(guide_name)
                 
-                # if guide_info.get("moduleName") == "eye":
+                if guide_info.get("moduleName") == "eye":
 
-                #     em.EyeModule().make(guide_name)
+                    em.EyeModule().make(guide_name)
 
                 
 
-    for template_name, guides in guides_data.items():
-        if not isinstance(guides, dict):
-            continue
+    # for template_name, guides in guides_data.items():
+    #     if not isinstance(guides, dict):
+    #         continue
 
-        for guide_name, guide_info in guides.items():
-            if guide_info.get("moduleName") != "Child":
+    #     for guide_name, guide_info in guides.items():
+    #         if guide_info.get("moduleName") != "Child":
 
-                if guide_info.get("moduleName") == "membran":
-                    mm.MembraneModule().make(guide_name)
+    #             if guide_info.get("moduleName") == "membran":
+    #                 mm.MembraneModule().make(guide_name)
         
-                if guide_info.get("moduleName") == "backLegFoot":
-                    fm.FingersModule().make(guide_name)
+    #             if guide_info.get("moduleName") == "backLegFoot":
+    #                 fm.FingersModule().make(guide_name)
 
-    skeleton_hierarchy = skh.build_complete_hierarchy() 
+    # skeleton_hierarchy = skh.build_complete_hierarchy() 
 
     rename_ctl_shapes()
     joint_label()
