@@ -192,7 +192,7 @@ def make(asset_name="dragon"):
 
     rename_ctl_shapes()
     joint_label()
-    setIsHistoricallyInteresting(0)
+    # setIsHistoricallyInteresting(0)
 
     cmds.inViewMessage(
     amg=f'Completed <hl> {asset_name.capitalize()} RIG</hl> build.',
