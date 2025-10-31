@@ -957,6 +957,7 @@ class EyesGuideCreation(GuideCreation):
 
             self.position_data = {
                     "eye": get_data(f"{self.sides}_eye"),
+                    "endEye": get_data(f"{self.sides}_endEye"),
             }
 
             self.position_data.update(position_data)
@@ -985,6 +986,7 @@ class EyesGuideCreation(GuideCreation):
             all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
             self.position_data = {
                     "eye": get_data(f"{self.sides}_eye"),
+                    "endEye": get_data(f"{self.sides}_endEye"),
             }
 
             for guide in all_child_guides:

@@ -15,6 +15,8 @@ from puiastreTools.utils.space_switch import fk_switch
 
 reload(data_export)
 
+AXIS_VECTOR = {'x': (1, 0, 0), '-x': (-1, 0, 0), 'y': (0, 1, 0), '-y': (0, -1, 0), 'z': (0, 0, 1), '-z': (0, 0, -1)}
+
 class EyeModule():
     """
     Class to create a neck module in a Maya rigging setup.
@@ -29,6 +31,7 @@ class EyeModule():
         """
         
         self.data_exporter = data_export.DataExport()
+
 
         self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
         self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
@@ -49,6 +52,13 @@ class EyeModule():
         self.guide_name = guide_name
 
         self.side = self.guide_name.split("_")[0]
+
+        if self.side == "L":
+            self.primary_aim_vector = om.MVector(AXIS_VECTOR["z"])
+            self.secondary_aim_vector = om.MVector(AXIS_VECTOR["-x"])
+        else:
+            self.primary_aim_vector = om.MVector(AXIS_VECTOR["-z"])
+            self.secondary_aim_vector = om.MVector(AXIS_VECTOR["-x"])
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_eyeModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyeControllers_GRP", ss=True, parent=self.masterWalk_ctl)
@@ -96,7 +106,6 @@ class EyeModule():
 
         point_pos = om.MPoint(*pos)
         closestPoint, paramU = curveFn.closestPoint(point_pos, space=om.MSpace.kWorld)
-        print(closestPoint, paramU, point_pos)
 
         if point:
             return closestPoint
@@ -179,7 +188,18 @@ class EyeModule():
             self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
         cmds.addAttr(self.skinning_trn, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
+        self.curve_guides = []
+        self.guides_transforms = []
+        for guides in self.guides:
+            shape = cmds.listRelatives(guides, shapes=True)[0] if cmds.listRelatives(guides, shapes=True) else None
+            if shape and cmds.objectType(shape) == "nurbsCurve":
+                self.curve_guides.append(guides)
+            else:
+                self.guides_transforms.append(guides)
+
         self.eyelid_rotation = cmds.createNode("aimMatrix", name=f"{self.side}_eyelidRotation_AMX", ss=True)
+
+        
 
         self.eye_direct_ctl, eye_direct_grp = controller_creator(
                     name=f"{self.side}_eyeDirect",
@@ -188,7 +208,32 @@ class EyeModule():
                     ro=True,
                     parent=self.controllers_trn
                 )
-        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{eye_direct_grp[0]}.offsetParentMatrix", force=True)
+
+        cmds.connectAttr(f"{self.guides_transforms[0]}.worldMatrix[0]", f"{self.eyelid_rotation}.inputMatrix", force=True)
+        cmds.connectAttr(f"{self.guides_transforms[1]}.worldMatrix[0]", f"{self.eyelid_rotation}.primaryTargetMatrix", force=True)
+        # cmds.connectAttr(f"{}.worldMatrix[0]", f"{self.eyelid_rotation}.secondaryTargetMatrix", force=True)
+        cmds.setAttr(f"{self.eyelid_rotation}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        cmds.setAttr(f"{self.eyelid_rotation}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{self.eyelid_rotation}.secondaryTargetVector", 0, 0, 1, type="double3")
+        cmds.setAttr(f"{self.eyelid_rotation}.secondaryMode", 2)
+
+        if self.side == "R":
+
+            multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_eyelidRotation_MMX", ss=True)
+            cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(f"{self.eyelid_rotation}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
+            
+            self.eyelid_rotation_matrix = cmds.getAttr(f"{multmatrix}.matrixSum")
+
+
+            cmds.connectAttr(f"{multmatrix}.matrixSum", f"{eye_direct_grp[0]}.offsetParentMatrix", force=True)
+
+        else:
+            self.eyelid_rotation_matrix = cmds.getAttr(f"{self.eyelid_rotation}.outputMatrix")
+            cmds.connectAttr(f"{self.eyelid_rotation}.outputMatrix", f"{eye_direct_grp[0]}.offsetParentMatrix", force=True)
+
+        # cmds.delete(self.eyelid_rotation)
+
 
         cmds.addAttr(self.eye_direct_ctl, shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
         cmds.setAttr(self.eye_direct_ctl+".extraSep", channelBox=True, lock=True)
@@ -202,19 +247,14 @@ class EyeModule():
         blend_matrix_in_out = []
         self.main_ctls = []
         self.main_ctls_grps = []
-        for name, item in zip(["Inner", "Outer"], [0, len(cmds.ls(f"{self.guides[1]}.cv[*]", fl=True)) - 1]):
+        for name, item in zip(["Inner", "Outer"], [0, len(cmds.ls(f"{self.curve_guides[0]}.cv[*]", fl=True)) - 1]):
 
             four_by_four = cmds.createNode("fourByFourMatrix", name=f"{self.side}_eyelid{name}Pos_F4X", ss=True)
-            cmds.setAttr(f"{four_by_four}.in30", cmds.pointPosition(f"{self.guides[1]}.cv[{item}]")[0])
-            cmds.setAttr(f"{four_by_four}.in31", cmds.pointPosition(f"{self.guides[1]}.cv[{item}]")[1])
-            cmds.setAttr(f"{four_by_four}.in32", cmds.pointPosition(f"{self.guides[1]}.cv[{item}]")[2])
+            self.eye_rotation_4b4(four_by_four)
+            cmds.setAttr(f"{four_by_four}.in30", cmds.pointPosition(f"{self.curve_guides[0]}.cv[{item}]")[0])
+            cmds.setAttr(f"{four_by_four}.in31", cmds.pointPosition(f"{self.curve_guides[0]}.cv[{item}]")[1])
+            cmds.setAttr(f"{four_by_four}.in32", cmds.pointPosition(f"{self.curve_guides[0]}.cv[{item}]")[2])
             four_by_fours_in_out.append(four_by_four)
-
-            blend_matrix_mid = cmds.createNode("blendMatrix", name=f"{self.side}_eyelid{name}Pos_BMX", ss=True)
-            cmds.connectAttr(f"{self.eyelid_rotation}.outputMatrix", f"{blend_matrix_mid}.inputMatrix", force=True)
-            cmds.connectAttr(f"{four_by_four}.output", f"{blend_matrix_mid}.target[0].targetMatrix", force=True)
-            cmds.setAttr(f"{blend_matrix_mid}.target[0].rotateWeight", 0)
-            blend_matrix_in_out.append(blend_matrix_mid)
 
             ctl, controller_grp = controller_creator(
                 name=f"{self.side}_{name}EyelidCorner",
@@ -226,56 +266,52 @@ class EyeModule():
             self.main_ctls.append(ctl)
             self.main_ctls_grps.append(controller_grp)
 
-            cmds.connectAttr(f"{blend_matrix_mid}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix", force=True)
+            cmds.connectAttr(f"{four_by_four}.output", f"{controller_grp[0]}.offsetParentMatrix", force=True)
 
-        cmds.connectAttr(f"{four_by_fours_in_out[0]}.output", f"{self.eyelid_rotation}.inputMatrix", force=True)
-        cmds.connectAttr(f"{four_by_fours_in_out[1]}.output", f"{self.eyelid_rotation}.primaryTargetMatrix", force=True)
-        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{self.eyelid_rotation}.secondaryTargetMatrix", force=True)
-        cmds.setAttr(f"{self.eyelid_rotation}.primaryInputAxis", 0, 0, -1, type="double3")
-        cmds.setAttr(f"{self.eyelid_rotation}.secondaryInputAxis", -1, 0, 0, type="double3")
-        cmds.setAttr(f"{self.eyelid_rotation}.secondaryTargetVector", 0, 0, 1, type="double3")
+        # cmds.connectAttr(f"{four_by_fours_in_out[0]}.output", f"{self.eyelid_rotation}.inputMatrix", force=True)
+        # cmds.connectAttr(f"{four_by_fours_in_out[1]}.output", f"{self.eyelid_rotation}.primaryTargetMatrix", force=True)
+        # cmds.connectAttr(f"{self.guides_transforms[0]}.worldMatrix[0]", f"{self.eyelid_rotation}.secondaryTargetMatrix", force=True)
+        # cmds.setAttr(f"{self.eyelid_rotation}.primaryInputAxis", 0, 0, -1, type="double3")
+        # cmds.setAttr(f"{self.eyelid_rotation}.secondaryInputAxis", -1, 0, 0, type="double3")
+        # cmds.setAttr(f"{self.eyelid_rotation}.secondaryTargetVector", 0, 0, 1, type="double3")
         
-        self.eyelid_rotation_matrix = cmds.getAttr(f"{self.eyelid_rotation}.outputMatrix")
+        # self.eyelid_rotation_matrix = cmds.getAttr(f"{self.eyelid_rotation}.outputMatrix")
 
         corner_joints = []
         for ctl, grp in zip(self.main_ctls, self.main_ctls_grps):
-            curve_skinning_joint = cmds.createNode("joint", name=ctl.replace("_CTL", "_JNT"), ss=True)
+            curve_skinning_joint = cmds.createNode("joint", name=ctl.replace("_CTL", "_JNT"), ss=True, p=self.module_trn)
 
             local_mmx = self.local_mmx(ctl, grp[0])
 
             cmds.connectAttr(f"{local_mmx}", f"{curve_skinning_joint}.offsetParentMatrix", force=True)
             corner_joints.append(curve_skinning_joint)
 
-        bezier_curves = []
-        # rebuilded_curves
+        rebuilded_curves = []
 
-        for curve in self.guides[1:]:
+        for curve in self.curve_guides:
             rebuild_curve = cmds.rebuildCurve(curve, name=curve.replace("Curve_GUIDE", "_CRV") ,ch=False, rpo=False, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=4, d=3)[0]
-            bezier_curve_dupe = cmds.duplicate(rebuild_curve, n=curve.replace("Curve_GUIDE", "Bezier_CRV"))[0]
-            cmds.parent(bezier_curve_dupe, rebuild_curve, self.module_trn)
-            cmds.select(bezier_curve_dupe, r=True)
-            cmds.nurbsCurveToBezier()
-            cmds.select(clear=True)   
-            bezier_curves.append(rebuild_curve)
+            cmds.parent(rebuild_curve, self.module_trn)
+            rebuilded_curves.append(rebuild_curve)
 
-        blink_ref = cmds.duplicate(bezier_curves[0], n=f"{self.side}_blinkRef_CRV") # Tabula esto para Oswald
+        blink_ref = cmds.duplicate(rebuilded_curves[0], n=f"{self.side}_blinkRef_CRV") # Tabula esto para Oswald
 
-        blink_ref_bls = cmds.blendShape(bezier_curves[1], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
+        blink_ref_bls = cmds.blendShape(rebuilded_curves[1], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
 
         cmds.connectAttr(self.eye_direct_ctl+".blinkHeight", f"{blink_ref_bls}.weight[0]")
 
         negative_curves = []
-        for i, curve in enumerate(bezier_curves):
+        for i, curve in enumerate(rebuilded_curves):
             negative_blink_curve = cmds.duplicate(curve, n=curve.replace("_CRV", f"NegativeBlinkRef_CRV"))
             value = 0 if i != 0 else 1
-            bls_tmp = cmds.blendShape(bezier_curves[value], negative_blink_curve, n=curve.replace("_CRV", f"NegativeBlinkRef_BLS"))[0]
+            bls_tmp = cmds.blendShape(rebuilded_curves[value], negative_blink_curve, n=curve.replace("_CRV", f"NegativeBlinkRef_BLS"))[0]
             cmds.setAttr(f"{bls_tmp}.weight[0]", -1)
             cmds.delete(negative_blink_curve, constructionHistory=True)
             negative_curves.append(negative_blink_curve)
 
         blink_end_curves = []
+        bls_name = []
 
-        for i, curves in enumerate(bezier_curves):
+        for i, curves in enumerate(rebuilded_curves):
             name = curves.replace("_CRV", f"Blink")
             blink_curve = cmds.duplicate(curves, n=curves.replace("_CRV", f"Blink_CRV"))[0]
 
@@ -299,8 +335,9 @@ class EyeModule():
             cmds.connectAttr(flm+".outFloat", f"{blink_bls}.weight[2]")
 
             blink_end_curves.append(blink_curve)
+            bls_name.append(blink_bls)
 
-        for index_main, curve in enumerate(blink_end_curves):
+        for index_main, curve in enumerate(rebuilded_curves):
          
             four_by_four_mid = cmds.createNode("fourByFourMatrix", name=curve.replace("_CRV", f"Middle_F4X"), ss=True)
 
@@ -321,30 +358,28 @@ class EyeModule():
                 )
             cmds.connectAttr(f"{four_by_four_mid}.output", f"{mid_controller_grp[0]}.offsetParentMatrix", force=True)
            
-            secondary_ctls = []
             joint_skinning_joints = []
 
-            dupe = cmds.duplicate(bezier_curves[index_main], name=f"{curve.replace('Blink_CRV', 'End_CRV')}")[0]
-            blink_ref_bls = cmds.blendShape(curve, dupe, n=f"{curve.replace('Blink_CRV', 'End_BLS')}")[0]
-            cmds.setAttr(f"{blink_ref_bls}.weight[0]", 1)
-
             for i, cv_index in enumerate([2, 3, 4]): # 3 6 9
-
                 ctl, controller_grp = controller_creator(
-                    name=f"{curve.replace('Blink_CRV', f'Secondary0{i+1}')}",
+                    name=f"{curve.replace('_CRV', f'Secondary0{i+1}')}",
                     suffixes=["GRP", "OFF","ANM"],
                     lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                     ro=True,
                     parent=self.controllers_trn
                 )
 
-                curve_shape = cmds.listRelatives(curve, shapes=True)[0]
+                four_by_four_mid = cmds.createNode("fourByFourMatrix", name=curve.replace("_CRV", f"Middle_F4X"), ss=True)
 
-                u_value = self.getClosestParamToWorldMatrix(curve=curve, pos=cmds.pointPosition(f"{curve}.cv[{cv_index}]"), point=False)
+                pos = self.getClosestParamToWorldMatrix(curve = curve, pos = cmds.pointPosition(f"{curve}.cv[{cv_index}]"), point=True)
 
-                four_by_four_secondary = self.curve_attachment(name=ctl.replace("_CTL", ""), curve_shape=curve_shape, u_value=u_value)
+                self.eye_rotation_4b4(four_by_four_mid)
 
-                cmds.connectAttr(f"{four_by_four_secondary}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix", force=True)
+                cmds.setAttr(f"{four_by_four_mid}.in30", pos[0])
+                cmds.setAttr(f"{four_by_four_mid}.in31", pos[1])
+                cmds.setAttr(f"{four_by_four_mid}.in32", pos[2])
+
+                cmds.connectAttr(f"{four_by_four_mid}.output", f"{controller_grp[0]}.offsetParentMatrix", force=True)
 
                 if cv_index == 2: # 3
                     multmatrix = self.local_space_parent(ctl, parents=[self.main_ctls[0], mid_ctl], default_weights=0.8)
@@ -356,11 +391,7 @@ class EyeModule():
                     cmds.connectAttr(f"{controller_grp[0]}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
                     cmds.connectAttr(f"{multmatrix}.matrixSum", f"{controller_grp[1]}.offsetParentMatrix", force=True)
 
-                cmds.connectAttr(f"{four_by_four_secondary}.outputMatrix", f"{multmatrix}.matrixIn[2]", force=True)
-                cmds.setAttr(f"{multmatrix}.matrixIn[3]", cmds.getAttr(f"{controller_grp[0]}.worldInverseMatrix[0]"), type="matrix")
-
-
-                curve_skinning_joint = cmds.createNode("joint", name=ctl.replace("_CTL", f"CurveSkinning_JNT"), ss=True)
+                curve_skinning_joint = cmds.createNode("joint", name=ctl.replace("_CTL", f"CurveSkinning_JNT"), ss=True, parent=self.module_trn)
 
                 local_mmx = self.local_mmx(ctl, controller_grp[0])
 
@@ -369,65 +400,30 @@ class EyeModule():
                 joint_skinning_joints.append(curve_skinning_joint)
 
                 if i == 2:
-                    skinCluster = cmds.skinCluster(joint_skinning_joints, corner_joints, dupe, n=curve.replace("_CRV", "_SKC"), toSelectedBones=True, maximumInfluences=1, normalizeWeights=1)[0]
+                    skinCluster = cmds.skinCluster(joint_skinning_joints, corner_joints, curve, n=curve.replace("_CRV", "_SKC"), toSelectedBones=True, maximumInfluences=1, normalizeWeights=1)[0]
 
-                # attr = "upper" if "upper" in curve.lower() else "lower"
+            for i, cv in enumerate(cmds.ls(f"{self.curve_guides[index_main]}.cv[*]", fl=True)):
+                name = f"{cv.split('.')[0].replace('Curve_GUIDE', 'Aim')}0{i+1}"
+                pick = self.curve_attachment(name=name, curve_shape=blink_end_curves[index_main], u_value=self.getClosestParamToWorldMatrix(curve=blink_end_curves[index_main], pos=cmds.pointPosition(cv)))
+                aim_matrix = cmds.createNode("aimMatrix", name=f"{name}_AMX", ss=True)
+                cmds.connectAttr(f"{self.guides_transforms[0]}.worldMatrix[0]", f"{aim_matrix}.inputMatrix", force=True)
+                cmds.connectAttr(f"{pick}.outputMatrix", f"{aim_matrix}.primaryTargetMatrix", force=True)
+                cmds.setAttr(f"{aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+                cmds.setAttr(f"{aim_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
 
-                # for j, value in enumerate([-1, 1]):
-                #     name = "First" if j == 0 else "Second"
+                value = (0, 0, 1) if self.side == "L" else (0, 0, -1)
 
+                cmds.setAttr(f"{aim_matrix}.secondaryTargetVector", *value, type="double3")
+                cmds.setAttr(f"{aim_matrix}.secondaryMode", 2)
 
-                #     name = f"{curve.replace('_CRV', f'{name}Tanget0{i+1}')}"
+                multmatrix = cmds.createNode("multMatrix", name=f"{name}_MMX", ss=True)
+                cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
 
-                #     ctl_tan, controller_grp_tan = controller_creator(
-                #     name=name,
-                #     suffixes=["GRP", "OFF","ANM"],
-                #     lock=["rotateZ", "rotateY","rotateZ", "scaleX", "scaleY", "scaleZ", "visibility"],
-                #     ro=True,
-                #     parent=self.tangent_controllers_trn
-                #     )
+                fourbyfour = cmds.createNode("fourByFourMatrix", name=f"{name}_F4X", ss=True)
+                dist = (om.MVector(*cmds.xform(self.guides_transforms[0], q=1, ws=1, t=1)) - om.MVector(*cmds.xform(self.guides_transforms[1], q=1, ws=1, t=1))).length()
+                cmds.setAttr(f"{fourbyfour}.in32", dist if self.side == "L" else -dist)
+                cmds.connectAttr(f"{fourbyfour}.output", f"{multmatrix}.matrixIn[0]", force=True)
 
-                #     curve_shape = cmds.listRelatives(dupe, shapes=True)[0]
+                joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
 
-                #     u_value = self.getClosestParamToWorldMatrix(curve=dupe, pos=cmds.pointPosition(f"{curve}.cv[{cv_index+value}]"), point=False)
-
-                #     four_by_four_secondary = self.curve_attachment(name=ctl.replace("_CTL", ""), curve_shape=curve_shape, u_value=u_value)
-
-                #     cmds.connectAttr(f"{four_by_four_secondary}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix", force=True)
-                    
-                #     four_by_four_tangent = cmds.createNode("fourByFourMatrix", name=curve.replace("_CRV", f'{name}Tangets0{j+1}'), ss=True)
-
-                #     self.eye_rotation_4b4(four_by_four_tangent)
-
-                #     cmds.setAttr(f"{four_by_four_tangent}.in30", cmds.pointPosition(f"{curve}.cv[{cv_index+value}]")[0])
-                #     cmds.setAttr(f"{four_by_four_tangent}.in31", cmds.pointPosition(f"{curve}.cv[{cv_index+value}]")[1])
-                #     cmds.setAttr(f"{four_by_four_tangent}.in32", cmds.pointPosition(f"{curve}.cv[{cv_index+value}]")[2])
-
-                #     blend_matrix_tangent = cmds.createNode("blendMatrix", name=curve.replace("_CRV", f'{name}Tangets0{j+1}'), ss=True)
-                #     cmds.connectAttr(f"{self.eyelid_rotation}.outputMatrix", f"{blend_matrix_tangent}.inputMatrix", force=True)
-                #     cmds.connectAttr(f"{four_by_four_tangent}.output", f"{blend_matrix_tangent}.target[0].targetMatrix", force=True)
-                #     cmds.setAttr(f"{blend_matrix_tangent}.target[0].rotateWeight", 0)
-
-                #     cmds.connectAttr(f"{four_by_four_tangent}.output", f"{controller_grp_tan[0]}.offsetParentMatrix", force=True)
-
-                #     parent_matrix = cmds.createNode("parentMatrix", name=f"{name}localSpaceParent_PMX", ss=True)
-                #     cmds.connectAttr(f"{controller_grp_tan[0]}.worldMatrix[0]", f"{parent_matrix}.inputMatrix", force=True)
-                #     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{parent_matrix}.target[1].targetMatrix", force=True)
-                #     cmds.setAttr(f"{parent_matrix}.target[1].offsetMatrix", self.get_offset_matrix(controller_grp_tan[0], ctl), type="matrix")
-
-                #     multmatrix = cmds.createNode("multMatrix", name=f"{name}localSpaceParent_MMX", ss=True)
-                #     cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
-                #     cmds.connectAttr(f"{controller_grp_tan[0]}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
-                #     cmds.connectAttr(f"{multmatrix}.matrixSum", f"{controller_grp_tan[1]}.offsetParentMatrix", force=True)
-
-                #     curve_skinning_joint = cmds.createNode("joint", name=f"{name}CurveSkinning_JNT", ss=True)
-
-                #     local_mmx = self.local_mmx(ctl_tan, controller_grp_tan[0])
-
-                #     cmds.connectAttr(f"{local_mmx}", f"{curve_skinning_joint}.offsetParentMatrix", force=True)
-
-
-
-
-
-                
+                cmds.connectAttr(f"{multmatrix}.matrixSum", f"{joint}.offsetParentMatrix", force=True)
