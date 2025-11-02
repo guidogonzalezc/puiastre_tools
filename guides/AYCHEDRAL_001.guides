@@ -1,5 +1,19 @@
 {
-    "Dragon": {
+    "AYCHEDRAL": {
+        "L_endEye_GUIDE": {
+            "worldPosition": [
+                19.854232788085938,
+                364.13946533203125,
+                613.9234619140625
+            ],
+            "parent": "L_eye_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
         "L_lowerEyelidCurve_GUIDE": {
             "cvs": [
                 [
@@ -160,6 +174,20 @@
             "jointTwist": "Child",
             "type": 0,
             "moduleName": "eye",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_endEye_GUIDE": {
+            "worldPosition": [
+                -19.855,
+                364.13946533203125,
+                613.92333984375
+            ],
+            "parent": "R_eye_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
@@ -330,9 +358,9 @@
         },
         "L_backToe_GUIDE": {
             "worldPosition": [
-                83.50188318298953,
-                5.1069977404354425,
-                68.25684892218874
+                86.21012436991293,
+                4.738108369464779,
+                66.15769006624393
             ],
             "parent": "L_backFoot_GUIDE",
             "jointTwist": "Child",
@@ -344,9 +372,9 @@
         },
         "L_backFoot_GUIDE": {
             "worldPosition": [
-                82.5394916264609,
-                23.004160301846085,
-                -9.580613851719868
+                78.22016962757606,
+                22.824641033251794,
+                -11.230572582263818
             ],
             "parent": "L_backAnkle_GUIDE",
             "jointTwist": "Child",
@@ -358,9 +386,9 @@
         },
         "L_backAnkle_GUIDE": {
             "worldPosition": [
-                77.53471402175293,
-                116.07575654303923,
-                -51.68639907430237
+                71.0335967060705,
+                116.0687436520057,
+                -52.6329574342707
             ],
             "parent": "L_backKnee_GUIDE",
             "jointTwist": "Child",
@@ -372,9 +400,9 @@
         },
         "L_backKnee_GUIDE": {
             "worldPosition": [
-                74.20195744551033,
-                178.05353036908153,
-                30.61520558440992
+                76.70283659594597,
+                177.91426295700808,
+                29.64035114872683
             ],
             "parent": "L_hip_GUIDE",
             "jointTwist": "Child",
@@ -386,9 +414,9 @@
         },
         "L_hip_GUIDE": {
             "worldPosition": [
-                66.96232502197716,
-                312.68571566816155,
-                -10.653237827731694
+                68.168,
+                312.752,
+                -10.699
             ],
             "parent": "guides_GRP",
             "jointTwist": 5.0,
@@ -406,7 +434,7 @@
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
-            "type": 0,
+            "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child",
@@ -449,7 +477,7 @@
             "parent": "guides_GRP",
             "jointTwist": 5.0,
             "type": 0,
-            "moduleName": "spine",
+            "moduleName": "spineQuad",
             "prefix": "Child",
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
@@ -491,7 +519,7 @@
             "parent": "guides_GRP",
             "jointTwist": 5.0,
             "type": 0,
-            "moduleName": "neck",
+            "moduleName": "neckQuad",
             "prefix": "Child",
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
@@ -672,7 +700,7 @@
             ],
             "parent": "L_clavicle_GUIDE",
             "jointTwist": "Child",
-            "type": 0,
+            "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child",
@@ -939,7 +967,7 @@
             "parent": "guides_GRP",
             "jointTwist": "Child",
             "type": 0,
-            "moduleName": "hand",
+            "moduleName": "handQuad",
             "prefix": "Child",
             "controllerNumber": 4,
             "guide_type_object": "Guide"
@@ -2011,53 +2039,11 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "L_pinky03_GUIDE": {
-            "worldPosition": [
-                123.05177307128906,
-                12.558343887329102,
-                33.8492317199707
-            ],
-            "parent": "L_pinky02_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
-        "L_pinky02_GUIDE": {
-            "worldPosition": [
-                113.0722885131836,
-                20.205533981323242,
-                14.009004592895508
-            ],
-            "parent": "L_pinky01_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
-        "L_pinky01_GUIDE": {
-            "worldPosition": [
-                102.26726531982422,
-                14.537446022033691,
-                -8.506991386413574
-            ],
-            "parent": "L_middle03_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
         "L_middle03_GUIDE": {
             "worldPosition": [
-                94.23251342773438,
-                11.33678150177002,
-                59.75160217285156
+                115.23337980942979,
+                11.30238020290889,
+                39.90251052348965
             ],
             "parent": "L_middle02_GUIDE",
             "jointTwist": "Child",
@@ -2069,9 +2055,9 @@
         },
         "L_middle02_GUIDE": {
             "worldPosition": [
-                90.96257019042969,
-                24.329076766967773,
-                31.858304977416992
+                104.99097351908158,
+                14.593282212029834,
+                18.15220297837231
             ],
             "parent": "L_middle01_GUIDE",
             "jointTwist": "Child",
@@ -2083,9 +2069,9 @@
         },
         "L_middle01_GUIDE": {
             "worldPosition": [
-                87.990234375,
-                16.639463424682617,
-                4.163076877593994
+                99.63034768584005,
+                13.408669720757805,
+                5.080949019885821
             ],
             "parent": "L_index03_GUIDE",
             "jointTwist": "Child",
@@ -2097,9 +2083,9 @@
         },
         "L_index03_GUIDE": {
             "worldPosition": [
-                60.902835845947266,
-                6.46720552444458,
-                51.25368118286133
+                79.42671282778416,
+                11.666278250595926,
+                61.381569327664906
             ],
             "parent": "L_index02_GUIDE",
             "jointTwist": "Child",
@@ -2111,9 +2097,9 @@
         },
         "L_index02_GUIDE": {
             "worldPosition": [
-                62.729713439941406,
-                18.191743850708008,
-                31.39507484436035
+                79.68088638382618,
+                18.603981401329165,
+                31.72594750750411
             ],
             "parent": "L_index01_GUIDE",
             "jointTwist": "Child",
@@ -2125,9 +2111,9 @@
         },
         "L_index01_GUIDE": {
             "worldPosition": [
-                67.53294372558594,
-                13.919435501098633,
-                0.21138741075992584
+                79.6302625191309,
+                14.579364779408076,
+                10.503383000469938
             ],
             "parent": "L_thumb03_GUIDE",
             "jointTwist": "Child",
@@ -2139,9 +2125,9 @@
         },
         "L_thumb03_GUIDE": {
             "worldPosition": [
-                43.064361572265625,
-                11.899592399597168,
-                -1.0420197248458862
+                46.39527657974044,
+                10.094114826296241,
+                51.538120282440076
             ],
             "parent": "L_thumb02_GUIDE",
             "jointTwist": "Child",
@@ -2153,9 +2139,9 @@
         },
         "L_thumb02_GUIDE": {
             "worldPosition": [
-                48.35829544067383,
-                19.44305992126465,
-                -7.957365989685059
+                52.998200667922475,
+                16.658593757897577,
+                25.428917557455232
             ],
             "parent": "L_thumb01_GUIDE",
             "jointTwist": "Child",
@@ -2167,16 +2153,16 @@
         },
         "L_thumb01_GUIDE": {
             "worldPosition": [
-                55.265010833740234,
-                25.12197494506836,
-                -16.687789916992188
+                58.06864610735939,
+                14.501643213639223,
+                5.379423406647452
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
             "type": 0,
             "moduleName": "backLegFoot",
             "prefix": "Child",
-            "controllerNumber": "Child",
+            "controllerNumber": 3,
             "guide_type_object": "Guide"
         },
         "R_firstFinger03_GUIDE": {
@@ -2412,7 +2398,7 @@
             "parent": "guides_GRP",
             "jointTwist": "Child",
             "type": 0,
-            "moduleName": "hand",
+            "moduleName": "handQuad",
             "prefix": "Child",
             "controllerNumber": 4,
             "guide_type_object": "Guide"
@@ -2467,7 +2453,7 @@
             ],
             "parent": "R_clavicle_GUIDE",
             "jointTwist": "Child",
-            "type": 0,
+            "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child",
@@ -2557,53 +2543,11 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "R_pinky03_GUIDE": {
-            "worldPosition": [
-                -123.05177307128906,
-                12.558343887329102,
-                33.8492317199707
-            ],
-            "parent": "R_pinky02_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
-        "R_pinky02_GUIDE": {
-            "worldPosition": [
-                -113.0722885131836,
-                20.205533981323242,
-                14.009004592895508
-            ],
-            "parent": "R_pinky01_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
-        "R_pinky01_GUIDE": {
-            "worldPosition": [
-                -102.26726531982422,
-                14.537446022033691,
-                -8.506991386413574
-            ],
-            "parent": "R_middle03_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
         "R_middle03_GUIDE": {
             "worldPosition": [
-                -94.23251342773438,
-                11.33678150177002,
-                59.75160217285156
+                -115.23337980942979,
+                11.30238020290889,
+                39.90251052348965
             ],
             "parent": "R_middle02_GUIDE",
             "jointTwist": "Child",
@@ -2615,9 +2559,9 @@
         },
         "R_middle02_GUIDE": {
             "worldPosition": [
-                -90.96257019042969,
-                24.329076766967773,
-                31.858304977416992
+                -104.99097351908158,
+                14.593282212029834,
+                18.15220297837231
             ],
             "parent": "R_middle01_GUIDE",
             "jointTwist": "Child",
@@ -2629,9 +2573,9 @@
         },
         "R_middle01_GUIDE": {
             "worldPosition": [
-                -87.990234375,
-                16.639463424682617,
-                4.163076877593994
+                -99.63034768584005,
+                13.408669720757805,
+                5.080949019885821
             ],
             "parent": "R_index03_GUIDE",
             "jointTwist": "Child",
@@ -2643,9 +2587,9 @@
         },
         "R_index03_GUIDE": {
             "worldPosition": [
-                -60.902835845947266,
-                6.46720552444458,
-                51.25368118286133
+                -79.42671282778416,
+                11.666278250595926,
+                61.381569327664906
             ],
             "parent": "R_index02_GUIDE",
             "jointTwist": "Child",
@@ -2657,9 +2601,9 @@
         },
         "R_index02_GUIDE": {
             "worldPosition": [
-                -62.729713439941406,
-                18.191743850708008,
-                31.39507484436035
+                -79.68088638382618,
+                18.603981401329165,
+                31.72594750750411
             ],
             "parent": "R_index01_GUIDE",
             "jointTwist": "Child",
@@ -2671,9 +2615,9 @@
         },
         "R_index01_GUIDE": {
             "worldPosition": [
-                -67.53294372558594,
-                13.919435501098633,
-                0.21138741075992584
+                -79.6302625191309,
+                14.579364779408076,
+                10.503383000469938
             ],
             "parent": "R_thumb03_GUIDE",
             "jointTwist": "Child",
@@ -2685,9 +2629,9 @@
         },
         "R_thumb03_GUIDE": {
             "worldPosition": [
-                -43.064361572265625,
-                11.899592399597168,
-                -1.0420197248458862
+                -46.39527657974044,
+                10.094114826296241,
+                51.538120282440076
             ],
             "parent": "R_thumb02_GUIDE",
             "jointTwist": "Child",
@@ -2699,9 +2643,9 @@
         },
         "R_thumb02_GUIDE": {
             "worldPosition": [
-                -48.35829544067383,
-                19.44305992126465,
-                -7.957365989685059
+                -52.998200667922475,
+                16.658593757897577,
+                25.428917557455232
             ],
             "parent": "R_thumb01_GUIDE",
             "jointTwist": "Child",
@@ -2713,16 +2657,16 @@
         },
         "R_thumb01_GUIDE": {
             "worldPosition": [
-                -55.265010833740234,
-                25.12197494506836,
-                -16.687789916992188
+                -58.06864610735939,
+                14.501643213639223,
+                5.379423406647452
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
             "type": 0,
             "moduleName": "backLegFoot",
             "prefix": "Child",
-            "controllerNumber": "Child",
+            "controllerNumber": 3,
             "guide_type_object": "Guide"
         },
         "R_backToe_GUIDE": {
@@ -2789,7 +2733,7 @@
             ],
             "parent": "R_hip_GUIDE",
             "jointTwist": "Child",
-            "type": 0,
+            "type": "Child",
             "moduleName": "Child",
             "prefix": "Child",
             "controllerNumber": "Child",

@@ -9,8 +9,10 @@ from puiastreTools.utils import core
 from puiastreTools.autorig import limb_module_matrix as lbm
 from puiastreTools.autorig import dragon_falanges as dfl
 from puiastreTools.autorig import dragon_leg_matrix as dlm
-from puiastreTools.autorig import neck_module_quad_matrix as nmm
-from puiastreTools.autorig import spine_module_biped_matrix as spmm
+from puiastreTools.autorig import neck_quad as nkq
+from puiastreTools.autorig import neck_biped as nkb
+from puiastreTools.autorig import spine_quad as spq
+from puiastreTools.autorig import spine_biped as spb
 from puiastreTools.autorig import tail_module_matrix as tmm
 from puiastreTools.autorig import skeleton_hierarchy as skh
 from puiastreTools.autorig import membran_module as mm
@@ -23,6 +25,7 @@ import maya.cmds as cmds
 from importlib import reload
 import json
 import maya.api.OpenMaya as om
+import os
 
 reload(basic_structure)
 reload(core)
@@ -30,13 +33,15 @@ reload(data_export)
 reload(lbm)
 reload(dfl)
 reload(dlm)
-reload(nmm)
-reload(spmm)
+reload(nkq)
+reload(nkb)
+reload(spq)
 reload(tmm)
 reload(skh)
 reload(mm)
 reload(fm)
 reload(em)
+reload(spb)
 
 def rename_ctl_shapes():
     """
@@ -83,7 +88,7 @@ def joint_label():
         cmds.setAttr(jnt + ".type", 18)
         cmds.setAttr(jnt + ".otherType", jnt.split("_")[1], type= "string")
 
-def make(asset_name="dragon"):
+def make():
     """
     Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
@@ -92,48 +97,36 @@ def make(asset_name="dragon"):
 
 
     # DEV COMMANDS
-    # cmds.file(new=True, force=True)
+    cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
 
+    # REL PATH
+    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
+    # Append the paths to DataManager
+    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\moana_001.guides")) # MAIASAURA_003.guides
+    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\AYCHEDRAL_curves_001.json")) # MAIASAURA_curves_001.json
 
-    # UNI
-    # core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\AYCHEDRAL_002.guides")
-    # core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\curves\AYCHEDRAL_curves_001.json")
-    
-    
-    # core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\MAIASAURA_003.guides")
-    # core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\curves\MAIASAURA_curves_001.json")
-
-
-
-    # GUIDO
-    core.DataManager.set_guide_data("D:/git/maya/puiastre_tools/guides/AYCHEDRAL_004.guides")
-    core.DataManager.set_ctls_data("D:/git/maya/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
-    # core.DataManager.set_guide_data("D:/rigs/cheeta/CHEETAH_002.guides")
-    # core.DataManager.set_ctls_data("D:/rigs/cheeta/CHEETAH_001.ctls")
-
-    # LAIA
-    # core.DataManager.set_guide_data("C:/3ero/TFG/puiastre_tools/guides/AYCHEDRAL_007.guides")
-    # core.DataManager.set_ctls_data("C:/3ero/TFG/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
-
+    # Create a new data export instance and generate build data
     data_exporter = data_export.DataExport()
     data_exporter.new_build()
-    if not asset_name:
-        asset_name = "asset"
-    basic_structure.create_basic_structure(asset_name=asset_name)
 
     final_path = core.DataManager.get_guide_data()
-    core.DataManager.set_asset_name("Dragon")
-    core.DataManager.set_mesh_data("Puiastre")
 
+    # Load guides data from the specified file
     try:
         with open(final_path, "r") as infile:
             guides_data = json.load(infile)
 
     except Exception as e:
         om.MGlobal.displayError(f"Error loading guides data: {e}")
-    
+
+    # Set asset name and mesh data in DataManager
+    core.DataManager.set_asset_name(list(guides_data.keys())[0])
+    core.DataManager.set_mesh_data(guides_data["meshes"])
+    basic_structure.create_basic_structure(asset_name=core.DataManager.get_asset_name())
+
+    # Loop through guides data and create modules based on guide information
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
             continue
@@ -144,6 +137,10 @@ def make(asset_name="dragon"):
                 if guide_info.get("moduleName") == "arm":
 
                     lbm.ArmModule(guide_name).make()
+                
+                if guide_info.get("moduleName") == "leg":
+
+                    lbm.LegModule(guide_name).make()
 
                 if guide_info.get("moduleName") == "backLeg":
  
@@ -153,17 +150,25 @@ def make(asset_name="dragon"):
 
                     dlm.FrontLegModule(guide_name).make()
 
-                if guide_info.get("moduleName") == "hand":
+                if guide_info.get("moduleName") == "handQuad":
 
                     dfl.FalangeModule().hand_distribution(guide_name=guide_name)
 
+                if guide_info.get("moduleName") == "spineQuad":
+                    
+                    spq.SpineModule().make(guide_name)
+
                 if guide_info.get("moduleName") == "spine":
                     
-                    spmm.SpineModule().make(guide_name)
+                    spb.SpineModule().make(guide_name)
 
+                if guide_info.get("moduleName") == "neckQuad":
+
+                    nkq.NeckModule().make(guide_name)
+                
                 if guide_info.get("moduleName") == "neck":
 
-                    nmm.NeckModule().make(guide_name)
+                    nkb.NeckModule().make(guide_name, num_joints=guide_info.get("jointTwist", 5))
 
                 if guide_info.get("moduleName") == "tail":
 
@@ -174,7 +179,7 @@ def make(asset_name="dragon"):
                 #     em.EyeModule().make(guide_name)
 
                 
-
+    # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
             continue
@@ -188,14 +193,17 @@ def make(asset_name="dragon"):
                 if guide_info.get("moduleName") == "backLegFoot":
                     fm.FingersModule().make(guide_name)
 
+    # Create the skeleton hierarchy and spaces
     skeleton_hierarchy = skh.build_complete_hierarchy() 
 
+    # End commands to clean the scene
     rename_ctl_shapes()
     joint_label()
     setIsHistoricallyInteresting(0)
 
+    # End message
     cmds.inViewMessage(
-    amg=f'Completed <hl> {asset_name.capitalize()} RIG</hl> build.',
+    amg=f'Completed <hl> {core.DataManager.get_asset_name().capitalize()} RIG</hl> build.',
     pos='midCenter',
     fade=True,
     alpha=0.8)

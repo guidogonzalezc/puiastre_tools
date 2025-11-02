@@ -756,18 +756,22 @@ class LimbModule(object):
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
+        
+        try:
+            skinning_joints = self.bendys()
+            self.distance = guide_import(f"{self.side}_shoulderFrontDistance_GUIDE", all_descendents=False)[0]
+            pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_shoulderFrontDistancePos_MMX", ss=True)
+            cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
 
-        skinning_joints = self.bendys()
-        self.distance = guide_import(f"{self.side}_shoulderFrontDistance_GUIDE", all_descendents=False)[0]
-        pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_shoulderFrontDistancePos_MMX", ss=True)
-        cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+            inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_shoulderFrontDistanceInverse_MTX", ss=True)
+            cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
+            cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+            distance_joints = cmds.createNode("joint", name=f"{self.side}_shoulderFrontDistance_JNT", ss=True, parent = self.muscle_locators)
+            cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
-        inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_shoulderFrontDistanceInverse_MTX", ss=True)
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
-        cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
-        distance_joints = cmds.createNode("joint", name=f"{self.side}_shoulderFrontDistance_JNT", ss=True, parent = self.muscle_locators)
-        cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
+        except Exception as e:
+            pass
 
     def get_offset_matrix(self, child, parent):
         """
@@ -1090,7 +1094,7 @@ class LimbModule(object):
         ball_joint = cmds.createNode("joint", name=f"{self.side}_{self.module_name}Ball_JNT", ss=True, parent=self.skinnging_grp)
 
         cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{ball_joint}.offsetParentMatrix") 
-
+        
 
 
 class ArmModule(LimbModule):
