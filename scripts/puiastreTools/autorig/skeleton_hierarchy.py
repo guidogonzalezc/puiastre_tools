@@ -167,7 +167,7 @@ def build_complete_hierarchy():
 
     for i, skinning_joint_list in enumerate(skinning_joints):
         if i != spine_index:
-            if "backLeg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0]:
+            if "backLeg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0] or "leg" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
                 leg_joints.append(joints[-1])
             elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0] or "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
@@ -230,7 +230,7 @@ def build_complete_hierarchy():
                         parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
 
         # ===== SPACE SWITCHES ===== #
-        if "backLeg" in skel_grps[i]:
+        if "backLeg" in skel_grps[i] or "leg" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
             pv = data_exporter.get_data(modules_name[i], "pv_ctl")
             root = data_exporter.get_data(modules_name[i], "root_ctl")

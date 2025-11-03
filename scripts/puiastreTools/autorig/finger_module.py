@@ -180,13 +180,13 @@ class FingersModule(object):
         thumb_guides = [finger for finger in self.fingers if "thumb" in finger]
         index_guides = [finger for finger in self.fingers if "index" in finger]
         middle_guides = [finger for finger in self.fingers if "middle" in finger]
-        pinky_guides = [finger for finger in self.fingers if "pinky" in finger]
+        # pinky_guides = [finger for finger in self.fingers if "pinky" in finger]
 
         self.controllers = []
 
         self.ik_controllers = []
 
-        for i, finger in enumerate([thumb_guides, index_guides, middle_guides, pinky_guides]):
+        for i, finger in enumerate([thumb_guides, index_guides, middle_guides]):
             finger_name = ''.join([c for c in finger[0].split('_')[1] if not c.isdigit()])
             
 

@@ -593,8 +593,8 @@ class JawModule():
 
 cmds.file(new=True, force=True)
 
-core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_015.guides")
-core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
+core.DataManager.set_guide_data(r"D:\git\maya\puiastre_tools\guides\AYCHEDRAL_002.guides")
+core.DataManager.set_ctls_data(r"D:\git\maya\puiastre_tools\curves\AYCHEDRAL_curves_001.json")
 
 basic_structure.create_basic_structure(asset_name="elephant_04")
 a = JawModule().make("C_jaw_GUIDE")

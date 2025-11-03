@@ -408,11 +408,10 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
         cmds.connectAttr(up_plug, f'{aim}.secondaryTargetMatrix')
 
         output_plug = f'{aim}.outputMatrix'
-
         cmds.setAttr(f'{aim}.primaryInputAxis', *aim_vector)
-        cmds.setAttr(f'{aim}.secondaryInputAxis', *AXIS_VECTOR[up_axis]*-1)
+        cmds.setAttr(f'{aim}.secondaryInputAxis', *[-a for a in AXIS_VECTOR[up_axis]], type='double3') # *AXIS_VECTOR[up_axis]*-1
         cmds.setAttr(f'{aim}.secondaryMode', 1)
-        cmds.setAttr(f'{aim}.secondaryTargetVector', *AXIS_VECTOR[up_axis]*-1)
+        cmds.setAttr(f'{aim}.secondaryTargetVector', *[-a for a in AXIS_VECTOR[up_axis]], type='double3') #*AXIS_VECTOR[up_axis]*-1
 
         if use_scale:
             scale_wam = create_wt_add_matrix(sca_off_plugs, wts, f'{name}Scale0{i}_WAM', tol=tol)

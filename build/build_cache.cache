@@ -7,5 +7,82 @@
         "skeletonHierarchy_GRP": "skeletonHierarchy_GRP",
         "muscleLocators_GRP": "muscleSystems_GRP",
         "adonis_GRP": "adonis_GRP"
+    },
+    "L_backLegModule": {
+        "skinning_transform": "L_backLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "L_hipFk_CTL",
+            "L_backKneeFk_CTL",
+            "L_backAnkleFk_CTL",
+            "L_backFootFk_CTL"
+        ],
+        "pv_ctl": "L_backLegPV_CTL",
+        "root_ctl": "L_backLegRootIk_CTL",
+        "end_ik": "L_backLegIk_CTL",
+        "foot_rotation": "L_backLegFootRotation_MMX",
+        "ikFkSwitch": "L_backLegSwitch_CTL",
+        "frontRoll": "L_backLegFrontRoll_CTL"
+    },
+    "R_backLegModule": {
+        "skinning_transform": "R_backLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_hipFk_CTL",
+            "R_backKneeFk_CTL",
+            "R_backAnkleFk_CTL",
+            "R_backFootFk_CTL"
+        ],
+        "pv_ctl": "R_backLegPV_CTL",
+        "root_ctl": "R_backLegRootIk_CTL",
+        "end_ik": "R_backLegIk_CTL",
+        "foot_rotation": "R_backLegFootRotation_MMX",
+        "ikFkSwitch": "R_backLegSwitch_CTL",
+        "frontRoll": "R_backLegFrontRoll_CTL"
+    },
+    "L_frontLegModule": {
+        "skinning_transform": "L_frontLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "L_frontHipFk_CTL",
+            "L_frontKneeFk_CTL",
+            "L_frontAnkleFk_CTL",
+            "L_frontFootFk_CTL"
+        ],
+        "pv_ctl": "L_frontLegPV_CTL",
+        "root_ctl": "L_frontLegRootIk_CTL",
+        "end_ik": "L_frontLegIk_CTL",
+        "foot_rotation": "L_frontLegFootRotation_MMX",
+        "ikFkSwitch": "L_frontLegSwitch_CTL",
+        "scapula_ctl": "L_scapula_CTL",
+        "first_bendy_joints": "L_frontLegUpperBendy00_JNT"
+    },
+    "R_frontLegModule": {
+        "skinning_transform": "R_frontLegSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_frontHipFk_CTL",
+            "R_frontKneeFk_CTL",
+            "R_frontAnkleFk_CTL",
+            "R_frontFootFk_CTL"
+        ],
+        "pv_ctl": "R_frontLegPV_CTL",
+        "root_ctl": "R_frontLegRootIk_CTL",
+        "end_ik": "R_frontLegIk_CTL",
+        "foot_rotation": "R_frontLegFootRotation_MMX",
+        "ikFkSwitch": "R_frontLegSwitch_CTL",
+        "scapula_ctl": "R_scapula_CTL",
+        "first_bendy_joints": "R_frontLegUpperBendy00_JNT"
+    },
+    "C_spineModule": {
+        "skinning_transform": "C_spineSkinning_GRP",
+        "body_ctl": "C_body_CTL",
+        "localHip": "C_localHip_CTL",
+        "localChest": "C_localChest_CTL",
+        "end_main_ctl": "C_spine03_CTL"
+    },
+    "C_neckModule": {
+        "skinning_transform": "C_neckSkinning_GRP",
+        "neck_ctl": "C_neck01_CTL"
+    },
+    "C_tailModule": {
+        "skinning_transform": "C_tailSkinning_GRP",
+        "main_ctl": "C_tail00_CTL"
     }
 }
