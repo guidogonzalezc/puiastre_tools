@@ -104,7 +104,7 @@ def make():
     """
 
     # DEV COMMANDS
-    # cmds.file(new=True, force=True)
+    cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
 
     # Create a new data export instance and generate build data

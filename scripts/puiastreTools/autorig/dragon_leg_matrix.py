@@ -832,17 +832,10 @@ class LimbModule(object):
             parent=self.masterWalk_ctl
         ) # Will be driven by spaces of scapula master
 
-        autoScapula_guide = self.skinning_joints[0][0]
+        autoScapula_guide = self.guides_matrix[0]
         autoScapulaEnd_guide = self.scapula_guide
 
-        cmds.connectAttr(f"{autoScapula_guide}.worldMatrix[0]", f"{self.scapula_master_ctl_grp[0]}.offsetParentMatrix")
-
-        module_joint = cmds.createNode("joint", name=self.scapula_guide.replace('_GUIDE', '_JNT'), ss=True, parent=self.skinnging_grp)
-
-        cmds.connectAttr(f"{self.scapula_ctl}.worldMatrix[0]", f"{module_joint}.offsetParentMatrix")
-
-        cmds.reorder(module_joint, front=True)
-
+        cmds.connectAttr(f"{autoScapula_guide}.outputMatrix", f"{self.scapula_master_ctl_grp[0]}.offsetParentMatrix")
 
         # Create automatic scapula setup
         distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_scapula_DBT", ss=True)
@@ -861,9 +854,9 @@ class LimbModule(object):
 
         aim_matrix_scapula = cmds.createNode("aimMatrix", name=f"{self.side}_scapula_AIM", ss=True)
         cmds.setAttr(f"{aim_matrix_scapula}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        cmds.connectAttr(f"{autoScapula_guide}.worldMatrix[0]", f"{aim_matrix_scapula}.inputMatrix") # Position from autoScapula guide
+        cmds.connectAttr(f"{autoScapula_guide}.outputMatrix", f"{aim_matrix_scapula}.inputMatrix") # Position from autoScapula guide
         cmds.connectAttr(f"{autoScapulaEnd_guide}.worldMatrix[0]", f"{aim_matrix_scapula}.primaryTargetMatrix") # Aim at autoScapulaEnd guide
-        cmds.connectAttr(f"{self.skinning_joints[1][0]}.worldMatrix[0]", f"{aim_matrix_scapula}.secondaryTargetMatrix") # Use knee jnt for up vector
+        cmds.connectAttr(f"{self.guides_matrix[1]}.outputMatrix", f"{aim_matrix_scapula}.secondaryTargetMatrix") # Use knee jnt for up vector
         cmds.setAttr(f"{aim_matrix_scapula}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{aim_matrix_scapula}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{aim_matrix_scapula}.secondaryMode", 1) # Align
@@ -874,6 +867,10 @@ class LimbModule(object):
 
         autoScapula_skinning_jnt = cmds.createNode("joint", name=f"{self.side}_autoScapula_JNT", ss=True, parent=self.skinnging_grp)
         autoScapulaEnd_skinning_jnt = cmds.createNode("joint", name=f"{self.side}_autoScapulaEnd_JNT", ss=True, parent=self.skinnging_grp)
+
+        cmds.reorder(autoScapulaEnd_skinning_jnt, front=True)
+        cmds.reorder(autoScapula_skinning_jnt, front=True)
+        
 
         cmds.connectAttr(f"{aim_matrix_scapula}.outputMatrix", f"{self.scapula_ctl_grp[0]}.offsetParentMatrix", force=True)
         cmds.connectAttr(f"{self.scapula_ctl}.worldMatrix[0]", f"{autoScapula_skinning_jnt}.offsetParentMatrix")

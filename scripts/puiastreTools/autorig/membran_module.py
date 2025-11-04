@@ -368,9 +368,7 @@ class MembraneModule(object):
         rebuilded_shape = cmds.listRelatives(rebuilded_surface, shapes=True, noIntermediate=True)[0]
 
         for i in range(5):
-            print("i:", i)
             for index in range(4):
-                print("index:", index)
                 point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_PrimaryMembrane{i}{index+1}_POSI", ss=True)
                 cmds.setAttr(f"{point_on_surface}.parameterU", i*0.25)
                 cmds.setAttr(f"{point_on_surface}.parameterV", index*0.25)

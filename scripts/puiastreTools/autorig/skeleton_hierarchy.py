@@ -166,15 +166,20 @@ def build_complete_hierarchy():
     spine_joints = parented_chain(skinning_joints=skinning_joints[spine_index], parent=None, hand_value=False)
 
     for i, skinning_joint_list in enumerate(skinning_joints):
+        print(skinning_joint_list)
         if i != spine_index:
             if "backLeg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0] or "leg" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
                 leg_joints.append(joints[-1])
             elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0] or "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
                 pass
+            elif "Scapula" in skinning_joint_list[0]:
+                joints = parented_chain(skinning_joints=[skinning_joint_list[0], skinning_joint_list[1]], parent=spine_joints[-2], hand_value=False)
+                joints = parented_chain(skinning_joints=skinning_joint_list[2:], parent=spine_joints[-2], hand_value=False)
+                break
             else:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
-                if "clavicle" in skinning_joint_list[0] or "scapula" in skinning_joint_list[0]:
+                if "clavicle" in skinning_joint_list[0]:
                     arm_joints.append(joints[-1])
                     complete_arm_chain.extend(skinning_joint_list)
 
@@ -257,19 +262,17 @@ def build_complete_hierarchy():
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
 
             space_switch.fk_switch(target = fk, sources= parents, sources_names=["LocalChest", "SpineEnd"])
-            space_switch.fk_switch(target = root, sources= parents, sources_names=["LocalChest", "SpineEnd"])
-            parents.insert(0, first_bendy)
-            space_switch.fk_switch(target = scapula_master, sources= parents, sources_names=["Front Leg", "LocalChest", "SpineEnd"])
-            parents.pop(0)
+            space_switch.fk_switch(target = root, sources= [scapula_master], sources_names=["ScapulaMaster"])
+            # parents.insert(0, first_bendy)
+            space_switch.fk_switch(target = scapula_master, sources= parents, sources_names=["LocalChest", "SpineEnd"])
+            # parents.pop(0)
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"])
 
             # ===== SCAPULA SPACES ===== #
-            
-
-            parents = [scapula]
-            space_switch.fk_switch(target = scapula_end, sources= parents, sources_names=["Scapula"])
+            space_switch.fk_switch(target = scapula_end, sources= [scapula], sources_names=["Scapula"], default_rotate=0.7, default_translate=0.7) # Follow the scapula ctl 70%
+            space_switch.fk_switch(target = scapula, sources= [scapula_master], sources_names=["ScapulaMaster"])
 
 
         if "tail" in skel_grps[i]:
