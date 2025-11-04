@@ -15,6 +15,8 @@ reload(guide_creation)
 reload(rig_builder)
 reload(curve_tool)
 
+FILE_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
+
 
 def vectorify_ui_call(*args):
     """
@@ -69,11 +71,9 @@ def build_aychedral_rig(*args):
     path_model = r"P:\VFX_Project_20\PUIASTRE_PRODUCTIONS\03_Production\Assets\CHARACTERS\Aychedral\Scenefiles\mod\Modeling\Aychedral_Modeling_v0029"
     # cmds.file(path_model, i=True)
 
-    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
-
     # Append the paths to DataManager
-    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\AYCHEDRAL_001.guides"))
-    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\AYCHEDRAL_curves_002.json"))
+    core.DataManager.set_guide_data(os.path.join(FILE_PATH, r"guides\AYCHEDRAL_001.guides"))
+    core.DataManager.set_ctls_data(os.path.join(FILE_PATH, r"curves\AYCHEDRAL_curves_002.json"))
 
     rig_builder.make()
 
@@ -89,11 +89,9 @@ def build_maiasaura_rig(*args):
     path_model = r"P:\VFX_Project_20\PUIASTRE_PRODUCTIONS\03_Production\Assets\CHARACTERS\maiasaura\Scenefiles\mod\Modeling\maiasaura_Modeling_v0008"
     # cmds.file(path_model, i=True)
 
-    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
-    # Append the paths to DataManager
-    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\MAIASAURA_003.guides"))
-    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\MAIASAURA_curves_002.json"))
+    core.DataManager.set_guide_data(os.path.join(FILE_PATH, r"guides\MAIASAURA_003.guides"))
+    core.DataManager.set_ctls_data(os.path.join(FILE_PATH, r"curves\MAIASAURA_curves_002.json"))
 
     rig_builder.make()
 

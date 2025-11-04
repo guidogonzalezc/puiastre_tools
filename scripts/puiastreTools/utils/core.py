@@ -3,8 +3,17 @@ import maya.cmds as cmds
 from maya.api import OpenMaya as om
 
 class DataManager:
-    _ctls_data = None
-    _guide_data = None
+    """
+    A class to manage and store data related to controls, guides, meshes, and asset names
+    across different modules in the rigging system.
+    """
+    @classmethod
+    def set_project_path(cls, path):
+        cls._project_path = path
+    
+    @classmethod
+    def get_project_path(cls):
+        return cls._project_path
 
     @classmethod
     def set_ctls_data(cls, data):
@@ -37,6 +46,21 @@ class DataManager:
     @classmethod
     def get_asset_name(cls):
         return cls._asset_name
+    
+    @classmethod
+    def set_skinning_data(cls, data):
+        cls._skinning_data = data
+    
+    @classmethod
+    def get_skinning_data(cls):
+        return cls._skinning_data
+    
+    @classmethod
+    def clear_data(cls):
+        cls._ctls_data = None
+        cls._guide_data = None
+        cls._mesh_data = None
+        cls._asset_name = None
 
 
 def pv_locator(name, parents =[], parent_append = None):
