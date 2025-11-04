@@ -176,7 +176,7 @@ def build_complete_hierarchy():
             elif "Scapula" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=[skinning_joint_list[0], skinning_joint_list[1]], parent=spine_joints[-2], hand_value=False)
                 joints = parented_chain(skinning_joints=skinning_joint_list[2:], parent=spine_joints[-2], hand_value=False)
-                break
+                continue
             else:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
                 if "clavicle" in skinning_joint_list[0]:
