@@ -166,7 +166,6 @@ def build_complete_hierarchy():
     spine_joints = parented_chain(skinning_joints=skinning_joints[spine_index], parent=None, hand_value=False)
 
     for i, skinning_joint_list in enumerate(skinning_joints):
-        print(skinning_joint_list)
         if i != spine_index:
             if "backLeg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0] or "leg" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
@@ -261,8 +260,19 @@ def build_complete_hierarchy():
 
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
 
-            space_switch.fk_switch(target = fk, sources= parents, sources_names=["LocalChest", "SpineEnd"])
+            parents.insert(0, scapula_master)
+            space_switch.fk_switch(target = fk, sources= parents, sources_names=["ScapulaMaster", "LocalChest", "SpineEnd"])
+            parents.pop(0)
             space_switch.fk_switch(target = root, sources= [scapula_master], sources_names=["ScapulaMaster"])
+
+            root_grp = root.replace("CTL", "GRP")
+            root_connection = cmds.listConnections(root_grp + ".offsetParentMatrix", destination=True, source=True)
+
+            if root_connection:
+                pick_matrix = cmds.createNode("pickMatrix", n=root_grp.replace("GRP", "PM"))
+                cmds.setAttr(pick_matrix + ".useRotate", 0)
+                cmds.connectAttr(root_connection[0] + ".outputMatrix", pick_matrix + ".inputMatrix")
+                cmds.connectAttr(pick_matrix + ".outputMatrix", root_grp + ".offsetParentMatrix", force=True)
             # parents.insert(0, first_bendy)
             space_switch.fk_switch(target = scapula_master, sources= parents, sources_names=["LocalChest", "SpineEnd"])
             # parents.pop(0)

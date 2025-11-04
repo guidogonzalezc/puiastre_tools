@@ -835,7 +835,10 @@ class LimbModule(object):
         autoScapula_guide = self.guides_matrix[0]
         autoScapulaEnd_guide = self.scapula_guide
 
-        cmds.connectAttr(f"{autoScapula_guide}.outputMatrix", f"{self.scapula_master_ctl_grp[0]}.offsetParentMatrix")
+        pick_matrix_scapula = cmds.createNode("pickMatrix", name=f"{self.side}_scapula_PM", ss=True)
+        cmds.setAttr(f"{pick_matrix_scapula}.useRotate", 0) # Orient to world
+        cmds.connectAttr(f"{autoScapula_guide}.outputMatrix", f"{pick_matrix_scapula}.inputMatrix")
+        cmds.connectAttr(f"{pick_matrix_scapula}.outputMatrix", f"{self.scapula_master_ctl_grp[0]}.offsetParentMatrix")
 
         # Create automatic scapula setup
         distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_scapula_DBT", ss=True)
