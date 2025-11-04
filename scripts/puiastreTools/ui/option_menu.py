@@ -57,7 +57,8 @@ def import_guides(*args, value=None):
     if value == True:   
         guide_creation.guide_import(joint_name = "all")
 
-def complete_rig(*args):
+def build_aychedral_rig(*args):
+
     """
     Function to build a complete rig using the rig builder module.
 
@@ -65,7 +66,38 @@ def complete_rig(*args):
         *args: Variable length argument list, not used in this function.
     """
     reload(rig_builder)
+    path_model = r"P:\VFX_Project_20\PUIASTRE_PRODUCTIONS\03_Production\Assets\CHARACTERS\Aychedral\Scenefiles\mod\Modeling\Aychedral_Modeling_v0029"
+    # cmds.file(path_model, i=True)
+
+    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
+
+    # Append the paths to DataManager
+    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\AYCHEDRAL_001.guides"))
+    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\AYCHEDRAL_curves_002.json"))
+
     rig_builder.make()
+
+def build_maiasaura_rig(*args):
+
+    """
+    Function to build the Maiasaura rig using the rig builder module.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+    reload(rig_builder)
+    path_model = r"P:\VFX_Project_20\PUIASTRE_PRODUCTIONS\03_Production\Assets\CHARACTERS\maiasaura\Scenefiles\mod\Modeling\maiasaura_Modeling_v0008"
+    # cmds.file(path_model, i=True)
+
+    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
+
+    # Append the paths to DataManager
+    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\MAIASAURA_003.guides"))
+    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\MAIASAURA_curves_002.json"))
+
+    rig_builder.make()
+
+
 
 def build_eye(*args):
     """
@@ -144,8 +176,8 @@ def puiastre_ui():
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
-    cmds.menuItem(label="   Complete Rig (dev only)", command=complete_rig)
-    cmds.menuItem(label="   Build eye", command=build_eye)
+    cmds.menuItem(label="   Aychedral Rig", command=build_aychedral_rig)
+    cmds.menuItem(label="   Maiasaura Rig", command=build_maiasaura_rig)
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

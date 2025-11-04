@@ -547,7 +547,7 @@ class FalangeModule(object):
                 t_values.append(t)
 
  
-            skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.names[i]}{bendy}", parent=self.skinnging_grp, custom_parm=t_values)
+            skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.names[i]}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, negate_secundary=False)
 
             if bendy == "LowerBendy":
                 joint = cmds.createNode("joint", name= f"{self.side}_{self.names[i]}{bendy}0{self.twist_number+1}_JNT", ss=True, parent=self.skinnging_grp)

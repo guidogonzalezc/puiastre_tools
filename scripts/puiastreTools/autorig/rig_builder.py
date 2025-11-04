@@ -19,6 +19,8 @@ from puiastreTools.autorig import membran_module as mm
 from puiastreTools.autorig import finger_module as fm
 from puiastreTools.autorig import eye_module as em
 
+import puiastreTools.utils.skinning_transfer as skt
+
 
 # Python libraries import
 import maya.cmds as cmds
@@ -42,6 +44,8 @@ reload(mm)
 reload(fm)
 reload(em)
 reload(spb)
+
+reload(skt)
 
 def rename_ctl_shapes():
     """
@@ -93,19 +97,15 @@ def make():
     Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
+    Args:
+        model_path (str): The file path to the model to be imported. (full path)
+        guides_path (str): The file path to the guides data. (full path)
+        ctls_path (str): The file path to the controllers data. (full path)
     """
-
 
     # DEV COMMANDS
     cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
-
-    # REL PATH
-    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
-
-    # Append the paths to DataManager
-    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\moana_001.guides")) # MAIASAURA_003.guides
-    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\AYCHEDRAL_curves_001.json")) # MAIASAURA_curves_001.json
 
     # Create a new data export instance and generate build data
     data_exporter = data_export.DataExport()
@@ -195,6 +195,8 @@ def make():
 
     # Create the skeleton hierarchy and spaces
     skeleton_hierarchy = skh.build_complete_hierarchy() 
+
+    # skt.load_skincluster()
 
     # End commands to clean the scene
     rename_ctl_shapes()

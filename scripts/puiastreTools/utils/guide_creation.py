@@ -907,7 +907,7 @@ def dino_rebuild_guides():
 
     # cmds.file(new=True, force=True)
 
-    core.DataManager.set_guide_data(r"D:\git\maya\puiastre_tools\guides\AYCHEDRAL_001.guides")
+    core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\AYCHEDRAL_001.guides")
     # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
@@ -920,16 +920,16 @@ def dino_rebuild_guides():
     LegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
     ArmGuideCreation().create_guides(guides_trn, buffers_trn)   
     ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
-    SpineBipedGuideCreation().create_guides(guides_trn, buffers_trn)
-    NeckBipedGuideCreation().create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="L", limb_name="foot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="R", limb_name="foot").create_guides(guides_trn, buffers_trn)
-    # FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    # FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    # FootFingersGuideCreation(side="L", limb_name="footBack").create_guides(guides_trn, buffers_trn)
-    # FootFingersGuideCreation(side="R", limb_name="footFront").create_guides(guides_trn, buffers_trn)
-    # FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
-    # FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    SpineQuadGuideCreation().create_guides(guides_trn, buffers_trn)
+    NeckQuadGuideCreation().create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="L", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+    FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="R", limb_name="footFront").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
 
 # dino_rebuild_guides()
 
