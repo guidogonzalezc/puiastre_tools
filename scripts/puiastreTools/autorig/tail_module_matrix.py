@@ -51,7 +51,7 @@ class TailModule():
 
         self.primary_aim = "-z"
         self.primary_aim_vector = AXIS_VECTOR[self.primary_aim]
-        self.secondary_aim = "y"
+        self.secondary_aim = "-y"
         self.secondary_aim_vector = AXIS_VECTOR[self.secondary_aim]
 
         self.side = self.guide_name.split("_")[0]
@@ -145,7 +145,7 @@ class TailModule():
             # self.bendy_nodes.append(bendy_grp)
 
         self.num_joints = len(self.ctls) * 3
-        self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=self.ctls, num_joints=self.num_joints, name=f"{self.side}_tail", parent=self.skinning_trn)
+        self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=self.ctls, num_joints=self.num_joints, name=f"{self.side}_tail", parent=self.skinning_trn, negate_secundary=True)
 
 
 # cmds.file(new=True, force=True)

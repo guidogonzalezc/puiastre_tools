@@ -97,23 +97,15 @@ def make():
     Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
     It also sets the radius for all joints and displays a completion message.
+    Args:
+        model_path (str): The file path to the model to be imported. (full path)
+        guides_path (str): The file path to the guides data. (full path)
+        ctls_path (str): The file path to the controllers data. (full path)
     """
 
-
     # DEV COMMANDS
-    cmds.file(new=True, force=True)
+    # cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
-
-    # path_model = r"P:\VFX_Project_20\PUIASTRE_PRODUCTIONS\03_Production\Assets\CHARACTERS\Aychedral\Scenefiles\mod\Modeling\Aychedral_Modeling_v0028.ma"
-    path_model = r"C:\Users\laia.peris\Desktop\mayasauraModel.ma"
-    cmds.file(path_model, i=True)
-
-    # REL PATH
-    file_path = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
-
-    # Append the paths to DataManager
-    core.DataManager.set_guide_data(os.path.join(file_path, r"guides\MAIASAURA_001.guides")) # MAIASAURA_001.guides
-    core.DataManager.set_ctls_data(os.path.join(file_path, r"curves\MAIASAURA_curves_001.json")) # MAIASAURA_curves_001.json
 
     # Create a new data export instance and generate build data
     data_exporter = data_export.DataExport()
@@ -204,7 +196,7 @@ def make():
     # Create the skeleton hierarchy and spaces
     skeleton_hierarchy = skh.build_complete_hierarchy() 
 
-    skt.load_skincluster()
+    # skt.load_skincluster()
 
     # End commands to clean the scene
     rename_ctl_shapes()

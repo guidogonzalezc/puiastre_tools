@@ -251,17 +251,26 @@ def build_complete_hierarchy():
             ik = data_exporter.get_data(modules_name[i], "end_ik")
             scapula = data_exporter.get_data(modules_name[i], "scapula_ctl")
             first_bendy = data_exporter.get_data(modules_name[i], "first_bendy_joints")
+            scapula_end = data_exporter.get_data(modules_name[i], "scapula_end_ctl")
+            scapula_master = data_exporter.get_data(modules_name[i], "scapula_master_ctl")
 
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
 
             space_switch.fk_switch(target = fk, sources= parents, sources_names=["LocalChest", "SpineEnd"])
             space_switch.fk_switch(target = root, sources= parents, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, first_bendy)
-            space_switch.fk_switch(target = scapula, sources= parents, sources_names=["Front Leg", "LocalChest", "SpineEnd"])
+            space_switch.fk_switch(target = scapula_master, sources= parents, sources_names=["Front Leg", "LocalChest", "SpineEnd"])
             parents.pop(0)
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"])
+
+            # ===== SCAPULA SPACES ===== #
+            
+
+            parents = [scapula]
+            space_switch.fk_switch(target = scapula_end, sources= parents, sources_names=["Scapula"])
+
 
         if "tail" in skel_grps[i]:
             main_ctl= data_exporter.get_data(modules_name[i], "main_ctl")
@@ -314,3 +323,14 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=1, default_translate=1, sources_names=[ "Wrist"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"])
+
+
+        # ===== SCAPULA SPACES ===== #
+
+        if "scapula" in skel_grps[i]:
+            scapula_ctl = data_exporter.get_data(modules_name[i], "scapula_ctl")
+            spine_end = data_exporter.get_data("C_spineModule", "end_main_ctl")
+            local_chest = data_exporter.get_data("C_spineModule", "localChest")
+            front_leg = data_exporter.get_data("C_dragonFrontLegModule", "root_ctl")
+
+            space_switch.fk_switch(target = scapula_ctl, sources= [front_leg, local_chest, spine_end], sources_names=["Front Leg", "LocalChest", "SpineEnd"])

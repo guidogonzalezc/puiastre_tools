@@ -17,6 +17,7 @@ from puiastreTools.utils import core
 from puiastreTools.utils import basic_structure
 
 
+
 reload(de_boors_002)
 reload(guide_creation)
 reload(ss)
@@ -800,14 +801,14 @@ class LimbModule(object):
                 t = 0.95 if index == self.twist_number - 1 else index / (float(self.twist_number) - 1)
                 t_values.append(t)
 
-            skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvMatrices, num_joints=self.twist_number, name=f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change = True)
+            self.skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvMatrices, num_joints=self.twist_number, name=f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change = True)
 
             if bendy == "LowerBendy":
                 joint = cmds.createNode("joint", name=f"{self.side}_{self.module_name}LowerBendy0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
                 cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint}.offsetParentMatrix")
-                skinning_joints.append(joint)
+                self.skinning_joints.append(joint)
 
-            joints.append(skinning_joints)
+            joints.append(self.skinning_joints)
         core.pv_locator(name=f"{self.side}_{self.module_name}PVLocator", parents=[self.pv_ik_ctl, joints[1][0]], parent_append=self.ik_controllers)
 
 
@@ -815,30 +816,80 @@ class LimbModule(object):
     
     def scapula(self):
 
-        self.scapula_ctl, self.scapula_ctl_grp = controller_creator(
-            name=f"{self.side}_scapula",
+        self.scapula_master_ctl, self.scapula_master_ctl_grp = controller_creator(
+            name=f"{self.side}_scapulaMaster",
             suffixes=["GRP", "OFF", "ANM"],
             lock=["sx", "sz", "sy", "visibility"],
             ro=True,
             parent=self.masterWalk_ctl
         )
 
-        # aim_matrix_scapula = cmds.createNode("aimMatrix", name=f"{self.side}_scapula_AIM", ss=True)
-        # cmds.connectAttr(f"{self.scapula_guide}.worldMatrix[0]", f"{aim_matrix_scapula}.inputMatrix")
-        # cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{aim_matrix_scapula}.primaryTargetMatrix")
-        # cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{aim_matrix_scapula}.secondaryTargetMatrix")
-        # cmds.setAttr(f"{aim_matrix_scapula}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        # cmds.setAttr(f"{aim_matrix_scapula}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        # cmds.setAttr(f"{aim_matrix_scapula}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        # cmds.setAttr(f"{aim_matrix_scapula}.secondaryMode", 1)
+        self.scapula_ctl, self.scapula_ctl_grp = controller_creator(
+            name=f"{self.side}_scapula",
+            suffixes=["GRP", "OFF", "ANM"],
+            lock=["sx", "sz", "sy", "visibility"],
+            ro=True,
+            parent=self.masterWalk_ctl
+        ) # Will be driven by spaces of scapula master
 
-        cmds.connectAttr(f"{self.scapula_guide}.worldMatrix[0]", f"{self.scapula_ctl_grp[0]}.offsetParentMatrix")
+        autoScapula_guide = self.skinning_joints[0][0]
+        autoScapulaEnd_guide = self.scapula_guide
+
+        cmds.connectAttr(f"{autoScapula_guide}.worldMatrix[0]", f"{self.scapula_master_ctl_grp[0]}.offsetParentMatrix")
 
         module_joint = cmds.createNode("joint", name=self.scapula_guide.replace('_GUIDE', '_JNT'), ss=True, parent=self.skinnging_grp)
 
         cmds.connectAttr(f"{self.scapula_ctl}.worldMatrix[0]", f"{module_joint}.offsetParentMatrix")
 
         cmds.reorder(module_joint, front=True)
+
+
+        # Create automatic scapula setup
+        distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_scapula_DBT", ss=True)
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{distance_between}.inMatrix1") # First guide (shoulder)
+        cmds.connectAttr(f"{self.scapula_guide}.worldMatrix[0]", f"{distance_between}.inMatrix2") # Second guide (scapula end)
+
+        four_by_four = cmds.createNode("fourByFourMatrix", name=f"{self.side}_scapula_F4X", ss=True)
+        
+        if self.side == "R":
+            negate = cmds.createNode("negate", name=f"{self.side}_scapula_NEGATE", ss=True)
+            cmds.connectAttr(f"{distance_between}.distance", f"{negate}.input")
+            cmds.connectAttr(f"{negate}.output", f"{four_by_four}.in30")
+        else:
+            cmds.connectAttr(f"{distance_between}.distance", f"{four_by_four}.in30")
+
+
+        aim_matrix_scapula = cmds.createNode("aimMatrix", name=f"{self.side}_scapula_AIM", ss=True)
+        cmds.setAttr(f"{aim_matrix_scapula}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        cmds.connectAttr(f"{autoScapula_guide}.worldMatrix[0]", f"{aim_matrix_scapula}.inputMatrix") # Position from autoScapula guide
+        cmds.connectAttr(f"{autoScapulaEnd_guide}.worldMatrix[0]", f"{aim_matrix_scapula}.primaryTargetMatrix") # Aim at autoScapulaEnd guide
+        cmds.connectAttr(f"{self.skinning_joints[1][0]}.worldMatrix[0]", f"{aim_matrix_scapula}.secondaryTargetMatrix") # Use knee jnt for up vector
+        cmds.setAttr(f"{aim_matrix_scapula}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{aim_matrix_scapula}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{aim_matrix_scapula}.secondaryMode", 1) # Align
+
+        mult_matrix_scapula = cmds.createNode("multMatrix", name=f"{self.side}_scapula_MMX", ss=True)
+        cmds.connectAttr(f"{four_by_four}.output", f"{mult_matrix_scapula}.matrixIn[0]")
+        cmds.connectAttr(f"{aim_matrix_scapula}.outputMatrix", f"{mult_matrix_scapula}.matrixIn[1]")
+
+        autoScapula_skinning_jnt = cmds.createNode("joint", name=f"{self.side}_autoScapula_JNT", ss=True, parent=self.skinnging_grp)
+        autoScapulaEnd_skinning_jnt = cmds.createNode("joint", name=f"{self.side}_autoScapulaEnd_JNT", ss=True, parent=self.skinnging_grp)
+
+        cmds.connectAttr(f"{aim_matrix_scapula}.outputMatrix", f"{self.scapula_ctl_grp[0]}.offsetParentMatrix", force=True)
+        cmds.connectAttr(f"{self.scapula_ctl}.worldMatrix[0]", f"{autoScapula_skinning_jnt}.offsetParentMatrix")
+
+        self.scapulaEnd_ctl, self.scapulaEnd_ctl_grp = controller_creator(
+            name=f"{self.side}_scapulaEnd",
+            suffixes=["GRP", "OFF", "ANM"],
+            lock=["sx", "sz", "sy", "visibility"],
+            ro=True,
+            parent=self.masterWalk_ctl
+        )
+
+        cmds.connectAttr(f"{mult_matrix_scapula}.matrixSum", f"{self.scapulaEnd_ctl_grp[0]}.offsetParentMatrix")
+        cmds.connectAttr(f"{self.scapulaEnd_ctl}.worldMatrix[0]", f"{autoScapulaEnd_skinning_jnt}.offsetParentMatrix")
+
+    
 
 
 
@@ -1162,7 +1213,7 @@ class BackLegModule(LimbModule):
     def make(self):
         super().make()
         self.reverse_foot()
-        skinning_joints = self.bendys()
+        self.skinning_joints = self.bendys()
         self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
 
         pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
@@ -1171,7 +1222,7 @@ class BackLegModule(LimbModule):
         inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
         cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
         cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+        cmds.connectAttr(f"{self.skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
         distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
         cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
@@ -1234,7 +1285,7 @@ class FrontLegModule(LimbModule):
     def make(self):
         super().make()
         self.reverse_foot()
-        skinning_joints = self.bendys()
+        self.skinning_joints = self.bendys()
         self.scapula()
         self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
 
@@ -1244,7 +1295,7 @@ class FrontLegModule(LimbModule):
         inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
         cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
         cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+        cmds.connectAttr(f"{self.skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
         distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
         cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
@@ -1261,7 +1312,9 @@ class FrontLegModule(LimbModule):
                 "foot_rotation": self.foot_rotation_multmatrix,
                 "ikFkSwitch": self.switch_ctl,
                 "scapula_ctl": self.scapula_ctl,
-                "first_bendy_joints": skinning_joints[0][0],
+                "first_bendy_joints": self.skinning_joints[0][0],
+                "scapula_end_ctl": self.scapulaEnd_ctl,
+                "scapula_master_ctl": self.scapula_master_ctl,
             }
         )
 
