@@ -110,7 +110,7 @@ def _highest_version_file_in_directory(folder_path, extension):
         candidates.append((os.path.join(folder_path, fname)))
     if candidates:
         candidates.sort()
-        file_path = candidates[0]
+        file_path = candidates[-1]
     return file_path
 
 def load_asset_configuration(asset_name):

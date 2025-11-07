@@ -1,15 +1,27 @@
 import os
 import maya.cmds as cmds
 from maya.api import OpenMaya as om
+import json
+
+SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
 class DataManager:
     """
     A class to manage and store data related to controls, guides, meshes, and asset names
     across different modules in the rigging system.
     """
+    # initialize class-level storage attributes to avoid AttributeError when getters are called
+    _project_path = None
+    _ctls_data = None
+    _guide_data = None
+    _mesh_data = None
+    _asset_name = None
+    _skinning_data = None
+
     @classmethod
     def set_project_path(cls, path):
         cls._project_path = path
+        store_data()
     
     @classmethod
     def get_project_path(cls):
@@ -18,6 +30,7 @@ class DataManager:
     @classmethod
     def set_ctls_data(cls, data):
         cls._ctls_data = data
+        store_data()
 
     @classmethod
     def get_ctls_data(cls):
@@ -26,6 +39,7 @@ class DataManager:
     @classmethod
     def set_guide_data(cls, data):
         cls._guide_data = data
+        store_data()
 
     @classmethod
     def get_guide_data(cls):
@@ -34,6 +48,7 @@ class DataManager:
     @classmethod
     def set_mesh_data(cls, data):
         cls._mesh_data = data
+        store_data()
 
     @classmethod
     def get_mesh_data(cls):
@@ -42,6 +57,7 @@ class DataManager:
     @classmethod
     def set_asset_name(cls, data):
         cls._asset_name = data
+        store_data()
 
     @classmethod
     def get_asset_name(cls):
@@ -50,6 +66,7 @@ class DataManager:
     @classmethod
     def set_skinning_data(cls, data):
         cls._skinning_data = data
+        store_data()
     
     @classmethod
     def get_skinning_data(cls):
@@ -62,6 +79,40 @@ class DataManager:
         cls._mesh_data = None
         cls._asset_name = None
 
+def store_data():
+    """
+    Store the current data from the DataManager into a JSON file.
+    """
+    data = {
+        "project_path": DataManager.get_project_path(),
+        "ctls_data": DataManager.get_ctls_data(),
+        "guide_data": DataManager.get_guide_data(),
+        "mesh_data": DataManager.get_mesh_data(),
+        "asset_name": DataManager.get_asset_name(),
+        "skinning_data": DataManager.get_skinning_data()
+    }
+    file_path = os.path.join(SCRIPT_PATH, "build", "old_data.json")
+    with open(file_path, 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+    om.MGlobal.displayInfo(f"Data stored at: {file_path}")
+
+def load_data():
+    """
+    Load data from the JSON file into the DataManager.
+    """
+    file_path = os.path.join(SCRIPT_PATH, "build", "old_data.json")
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as json_file:
+            data = json.load(json_file)
+            DataManager.set_project_path(data.get("project_path"))
+            DataManager.set_ctls_data(data.get("ctls_data"))
+            DataManager.set_guide_data(data.get("guide_data"))
+            DataManager.set_mesh_data(data.get("mesh_data"))
+            DataManager.set_asset_name(data.get("asset_name"))
+            DataManager.set_skinning_data(data.get("skinning_data"))
+        om.MGlobal.displayInfo(f"Data loaded from: {file_path}")
+    else:
+        om.MGlobal.displayWarning(f"No data file found at: {file_path}")
 
 def pv_locator(name, parents =[], parent_append = None):
     curve = cmds.curve(d=1, p=[(0, 0, 0), (0, 1, 0)], k=[0, 1], name=name+"_CTL")

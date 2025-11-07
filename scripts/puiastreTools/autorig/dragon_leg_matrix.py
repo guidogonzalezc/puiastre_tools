@@ -1315,6 +1315,8 @@ class FrontLegModule(LimbModule):
                 "first_bendy_joints": self.skinning_joints[0][0],
                 "scapula_end_ctl": self.scapulaEnd_ctl,
                 "scapula_master_ctl": self.scapula_master_ctl,
+                "frontRoll": self.frontRoll_ctl,
+
             }
         )
 

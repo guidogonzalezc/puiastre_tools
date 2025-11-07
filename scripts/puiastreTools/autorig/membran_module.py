@@ -82,7 +82,7 @@ class MembraneModule(object):
 
         self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_membraneModule_GRP", parent=self.modules_grp, ss=True)
         self.individual_controllers_grp = cmds.createNode("transform", name=f"{self.side}_membraneControllers_GRP", parent=self.masterWalk_ctl, ss=True)
-        self.skinnging_grp = cmds.createNode("transform", name=f"{self.side}_membraneSkinningJoints_GRP", parent=self.skel_grp, ss=True)
+        # self.skinnging_grp = cmds.createNode("transform", name=f"{self.side}_membraneSkinningJoints_GRP", parent=self.skel_grp, ss=True)
         cmds.setAttr(f"{self.individual_controllers_grp}.inheritsTransform", 0)
         
         self.primary_aim_vector = om.MVector(AXIS_VECTOR[self.primary_aim])
@@ -93,7 +93,7 @@ class MembraneModule(object):
         if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
             self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
 
-        cmds.addAttr(self.skinnging_grp, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
+        # cmds.addAttr(self.skinnging_grp, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
         self.secondary_membranes()
 
@@ -103,7 +103,7 @@ class MembraneModule(object):
         self.data_exporter.append_data(
             f"{self.side}_membraneModule",
             {
-                "skinning_transform": self.skinnging_grp,
+                # "skinning_transform": self.skinnging_grp,
             }
         )
 
@@ -569,24 +569,67 @@ class MembraneModule(object):
                 skincluster = cmds.skinCluster(falanges_selected_joints, plane, toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_{self.number_to_ordinal_word(i+1)}MembraneSkinCluster_SKN")[0]
 
 
-                for value_temp, (u_value, name) in enumerate([(0.33, "Inner"),(0.66, "Outer")]):
+                # for value_temp, (u_value, name) in enumerate([(0.33, "Inner"),(0.66, "Outer")]):
 
-                    distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}Distance_DB", ss=True)
-                    cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{distance_between}.inMatrix1")
-                    cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{distance_between}.inMatrix2")
+                #     distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}Distance_DB", ss=True)
+                #     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{distance_between}.inMatrix1")
+                #     cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{distance_between}.inMatrix2")
 
-                    divide = cmds.createNode("divide", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}Distance_DIV", ss=True)
-                    cmds.setAttr(f"{divide}.input2", cmds.getAttr(f"{distance_between}.distance"))
-                    cmds.connectAttr(f"{distance_between}.distance", f"{divide}.input1")
+                #     divide = cmds.createNode("divide", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}Distance_DIV", ss=True)
+                #     cmds.setAttr(f"{divide}.input2", cmds.getAttr(f"{distance_between}.distance"))
+                #     cmds.connectAttr(f"{distance_between}.distance", f"{divide}.input1")
 
-                    for index, v_value in enumerate([0, 0.33, 0.66, 1]):
-                        point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_POSI", ss=True)
-                        cmds.setAttr(f"{point_on_surface}.parameterU", u_value)
-                        cmds.setAttr(f"{point_on_surface}.parameterV", v_value)
+                #     for index, v_value in enumerate([0, 0.33, 0.66, 1]):
+                #         point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_POSI", ss=True)
+                #         cmds.setAttr(f"{point_on_surface}.parameterU", u_value)
+                #         cmds.setAttr(f"{point_on_surface}.parameterV", v_value)
+
+                #         cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
+
+                #         matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}", ss=True)
+
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
+
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
+
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
+
+                #         cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
+                #         cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
+
+                #         # joint = cmds.createNode("joint", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                #         # cmds.connectAttr(f"{matrix_node}.output", f"{joint}.offsetParentMatrix", force=True)
+
+                #         pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_PMX", ss=True)
+                #         cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
+                #         cmds.setAttr(f"{pickMatrix}.useScale", 0)
+                #         cmds.setAttr(f"{pickMatrix}.useShear", 0)
+
+                #         joint = cmds.createNode("joint", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                #         cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
+
+                #         cmds.connectAttr(f"{divide}.output", f"{joint}.scaleZ")
+
+                u_row = 6
+                v_row = 5
+
+                for i in range(u_row):
+
+                    for index in range(v_row):
+                        point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i}{index+1}_POSI", ss=True)
+                        cmds.setAttr(f"{point_on_surface}.parameterU", float(i) / (u_row - 1))
+                        cmds.setAttr(f"{point_on_surface}.parameterV", float(index) / (v_row - 1))
 
                         cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
 
-                        matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}", ss=True)
+                        matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i}{index+1}_FBF", ss=True)
 
                         cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
                         cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
@@ -604,15 +647,12 @@ class MembraneModule(object):
                         cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
                         cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
 
-                        # joint = cmds.createNode("joint", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
-                        # cmds.connectAttr(f"{matrix_node}.output", f"{joint}.offsetParentMatrix", force=True)
-
-                        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_PMX", ss=True)
+                        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i}{index+1}_PMX", ss=True)
                         cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
                         cmds.setAttr(f"{pickMatrix}.useScale", 0)
                         cmds.setAttr(f"{pickMatrix}.useShear", 0)
 
-                        joint = cmds.createNode("joint", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                        joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i}{index+1}_JNT", ss=True)#, parent=self.skinnging_grp)
                         cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
+                        cmds.setAttr(f"{joint}.radius", 20)
 
-                        cmds.connectAttr(f"{divide}.output", f"{joint}.scaleZ")

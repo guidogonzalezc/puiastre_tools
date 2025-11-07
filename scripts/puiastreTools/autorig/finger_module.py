@@ -46,11 +46,11 @@ class FingersModule(object):
 
         data_exporter = data_export.DataExport()
         self.import_guides(guide_name)
-        leg_skinning = data_exporter.get_data(f"{self.side}_backLegModule", "skinning_transform")
+        leg_skinning = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "skinning_transform")
         self.leg_ball_blm = cmds.listRelatives(leg_skinning, children=True)[-1]
-        self.foot_rotation = data_exporter.get_data(f"{self.side}_backLegModule", "frontRoll")
-        self.ikSwitch_ctl = data_exporter.get_data(f"{self.side}_backLegModule", "ikFkSwitch")
-
+        self.foot_rotation = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "frontRoll")
+        self.ikSwitch_ctl = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "ikFkSwitch")
+        print(f"{self.side}_{self.finger_front_name.lower()}LegModule")
 
         parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_legFingersParent_PMX", ss=True)
         cmds.connectAttr(self.leg_ball_blm + ".worldMatrix[0]", parent_matrix + ".target[0].targetMatrix")
@@ -86,7 +86,7 @@ class FingersModule(object):
         # self.attributes_setup()
 
         self.data_exporter.append_data(
-            f"{self.side}_footFingersModule",
+            f"{self.side}_foot{self.finger_front_name}FingersModule",
             {
                 "skinning_transform": self.skinning_grp,
                 "ik_controllers": self.ik_controllers,
@@ -102,10 +102,21 @@ class FingersModule(object):
 
         self.fingers = guide_import(guide_name, all_descendents=True, path=None)
         self.side = self.fingers[0].split("_")[0]
-        self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_legFingersControllers_GRP", parent=self.masterWalk_ctl)
-        self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_footFingerModule_GRP", parent=self.modules_grp, ss=True)
-        self.skinning_grp = cmds.createNode("transform", name=f"{self.side}_footFingerSkinningJoints_GRP", parent=self.skel_grp, ss=True)
-        self.controllers_grp_ik = cmds.createNode("transform", name=f"{self.side}_legFingersIkControllers_GRP", parent=self.masterWalk_ctl)
+
+        if "front" in self.fingers[0].lower():
+            self.finger_front_name = "Front" 
+
+        elif  "back" in self.fingers[0].lower():
+            self.finger_front_name = "Back"
+        else:
+            self.finger_front_name = ""
+
+        self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_legFingers{self.finger_front_name}Controllers_GRP", parent=self.masterWalk_ctl)
+        self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_footFinger{self.finger_front_name}Module_GRP", parent=self.modules_grp, ss=True)
+        self.skinning_grp = cmds.createNode("transform", name=f"{self.side}_footFinger{self.finger_front_name}SkinningJoints_GRP", parent=self.skel_grp, ss=True)
+        self.controllers_grp_ik = cmds.createNode("transform", name=f"{self.side}_legFingers{self.finger_front_name}IkControllers_GRP", parent=self.masterWalk_ctl)
+
+
 
 
         cmds.setAttr(self.controllers_grp + ".inheritsTransform", 0)
@@ -135,10 +146,11 @@ class FingersModule(object):
         Create controllers for each guide
         :param guide_name: name of the guide to import
         """
-        self.finger_attributes_ctl, self.finger_attributes_nodes, = controller_creator(name=f"{self.side}_fingersAttributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
+
+        self.finger_attributes_ctl, self.finger_attributes_nodes, = controller_creator(name=f"{self.side}_fingers{self.finger_front_name}Attributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
 
         self.finger_plane, self.finger_plane_grp = controller_creator(
-                    name=f"{self.side}_fingersPlaneIk",
+                    name=f"{self.side}_fingers{self.finger_front_name}PlaneIk",
                     suffixes=["GRP", "ANM"],
                     lock=["sx", "sy", "sz", "visibility"],
                     ro=False,
@@ -177,19 +189,18 @@ class FingersModule(object):
         cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Twist", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
         cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Fan", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
 
-        thumb_guides = [finger for finger in self.fingers if "thumb" in finger]
-        index_guides = [finger for finger in self.fingers if "index" in finger]
-        middle_guides = [finger for finger in self.fingers if "middle" in finger]
-        # pinky_guides = [finger for finger in self.fingers if "pinky" in finger]
+        thumb_guides = [finger for finger in self.fingers if "thumb" in finger.lower()]
+        index_guides = [finger for finger in self.fingers if "index" in finger.lower()]
+        middle_guides = [finger for finger in self.fingers if "middle" in finger.lower()]
+        pinky_guides = [finger for finger in self.fingers if "pinky" in finger.lower()]
 
         self.controllers = []
 
         self.ik_controllers = []
 
-        for i, finger in enumerate([thumb_guides, index_guides, middle_guides]):
+        for i, finger in enumerate([thumb_guides, index_guides, middle_guides, pinky_guides]):
             finger_name = ''.join([c for c in finger[0].split('_')[1] if not c.isdigit()])
             
-
             controllers = []
             aim_matrix_guides = []
             self.sdk_thumb_nodes = []

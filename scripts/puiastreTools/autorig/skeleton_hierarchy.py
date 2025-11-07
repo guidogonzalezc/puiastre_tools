@@ -175,6 +175,7 @@ def build_complete_hierarchy():
             elif "Scapula" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=[skinning_joint_list[0], skinning_joint_list[1]], parent=spine_joints[-2], hand_value=False)
                 joints = parented_chain(skinning_joints=skinning_joint_list[2:], parent=spine_joints[-2], hand_value=False)
+                leg_joints.append(joints[-1])
                 continue
             else:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
@@ -187,7 +188,22 @@ def build_complete_hierarchy():
     for i, skinning_joint_list in enumerate(skinning_joints):
         if "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
             side = skinning_joint_list[0].split("_")[0]
-            parent_joint = next((j for j in leg_joints if side in j), None)
+
+            if "back" in skinning_joint_list[0].lower():
+                for joint in leg_joints:
+                    if f"{side}_" in joint and "back" in joint.lower():
+                        parent_joint = joint
+            elif "front" in skinning_joint_list[0].lower():
+                for joint in leg_joints:
+                    if f"{side}_" in joint and "front" in joint.lower():
+                        parent_joint = joint 
+            else:
+               for joint in leg_joints:
+                    if f"{side}_" in joint:
+                        parent_joint = joint
+
+            print(skinning_joint_list[0], parent_joint)
+
             for i in range(0, 12, 3):
                 joint_list = skinning_joint_list[i:i+3]
                 parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=False)

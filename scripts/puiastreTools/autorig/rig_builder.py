@@ -4,6 +4,7 @@
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
+from puiastreTools.ui import project_manager
 
 # Rig modules import
 from puiastreTools.autorig import limb_module_matrix as lbm
@@ -46,6 +47,7 @@ reload(em)
 reload(spb)
 
 reload(skt)
+reload(project_manager)
 
 def rename_ctl_shapes():
     """
@@ -92,7 +94,7 @@ def joint_label():
         cmds.setAttr(jnt + ".type", 18)
         cmds.setAttr(jnt + ".otherType", jnt.split("_")[1], type= "string")
 
-def make():
+def make(asset_name = "", latest = False):
     """
     Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
@@ -102,9 +104,16 @@ def make():
         guides_path (str): The file path to the guides data. (full path)
         ctls_path (str): The file path to the controllers data. (full path)
     """
-
+    if latest:
+        core.load_data()
+    else:
+        try:
+            project_manager.load_asset_configuration(asset_name)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading asset configuration: {e}")
+            return
     # DEV COMMANDS
-    cmds.file(new=True, force=True)
+    # cmds.file(new=True, force=True)
     # cmds.scriptEditorInfo(ch=True)
 
     # Create a new data export instance and generate build data
@@ -112,6 +121,7 @@ def make():
     data_exporter.new_build()
 
     final_path = core.DataManager.get_guide_data()
+    print("FINAL PATH:", final_path)
 
     # Load guides data from the specified file
     try:
@@ -189,8 +199,8 @@ def make():
 
                 if guide_info.get("moduleName") == "membran":
                     mm.MembraneModule().make(guide_name)
-        
-                if guide_info.get("moduleName") == "backLegFoot":
+
+                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
                     fm.FingersModule().make(guide_name)
 
     # Create the skeleton hierarchy and spaces
@@ -211,4 +221,3 @@ def make():
     alpha=0.8)
 
     cmds.select(clear=True)
-

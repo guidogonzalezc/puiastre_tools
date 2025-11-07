@@ -1,0 +1,8 @@
+{
+    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\cheetah",
+    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\cheetah\\curves\\CHAR_cheetah_001.json",
+    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\cheetah\\guides\\CHAR_cheetah_002.guides",
+    "mesh_data": "cheetah_MSH",
+    "asset_name": "Cheetah",
+    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\cheetah\\skinning\\CHAR_cheetah_001.skn"
+}

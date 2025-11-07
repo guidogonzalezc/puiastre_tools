@@ -9,9 +9,11 @@ from puiastreTools.utils import core
 from puiastreTools.utils import data_export
 import maya.api.OpenMaya as om
 from puiastreTools.utils import curve_tool
+from puiastreTools.ui import project_manager
 
 reload(curve_tool)
 reload(core)
+reload(project_manager)
 
 class GuideCreation(object):
     """
@@ -753,22 +755,24 @@ class FootFingersGuideCreation(GuideCreation):
     def __init__(self, side = "L", limb_name="foot", prefix=False, controller_number=3):
         self.sides = side
         self.reverse_foot_name = limb_name
+        print("reverse:", self.reverse_foot_name)
         self.limb_name = limb_name
         self.aim_name = None
         self.aim_offset = 0
         self.controller_number = int(controller_number)
         self.prefix = None
         ctl = "" if prefix == False else self.reverse_foot_name
+        print("ctl:", ctl)
         def maybe_cap(s):
             return s.capitalize() if ctl else s
 
         names = ["thumb", "index", "middle", "pinky", "ring"]
-
+        self.position_data = {}
         for i in range(0, int(self.controller_number)):
             self.position_data[f"{ctl}{maybe_cap(names[i])}01"] = get_data(f"{self.sides}_{ctl}{maybe_cap(names[i])}01")
             self.position_data[f"{ctl}{maybe_cap(names[i])}02"] = get_data(f"{self.sides}_{ctl}{maybe_cap(names[i])}02")
             self.position_data[f"{ctl}{maybe_cap(names[i])}03"] = get_data(f"{self.sides}_{ctl}{maybe_cap(names[i])}03")
-            
+        
 class JiggleJoint(GuideCreation):
     """
     Guide creation for jiggle joints.
@@ -907,29 +911,31 @@ def dino_rebuild_guides():
 
     # cmds.file(new=True, force=True)
 
-    core.DataManager.set_guide_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\guides\AYCHEDRAL_001.guides")
-    # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
+    # project_manager.load_asset_configuration(asset_name = "cheetah")
 
+    core.DataManager.set_guide_data(r"D:\git\maya\puiastre_tools\assets\cheetah\guides\CHAR_cheetah_001.guides")
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
     buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
     cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
-    LegGuideCreation().create_guides(guides_trn, buffers_trn)   
-    LegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
-    ArmGuideCreation().create_guides(guides_trn, buffers_trn)   
-    ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
+    FrontLegGuideCreation().create_guides(guides_trn, buffers_trn)   
+    FrontLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
+    BackLegGuideCreation().create_guides(guides_trn, buffers_trn)   
+    BackLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
     SpineQuadGuideCreation().create_guides(guides_trn, buffers_trn)
     NeckQuadGuideCreation().create_guides(guides_trn, buffers_trn)
     FootGuideCreation(side="L", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
     FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
     FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
     FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footBack").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="R", limb_name="footFront").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footFront").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="R", limb_name="footBack").create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footBack", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="R", limb_name="footBack", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
+
+    FootFingersGuideCreation(side="R", limb_name="footFront", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footFront", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
+    TailGuideCreation().create_guides(guides_trn, buffers_trn)
 
 # dino_rebuild_guides()
 
@@ -1007,8 +1013,8 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "eye":
                     EyesGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
                     
-                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "frontLegFoot":
-                    if "backLegFoot" in guide_name or "frontLegFoot" in guide_name:
+                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "frontLegFoot" or "footBack" in guide_name or "footFront" in guide_name:
+                    if "backLegFoot" in guide_name or "frontLegFoot" in guide_name or "footBack" in guide_name or "footFront" in guide_name:
                         FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name=guide_info.get("moduleName"), prefix=True, controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                     else:
                         FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name=guide_info.get("moduleName"), prefix=False, controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
