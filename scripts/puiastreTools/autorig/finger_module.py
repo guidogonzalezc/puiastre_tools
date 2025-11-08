@@ -46,11 +46,14 @@ class FingersModule(object):
 
         data_exporter = data_export.DataExport()
         self.import_guides(guide_name)
+
+        print(f"{self.side}_{self.finger_front_name.lower()}LegModule")
+
+
         leg_skinning = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "skinning_transform")
         self.leg_ball_blm = cmds.listRelatives(leg_skinning, children=True)[-1]
         self.foot_rotation = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "frontRoll")
         self.ikSwitch_ctl = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "ikFkSwitch")
-        print(f"{self.side}_{self.finger_front_name.lower()}LegModule")
 
         parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_legFingersParent_PMX", ss=True)
         cmds.connectAttr(self.leg_ball_blm + ".worldMatrix[0]", parent_matrix + ".target[0].targetMatrix")
@@ -102,14 +105,13 @@ class FingersModule(object):
 
         self.fingers = guide_import(guide_name, all_descendents=True, path=None)
         self.side = self.fingers[0].split("_")[0]
-
         if "front" in self.fingers[0].lower():
             self.finger_front_name = "Front" 
 
         elif  "back" in self.fingers[0].lower():
             self.finger_front_name = "Back"
         else:
-            self.finger_front_name = ""
+            self.finger_front_name = "Back"
 
         self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_legFingers{self.finger_front_name}Controllers_GRP", parent=self.masterWalk_ctl)
         self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_footFinger{self.finger_front_name}Module_GRP", parent=self.modules_grp, ss=True)
@@ -189,16 +191,32 @@ class FingersModule(object):
         cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Twist", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
         cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Fan", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
 
+        final_path = core.DataManager.get_guide_data()
+        self.controller_number = 5
+        try:
+            with open(final_path, "r") as infile:
+                guides_data = json.load(infile)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading guides data: {e}")
+        for template_name, guides in guides_data.items():
+            if not isinstance(guides, dict):
+                continue  
+            for guide_name, guide_info in guides.items():
+                if guide_name == self.fingers[0]:
+                    self.controller_number = int(guide_info.get("controllerNumber", 0))
+
         thumb_guides = [finger for finger in self.fingers if "thumb" in finger.lower()]
         index_guides = [finger for finger in self.fingers if "index" in finger.lower()]
         middle_guides = [finger for finger in self.fingers if "middle" in finger.lower()]
         pinky_guides = [finger for finger in self.fingers if "pinky" in finger.lower()]
+        ring_guides = [finger for finger in self.fingers if "ring" in finger.lower()]
 
         self.controllers = []
 
         self.ik_controllers = []
-
-        for i, finger in enumerate([thumb_guides, index_guides, middle_guides, pinky_guides]):
+        finger_list = [thumb_guides, index_guides, middle_guides, pinky_guides, ring_guides]
+        for i in range (self.controller_number):
+            finger = finger_list[i]
             finger_name = ''.join([c for c in finger[0].split('_')[1] if not c.isdigit()])
             
             controllers = []

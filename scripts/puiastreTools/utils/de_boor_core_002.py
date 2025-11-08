@@ -121,7 +121,7 @@ def get_offset_matrix(child, parent):
 
 def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=0.001, d=None, kv_type=OPEN,
                    param_from_length=True, tol=0.000001, name='ribbon', use_position=True, use_tangent=True,
-                   use_up=True, use_scale=True, custom_parm = [], parent=None, axis_change=False, negate_secundary=False):
+                   use_up=True, use_scale=True, custom_parm = [], parent=None, axis_change=False, negate_secundary=False, align=False):
     """
     Use controls and de_boor function to get position, tangent and up values for joints.  The param_from_length can
     be used to get the parameter values using a fraction of the curve length, otherwise the parameter values will be
@@ -416,7 +416,11 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
         # else:
             # cmds.setAttr(f'{aim}.secondaryInputAxis', *AXIS_VECTOR[up_axis], type='double3')
             # cmds.setAttr(f'{aim}.secondaryTargetVector', *AXIS_VECTOR[up_axis], type='double3')
-        cmds.setAttr(f'{aim}.secondaryMode', 1)
+        if not align:
+            cmds.setAttr(f'{aim}.secondaryMode', 1)
+
+        else: 
+            cmds.setAttr(f'{aim}.secondaryMode', 2)
 
         if use_scale:
             scale_wam = create_wt_add_matrix(sca_off_plugs, wts, f'{name}Scale0{i}_WAM', tol=tol)

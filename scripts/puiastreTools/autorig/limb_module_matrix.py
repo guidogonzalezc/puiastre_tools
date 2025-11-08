@@ -327,7 +327,12 @@ class LimbModule(object):
 
         if self.side == "R":
             hand_ctl_offset = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}HandIkOffset_MMX", ss=True)
-            cmds.connectAttr(f"{self.guides_matrix[2]}.outputMatrix", f"{hand_ctl_offset}.matrixIn[1]")
+            if self.oriented_ik:
+           
+                cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{hand_ctl_offset}.matrixIn[1]")
+            else:
+                cmds.connectAttr(f"{self.guides_matrix[2]}.outputMatrix", f"{hand_ctl_offset}.matrixIn[1]")
+
             cmds.setAttr(f"{hand_ctl_offset}.matrixIn[0]",  -1, 0, 0, 0, 
                                                             0, -1, 0, 0, 
                                                             0, -0, -1, 0,
@@ -335,7 +340,10 @@ class LimbModule(object):
             cmds.connectAttr(hand_ctl_offset + ".matrixSum", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
 
         else:
-            cmds.connectAttr(self.guides_matrix[2] + ".outputMatrix", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+            if self.oriented_ik:
+                cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+            else:
+                cmds.connectAttr(f"{self.guides_matrix[2]}.outputMatrix", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
 
         cmds.addAttr(self.pv_ik_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.pv_ik_ctl+".extraAttr", channelBox=True, lock=True)
@@ -681,7 +689,10 @@ class LimbModule(object):
         self.switch_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}SwitchPos_MMX", ss=True)
         cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_pos_multMatrix}.matrixIn[0]")
         inverse_guide = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}SwitchPosInverse_MTX", ss=True)
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse_guide}.inputMatrix")
+        pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}SwitchPos_PIM", ss=True)
+        cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{pick_matrix}.inputMatrix")
+        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{inverse_guide}.inputMatrix")
         cmds.connectAttr(f"{inverse_guide}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[1]")
         cmds.connectAttr(f"{self.switch_pos_multMatrix}.matrixSum", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
         cmds.setAttr(f"{self.switch_ctl_grp[0]}.inheritsTransform", 0)
@@ -752,7 +763,10 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
         cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
-        cmds.connectAttr(f"{self.blend_wm[0]}", f"{self.switch_pos_multMatrix}.matrixIn[2]")
+        pick_matrix = cmds.createNode("pickMatrix", name=f"{name}PickSwitchNoRot_PIM", ss=True)
+        cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+        cmds.connectAttr(f"{self.blend_wm[0]}", f"{pick_matrix}.inputMatrix")
+        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
@@ -1122,14 +1136,25 @@ class ArmModule(LimbModule):
 
         self.ikHandleEnabled = False
 
-        # Arm-specific setup
-        if self.side == "L":
-            self.primary_aim = "x"
-            self.secondary_aim = "-y"
+        if not "moana" == core.DataManager.get_asset_name().lower():
+            if self.side == "L":
+                self.primary_aim = "x"
+                self.secondary_aim = "-y"
 
-        elif self.side == "R":
-            self.primary_aim = "-x"
-            self.secondary_aim = "y"
+
+            elif self.side == "R":
+                self.primary_aim = "-x"
+                self.secondary_aim = "y"
+
+        else:
+            if self.side == "L":
+                self.primary_aim = "x"
+                self.secondary_aim = "z"
+
+
+            elif self.side == "R":
+                self.primary_aim = "-x"
+                self.secondary_aim = "-z"
 
         self.default_ik = 1
 
@@ -1302,6 +1327,7 @@ class LegModule(LimbModule):
         elif self.side == "R":
             self.primary_aim = "-x"
             self.secondary_aim = "y"
+
 
         self.default_ik = 0
 

@@ -130,6 +130,7 @@ def puiastre_ui():
     cmds.menuItem(label="   Aychedral Rig", command=partial(build_rig, asset_name="aychedral"))
     cmds.menuItem(label="   Maiasaura Rig", command=partial(build_rig, asset_name="maiasaura"))
     cmds.menuItem(label="   Cheetah Rig", command=partial(build_rig, asset_name="cheetah"))
+    cmds.menuItem(label="   Moana Rig", command=partial(build_rig, asset_name="moana"))
     cmds.setParent("..", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

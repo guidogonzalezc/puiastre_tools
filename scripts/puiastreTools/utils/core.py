@@ -94,7 +94,6 @@ def store_data():
     file_path = os.path.join(SCRIPT_PATH, "build", "old_data.json")
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
-    om.MGlobal.displayInfo(f"Data stored at: {file_path}")
 
 def load_data():
     """
@@ -110,7 +109,6 @@ def load_data():
             DataManager.set_mesh_data(data.get("mesh_data"))
             DataManager.set_asset_name(data.get("asset_name"))
             DataManager.set_skinning_data(data.get("skinning_data"))
-        om.MGlobal.displayInfo(f"Data loaded from: {file_path}")
     else:
         om.MGlobal.displayWarning(f"No data file found at: {file_path}")
 

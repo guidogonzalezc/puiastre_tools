@@ -177,7 +177,7 @@ class NeckModule():
         cmds.connectAttr(f"{tan01_end_pos}.matrixSum", f"{head_scale}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{head_scale}.target[0].targetMatrix")
         cmds.setAttr(f"{head_scale}.target[0].translateWeight", 0)
-        cmds.setAttr(f"{head_scale}.target[0].rotateWeight", 0)
+        # cmds.setAttr(f"{head_scale}.target[0].rotateWeight", 0)
 
         head_with_local_rotation = cmds.createNode("blendMatrix", name=f"{self.side}_headLocalRotation_BMX", ss=True)
         cmds.connectAttr(f"{tan01_end_pos}.matrixSum", f"{head_with_local_rotation}.inputMatrix")
@@ -193,7 +193,7 @@ class NeckModule():
 
         t_values.pop(-1)
         
-        self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvs, num_joints=self.num_joints-1, name=f"{self.side}_neck", parent=self.skinning_trn, custom_parm=t_values, use_position=True, use_tangent=True, use_up=True)
+        self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvs, num_joints=self.num_joints-1, name=f"{self.side}_neck", parent=self.skinning_trn, custom_parm=t_values, use_position=True, use_tangent=True, use_up=True, negate_secundary=True, align=True)
 
         self.input_connections = []
         head_temp_joint = cmds.createNode("joint", n=f"{self.side}_head_JNT", parent=self.skinning_trn, ss=True)

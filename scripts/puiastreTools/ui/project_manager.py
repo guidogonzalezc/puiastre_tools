@@ -141,6 +141,7 @@ def load_asset_configuration(asset_name):
     with open(config_file_path, 'r') as config_file:
         configurations = json.load(config_file)
 
+
     for folder_names, path in configurations.items():
         if path == "relative":
             folder_path = os.path.join(asset_path, folder_names)
