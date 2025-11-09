@@ -278,19 +278,22 @@ class LimbModule(object):
         cmds.connectAttr(f"{pole_pos}.output3Dy", f'{fourByFour}.in31')
         cmds.connectAttr(f"{pole_pos}.output3Dz", f'{fourByFour}.in32')
 
-        aim_matrix = cmds.createNode('aimMatrix', name=f"{self.side}_{self.module_name}PvAim_AMX", ss=True)
-        cmds.setAttr(f'{aim_matrix}.primaryInputAxis', 0, 0, 1, type='double3')
-        cmds.setAttr(f'{aim_matrix}.secondaryInputAxis', 1, 0, 0, type='double3')
-        cmds.setAttr(f'{aim_matrix}.secondaryTargetVector', 1, 0, 0, type='double3')
-        cmds.setAttr(f'{aim_matrix}.primaryMode', 1)
-        cmds.setAttr(f'{aim_matrix}.secondaryMode', 2)
-        cmds.connectAttr(f'{fourByFour}.output', f'{aim_matrix}.inputMatrix')
-        cmds.connectAttr(f'{m2_attr}', f"{aim_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f'{m2_attr}', f'{aim_matrix}.secondaryTargetMatrix')
+        # aim_matrix = cmds.createNode('aimMatrix', name=f"{self.side}_{self.module_name}PvAim_AMX", ss=True)
+        # cmds.setAttr(f'{aim_matrix}.primaryInputAxis', 0, 0, 1, type='double3')
+        # cmds.setAttr(f'{aim_matrix}.secondaryInputAxis', 1, 0, 0, type='double3')
+        # cmds.setAttr(f'{aim_matrix}.secondaryTargetVector', 1, 0, 0, type='double3')
+        # cmds.setAttr(f'{aim_matrix}.primaryMode', 1)
+        # cmds.setAttr(f'{aim_matrix}.secondaryMode', 2)
+        # cmds.connectAttr(f'{fourByFour}.output', f'{aim_matrix}.inputMatrix')
+        # cmds.connectAttr(f'{m2_attr}', f"{aim_matrix}.primaryTargetMatrix")
+        # cmds.connectAttr(f'{m2_attr}', f'{aim_matrix}.secondaryTargetMatrix')
 
         blend_matrix = cmds.createNode('blendMatrix', name=f"{self.side}_{self.module_name}PvBlend_BLM", ss=True)
         cmds.connectAttr(f'{fourByFour}.output', f'{blend_matrix}.inputMatrix')
-        cmds.connectAttr(f'{aim_matrix}.outputMatrix', f'{blend_matrix}.target[0].targetMatrix')
+        cmds.connectAttr(f'{m2_attr}', f'{blend_matrix}.target[0].targetMatrix')
+        cmds.setAttr(f'{blend_matrix}.target[0].translateWeight', 0)
+        cmds.setAttr(f'{blend_matrix}.target[0].scaleWeight', 0)
+        cmds.setAttr(f'{blend_matrix}.target[0].shearWeight', 0)
 
         return blend_matrix
 
