@@ -1393,6 +1393,21 @@ def guide_import(joint_name, all_descendents=True, path=None):
 
         return transforms_chain_export
 
+def add_module_to_guide():
+    """
+    Adds a module to the guide creation process.
+    """
+
+
+    project_manager.load_asset_configuration(asset_name = "moana")
+
+    load_guides()
+    guides_trn = "guides_GRP"
+    buffers_trn = "buffers_GRP"
+    EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
+   
+# add_module_to_guide()
+
 """ --- Debug code for maya
 
 from importlib import reload

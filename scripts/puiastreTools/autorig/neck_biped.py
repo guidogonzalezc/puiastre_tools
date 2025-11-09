@@ -158,20 +158,43 @@ class NeckModule():
         cmds.connectAttr(f"{real_dis_global}.output", f"{neck_to_head_blendTwo}.input[1]")
         cmds.connectAttr(f"{self.main_controllers[-1]}.stretch", f"{neck_to_head_blendTwo}.attributesBlender")
 
-        neck01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_neckWM_AIM", ss=True)
-        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix}.inputMatrix")
-        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck01_world_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{neck01_world_matrix}.secondaryTargetMatrix")
-        cmds.setAttr(f"{neck01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        cmds.setAttr(f"{neck01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{neck01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{neck01_world_matrix}.secondaryMode", 2)
+        neck01_world_matrix_aim = cmds.createNode("aimMatrix", name=f"{self.side}_neckWM_AIM", ss=True)
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix_aim}.inputMatrix")
+        cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck01_world_matrix_aim}.primaryTargetMatrix")
+        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{neck01_world_matrix_aim}.secondaryTargetMatrix")
+        cmds.setAttr(f"{neck01_world_matrix_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        cmds.setAttr(f"{neck01_world_matrix_aim }.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{neck01_world_matrix_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{neck01_world_matrix_aim}.secondaryMode", 2)
+
+        neck01_world_matrix = cmds.createNode("multMatrix", name=f"{self.side}_neck01_MMX", ss=True)
+        decompose_wm = cmds.createNode("decomposeMatrix", name=f"{self.side}_neck01_DCM", ss=True)
+        decompose_ctl = cmds.createNode("decomposeMatrix", name=f"{self.side}_neck01CTL_DCM", ss=True)
+        negate = cmds.createNode("negate", name=f"{self.side}_neck01Negate_NEG", ss=True)
+        sum = cmds.createNode("sum", name=f"{self.side}_neck01_SUM", ss=True)
+        compose = cmds.createNode("composeMatrix", name=f"{self.side}_neck01_CMP", ss=True)
+
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{decompose_ctl}.inputMatrix")
+        cmds.connectAttr(f"{decompose_wm}.outputRotateY", f"{negate}.input")
+        cmds.connectAttr(f"{negate}.output", f"{sum}.input[1]")
+        cmds.connectAttr(f"{neck01_world_matrix_aim}.outputMatrix", f"{decompose_wm}.inputMatrix")
+        cmds.connectAttr(f"{decompose_ctl}.outputRotateY", f"{sum}.input[0]")
+        cmds.connectAttr(f"{sum}.output", f"{compose}.inputRotateY")
+        cmds.connectAttr(f"{compose}.outputMatrix", f"{neck01_world_matrix}.matrixIn[0]")
+
+        cmds.connectAttr(f"{neck01_world_matrix_aim}.outputMatrix", f"{neck01_world_matrix}.matrixIn[1]")
+
+
+
+
+
+
         tan01_translate_offset = cmds.createNode("fourByFourMatrix", name=f"{self.side}_headTranslateOffset_FBM", ss=True)
         cmds.connectAttr(f"{neck_to_head_blendTwo}.output", f"{tan01_translate_offset}.in31")
 
         tan01_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_headNoScale_MMT", ss=True)
         cmds.connectAttr(f"{tan01_translate_offset}.output", f"{tan01_end_pos}.matrixIn[0]")
-        cmds.connectAttr(f"{neck01_world_matrix}.outputMatrix", f"{tan01_end_pos}.matrixIn[1]")
+        cmds.connectAttr(f"{neck01_world_matrix}.matrixSum", f"{tan01_end_pos}.matrixIn[1]")
         
         head_scale = cmds.createNode("blendMatrix", name=f"{self.side}_headScale_BMX", ss=True)
         cmds.connectAttr(f"{tan01_end_pos}.matrixSum", f"{head_scale}.inputMatrix")
@@ -184,7 +207,7 @@ class NeckModule():
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{head_with_local_rotation}.target[0].targetMatrix")
         cmds.setAttr(f"{head_with_local_rotation}.target[0].translateWeight", 0)
 
-        cvs = [f"{neck01_world_matrix}.outputMatrix", f"{head_scale}.outputMatrix"]
+        cvs = [f"{neck01_world_matrix}.matrixSum", f"{head_scale}.outputMatrix"]
 
         t_values = []
         for i in range(self.num_joints):

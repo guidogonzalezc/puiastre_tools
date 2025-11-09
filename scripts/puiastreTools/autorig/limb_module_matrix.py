@@ -325,7 +325,7 @@ class LimbModule(object):
 
         )
 
-        if self.side == "R":
+        if self.side == "R" and self.module_name == "arm":
             hand_ctl_offset = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}HandIkOffset_MMX", ss=True)
             if self.oriented_ik:
            
@@ -646,7 +646,7 @@ class LimbModule(object):
         hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.module_name}EndLocal_F4X", ss=True)
 
         hand_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}EndWM_MMX", ss=True)
-        if self.side == "R":
+        if self.side == "R" and self.module_name == "arm":
             cmds.setAttr(f"{hand_wm_multmatrix}.matrixIn[0]",  -1, 0, 0, 0,
                                                     -0, -1, 0, 0,
                                                     0, 0, -1, 0,
@@ -1136,25 +1136,16 @@ class ArmModule(LimbModule):
 
         self.ikHandleEnabled = False
 
-        if not "moana" == core.DataManager.get_asset_name().lower():
-            if self.side == "L":
-                self.primary_aim = "x"
-                self.secondary_aim = "-y"
+        if self.side == "L":
+            self.primary_aim = "x"
+            self.secondary_aim = "-y"
 
 
-            elif self.side == "R":
-                self.primary_aim = "-x"
-                self.secondary_aim = "y"
-
-        else:
-            if self.side == "L":
-                self.primary_aim = "x"
-                self.secondary_aim = "z"
+        elif self.side == "R":
+            self.primary_aim = "-x"
+            self.secondary_aim = "y"
 
 
-            elif self.side == "R":
-                self.primary_aim = "-x"
-                self.secondary_aim = "-z"
 
         self.default_ik = 1
 
