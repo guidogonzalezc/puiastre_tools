@@ -176,11 +176,11 @@ class NeckModule():
         neck01_world_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_neck01WM_AIM", ss=True)
         cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck01_world_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{neck01_world_matrix}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix}.secondaryTargetMatrix")
         cmds.setAttr(f"{neck01_world_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{neck01_world_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{neck01_world_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{neck01_world_matrix}.secondaryMode", 2)
+        cmds.setAttr(f"{neck01_world_matrix}.secondaryMode", 1)
         tan01_translate_offset = cmds.createNode("fourByFourMatrix", name=f"{self.side}_tan01TranslateOffset_FBM", ss=True)
         cmds.connectAttr(f"{neck_to_tan01_blendTwo}.output", f"{tan01_translate_offset}.in32")
 
