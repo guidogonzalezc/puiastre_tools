@@ -341,8 +341,11 @@ class GuideCreation(object):
                 if "Settings" in self.guides[i+1] or "localHip" in self.guides[i+1] or self.limb_name == "mouth":
                     continue
                 if "metacarpal" in self.guides[i] or "Metacarpal" in self.guides[i]:
-                    if cmds.listRelatives(self.guides[i], parent=True) != [self.guides[0]]:
-                        cmds.parent(self.guides[i], self.guides[0])
+                    try:
+                        if cmds.listRelatives(self.guides[i], parent=True) != [self.guides[0]]:
+                            cmds.parent(self.guides[i], self.guides[0])
+                    except:
+                        pass
                     curve = cmds.curve(d=1, p=[(1, 0, 0), (2, 0, 0)], n=f"{self.guides[i]}_to_{self.guides[0]}_CRV")
                     dcmp = cmds.createNode("decomposeMatrix", name=f"{self.guides[i]}_to_{self.guides[0]}{i}_DCM", ss=True)
                     dcmp02 = cmds.createNode("decomposeMatrix", name=f"{self.guides[i]}_to_{self.guides[0]}{i+1}_DCM", ss=True)
@@ -398,7 +401,7 @@ class GuideCreation(object):
 
 def get_data(name, module_name=False):
 
-    final_path = core.init_template_file(ext=".guides", export=False)
+    final_path = core.DataManager.get_guide_data()
 
     try:
         with open(final_path, "r") as infile:
@@ -633,34 +636,6 @@ class MembraneCreation(GuideCreation):
             # "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
         }
 
-def number_to_ordinal_word(n):
-    base_ordinal = {
-        1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth',
-        6: 'sixth', 7: 'seventh', 8: 'eighth', 9: 'ninth', 10: 'tenth',
-        11: 'eleventh', 12: 'twelfth', 13: 'thirteenth', 14: 'fourteenth',
-        15: 'fifteenth', 16: 'sixteenth', 17: 'seventeenth', 18: 'eighteenth',
-        19: 'nineteenth'
-    }
-    tens = {
-        20: 'twentieth', 30: 'thirtieth', 40: 'fortieth',
-        50: 'fiftieth', 60: 'sixtieth', 70: 'seventieth',
-        80: 'eightieth', 90: 'ninetieth'
-    }
-    tens_prefix = {
-        20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty',
-        60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety'
-    }
-    if n <= 19:
-        return base_ordinal[n]
-    elif n in tens:
-        return tens[n]
-    elif n < 100:
-        ten = (n // 10) * 10
-        unit = n % 10
-        return tens_prefix[ten] + "-" + base_ordinal[unit]
-    else:
-        return str(n)
-
 class HandGuideCreation(GuideCreation):
     """
     Guide creation for hands.
@@ -707,7 +682,7 @@ class HandGuideCreation(GuideCreation):
             }
 
             for item in range(int(controller_number)):
-                name = number_to_ordinal_word(item + 1)
+                name = core.number_to_ordinal_word(item + 1)
                 if name == "first":
                     self.position_data.update({
                         f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
@@ -747,7 +722,29 @@ class FootGuideCreation(GuideCreation):
 
 
     }
-        
+
+class FkFingersGuideCreation(GuideCreation):
+    """
+    Guide creation for feet.
+    """
+    def __init__(self, side = "L", limb_name="foot", prefix=False, controller_number=3):
+        self.sides = side
+        self.reverse_foot_name = limb_name
+        self.limb_name = "fkFinger"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = int(controller_number)
+        self.prefix = None
+       
+        self.position_data = {}
+        for i in range(0, int(self.controller_number)):
+            if i == 0:
+                name = f"{limb_name}Metacarpal" if len(limb_name) >= 4 else f"{limb_name}0{i}"
+            else:
+                name = f"{limb_name}0{i}"
+            self.position_data[f"{name}"] = get_data(f"{self.sides}_{name}")
+
+
 class FootFingersGuideCreation(GuideCreation):
     """
     Guide creation for feet.
@@ -755,14 +752,12 @@ class FootFingersGuideCreation(GuideCreation):
     def __init__(self, side = "L", limb_name="foot", prefix=False, controller_number=3):
         self.sides = side
         self.reverse_foot_name = limb_name
-        print("reverse:", self.reverse_foot_name)
         self.limb_name = limb_name
         self.aim_name = None
         self.aim_offset = 0
         self.controller_number = int(controller_number)
         self.prefix = None
         ctl = "" if prefix == False else self.reverse_foot_name
-        print("ctl:", ctl)
         def maybe_cap(s):
             return s.capitalize() if ctl else s
 
@@ -943,7 +938,6 @@ def load_guides(path = ""):
     if not path or path == "_":
         path = "body_template_"
 
-    # final_path = core.init_template_file(ext=".guides", export=False, file_name=path)
     final_path = core.DataManager.get_guide_data()
 
     try:
@@ -1012,7 +1006,10 @@ def load_guides(path = ""):
 
                 if guide_info.get("moduleName") == "eye":
                     EyesGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
-                    
+
+                if guide_info.get("moduleName") == "eye":
+                    EyesGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
+                                    
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "frontLegFoot" or "footBack" in guide_name or "footFront" in guide_name:
                     if "backLegFoot" in guide_name or "frontLegFoot" in guide_name or "footBack" in guide_name or "footFront" in guide_name:
                         FootFingersGuideCreation(side=guide_name.split("_")[0], limb_name=guide_info.get("moduleName"), prefix=True, controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
@@ -1126,8 +1123,7 @@ def guides_export(mirror=False):
         Exports the guides from the selected folder in the Maya scene to a JSON file.
         """
 
-        # TEMPLATE_FILE = core.init_template_file(ext=".guides", file_name=f"{file_name}_")
-        TEMPLATE_FILE = core.init_template_file(ext=".guides")
+        TEMPLATE_FILE = core.DataManager.get_guide_data()
         print(f"Exporting guides to {TEMPLATE_FILE}")
         
         guides_folder = cmds.ls("guides_GRP", type="transform")
@@ -1331,7 +1327,7 @@ def guide_import(joint_name, all_descendents=True, path=None):
                         cmds.addAttr(guide_transform, longName="guideType", attributeType="enum", enumName=guideType, keyable=False)
 
 
-                final_path = core.init_template_file(ext=".guides", export=False)
+                final_path = core.DataManager.get_guide_data()
 
                 with open(final_path, "r") as infile:
                     guides_data = json.load(infile)

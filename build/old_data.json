@@ -1,8 +1,8 @@
 {
-    "project_path": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\aychedral",
-    "ctls_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\aychedral\\curves\\CHAR_aychedral_002.json",
-    "guide_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\aychedral\\guides\\CHAR_aychedral_001.guides",
-    "mesh_data": "Puiastre",
-    "asset_name": "AYCHEDRAL",
-    "skinning_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\aychedral\\skinning\\CHAR_aychedral_001.skn"
+    "project_path": null,
+    "ctls_data": null,
+    "guide_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\moana\\guides\\CHAR_moana_001.guides",
+    "mesh_data": "C_body_MSH",
+    "asset_name": "moana",
+    "skinning_data": null
 }

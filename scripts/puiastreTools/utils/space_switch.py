@@ -1,27 +1,8 @@
 import maya.cmds as cmds
 import maya.api.OpenMaya as om
 from puiastreTools.utils import data_export
+from puiastreTools.utils.core import get_offset_matrix
 
-
-def get_offset_matrix(child, parent):
-    """
-    Calculate the offset matrix between a child and parent transform in Maya.
-    Args:
-        child (str): The name of the child transform.
-        parent (str): The name of the parent transform. 
-    Returns:
-        om.MMatrix: The offset matrix that transforms the child into the parent's space.
-    """
-    child_dag = om.MSelectionList().add(child).getDagPath(0)
-    parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-    
-    child_world_matrix = child_dag.inclusiveMatrix()
-    parent_world_matrix = parent_dag.inclusiveMatrix()
-    
-    offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-    
-    return offset_matrix
 
 def leg_pv_spaceswitch(localHip, legPv, footCtl, root):
 

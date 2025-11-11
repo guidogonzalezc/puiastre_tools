@@ -132,76 +132,6 @@ def pv_locator(name, parents =[], parent_append = None):
 
     return curve
 
-def init_template_file(ext=".guides", export=True):
-    """
-    Initializes the TEMPLATE_FILE variable.
-    If a path is provided, it sets TEMPLATE_FILE to that path.
-    Otherwise, it uses the default template file path.
-    """
-
-    if ext == ".guides":
-        file_name = DataManager.get_guide_data()
-    elif ext == ".ctls":
-        file_name = DataManager.get_ctls_data()
-
-    end_file_path = None
-
-
-    if not os.path.isabs(file_name):
-        folder= {".guides": "guides", ".ctls": "curves"}
-        complete_path = os.path.realpath(__file__)
-        relative_path = complete_path.split("\scripts")[0]
-        guides_dir = os.path.join(relative_path, folder[ext])
-        base_name = file_name
-        # Find all files matching the pattern
-        existing = [
-            f for f in os.listdir(guides_dir)
-            if f.startswith(base_name) and f.endswith(ext)
-        ]
-        max_num = 1
-        for f in existing:
-            try:
-                num = int(f[len(base_name):len(base_name)+2])
-                if num > max_num:
-                    max_num = num
-            except ValueError:
-                continue
-        default_template = os.path.join(guides_dir, f"{base_name}{max_num:02d}{ext}")
-    else:
-        default_template = file_name
-        base_name = os.path.splitext(file_name)[0]
-
-    if export:
-        if os.path.exists(default_template):
-            result = cmds.confirmDialog(
-                title='Template Exists',
-                message=f'{default_template} already exists. Replace it?',
-                button=['Replace', 'Add +1', 'Cancel'],
-                defaultButton='Replace',
-                cancelButton='Cancel',
-                dismissString='Cancel'
-            )
-            if result == 'Replace':
-                end_file_path = default_template
-            elif result == 'Add +1':
-                base, ext = os.path.splitext(default_template)
-                i = 2
-                while True:
-                        new_template = f"{base[:-2]}{i:02d}{ext}"
-                        if not os.path.exists(new_template):
-                                end_file_path = new_template
-                                break
-                        i += 1
-            elif result == 'Cancel':
-                om.MGlobal.displayWarning("Template creation cancelled.")
-                return None
-            else:
-                end_file_path = None
-    else:
-        end_file_path = default_template
-
-    return end_file_path
-
 def square_multiyply(distance, side):
     name = distance.split(".")[0]
     name = "_".join(name.split("_")[:2])
@@ -211,7 +141,7 @@ def square_multiyply(distance, side):
     return f"{multiply}.output"
 
 def law_of_cosine(sides = [], power=[], name = "L_armModule", negate=False, acos=False):
-    """`
+    """
     Calculate the angle opposite side c using the law of cosines.
     """
     
@@ -278,3 +208,122 @@ def law_of_cosine(sides = [], power=[], name = "L_armModule", negate=False, acos
         return divide, power_mults, negate_cos_value
 
     return divide, power_mults
+
+def get_offset_matrix(child, parent):
+    """
+    Calculate the offset matrix between a child and parent transform in Maya.
+    Args:
+        child (str): The name of the child transform or matrix attribute.
+        parent (str): The name of the parent transform or matrix attribute. 
+    Returns:
+        list: The offset matrix as a flat list of 16 floats in row-major order that transforms the child into the parent's space.
+    """
+    def get_world_matrix(node):
+        try:
+            dag = om.MSelectionList().add(node).getDagPath(0)
+            return dag.inclusiveMatrix()
+        except:
+            matrix = cmds.getAttr(node)
+            return om.MMatrix(matrix)
+
+    child_world_matrix = get_world_matrix(child)
+    parent_world_matrix = get_world_matrix(parent)
+
+    offset_matrix = child_world_matrix * parent_world_matrix.inverse()
+
+    # Convert to Python list (row-major order)
+    offset_matrix_list = list(offset_matrix)
+
+    return offset_matrix_list
+
+def get_closest_transform(main_transform, transform_list):
+    """
+    Returns the transform from transform_list that is closest to main_transform.
+    
+    Args:
+        main_transform (str): Name of the main transform.
+        transform_list (list): List of transform names to compare.
+
+    Returns:
+        str: Name of the closest transform.
+    """
+    main_pos = om.MVector(main_transform)
+    
+    closest_obj = None
+    closest_dist = float('inf')
+    
+    for t in transform_list:
+        if not cmds.objExists(t):
+            continue
+        
+        pos = om.MVector(cmds.xform(t, q=True, ws=True, t=True))
+        dist = (pos - main_pos).length()
+        
+        if dist < closest_dist:
+            closest_dist = dist
+            closest_obj = t
+
+    return closest_obj
+
+def getClosestParamsToPositionSurface(surface, position):
+    """
+    Returns the closest parameters (u, v) on the given NURBS surface 
+    to a world-space position.
+
+    Args:
+        surface (str or MObject or MDagPath): The surface to evaluate.
+        position (list or tuple): A 3D world-space position [x, y, z].
+
+    Returns:
+        tuple: (u, v) parameters on the surface closest to the given position.
+    """
+    # Get MDagPath for surface
+    if isinstance(surface, str):
+        sel = om.MSelectionList()
+        sel.add(surface)
+        surface_dag_path = sel.getDagPath(0)
+    elif isinstance(surface, om.MObject):
+        surface_dag_path = om.MDagPath.getAPathTo(surface)
+    elif isinstance(surface, om.MDagPath):
+        surface_dag_path = surface
+    else:
+        raise TypeError("Surface must be a string name, MObject, or MDagPath.")
+
+    # Create function set for NURBS surface
+    surface_fn = om.MFnNurbsSurface(surface_dag_path)
+
+    # Convert position to MPoint
+    point = om.MPoint(*position)
+
+    # Get closest point and parameters
+    closest_point, u, v = surface_fn.closestPoint(point, space=om.MSpace.kWorld)
+
+    return u, v
+
+def number_to_ordinal_word(n):
+    base_ordinal = {
+        1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth',
+        6: 'sixth', 7: 'seventh', 8: 'eighth', 9: 'ninth', 10: 'tenth',
+        11: 'eleventh', 12: 'twelfth', 13: 'thirteenth', 14: 'fourteenth',
+        15: 'fifteenth', 16: 'sixteenth', 17: 'seventeenth', 18: 'eighteenth',
+        19: 'nineteenth'
+    }
+    tens = {
+        20: 'twentieth', 30: 'thirtieth', 40: 'fortieth',
+        50: 'fiftieth', 60: 'sixtieth', 70: 'seventieth',
+        80: 'eightieth', 90: 'ninetieth'
+    }
+    tens_prefix = {
+        20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty',
+        60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety'
+    }
+    if n <= 19:
+        return base_ordinal[n]
+    elif n in tens:
+        return tens[n]
+    elif n < 100:
+        ten = (n // 10) * 10
+        unit = n % 10
+        return tens_prefix[ten] + "-" + base_ordinal[unit]
+    else:
+        return str(n)

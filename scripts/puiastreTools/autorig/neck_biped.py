@@ -39,8 +39,6 @@ class NeckModule():
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
 
-
-
     def make(self, guide_name, num_joints = 5):
         """
         Creates the neck module, including the neck chain, controllers, and various systems.

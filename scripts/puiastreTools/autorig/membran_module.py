@@ -16,7 +16,7 @@ import puiastreTools.utils.de_boor_core_002 as de_boors_002
 from puiastreTools.utils import space_switch as ss
 from puiastreTools.utils import core
 from puiastreTools.utils import basic_structure
-
+import maya.api.OpenMaya as om
 
 reload(de_boors_002)
 reload(guide_creation)
@@ -36,34 +36,6 @@ class MembraneModule(object):
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
         self.skeleton_hierarchy = self.data_exporter.get_data("basic_structure", "skeletonHierarchy_GRP")
-    
-    def number_to_ordinal_word(self, n):
-        base_ordinal = {
-            1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth',
-            6: 'sixth', 7: 'seventh', 8: 'eighth', 9: 'ninth', 10: 'tenth',
-            11: 'eleventh', 12: 'twelfth', 13: 'thirteenth', 14: 'fourteenth',
-            15: 'fifteenth', 16: 'sixteenth', 17: 'seventeenth', 18: 'eighteenth',
-            19: 'nineteenth'
-        }
-        tens = {
-            20: 'twentieth', 30: 'thirtieth', 40: 'fortieth',
-            50: 'fiftieth', 60: 'sixtieth', 70: 'seventieth',
-            80: 'eightieth', 90: 'ninetieth'
-        }
-        tens_prefix = {
-            20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty',
-            60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety'
-        }
-        if n <= 19:
-            return base_ordinal[n]
-        elif n in tens:
-            return tens[n]
-        elif n < 100:
-            ten = (n // 10) * 10
-            unit = n % 10
-            return tens_prefix[ten] + "-" + base_ordinal[unit]
-        else:
-            return str(n)
 
     def make(self, guide_name):
 
@@ -109,92 +81,6 @@ class MembraneModule(object):
             }
         )
 
-    import maya.api.OpenMaya as om
-
-    def getClosestParamsToPosition(self, surface, position):
-        """
-        Returns the closest parameters (u, v) on the given NURBS surface 
-        to a world-space position.
-
-        Args:
-            surface (str or MObject or MDagPath): The surface to evaluate.
-            position (list or tuple): A 3D world-space position [x, y, z].
-
-        Returns:
-            tuple: (u, v) parameters on the surface closest to the given position.
-        """
-        # Get MDagPath for surface
-        if isinstance(surface, str):
-            sel = om.MSelectionList()
-            sel.add(surface)
-            surface_dag_path = sel.getDagPath(0)
-        elif isinstance(surface, om.MObject):
-            surface_dag_path = om.MDagPath.getAPathTo(surface)
-        elif isinstance(surface, om.MDagPath):
-            surface_dag_path = surface
-        else:
-            raise TypeError("Surface must be a string name, MObject, or MDagPath.")
-
-        # Create function set for NURBS surface
-        surface_fn = om.MFnNurbsSurface(surface_dag_path)
-
-        # Convert position to MPoint
-        point = om.MPoint(*position)
-
-        # Get closest point and parameters
-        closest_point, u, v = surface_fn.closestPoint(point, space=om.MSpace.kWorld)
-
-        return u, v
-
-
-    def get_closest_transform(self, main_transform, transform_list):
-        """
-        Returns the transform from transform_list that is closest to main_transform.
-        
-        Args:
-            main_transform (str): Name of the main transform.
-            transform_list (list): List of transform names to compare.
-
-        Returns:
-            str: Name of the closest transform.
-        """
-        main_pos = om.MVector(main_transform)
-        
-        closest_obj = None
-        closest_dist = float('inf')
-        
-        for t in transform_list:
-            if not cmds.objExists(t):
-                continue
-            
-            pos = om.MVector(cmds.xform(t, q=True, ws=True, t=True))
-            dist = (pos - main_pos).length()
-            
-            if dist < closest_dist:
-                closest_dist = dist
-                closest_obj = t
-
-        return closest_obj
-
-
-    def get_offset_matrix(self, child, parent):
-        """
-        Calculate the offset matrix between a child and parent transform in Maya.
-        Args:
-            child (str): The name of the child transform.
-            parent (str): The name of the parent transform. 
-        Returns:
-            om.MMatrix: The offset matrix that transforms the child into the parent's space.
-        """
-        child_dag = om.MSelectionList().add(child).getDagPath(0)
-        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-        
-        child_world_matrix = child_dag.inclusiveMatrix()
-        parent_world_matrix = parent_dag.inclusiveMatrix()
-        
-        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-        return offset_matrix
 
     def main_membrane(self):
         data_exporter = data_export.DataExport()
@@ -228,7 +114,7 @@ class MembraneModule(object):
             search_list = spine_joints
             search_list.extend(tail_joints)
 
-            closest_transform = self.get_closest_transform(closest_pos, search_list)
+            closest_transform = core.get_closest_transform(closest_pos, search_list)
             first_row_closest.append(closest_transform)
 
 
@@ -264,7 +150,7 @@ class MembraneModule(object):
             closest_pos = cmds.pointPosition(f"{guide_shape}.cv[2][{i}]", world=True) 
             search_list = membran_joints
 
-            closest_transform = self.get_closest_transform(closest_pos, search_list)
+            closest_transform = core.get_closest_transform(closest_pos, search_list)
             third_row_closest.append(closest_transform)
 
         skinning_list = first_row_closest
@@ -295,7 +181,7 @@ class MembraneModule(object):
             secondary_controllers = []
             pick_matrices = []
             for index in range(4):
-                u, v = self.getClosestParamsToPosition(self.guides[0], cmds.pointPosition(f"{rebuilded_surface}.cv[{i+1}][{index}]", world=True))
+                u, v = core.getClosestParamsToPositionSurface(self.guides[0], cmds.pointPosition(f"{rebuilded_surface}.cv[{i+1}][{index}]", world=True))
 
                 point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{name}Membrane0{index+1}_POSI", ss=True)
                 cmds.setAttr(f"{point_on_surface}.parameterU", u)
@@ -414,7 +300,7 @@ class MembraneModule(object):
         input_val = 0
         skinning_joints = []
         while True:
-            joint_name = f"{self.side}_{self.number_to_ordinal_word(input_val + 1)}MetacarpalModule"
+            joint_name = f"{self.side}_{core.number_to_ordinal_word(input_val + 1)}MetacarpalModule"
             joint = self.data_exporter.get_data(joint_name, "skinning_transform")
             if joint is None:
                 break
@@ -425,18 +311,6 @@ class MembraneModule(object):
             joint_list_one = cmds.listRelatives(skinning_joints[i], children=True, type="joint")
             joint_list_two = cmds.listRelatives(skinning_joints[i+1], children=True, type="joint")
             
-            # if joint_list_one and joint_list_two:
-            #     len_one = len(joint_list_one)
-            #     split_indices = [
-            #         1,
-            #         5,
-            #         10,
-            #         14
-            #     ]
-            #     split_points_one = [joint_list_one[idx] for idx in split_indices if idx > 0 and idx <= len_one]
-            #     split_points_two = [joint_list_two[idx] for idx in split_indices if idx > 0 and idx <= len(joint_list_two)]
-                
-
             for values in [0.5]:
 
                 ctls = []
@@ -450,7 +324,7 @@ class MembraneModule(object):
                 for index, (joint_one, joint_two) in enumerate(zip(joint_list_one, joint_list_two)):
                     if values == 0.5:
                         name = "MainController"
-                    y_axis_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_AMX", ss=True)
+                    y_axis_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_AMX", ss=True)
                     cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{y_axis_aim}.inputMatrix")
                     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim}.primaryTargetMatrix")
                     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim}.secondaryTargetMatrix")
@@ -459,7 +333,7 @@ class MembraneModule(object):
                     cmds.setAttr(f"{y_axis_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
                     cmds.setAttr(f"{y_axis_aim}.secondaryMode", 2)
 
-                    y_axis_aim_translate = cmds.createNode("blendMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_BMX", ss=True)
+                    y_axis_aim_translate = cmds.createNode("blendMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_BMX", ss=True)
                     cmds.connectAttr(f"{y_axis_aim}.outputMatrix", f"{y_axis_aim_translate}.inputMatrix")
                     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{y_axis_aim_translate}.target[0].targetMatrix")
                     cmds.setAttr(f"{y_axis_aim_translate}.target[0].scaleWeight", 0)
@@ -469,27 +343,27 @@ class MembraneModule(object):
 
                     mult_side = 1 if self.side == "L" else -1
 
-                    y_axis_aim_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_MMX", ss=True)
+                    y_axis_aim_end_pos = cmds.createNode("multMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_MMX", ss=True)
                     cmds.setAttr(f"{y_axis_aim_end_pos}.matrixIn[0]",   1, 0, 0, 0, 
                                                                         0, 1, 0, 0, 
                                                                         0, 0, 1, 0, 
                                                                         0, 50*mult_side, 0, 1, type="matrix")
                     cmds.connectAttr(f"{y_axis_aim_translate}.outputMatrix", f"{y_axis_aim_end_pos}.matrixIn[1]")   
 
-                    mid_position = cmds.createNode("wtAddMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_WTM", ss=True)
+                    mid_position = cmds.createNode("wtAddMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_WTM", ss=True)
                     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{mid_position}.wtMatrix[0].matrixIn")
                     cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{mid_position}.wtMatrix[1].matrixIn")
                     cmds.setAttr(f"{mid_position}.wtMatrix[0].weightIn", values) # Cambiar valor para 0.25 0.5 0.75
                     cmds.setAttr(f"{mid_position}.wtMatrix[1].weightIn", 1-values) # Cambiar valor para 0.25 0.5 0.75
 
-                    front_offset_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}FrontOffset_MMX", ss=True)
+                    front_offset_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}FrontOffset_MMX", ss=True)
                     cmds.setAttr(f"{front_offset_multMatrix}.matrixIn[0]",   1, 0, 0, 0, 
                                                                             0, 1, 0, 0,
                                                                             0, 0, 1, 0,
                                                                             10, 0, 0, 1, type="matrix")
                     cmds.connectAttr(f"{mid_position}.matrixSum", f"{front_offset_multMatrix}.matrixIn[1]")
 
-                    membran_wm_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}End_AMX", ss=True)
+                    membran_wm_aim = cmds.createNode("aimMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}End_AMX", ss=True)
                     cmds.connectAttr(f"{mid_position}.matrixSum", f"{membran_wm_aim}.inputMatrix")
                     cmds.connectAttr(f"{y_axis_aim_end_pos}.matrixSum", f"{membran_wm_aim}.secondaryTargetMatrix")
 
@@ -500,7 +374,7 @@ class MembraneModule(object):
 
                     if index != 0:
                         ctl, ctl_grp = controller_creator(
-                        name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}",
+                        name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}",
                         suffixes=["GRP", "ANM"],
                         lock=["scaleX", "scaleY", "scaleZ", "visibility"],
                         ro=True,
@@ -508,12 +382,12 @@ class MembraneModule(object):
                         )
                     
 
-                    pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_PMX", ss=True)
+                    pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_PMX", ss=True)
 
                     cmds.connectAttr(f"{membran_wm_aim}.outputMatrix", f"{pick_matrix}.inputMatrix")
                     cmds.setAttr(f"{pick_matrix}.useScale", 0)
 
-                    joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
+                    joint = cmds.createNode("joint", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
                     
                     falanges_selected_joints.append(joint_one)
                     falanges_selected_joints.append(joint)
@@ -521,9 +395,9 @@ class MembraneModule(object):
                     
 
                     if ctls:
-                        multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}Offset_MMX", ss=True)
-                        multMatrix_wm = cmds.createNode("multMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}WM_MMX", ss=True)
-                        inverseMatrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}IMX", ss=True)
+                        multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}Offset_MMX", ss=True)
+                        multMatrix_wm = cmds.createNode("multMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}WM_MMX", ss=True)
+                        inverseMatrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}0{index+1}IMX", ss=True)
                         cmds.connectAttr(f"{pick_matrix_nodes[-1]}.outputMatrix", f"{inverseMatrix}.inputMatrix")
 
                         cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{multMatrix}.matrixIn[0]")
@@ -556,7 +430,7 @@ class MembraneModule(object):
                         cmds.setAttr(f"{membran_wm_aim}.primaryInputAxis", pv.x, pv.y, pv.z, type="double3")
 
                 
-                plane = cmds.nurbsPlane(p=(0, 0, 0), ax=(0, 1, 0), w=1, lr=1, d=2, u=1, v=len(joint_list_one)-2, ch=0, n=f"{self.side}_{self.number_to_ordinal_word(i+1)}MembraneSkinCluster_NSP")[0]
+                plane = cmds.nurbsPlane(p=(0, 0, 0), ax=(0, 1, 0), w=1, lr=1, d=2, u=1, v=len(joint_list_one)-2, ch=0, n=f"{self.side}_{core.number_to_ordinal_word(i+1)}MembraneSkinCluster_NSP")[0]
                 cmds.parent(plane, self.individual_module_grp)
 
                 plane_shape = cmds.listRelatives(plane, shapes=True, noIntermediate=True)[0]
@@ -568,27 +442,27 @@ class MembraneModule(object):
                         cmds.xform(f"{plane}.cv[{u_value}][{v_value}]", ws=True, t=pos)
                         count += 1
                 
-                skincluster = cmds.skinCluster(falanges_selected_joints, plane, toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_{self.number_to_ordinal_word(i+1)}MembraneSkinCluster_SKN")[0]
+                skincluster = cmds.skinCluster(falanges_selected_joints, plane, toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_{core.number_to_ordinal_word(i+1)}MembraneSkinCluster_SKN")[0]
 
 
                 # for value_temp, (u_value, name) in enumerate([(0.33, "Inner"),(0.66, "Outer")]):
 
-                #     distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}Distance_DB", ss=True)
+                #     distance_between = cmds.createNode("distanceBetween", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}Distance_DB", ss=True)
                 #     cmds.connectAttr(f"{joint_one}.worldMatrix[0]", f"{distance_between}.inMatrix1")
                 #     cmds.connectAttr(f"{joint_two}.worldMatrix[0]", f"{distance_between}.inMatrix2")
 
-                #     divide = cmds.createNode("divide", name=f"{self.side}_{self.number_to_ordinal_word(i+1)}Membrane{name}Distance_DIV", ss=True)
+                #     divide = cmds.createNode("divide", name=f"{self.side}_{core.number_to_ordinal_word(i+1)}Membrane{name}Distance_DIV", ss=True)
                 #     cmds.setAttr(f"{divide}.input2", cmds.getAttr(f"{distance_between}.distance"))
                 #     cmds.connectAttr(f"{distance_between}.distance", f"{divide}.input1")
 
                 #     for index, v_value in enumerate([0, 0.33, 0.66, 1]):
-                #         point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_POSI", ss=True)
+                #         point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_POSI", ss=True)
                 #         cmds.setAttr(f"{point_on_surface}.parameterU", u_value)
                 #         cmds.setAttr(f"{point_on_surface}.parameterV", v_value)
 
                 #         cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
 
-                #         matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}", ss=True)
+                #         matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}", ss=True)
 
                 #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
                 #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
@@ -606,15 +480,15 @@ class MembraneModule(object):
                 #         cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
                 #         cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
 
-                #         # joint = cmds.createNode("joint", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                #         # joint = cmds.createNode("joint", name=f"{self.side}_{name}{core.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
                 #         # cmds.connectAttr(f"{matrix_node}.output", f"{joint}.offsetParentMatrix", force=True)
 
-                #         pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_PMX", ss=True)
+                #         pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{name}{core.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_PMX", ss=True)
                 #         cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
                 #         cmds.setAttr(f"{pickMatrix}.useScale", 0)
                 #         cmds.setAttr(f"{pickMatrix}.useShear", 0)
 
-                #         joint = cmds.createNode("joint", name=f"{self.side}_{name}{self.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
+                #         joint = cmds.createNode("joint", name=f"{self.side}_{name}{core.number_to_ordinal_word(i+1).capitalize()}Membrane0{index+1}_JNT", ss=True, parent=self.skinnging_grp)
                 #         cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
 
                 #         cmds.connectAttr(f"{divide}.output", f"{joint}.scaleZ")
@@ -625,13 +499,13 @@ class MembraneModule(object):
                 for i_u_row in range(u_row):
 
                     for index in range(v_row):
-                        point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_POSI", ss=True)
+                        point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_POSI", ss=True)
                         cmds.setAttr(f"{point_on_surface}.parameterU", float(i_u_row) / (u_row - 1))
                         cmds.setAttr(f"{point_on_surface}.parameterV", float(index) / (v_row - 1))
 
                         cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
 
-                        matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_FBF", ss=True)
+                        matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_FBF", ss=True)
 
                         cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
                         cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
@@ -649,12 +523,12 @@ class MembraneModule(object):
                         cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
                         cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
 
-                        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_PMX", ss=True)
+                        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_PMX", ss=True)
                         cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
                         cmds.setAttr(f"{pickMatrix}.useScale", 0)
                         cmds.setAttr(f"{pickMatrix}.useShear", 0)
 
-                        joint = cmds.createNode("joint", name=f"{self.side}_{self.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_JNT", ss=True, parent=self.skinning_grp)
+                        joint = cmds.createNode("joint", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_JNT", ss=True, parent=self.skinning_grp)
                         cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
                         cmds.setAttr(f"{joint}.radius", 20)
 

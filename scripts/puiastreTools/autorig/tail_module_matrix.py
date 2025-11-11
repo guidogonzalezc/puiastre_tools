@@ -38,7 +38,6 @@ class TailModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
 
-
     def make(self, guide_name):
         """
         Creates the spine module, including the spine chain, controllers, and various systems.
@@ -88,9 +87,6 @@ class TailModule():
 
         cmds.addAttr(self.skinning_trn, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
 
-        
-
-    
     def create_controllers(self):
 
         """
@@ -147,12 +143,4 @@ class TailModule():
         self.num_joints = len(self.ctls) * 3
         self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=self.ctls, num_joints=self.num_joints, name=f"{self.side}_tail", parent=self.skinning_trn, negate_secundary=True)
 
-
-# cmds.file(new=True, force=True)
-
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-# core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
-
-# basic_structure.create_basic_structure(asset_name="dragon")
-# a = TailModule().make("C_tail01_GUIDE")
 

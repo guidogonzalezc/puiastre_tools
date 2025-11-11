@@ -429,48 +429,10 @@ class FalangeModule(object):
 
         name = self.blend_wm[0].replace("_BLM.outputMatrix", "")
         
-        # nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
-        # nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
-        # nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
-
-        # cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollAlign}.inputMatrix")
-        # cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollAlign}.target[0].targetMatrix")
-        # cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollAlign}.target[0].weight")
-
-        # cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollPick}.inputMatrix")
-        # cmds.connectAttr(f"{nonRollPick}.outputMatrix", f"{nonRollAim}.inputMatrix")
-        # cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.secondaryTargetMatrix")
-        # cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
-        # cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        # cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        # cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        # cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
-
-        # cmds.setAttr(f"{nonRollPick}.useRotate", 0)
-
         self.shoulder_rotate_matrix = self.blend_wm[0]
-        # self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
 
         self.bendys()
 
-    def get_offset_matrix(self, child, parent):
-        """
-        Calculate the offset matrix between a child and parent transform in Maya.
-        Args:
-            child (str): The name of the child transform.
-            parent (str): The name of the parent transform. 
-        Returns:
-            om.MMatrix: The offset matrix that transforms the child into the parent's space.
-        """
-        child_dag = om.MSelectionList().add(child).getDagPath(0)
-        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-        
-        child_world_matrix = child_dag.inclusiveMatrix()
-        parent_world_matrix = parent_dag.inclusiveMatrix()
-        
-        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-        return offset_matrix
 
     def getClosestParamToWorldMatrix(self, curveDagPath, worldMatrix):
         """

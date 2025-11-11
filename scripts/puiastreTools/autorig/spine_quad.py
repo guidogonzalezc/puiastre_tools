@@ -38,7 +38,6 @@ class SpineModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
 
-
     def make(self, guide_name):
         """
         Creates the spine module, including the spine chain, controllers, and various systems.
@@ -447,10 +446,3 @@ class SpineModule():
 
         cmds.reorder(self.local_hip_joint, back=True)
 
-# cmds.file(new=True, force=True)
-
-# core.DataManager.set_guide_data("H:/ggMayaAutorig/guides/elephant_04.guides")
-# core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
-
-# basic_structure.create_basic_structure(asset_name="elephant_04")
-# a = SpineModule().make("C_spine01_GUIDE")

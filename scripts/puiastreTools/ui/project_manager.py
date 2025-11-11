@@ -183,7 +183,15 @@ def load_asset_configuration(asset_name):
                 else:
                     om.MGlobal.displayInfo(f"No matching .ma files found in: {folder_path}")
             else:
-                om.MGlobal.displayError(f"Models folder does not exist: {folder_path}")
+                folder_path = os.path.join(asset_path, "models")
+                highest_version_file = _highest_version_file_in_directory(folder_path, ".ma")
+
+                if highest_version_file:
+                    cmds.file(highest_version_file, o=True, f=True)
+                    om.MGlobal.displayInfo(f"Model loaded from: {highest_version_file}")
+                else:
+                    om.MGlobal.displayInfo(f"No matching .ma files found in: {folder_path}")
+                om.MGlobal.displayError(f"Models folder does not exist repathed to: {folder_path}")
                 return
 
 

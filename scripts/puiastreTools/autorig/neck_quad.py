@@ -39,8 +39,6 @@ class NeckModule():
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
 
-
-
     def make(self, guide_name):
         """
         Creates the neck module, including the neck chain, controllers, and various systems.
@@ -397,11 +395,3 @@ class NeckModule():
             distance_joints = cmds.createNode("joint", name=f"{self.side}_{name}HeadDistance_JNT", ss=True, parent = self.muscle_locators)
             cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
             
-
-# cmds.file(new=True, force=True)
-
-# core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/test_03.guides")
-# core.DataManager.set_ctls_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/curves/AYCHEDRAL_curves_001.json")
-
-# basic_structure.create_basic_structure(asset_name="elephant_04")
-# a = NeckModule().make("C_neck_GUIDE")

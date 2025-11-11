@@ -15,6 +15,7 @@ from puiastreTools.utils import guide_creation
 import puiastreTools.utils.de_boor_core_002 as de_boors_002
 from puiastreTools.utils import space_switch as ss
 from puiastreTools.utils import core
+from puiastreTools.utils.core import get_offset_matrix
 from puiastreTools.utils import basic_structure
 import re
 
@@ -63,12 +64,9 @@ class FingersModule(object):
         cmds.connectAttr(self.ikSwitch_ctl + ".switchIkFk", reverse + ".inputX")
         cmds.connectAttr(reverse + ".outputX", parent_matrix + ".target[1].weight")
 
-        offset_matrix = self.get_offset_matrix(self.controllers_grp, self.leg_ball_blm)
-        temp_transform = cmds.createNode("transform", name=f"{self.side}_legFingersTempOffset_GRP", parent=self.controllers_grp, ss=True)
-        cmds.connectAttr(self.foot_rotation + ".worldMatrix[0]", temp_transform + ".offsetParentMatrix")
-        offset_matrix02 = self.get_offset_matrix(self.controllers_grp, temp_transform)
+        offset_matrix = get_offset_matrix(self.controllers_grp, self.leg_ball_blm)
 
-        cmds.delete(temp_transform)
+        offset_matrix02 = get_offset_matrix(self.controllers_grp, self.foot_rotation + ".worldMatrix[0]")
 
         cmds.setAttr(parent_matrix + ".target[0].offsetMatrix", *offset_matrix, type="matrix")
         cmds.setAttr(parent_matrix + ".target[1].offsetMatrix", *offset_matrix02, type="matrix")
@@ -122,26 +120,7 @@ class FingersModule(object):
 
 
         cmds.setAttr(self.controllers_grp + ".inheritsTransform", 0)
-    
-    def get_offset_matrix(self, child, parent):
-        """
-        Calculate the offset matrix between a child and parent transform in Maya.
-        Args:
-            child (str): The name of the child transform.
-            parent (str): The name of the parent transform. 
-        Returns:
-            om.MMatrix: The offset matrix that transforms the child into the parent's space.
-        """
-        child_dag = om.MSelectionList().add(child).getDagPath(0)
-        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
         
-        child_world_matrix = child_dag.inclusiveMatrix()
-        parent_world_matrix = parent_dag.inclusiveMatrix()
-        
-        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-        return offset_matrix
-    
     def create_controller(self):
 
         """"
@@ -361,13 +340,8 @@ class FingersModule(object):
         cmds.connectAttr(self.ikSwitch_ctl + ".switchIkFk", reverse + ".inputX")
         cmds.connectAttr(reverse + ".outputX", root_wm + ".target[1].weight")
 
-        temp_transform = cmds.createNode("transform", name=f"{self.side}_legFingersTempOffset_GRP", parent=self.controllers_grp, ss=True)
-        cmds.connectAttr(guides_list[0] + ".outputMatrix", temp_transform + ".offsetParentMatrix")
-
-        offset_matrix = self.get_offset_matrix(temp_transform, self.leg_ball_blm)
-        offset_matrix02 = self.get_offset_matrix(temp_transform, self.foot_rotation)
-        cmds.delete(temp_transform)
-
+        offset_matrix = get_offset_matrix(guides_list[0] + ".outputMatrix", self.leg_ball_blm)
+        offset_matrix02 = get_offset_matrix(guides_list[0] + ".outputMatrix", self.foot_rotation)
 
         cmds.setAttr(root_wm + ".target[0].offsetMatrix", *offset_matrix, type="matrix")
         cmds.setAttr(root_wm + ".target[1].offsetMatrix", *offset_matrix02, type="matrix")

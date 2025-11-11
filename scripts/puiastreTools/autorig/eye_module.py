@@ -9,6 +9,7 @@ from puiastreTools.utils.curve_tool import controller_creator
 from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
+from puiastreTools.utils.core import get_offset_matrix
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import de_boor_core_002
 from puiastreTools.utils.space_switch import fk_switch
@@ -76,26 +77,6 @@ class EyeModule():
                                     }
                                   )
         
-
-    def get_offset_matrix(self, child, parent):
-        """
-        Calculate the offset matrix between a child and parent transform in Maya.
-        Args:
-            child (str): The name of the child transform.
-            parent (str): The name of the parent transform. 
-        Returns:
-            om.MMatrix: The offset matrix that transforms the child into the parent's space.
-        """
-        child_dag = om.MSelectionList().add(child).getDagPath(0)
-        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-        
-        child_world_matrix = child_dag.inclusiveMatrix()
-        parent_world_matrix = parent_dag.inclusiveMatrix()
-        
-        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-        return offset_matrix
-
     def getClosestParamToWorldMatrix(self, curve, pos, point=False):
         """
         Returns the closest parameter (u) on the curve to the given worldMatrix.
@@ -158,8 +139,8 @@ class EyeModule():
         cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{parentMatrix}.inputMatrix", force=True)
         cmds.connectAttr(f"{parents[0]}.worldMatrix[0]", f"{parentMatrix}.target[1].targetMatrix", force=True)
         cmds.connectAttr(f"{parents[1]}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
-        cmds.setAttr(f"{parentMatrix}.target[1].offsetMatrix", self.get_offset_matrix(grp, parents[0]), type="matrix")
-        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", self.get_offset_matrix(grp, parents[1]), type="matrix")
+        cmds.setAttr(f"{parentMatrix}.target[1].offsetMatrix", get_offset_matrix(grp, parents[0]), type="matrix")
+        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", get_offset_matrix(grp, parents[1]), type="matrix")
 
         multmatrix = cmds.createNode("multMatrix", name=f"{name}localSpaceParent_MMX", ss=True)
         cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
@@ -187,10 +168,9 @@ class EyeModule():
         parentMatrix = cmds.createNode("parentMatrix", name=f"{multmatrix_name.replace('_MMX', '')}_PMX", ss=True)
         cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{parentMatrix}.inputMatrix", force=True)
         cmds.connectAttr(f"{multmatrix_name}.matrixSum", f"{parentMatrix}.target[0].targetMatrix", force=True)
-        temp_transform = cmds.createNode("transform", name=f"{multmatrix_name}_TEMP", ss=True)
-        cmds.connectAttr(f"{multmatrix_name}.matrixSum", f"{temp_transform}.offsetParentMatrix", force=True)
-        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", self.get_offset_matrix(grp, temp_transform), type="matrix")
-        cmds.delete(temp_transform)
+        
+        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", get_offset_matrix(grp, f"{multmatrix_name}.matrixSum"), type="matrix")
+
         multmatrix = cmds.createNode("multMatrix", name=f"{multmatrix_name.replace('_MMX', 'Offset_MMX')}", ss=True)
         cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
         cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)

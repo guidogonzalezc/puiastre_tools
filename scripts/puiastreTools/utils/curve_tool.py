@@ -35,7 +35,7 @@ def get_all_ctl_curves_data(path = "",prefix="CTL"):
     including their CV positions, form, knots, degree, and override attributes.
     """
 
-    TEMPLATE_FILE = core.init_template_file(ext=".ctls")
+    TEMPLATE_FILE = core.DataManager.get_ctls_data()
 
     ctl_data = {}
 
@@ -249,7 +249,7 @@ def controller_creator(name, suffixes=["GRP", "ANM"], mirror=False, parent=None,
         suffixes (list): List of suffixes for the groups to be created. Default is ["GRP"].
     """
 
-    TEMPLATE_FILE = core.init_template_file(ext=".ctls", export=False)
+    TEMPLATE_FILE = core.DataManager.get_ctls_data()
 
     created_grps = []
     if suffixes:

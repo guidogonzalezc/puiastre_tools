@@ -9,8 +9,10 @@ from puiastreTools.utils.curve_tool import controller_creator
 from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
+from puiastreTools.utils.core import get_offset_matrix
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import guide_creation
+import maya.api.OpenMaya as om
 
 from puiastreTools.utils.space_switch import fk_switch
 
@@ -96,31 +98,8 @@ class JawModule():
         cmds.setAttr(f"{local_mult_matrix}.matrixIn[2]", grp_world_matrix, type="matrix")
 
         return f"{local_mult_matrix}.matrixSum"
-
-    def get_offset_matrix(self, child, parent, matrix=False):
-        """
-        Calculate the offset matrix between a child and parent transform in Maya.
-        Args:
-            child (str): The name of the child transform.
-            parent (str): The name of the parent transform. 
-        Returns:
-            om.MMatrix: The offset matrix that transforms the child into the parent's space.
-        """
-        if not matrix:
-            child_dag = om.MSelectionList().add(child).getDagPath(0)
-            child_world_matrix = child_dag.inclusiveMatrix()
-        else:
-            child_world_matrix = om.MMatrix(child)
-
-        parent_dag = om.MSelectionList().add(parent).getDagPath(0)
-        
-        parent_world_matrix = parent_dag.inclusiveMatrix()
-        
-        offset_matrix = child_world_matrix * parent_world_matrix.inverse()
-
-        return offset_matrix
     
-    import maya.api.OpenMaya as om
+    
 
     def getClosestParamToPosition(self, curve, position):
         """
@@ -320,7 +299,7 @@ class JawModule():
                 reverse = cmds.createNode("reverse", name="R_lipCorner_REV", ss=True)
                 cmds.connectAttr(f"{self.r_side_jaw_ctl}.height", f"{reverse}.inputX")
                 cmds.connectAttr(f"{reverse}.outputX", f"{parent_matrix_r_side}.target[0].weight")
-                jaw_offset_r = self.get_offset_matrix(cmds.getAttr(f"{r_lip_corner_4b4}.output"), self.jaw_ctl, matrix=True)
+                jaw_offset_r = get_offset_matrix(f"{r_lip_corner_4b4}.output", self.jaw_ctl)
                 cmds.setAttr(f"{parent_matrix_r_side}.target[0].offsetMatrix", jaw_offset_r, type="matrix")
                 cmds.setAttr(f"{parent_matrix_r_side}.target[1].offsetMatrix", jaw_offset_r, type="matrix")
 
@@ -357,7 +336,7 @@ class JawModule():
                 reverse = cmds.createNode("reverse", name="L_lipCorner_REV", ss=True)
                 cmds.connectAttr(f"{self.l_side_jaw_ctl}.height", f"{reverse}.inputX")
                 cmds.connectAttr(f"{reverse}.outputX", f"{parent_matrix_l_side}.target[0].weight")
-                jaw_offset_l = self.get_offset_matrix(cmds.getAttr(f"{l_lip_corner_4b4}.output"), self.jaw_ctl, matrix=True)
+                jaw_offset_l = get_offset_matrix(f"{l_lip_corner_4b4}.output", self.jaw_ctl)
                 cmds.setAttr(f"{parent_matrix_l_side}.target[0].offsetMatrix", jaw_offset_l, type="matrix")
                 cmds.setAttr(f"{parent_matrix_l_side}.target[1].offsetMatrix", jaw_offset_l, type="matrix")
 
@@ -410,7 +389,7 @@ class JawModule():
             parent_matrix_mid = cmds.createNode("parentMatrix", name=f"C_{main_mid_name}Lip_PMX", ss=True)
             cmds.connectAttr(f"{mid_pos_4b4}.output", f"{parent_matrix_mid}.inputMatrix")
             cmds.connectAttr(f"{jaw_controller}.worldMatrix[0]", f"{parent_matrix_mid}.target[0].targetMatrix")
-            jaw_offset_r = self.get_offset_matrix(cmds.getAttr(f"{mid_pos_4b4}.output"), jaw_controller, matrix=True)
+            jaw_offset_r = get_offset_matrix(f"{mid_pos_4b4}.output", jaw_controller)
             cmds.setAttr(f"{parent_matrix_mid}.target[0].offsetMatrix", jaw_offset_r, type="matrix")
 
             jaw_offset_child = cmds.createNode("multMatrix", name=f"C_{main_mid_name}Lip_MMX", ss=True)
@@ -576,7 +555,7 @@ class JawModule():
                 joint = cmds.createNode("joint", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}Skinning_JNT", ss=True, parent = self.skinning_trn)
                 cmds.connectAttr(f"{fourByFourMatrix}.output", f"{joint}.offsetParentMatrix", f=True)
 
-                cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", self.get_offset_matrix(cmds.getAttr(f"{fourOrigPos}.output"), joint, matrix=True), type="matrix")
+                cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", get_offset_matrix(f"{fourOrigPos}.output", joint), type="matrix")
 
 
 

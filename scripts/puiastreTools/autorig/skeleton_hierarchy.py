@@ -12,36 +12,6 @@ from puiastreTools.utils import space_switch
 
 reload(core)
 
-def get_closest_transform(main_transform, transform_list):
-    """
-    Returns the transform from transform_list that is closest to main_transform.
-    
-    Args:
-        main_transform (str): Name of the main transform.
-        transform_list (list): List of transform names to compare.
-
-    Returns:
-        str: Name of the closest transform.
-    """
-                    
-    # Get main transform position
-    main_pos = om.MVector(cmds.xform(main_transform, q=True, ws=True, t=True))
-    
-    closest_obj = None
-    closest_dist = float('inf')
-    
-    for t in transform_list:
-        if not cmds.objExists(t):
-            continue
-        
-        pos = om.MVector(cmds.xform(t, q=True, ws=True, t=True))
-        dist = (pos - main_pos).length()
-        
-        if dist < closest_dist:
-            closest_dist = dist
-            closest_obj = t
-
-    return closest_obj
 
 def parented_chain(skinning_joints, parent, hand_value=False):
 
@@ -128,7 +98,7 @@ def build_complete_hierarchy():
         with open(build_path, "r") as f:
             build_data = json.load(f)
 
-        guides_path = core.init_template_file(ext=".guides", export=False)
+        guides_path = core.DataManager.get_guide_data()
         
         with open(guides_path, "r") as f:
             guides_data = json.load(f)
@@ -244,7 +214,7 @@ def build_complete_hierarchy():
             for joint_list in membrane_groups:
                 if joint_list:
                     if "PrimaryMembrane01" in joint_list[0]:
-                        closest01 = get_closest_transform(joint_list[0], complete_arm_chain)
+                        closest01 = core.get_closest_transform(joint_list[0], complete_arm_chain)
                         parented_chain(skinning_joints=joint_list, parent=closest01, hand_value=False)
                     else:
                         parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
