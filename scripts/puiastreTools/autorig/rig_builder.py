@@ -19,6 +19,7 @@ from puiastreTools.autorig import skeleton_hierarchy as skh
 from puiastreTools.autorig import membran_module as mm
 from puiastreTools.autorig import finger_module as fm
 from puiastreTools.autorig import eye_module as em
+from puiastreTools.autorig import fkFingers as fkf
 
 import puiastreTools.utils.skinning_transfer as skt
 
@@ -45,6 +46,7 @@ reload(mm)
 reload(fm)
 reload(em)
 reload(spb)
+reload(fkf)
 
 reload(skt)
 reload(project_manager)
@@ -199,6 +201,9 @@ def make(asset_name = "", latest = False):
 
                 if guide_info.get("moduleName") == "membran":
                     mm.MembraneModule().make(guide_name)
+
+                if guide_info.get("moduleName") == "fkFinger":
+                    fkf.FingersModule().make(guide_name)
 
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
                     fm.FingersModule().make(guide_name)

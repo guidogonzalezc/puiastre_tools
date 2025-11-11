@@ -17,6 +17,7 @@ class DataManager:
     _mesh_data = None
     _asset_name = None
     _skinning_data = None
+    _finger_data = None
 
     @classmethod
     def set_project_path(cls, path):
@@ -71,6 +72,21 @@ class DataManager:
     @classmethod
     def get_skinning_data(cls):
         return cls._skinning_data
+    
+    def set_finger_data(cls, side, data):
+        # ensure dict storage per side
+        if cls._finger_data is None:
+            cls._finger_data = {}
+        cls._finger_data[side] = data
+        store_data()
+
+    @classmethod
+    def get_finger_data(cls, side=None):
+        if cls._finger_data is None:    
+            return None if side is not None else {}
+        if side is None:
+            return cls._finger_data
+        return cls._finger_data.get(side)
     
     @classmethod
     def clear_data(cls):

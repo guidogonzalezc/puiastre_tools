@@ -1007,8 +1007,10 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "eye":
                     EyesGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
 
-                if guide_info.get("moduleName") == "eye":
-                    EyesGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
+                if guide_info.get("moduleName") == "fkFinger":
+                    name = guide_name.split("_")[1].replace("Metacarpal", "")
+                    name = re.sub(r"\d+", "", name)
+                    FkFingersGuideCreation(side=guide_name.split("_")[0], limb_name=name, prefix=False, controller_number=guide_info.get("controllerNumber")).create_guides(guides_trn, buffers_trn)
                                     
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "frontLegFoot" or "footBack" in guide_name or "footFront" in guide_name:
                     if "backLegFoot" in guide_name or "frontLegFoot" in guide_name or "footBack" in guide_name or "footFront" in guide_name:
