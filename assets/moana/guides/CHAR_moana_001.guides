@@ -1,5 +1,5 @@
 {
-    "Dragon": {
+    "moana": {
         "L_toe_GUIDE": {
             "worldPosition": [
                 3.3033436199608044,
@@ -324,7 +324,7 @@
         },
         "R_shoulderFrontDistance_GUIDE": {
             "worldPosition": [
-                0.0,
+                -0.0,
                 0.0,
                 0.0
             ],
@@ -856,9 +856,9 @@
         },
         "R_thumb03_GUIDE": {
             "worldPosition": [
-                -19.52609634399414,
-                34.378089904785156,
-                3.2486660480499268
+                -19.526096641553053,
+                34.37809103457939,
+                3.2486660044813798
             ],
             "parent": "R_thumb02_GUIDE",
             "jointTwist": "Child",
@@ -870,9 +870,9 @@
         },
         "R_thumb02_GUIDE": {
             "worldPosition": [
-                -19.02238655090332,
-                35.527339935302734,
-                2.8071706295013428
+                -19.022386811469495,
+                35.52734082223675,
+                2.807170632040201
             ],
             "parent": "R_thumb01_GUIDE",
             "jointTwist": "Child",
@@ -884,9 +884,9 @@
         },
         "R_thumb01_GUIDE": {
             "worldPosition": [
-                -18.671464920043945,
-                36.2584228515625,
-                2.2268035411834717
+                -18.671465501827207,
+                36.25842402667868,
+                2.226803427389393
             ],
             "parent": "R_thumbMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -898,8 +898,8 @@
         },
         "R_thumbMetacarpal_GUIDE": {
             "worldPosition": [
-                -19.16195297241211,
-                37.64057159423828,
+                -19.161952646605396,
+                37.64057086673425,
                 1.7293565273284912
             ],
             "parent": "guides_GRP",
@@ -912,9 +912,9 @@
         },
         "R_index04_GUIDE": {
             "worldPosition": [
-                -22.89767074584961,
-                33.5509033203125,
-                1.844632625579834
+                -22.897669938711715,
+                33.550904241592576,
+                1.8446326199878054
             ],
             "parent": "R_index03_GUIDE",
             "jointTwist": "Child",
@@ -926,9 +926,9 @@
         },
         "R_index03_GUIDE": {
             "worldPosition": [
-                -22.191986083984375,
-                34.33676528930664,
-                1.8096082210540771
+                -22.1919866810065,
+                34.33676586701778,
+                1.80960820960769
             ],
             "parent": "R_index02_GUIDE",
             "jointTwist": "Child",
@@ -940,9 +940,9 @@
         },
         "R_index02_GUIDE": {
             "worldPosition": [
-                -21.617042541503906,
-                34.94258499145508,
-                1.7790642976760864
+                -21.61704286578672,
+                34.94258368975575,
+                1.7790642383083486
             ],
             "parent": "R_index01_GUIDE",
             "jointTwist": "Child",
@@ -954,9 +954,9 @@
         },
         "R_index01_GUIDE": {
             "worldPosition": [
-                -20.689708709716797,
-                35.91211700439453,
-                1.7293565273284912
+                -20.6897087097168,
+                35.912117004394545,
+                1.7293565273284917
             ],
             "parent": "R_indexMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -968,9 +968,9 @@
         },
         "R_indexMetacarpal_GUIDE": {
             "worldPosition": [
-                -19.16195297241211,
-                37.64057159423828,
-                1.7293565273284912
+                -19.161953532919505,
+                37.640569710365625,
+                1.7293565273284914
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -982,9 +982,9 @@
         },
         "R_middle04_GUIDE": {
             "worldPosition": [
-                -23.291301727294922,
-                33.27681350708008,
-                0.7931859493255615
+                -23.291301124577306,
+                33.276811726283746,
+                0.7931859493255634
             ],
             "parent": "R_middle03_GUIDE",
             "jointTwist": "Child",
@@ -996,9 +996,9 @@
         },
         "R_middle03_GUIDE": {
             "worldPosition": [
-                -22.545141220092773,
-                34.17046356201172,
-                0.7931859493255615
+                -22.545141110720223,
+                34.17046390868263,
+                0.7931859493255619
             ],
             "parent": "R_middle02_GUIDE",
             "jointTwist": "Child",
@@ -1010,9 +1010,9 @@
         },
         "R_middle02_GUIDE": {
             "worldPosition": [
-                -21.89459228515625,
-                34.70793914794922,
-                0.7931859493255615
+                -21.894591567771425,
+                34.707938909950364,
+                0.7931859493255617
             ],
             "parent": "R_middle01_GUIDE",
             "jointTwist": "Child",
@@ -1024,9 +1024,9 @@
         },
         "R_middle01_GUIDE": {
             "worldPosition": [
-                -20.85062026977539,
-                35.903358459472656,
-                0.7931859493255615
+                -20.85062038659035,
+                35.903359277242046,
+                0.7931859493255617
             ],
             "parent": "R_middleMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -1038,8 +1038,8 @@
         },
         "R_middleMetacarpal_GUIDE": {
             "worldPosition": [
-                -19.386571884155273,
-                37.60163497924805,
+                -19.386571767772676,
+                37.601635706628905,
                 0.7931859493255615
             ],
             "parent": "guides_GRP",
@@ -1052,9 +1052,9 @@
         },
         "R_ring04_GUIDE": {
             "worldPosition": [
-                -23.035667419433594,
-                33.4006462097168,
-                -0.2268153727054596
+                -23.03566679049647,
+                33.40064663335872,
+                -0.22681537460687093
             ],
             "parent": "R_ring03_GUIDE",
             "jointTwist": "Child",
@@ -1066,9 +1066,9 @@
         },
         "R_ring03_GUIDE": {
             "worldPosition": [
-                -22.381832122802734,
-                34.24821853637695,
-                -0.21176493167877197
+                -22.381832938800347,
+                34.24821804542373,
+                -0.21176493443817224
             ],
             "parent": "R_ring02_GUIDE",
             "jointTwist": "Child",
@@ -1094,7 +1094,7 @@
         },
         "R_ring01_GUIDE": {
             "worldPosition": [
-                -20.77664566040039,
+                -20.776645660400387,
                 35.92371368408203,
                 -0.17886200547218323
             ],
@@ -1108,8 +1108,8 @@
         },
         "R_ringMetacarpal_GUIDE": {
             "worldPosition": [
-                -19.325111389160156,
-                37.59711837768555,
+                -19.325111140926104,
+                37.597117415689176,
                 -0.17886200547218323
             ],
             "parent": "guides_GRP",
@@ -1122,9 +1122,9 @@
         },
         "R_pinky04_GUIDE": {
             "worldPosition": [
-                -22.422189712524414,
-                33.770511627197266,
-                -1.0484600067138672
+                -22.422190642427704,
+                33.770511307145384,
+                -1.0484600067138643
             ],
             "parent": "R_pinky03_GUIDE",
             "jointTwist": "Child",
@@ -1136,8 +1136,8 @@
         },
         "R_pinky03_GUIDE": {
             "worldPosition": [
-                -21.859882354736328,
-                34.46409606933594,
+                -21.859882970616816,
+                34.46409721062288,
                 -1.0484600067138672
             ],
             "parent": "R_pinky02_GUIDE",
@@ -1150,8 +1150,8 @@
         },
         "R_pinky02_GUIDE": {
             "worldPosition": [
-                -21.396852493286133,
-                34.889808654785156,
+                -21.396851665934303,
+                34.8898100954962,
                 -1.0484600067138672
             ],
             "parent": "R_pinky01_GUIDE",
@@ -1178,8 +1178,8 @@
         },
         "R_pinkyMetacarpal_GUIDE": {
             "worldPosition": [
-                -19.219797134399414,
-                37.55287170410156,
+                -19.21979722431288,
+                37.552873493946024,
                 -1.0484600067138672
             ],
             "parent": "guides_GRP",
@@ -1189,8 +1189,36 @@
             "prefix": "Child",
             "controllerNumber": 5,
             "guide_type_object": "Guide"
+        },
+        "L_endEye_GUIDE": {
+            "worldPosition": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_eye_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_eye_GUIDE": {
+            "worldPosition": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "eye",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
         }
     },
-    "controls": null,
-    "meshes": "Puiastre"
+    "controls": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\moana\\curves\\CHAR_moana_003.json",
+    "meshes": "C_body_MSH"
 }

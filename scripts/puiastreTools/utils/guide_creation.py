@@ -246,7 +246,14 @@ class GuideCreation(object):
                     parent = positions[1]
                     type = positions[-1]
                     positions = positions[0]
-                 
+                print(joint_name)
+                if len(joint_name.split("_")) > 1:
+                    side = joint_name.split("_")[0]
+                    joint_name =joint_name.split("_")[1]
+
+                print(joint_name)
+                print(side)
+
                 positions = [0,0,0] if positions is None else positions
                 parent = None if parent == None else parent
                 type = "joint" if type == None else type
@@ -818,13 +825,61 @@ class MouthGuideCreation(GuideCreation):
         all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
         self.position_data = {
                 "jaw": get_data(f"{self.sides}_jaw"),
-                "mouthSliding": get_data(f"{self.sides}_mouthSliding"),
         }
 
-        for guide in all_child_guides:
-            self.position_data.update({
-                guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
-        })
+        try:
+            for guide in all_child_guides:
+                self.position_data.update({
+                    guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+                })
+        except:
+            pass
+
+class EyebrowGuideCreation(GuideCreation):
+    """
+    Guide creation for eyebrow.
+    """
+    def __init__(self, side = "C", input_name="eyebrow"):
+        self.sides = side
+        self.limb_name = "eyebrow"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = None
+        self.prefix = None
+
+        final_path = core.DataManager.get_guide_data()
+        try:
+            with open(final_path, "r") as infile:
+                guides_data = json.load(infile)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading guides data: {e}")
+
+        guide_set_name = next(iter(guides_data))
+        parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
+
+        def collect_descendants(parent, parent_map):
+            descendants = []
+            children = [joint for joint, p in parent_map.items() if p == parent]
+            for child in children:
+                descendants.append(child)
+                descendants.extend(collect_descendants(child, parent_map))
+            return descendants
+
+        self.position_data = {
+                "centerBrow": get_data(f"{self.sides}_centerBrow"),
+        }
+        all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+        print(all_child_guides)
+
+        try:
+            for guide in all_child_guides:
+                self.position_data.update({
+                    guide.replace("_GUIDE", ""): get_data(guide.replace("_GUIDE", "")),
+                })
+
+            print(self.position_data)
+        except:
+            pass
 
 class EyesGuideCreation(GuideCreation):
     """
@@ -862,10 +917,13 @@ class EyesGuideCreation(GuideCreation):
                 "endEye": get_data(f"{self.sides}_endEye"),
         }
 
-        for guide in all_child_guides:
-            self.position_data.update({
-                guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
-        })
+        try:
+            for guide in all_child_guides:
+                self.position_data.update({
+                    guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+            })
+        except:
+            pass
 
 def dragon_rebuild_guides():
     """
@@ -1006,6 +1064,9 @@ def load_guides(path = ""):
 
                 if guide_info.get("moduleName") == "eye":
                     EyesGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
+
+                if guide_info.get("moduleName") == "eyebrow":
+                    EyebrowGuideCreation(side=guide_name.split("_")[0], input_name=guide_name).create_guides(guides_trn, buffers_trn)
 
                 if guide_info.get("moduleName") == "fkFinger":
                     name = guide_name.split("_")[1].replace("Metacarpal", "")
@@ -1402,9 +1463,9 @@ def add_module_to_guide():
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
-    EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
-   
-# add_module_to_guide()
+    # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
+
+add_module_to_guide()
 
 """ --- Debug code for maya
 

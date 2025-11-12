@@ -20,6 +20,7 @@ from puiastreTools.autorig import membran_module as mm
 from puiastreTools.autorig import finger_module as fm
 from puiastreTools.autorig import eye_module as em
 from puiastreTools.autorig import fkFingers as fkf
+from puiastreTools.autorig import jaw_module_matrix as jmm
 
 import puiastreTools.utils.skinning_transfer as skt
 
@@ -47,6 +48,7 @@ reload(fm)
 reload(em)
 reload(spb)
 reload(fkf)
+reload(jmm)
 
 reload(skt)
 reload(project_manager)
@@ -186,9 +188,13 @@ def make(asset_name = "", latest = False):
 
                     tmm.TailModule().make(guide_name)
                 
-                # if guide_info.get("moduleName") == "eye":
+                if guide_info.get("moduleName") == "eye":
 
-                #     em.EyeModule().make(guide_name)
+                    em.EyeModule().make(guide_name)
+                
+                if guide_info.get("moduleName") == "mouth":
+
+                    jmm.JawModule().make(guide_name)
 
                 
     # Additional modules who depends on others modules

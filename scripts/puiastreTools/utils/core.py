@@ -343,3 +343,62 @@ def number_to_ordinal_word(n):
         return tens_prefix[ten] + "-" + base_ordinal[unit]
     else:
         return str(n)
+    
+def local_space_parent(ctl, parents=[], default_weights=0.5):
+
+    name = ctl.replace("_CTL", "")
+
+    parentMatrix = cmds.createNode("parentMatrix", name=f"{name}localSpaceParent_PMX", ss=True)
+
+    grp = ctl.replace("_CTL", "_GRP")
+    off = ctl.replace("_CTL", "_OFF")
+
+    cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{parentMatrix}.inputMatrix", force=True)
+    cmds.connectAttr(f"{parents[0]}.worldMatrix[0]", f"{parentMatrix}.target[1].targetMatrix", force=True)
+    cmds.connectAttr(f"{parents[1]}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
+    cmds.setAttr(f"{parentMatrix}.target[1].offsetMatrix", get_offset_matrix(grp, parents[0]), type="matrix")
+    cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", get_offset_matrix(grp, parents[1]), type="matrix")
+
+    multmatrix = cmds.createNode("multMatrix", name=f"{name}localSpaceParent_MMX", ss=True)
+    cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
+    cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+    cmds.connectAttr(f"{multmatrix}.matrixSum", f"{off}.offsetParentMatrix", force=True)
+
+    cmds.addAttr(ctl, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
+    cmds.setAttr(f"{ctl}.SpaceSwitchSep", channelBox=True, lock=True)   
+
+    cmds.addAttr(ctl, longName="SpaceFollow", attributeType="float", min=0, max=1, defaultValue=default_weights, keyable=True)
+    cmds.connectAttr(f"{ctl}.SpaceFollow", f"{parentMatrix}.target[0].weight", force=True)
+    rev = cmds.createNode("reverse", name=f"{name}localSpaceParent_REV", ss=True)
+    cmds.connectAttr(f"{ctl}.SpaceFollow", f"{rev}.inputX", force=True)
+    cmds.connectAttr(f"{rev}.outputX", f"{parentMatrix}.target[1].weight", force=True)
+
+    return multmatrix
+
+def local_mmx(ctl, grp):
+    name = ctl.replace("_CTL", "")
+
+    multmatrix = cmds.createNode("multMatrix", name=f"{name}local_MMX", ss=True)
+    cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{multmatrix}.matrixIn[0]", force=True)
+    cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+    cmds.setAttr(f"{multmatrix}.matrixIn[2]", cmds.getAttr(f"{ctl}.worldMatrix[0]"), type="matrix")
+
+    return f"{multmatrix}.matrixSum"
+
+def getClosestParamToWorldMatrixCurve(curve, pos, point=False):
+    """
+    Returns the closest parameter (u) on the curve to the given worldMatrix.
+    """
+    selection_list = om.MSelectionList()
+    selection_list.add(curve)
+    curve_dag_path = selection_list.getDagPath(0)
+
+    curveFn = om.MFnNurbsCurve(curve_dag_path)
+
+    point_pos = om.MPoint(*pos)
+    closestPoint, paramU = curveFn.closestPoint(point_pos, space=om.MSpace.kWorld)
+
+    if point:
+        return closestPoint
+
+    return paramU
