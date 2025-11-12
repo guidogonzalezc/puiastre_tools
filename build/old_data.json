@@ -2,7 +2,7 @@
     "project_path": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\moana",
     "ctls_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\moana\\curves\\CHAR_moana_003.json",
     "guide_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\moana\\guides\\CHAR_moana_003.guides",
-    "mesh_data": null,
+    "mesh_data": "C_body_MSH",
     "asset_name": "moana",
     "skinning_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\moana\\skinning\\CHAR_moana_001.skn"
 }

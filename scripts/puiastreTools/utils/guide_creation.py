@@ -1465,7 +1465,7 @@ def add_module_to_guide():
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
 
-add_module_to_guide()
+# add_module_to_guide()
 
 """ --- Debug code for maya
 
