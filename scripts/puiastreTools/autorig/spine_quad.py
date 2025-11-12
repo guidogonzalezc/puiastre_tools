@@ -132,7 +132,7 @@ class SpineModule():
             parent=self.controllers_trn
         )
 
-        cmds.connectAttr(f"{self.guide_matrix[0]}.outputMatrix", f"{body_grp[0]}.offsetParentMatrix")
+        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{body_grp[0]}.offsetParentMatrix")
 
         cmds.connectAttr(f"{self.body_ctl}.worldMatrix[0]", f"{hip_grp[0]}.offsetParentMatrix")
 

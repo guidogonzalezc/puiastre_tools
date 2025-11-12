@@ -12156,15 +12156,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_fingersAttributes_GRP|L_fingersAttributes_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersControllers_GRP|L_fingersAttributes_GRP|L_fingersBackAttributes_CTL": {
         "transform": {
-            "name": "L_fingersAttributes_CTL",
+            "name": "L_fingersBackAttributes_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_fingersAttributes_CTLShape",
+                "name": "L_fingersBackAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -12247,7 +12247,7 @@
                 }
             },
             {
-                "name": "L_fingersAttributes_CTLShape1",
+                "name": "L_fingersBackAttributes_CTLShape1",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -12275,15 +12275,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersIkControllers_GRP|L_fingersPlaneIk_GRP|L_fingersPlaneIk_ANM|L_fingersPlaneIk_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_legFingersIkControllers_GRP|L_fingersPlaneIk_GRP|L_fingersPlaneIk_ANM|L_fingersBackPlaneIk_CTL": {
         "transform": {
-            "name": "L_fingersPlaneIk_CTL",
+            "name": "L_fingersBackPlaneIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 14
         },
         "shapes": [
             {
-                "name": "L_fingersPlaneIk_CTLShape",
+                "name": "L_fingersBackPlaneIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -13743,15 +13743,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_firstMembraneMainController04_GRP|L_firstMembraneMainController04_ANM|L_firstMembraneMainController04_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_firstMembraneMainController04_GRP|L_firstMembraneMainController04_ANM|L_firstMembraneMainController01_CTL": {
         "transform": {
-            "name": "L_firstMembraneMainController04_CTL",
+            "name": "L_firstMembraneMainController01_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_firstMembraneMainController04_CTLShape",
+                "name": "L_firstMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21597,15 +21597,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_secondMembraneMainController04_GRP|L_secondMembraneMainController04_ANM|L_secondMembraneMainController04_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_secondMembraneMainController04_GRP|L_secondMembraneMainController04_ANM|L_secondMembraneMainController01_CTL": {
         "transform": {
-            "name": "L_secondMembraneMainController04_CTL",
+            "name": "L_secondMembraneMainController01_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_secondMembraneMainController04_CTLShape",
+                "name": "L_secondMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23757,15 +23757,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_thirdMembraneMainController04_GRP|L_thirdMembraneMainController04_ANM|L_thirdMembraneMainController04_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_membraneControllers_GRP|L_thirdMembraneMainController04_GRP|L_thirdMembraneMainController04_ANM|L_thirdMembraneMainController01_CTL": {
         "transform": {
-            "name": "L_thirdMembraneMainController04_CTL",
+            "name": "L_thirdMembraneMainController01_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_thirdMembraneMainController04_CTLShape",
+                "name": "L_thirdMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32125,15 +32125,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_fingersAttributes_GRP|R_fingersAttributes_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersControllers_GRP|R_fingersAttributes_GRP|R_fingersBackAttributes_CTL": {
         "transform": {
-            "name": "R_fingersAttributes_CTL",
+            "name": "R_fingersBackAttributes_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_fingersAttributes_CTLShape",
+                "name": "R_fingersBackAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32216,7 +32216,7 @@
                 }
             },
             {
-                "name": "R_fingersAttributes_CTLShape1",
+                "name": "R_fingersBackAttributes_CTLShape1",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32244,15 +32244,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersIkControllers_GRP|R_fingersPlaneIk_GRP|R_fingersPlaneIk_ANM|R_fingersPlaneIk_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_legFingersIkControllers_GRP|R_fingersPlaneIk_GRP|R_fingersPlaneIk_ANM|R_fingersBackPlaneIk_CTL": {
         "transform": {
-            "name": "R_fingersPlaneIk_CTL",
+            "name": "R_fingersBackPlaneIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 14
         },
         "shapes": [
             {
-                "name": "R_fingersPlaneIk_CTLShape",
+                "name": "R_fingersBackPlaneIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33712,15 +33712,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_firstMembraneMainController04_GRP|R_firstMembraneMainController04_ANM|R_firstMembraneMainController04_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_firstMembraneMainController04_GRP|R_firstMembraneMainController04_ANM|R_firstMembraneMainController01_CTL": {
         "transform": {
-            "name": "R_firstMembraneMainController04_CTL",
+            "name": "R_firstMembraneMainController01_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_firstMembraneMainController04_CTLShape",
+                "name": "R_firstMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41566,15 +41566,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_secondMembraneMainController04_GRP|R_secondMembraneMainController04_ANM|R_secondMembraneMainController04_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_secondMembraneMainController04_GRP|R_secondMembraneMainController04_ANM|R_secondMembraneMainController01_CTL": {
         "transform": {
-            "name": "R_secondMembraneMainController04_CTL",
+            "name": "R_secondMembraneMainController01_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_secondMembraneMainController04_CTLShape",
+                "name": "R_secondMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43726,15 +43726,15 @@
             }
         ]
     },
-    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_thirdMembraneMainController04_GRP|R_thirdMembraneMainController04_ANM|R_thirdMembraneMainController04_CTL": {
+    "|AYCHEDRAL|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_membraneControllers_GRP|R_thirdMembraneMainController04_GRP|R_thirdMembraneMainController04_ANM|R_thirdMembraneMainController01_CTL": {
         "transform": {
-            "name": "R_thirdMembraneMainController04_CTL",
+            "name": "R_thirdMembraneMainController01_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_thirdMembraneMainController04_CTLShape",
+                "name": "R_thirdMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
