@@ -136,6 +136,7 @@ class NeckModule():
         cmds.addAttr(self.main_controllers[-1], shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.main_controllers[-1]+".attachedFk", channelBox=True, lock=True)
         cmds.addAttr(self.main_controllers[-1], shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+        cmds.setAttr(self.main_controllers[-1]+".attachedFKVis",channelBox=True, keyable=False)
 
         
 

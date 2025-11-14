@@ -805,6 +805,13 @@ class LimbModule(object):
             parent=self.masterWalk_ctl
         )
 
+        cmds.addAttr(self.scapula_master_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=self.default_ik, keyable=True)
+        switch_connections = cmds.listConnections(f"{self.switch_ctl}.switchIkFk", plugs=True, source=False, destination=True)
+        for connection in switch_connections:
+            cmds.connectAttr(f"{self.scapula_master_ctl}.switchIkFk", connection, f=True)
+        
+        cmds.delete(self.switch_ctl_grp[0])
+
         self.scapula_ctl, self.scapula_ctl_grp = controller_creator(
             name=f"{self.side}_scapula",
             suffixes=["GRP", "OFF", "ANM"],

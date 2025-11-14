@@ -168,7 +168,7 @@ class SpineModule():
         cmds.addAttr(self.main_controllers[1], shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.main_controllers[1]+".tangents", channelBox=True, lock=True)
         cmds.addAttr(self.main_controllers[1], shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
-        cmds.setAttr(self.main_controllers[1]+".tangentVisibility", channelBox=True)
+        cmds.setAttr(self.main_controllers[1]+".tangentVisibility", channelBox=True, keyable=False) # make unkeyable
 
         fk_switch(target= self.main_controllers[1], sources= [self.main_controllers[2], self.main_controllers[0]])
         cmds.setAttr(f"{self.main_controllers[1]}.RotateValue", lock=True, keyable=False)
@@ -211,16 +211,27 @@ class SpineModule():
 
         movable_ctl = controller_creator(f"{self.side}_movablePivot", 
                                                           suffixes=[], 
-                                                          lock=["scaleX", "scaleY", "scaleZ", "visibility"], 
+                                                          lock=["scaleX", "scaleY", "scaleZ"], 
                                                           ro=True, 
                                                           parent=self.body_ctl)
         
         for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
             cmds.setAttr(f"{movable_ctl}.{attr}", 0)
+        shape_movable = cmds.listRelatives(movable_ctl, shapes=True)
+        for shape in shape_movable:
+            print(shape)
+            cmds.setAttr(f"{shape}.alwaysDrawOnTop", 1)
+
+        # Add visibility attribute to body controller
+        cmds.addAttr(self.body_ctl, shortName="pivot", niceName="Body Pivot ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(self.body_ctl+".pivot", channelBox=True, lock=True)
+        cmds.addAttr(self.body_ctl, shortName="movablePivotVis", niceName="Movable Pivot Visibility", attributeType="bool", keyable=True)
+        cmds.setAttr(f"{self.body_ctl}.movablePivotVis", channelBox=True, keyable=False)
         
 
         cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.rotatePivot") 
-        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot") 
+        cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot")
+        cmds.connectAttr(f"{self.body_ctl}.movablePivotVis", f"{movable_ctl}.visibility")
 
         dummy_body = cmds.createNode("transform", n=f"{self.side}_dummyBody_TRN", p=self.body_ctl) 
 
@@ -250,6 +261,7 @@ class SpineModule():
         cmds.addAttr(self.body_ctl, shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.body_ctl+".attachedFk", channelBox=True, lock=True)
         cmds.addAttr(self.body_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+        cmds.setAttr(f"{self.body_ctl}.attachedFKVis", channelBox=True, keyable=False) # make unkeyable
 
         clamped_distance = cmds.createNode("distanceBetween", name=f"{self.side}_spineToTan01_DIB", ss=True)
         real_distance = cmds.createNode("distanceBetween", name=f"{self.side}_spineToTan01_DIB", ss=True)

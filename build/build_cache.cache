@@ -8,7 +8,75 @@
         "muscleLocators_GRP": "muscleSystems_GRP",
         "adonis_GRP": "adonis_GRP"
     },
-    "C_eyebrowModule": {
-        "skinning_transform": "C_eyebrowSkinning_GRP"
+    "L_legModule": {
+        "skinning_transform": "L_legSkinningJoints_GRP",
+        "fk_ctl": [
+            "L_hipFk_CTL",
+            "L_kneeFk_CTL",
+            "L_ankleFk_CTL",
+            "L_footFk_CTL"
+        ],
+        "pv_ctl": "L_legPV_CTL",
+        "root_ctl": "L_legRootIk_CTL",
+        "end_ik": "L_legIk_CTL"
+    },
+    "R_legModule": {
+        "skinning_transform": "R_legSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_hipFk_CTL",
+            "R_kneeFk_CTL",
+            "R_ankleFk_CTL",
+            "R_footFk_CTL"
+        ],
+        "pv_ctl": "R_legPV_CTL",
+        "root_ctl": "R_legRootIk_CTL",
+        "end_ik": "R_legIk_CTL"
+    },
+    "L_armModule": {
+        "skinning_transform": "L_armSkinningJoints_GRP",
+        "fk_ctl": [
+            "L_shoulderFk_CTL",
+            "L_elbowFk_CTL",
+            "L_wristFk_CTL"
+        ],
+        "pv_ctl": "L_armPV_CTL",
+        "root_ctl": "L_armRootIk_CTL",
+        "end_ik": "L_armIk_CTL",
+        "scapula_ctl": "L_scapula_CTL"
+    },
+    "R_armModule": {
+        "skinning_transform": "R_armSkinningJoints_GRP",
+        "fk_ctl": [
+            "R_shoulderFk_CTL",
+            "R_elbowFk_CTL",
+            "R_wristFk_CTL"
+        ],
+        "pv_ctl": "R_armPV_CTL",
+        "root_ctl": "R_armRootIk_CTL",
+        "end_ik": "R_armIk_CTL",
+        "scapula_ctl": "R_scapula_CTL"
+    },
+    "C_spineModule": {
+        "skinning_transform": "C_spineSkinning_GRP",
+        "body_ctl": "C_body_CTL",
+        "localHip": "C_localHip_CTL",
+        "localChest": "C_localChest_CTL",
+        "main_ctl": "C_localHip_JNT",
+        "end_main_ctl": "C_localChest_CTL"
+    },
+    "C_neckModule": {
+        "skinning_transform": "C_neckSkinning_GRP",
+        "neck_ctl": "C_neck01_CTL"
+    },
+    "L_eyeModule": {
+        "skinning_transform": "L_eyeSkinning_GRP",
+        "eyeMain": "C_eyeMain_CTL"
+    },
+    "R_eyeModule": {
+        "skinning_transform": "R_eyeSkinning_GRP",
+        "eyeMain": "C_eyeMain_CTL"
+    },
+    "C_jawModule": {
+        "skinning_transform": "C_jawSkinning_GRP"
     }
 }
