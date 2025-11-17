@@ -267,8 +267,8 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"])
 
             # ===== SCAPULA SPACES ===== #
-            space_switch.fk_switch(target = scapula_end, sources= [scapula], sources_names=["Scapula"], default_rotate=0.7, default_translate=0.7) # Follow the scapula ctl 70%
-            space_switch.fk_switch(target = scapula, sources= [scapula_master], sources_names=["ScapulaMaster"])
+            # space_switch.fk_switch(target = scapula_end, sources= [scapula], sources_names=["Scapula"], default_rotate=0.7, default_translate=0.7) # Follow the scapula ctl 70%
+            # space_switch.fk_switch(target = scapula, sources= [scapula_master], sources_names=["ScapulaMaster"])
 
 
         if "tail" in skel_grps[i]:

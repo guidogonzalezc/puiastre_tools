@@ -7,6 +7,7 @@ import math
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
 from puiastreTools.utils.guide_creation import guide_import
+from puiastreTools.utils.core import get_offset_matrix
 from puiastreTools.utils import data_export
 
 # Dev only imports
@@ -806,6 +807,7 @@ class LimbModule(object):
         )
 
         cmds.addAttr(self.scapula_master_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=self.default_ik, keyable=True)
+        cmds.setAttr(f"{self.scapula_master_ctl}.switchIkFk", channelBox=True, lock=True) 
         switch_connections = cmds.listConnections(f"{self.switch_ctl}.switchIkFk", plugs=True, source=False, destination=True)
         for connection in switch_connections:
             cmds.connectAttr(f"{self.scapula_master_ctl}.switchIkFk", connection, f=True)
@@ -863,7 +865,12 @@ class LimbModule(object):
         cmds.reorder(autoScapula_skinning_jnt, front=True)
         
 
-        cmds.connectAttr(f"{aim_matrix_scapula}.outputMatrix", f"{self.scapula_ctl_grp[0]}.offsetParentMatrix", force=True)
+        parent_matrix_scapula = cmds.createNode("parentMatrix", n=f"{self.side}_scapula_PMX", ss=True)
+        cmds.connectAttr(f"{aim_matrix_scapula}.outputMatrix", f"{parent_matrix_scapula}.inputMatrix")
+        cmds.connectAttr(f"{self.scapula_master_ctl}.worldMatrix[0]", f"{parent_matrix_scapula}.target[0].targetMatrix")
+        off_matrix = get_offset_matrix(f"{aim_matrix_scapula}.outputMatrix", self.scapula_master_ctl)
+        cmds.setAttr(f"{parent_matrix_scapula}.target[0].offsetMatrix", off_matrix, type="matrix")
+        cmds.connectAttr(f"{parent_matrix_scapula}.outputMatrix", f"{self.scapula_ctl_grp[0]}.offsetParentMatrix", force=True)
         cmds.connectAttr(f"{self.scapula_ctl}.worldMatrix[0]", f"{autoScapula_skinning_jnt}.offsetParentMatrix")
 
         self.scapulaEnd_ctl, self.scapulaEnd_ctl_grp = controller_creator(
@@ -877,9 +884,56 @@ class LimbModule(object):
         cmds.connectAttr(f"{mult_matrix_scapula}.matrixSum", f"{self.scapulaEnd_ctl_grp[0]}.offsetParentMatrix")
         cmds.connectAttr(f"{self.scapulaEnd_ctl}.worldMatrix[0]", f"{autoScapulaEnd_skinning_jnt}.offsetParentMatrix")
 
+        self.scapula_space_switch()
+
     
+    def scapula_space_switch(self):
+
+        """
+        Create the scapula end space switches with the attributes on the scapula.
+        """
+
+        cmds.setAttr(f"{self.scapulaEnd_ctl_grp[0]}.inheritsTransform", 0)
+
+        connections = cmds.listConnections(f"{self.scapulaEnd_ctl_grp[0]}.offsetParentMatrix", plugs=True, source=True, destination=False)[0]
+
+        data_exporter = data_export.DataExport()
 
 
+        masterWalk_ctl = data_exporter.get_data("basic_structure", "masterWalk_CTL")
+
+        sources = [self.scapula_ctl]
+        target_grp = self.scapulaEnd_ctl_grp[0]
+
+        parent_matrix_masterwalk = cmds.createNode("parentMatrix", name=self.scapulaEnd_ctl.replace("_CTL", "MasterwalkSpace_PM"), ss=True)
+        parent_matrix_parents = cmds.createNode("parentMatrix", name=self.scapulaEnd_ctl.replace("_CTL", "Space_PM"), ss=True)
+        blend_matrix = cmds.createNode("blendMatrix", name=self.scapulaEnd_ctl.replace("_CTL", "Space_BMX"), ss=True)
+
+        cmds.addAttr(self.scapula_ctl, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
+        cmds.setAttr(f"{self.scapula_ctl}.SpaceSwitchSep", channelBox=True, lock=True)   
+        cmds.addAttr(self.scapula_ctl, longName="TranslateValue", attributeType="float", min=0, max=1, defaultValue=0.5, keyable=True)
+        cmds.addAttr(self.scapula_ctl, longName="RotateValue", attributeType="float", min=0, max=1, defaultValue=0.5, keyable=True)
+
+        cmds.connectAttr(connections, f"{parent_matrix_parents}.inputMatrix")
+        cmds.connectAttr(connections, f"{parent_matrix_masterwalk}.inputMatrix")
+        cmds.connectAttr(f"{parent_matrix_parents}.outputMatrix", f"{blend_matrix}.target[0].targetMatrix")
+        cmds.connectAttr(f"{parent_matrix_masterwalk}.outputMatrix", f"{blend_matrix}.inputMatrix")
+
+        offset_masterwalk = get_offset_matrix(target_grp, masterWalk_ctl)
+        cmds.connectAttr(f"{masterWalk_ctl}.worldMatrix[0]", f"{parent_matrix_masterwalk}.target[0].targetMatrix")
+        cmds.setAttr(f"{parent_matrix_masterwalk}.target[0].offsetMatrix", offset_masterwalk, type="matrix")
+
+        for z, driver in enumerate(sources):
+            off_matrix = get_offset_matrix(target_grp, driver)
+            cmds.connectAttr(f"{driver}.worldMatrix[0]", f"{parent_matrix_parents}.target[{z}].targetMatrix") 
+            cmds.setAttr(f"{parent_matrix_parents}.target[{z}].offsetMatrix", off_matrix, type="matrix")
+
+        cmds.connectAttr(f"{self.scapula_ctl}.RotateValue", f"{blend_matrix}.target[0].rotateWeight")
+        cmds.connectAttr(f"{self.scapula_ctl}.TranslateValue", f"{blend_matrix}.target[0].translateWeight")
+        cmds.setAttr(f"{blend_matrix}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{blend_matrix}.target[0].shearWeight", 0)
+
+        cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{target_grp}.offsetParentMatrix", force=True)
 
 
     def reverse_foot(self):
