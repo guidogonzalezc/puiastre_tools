@@ -128,6 +128,7 @@ def puiastre_ui():
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
     cmds.menuItem(label="   Aychedral Rig", command=partial(build_rig, asset_name="aychedral"))
+    cmds.menuItem(label="   Varyndor Rig", command=partial(build_rig, asset_name="varyndor"))
     cmds.menuItem(label="   Maiasaura Rig", command=partial(build_rig, asset_name="maiasaura"))
     cmds.menuItem(label="   Cheetah Rig", command=partial(build_rig, asset_name="cheetah"))
     cmds.menuItem(label="   Moana Rig", command=partial(build_rig, asset_name="moana"))
