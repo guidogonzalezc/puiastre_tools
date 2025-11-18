@@ -9,11 +9,13 @@ from puiastreTools.autorig import rig_builder
 from puiastreTools.utils import curve_tool 
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import core
+from puiastreTools.ui import project_manager
 
 reload(option_menu)
 reload(guide_creation)
 reload(rig_builder)
 reload(curve_tool)
+reload(project_manager)
 
 FILE_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
@@ -93,6 +95,26 @@ def mirror_ctl(*args):
     """
     curve_tool.mirror_shapes()
 
+def import_guides(*args, asset_name=None): 
+    """
+    Function to import guides into the scene. If value is True, imports all guides; if None, opens an option box.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+        value (bool, optional): If True, imports all guides. If None, opens an option box. Defaults to None.
+    """
+    project_manager.load_asset_configuration(asset_name)
+    guide_creation.load_guides()
+
+def export_guides(*args): 
+    """
+    Function to export selected guides from the scene.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """ 
+    guide_creation.guides_export()
+
 def puiastre_ui():
     """
     Create the Puiastre Productions menu in Maya.
@@ -109,21 +131,25 @@ def puiastre_ui():
     cmds.menuItem(label="   Settings", subMenu=True, tearOff=True, boldFont=True, image="puiastreLogo.png")
     cmds.menuItem(label="   Reload UI", command=reload_ui)
 
-    cmds.setParent("..", menu=True)
+    cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
 
     cmds.menuItem(label="   Guides", subMenu=True, tearOff=True, boldFont=True, image="puiastreJoint.png")
     cmds.menuItem(label="   Export selected Guides", command=export_guides)
-    cmds.menuItem(label="   Import Guides", command=partial(import_guides, value = True))
-    cmds.menuItem(label="   Import selected Guides", optionBox=True, command=partial(import_guides, value = None))
-    cmds.setParent("..", menu=True)
+    cmds.menuItem(label="   Import Guides", subMenu=True, tearOff=True)
+    cmds.menuItem(label="   Aychedral Guides", command=partial(import_guides, asset_name="aychedral"))
+    cmds.menuItem(label="   Varyndor Guides", command=partial(import_guides, asset_name="varyndor"))
+    cmds.menuItem(label="   Maiasaura Guides", command=partial(import_guides, asset_name="maiasaura"))
+    cmds.menuItem(label="   Cheetah Guides", command=partial(import_guides, asset_name="cheetah"))
+    cmds.menuItem(label="   Moana Guides", command=partial(import_guides, asset_name="moana"))
+    cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Controls", subMenu=True, tearOff=True, boldFont=True, image="controllers.png")
     cmds.menuItem(label="   Export all controllers", command=partial(export_curves, curves_path=curves_path))
     cmds.menuItem(label="   Mirror all L_ to R_", command=mirror_ctl)
-    cmds.setParent("..", menu=True)
+    cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
@@ -132,18 +158,18 @@ def puiastre_ui():
     cmds.menuItem(label="   Maiasaura Rig", command=partial(build_rig, asset_name="maiasaura"))
     cmds.menuItem(label="   Cheetah Rig", command=partial(build_rig, asset_name="cheetah"))
     cmds.menuItem(label="   Moana Rig", command=partial(build_rig, asset_name="moana"))
-    cmds.setParent("..", menu=True)
+    cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Animation", subMenu=True, tearOff=True, boldFont=True)
     cmds.menuItem(label="   Vectorify", command=vectorify_ui_call)
-    cmds.setParent("..", menu=True)
+    cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Skin Cluster", subMenu=True, tearOff=True, boldFont=True)
     cmds.menuItem(label="   Export Skin Data")
     cmds.menuItem(label="   Import Skin Data")
-    cmds.setParent("..", menu=True)
+    cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.setParent("..", menu=True)
