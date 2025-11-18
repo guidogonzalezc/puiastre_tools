@@ -41,25 +41,7 @@ def reload_ui(*args):
     reload(option_menu)
     option_menu.puiastre_ui()
 
-def export_guides(*args): 
-    """
-    Function to export selected guides from the scene.
 
-    Args:
-        *args: Variable length argument list, not used in this function.
-    """ 
-    guide_creation.guides_export()
-
-def import_guides(*args, value=None): 
-    """
-    Function to import guides into the scene. If value is True, imports all guides; if None, opens an option box.
-
-    Args:
-        *args: Variable length argument list, not used in this function.
-        value (bool, optional): If True, imports all guides. If None, opens an option box. Defaults to None.
-    """
-    if value == True:   
-        guide_creation.guide_import(joint_name = "all")
 
 def build_rig(*args, asset_name = None):
 
