@@ -775,12 +775,12 @@ def build_surfaces_from_template(path=None, target_transform_name=None):
 
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
 
-core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\assets\varyndor\curves\CHAR_varyndor_001.json")
+# core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\assets\varyndor\curves\CHAR_varyndor_001.json")
 # core.DataManager.set_ctls_data(r"D:\git\maya\puiastre_tools\assets\moana\curves\CHAR_moana_001.json")
-core.DataManager.set_asset_name("varyndor")
-core.DataManager.set_mesh_data("C_body_MSH")
+# core.DataManager.set_asset_name("varyndor")
+# core.DataManager.set_mesh_data("C_body_MSH")
 # # aa = get_all_nurbs_surfaces_data(transform_name="tt")
 # # print(aa)
 # # build_surfaces_from_template(core.DataManager.get_guide_data(), target_transform_name="tt")
-get_all_ctl_curves_data()
+# get_all_ctl_curves_data()
 # mirror_shapes()
