@@ -118,7 +118,7 @@ def puiastre_ui():
 
 
     cmds.menuItem(label="   Guides", subMenu=True, tearOff=True, boldFont=True, image="puiastreJoint.png")
-    cmds.menuItem(label="   Export selected Guides", command=export_guides)
+    cmds.menuItem(label="   Export Guides to latest", command=export_guides)
     cmds.menuItem(label="   Import Guides", subMenu=True, tearOff=True)
     cmds.menuItem(label="   Aychedral Guides", command=partial(import_guides, asset_name="aychedral"))
     cmds.menuItem(label="   Varyndor Guides", command=partial(import_guides, asset_name="varyndor"))

@@ -326,7 +326,22 @@ class LimbModule(object):
 
         )
 
-        cmds.connectAttr(self.leg_guides[0] , f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+        if self.side == "R":
+            hand_ctl_offset = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}HandIkOffset_MMX", ss=True)
+          
+            cmds.connectAttr(f"{self.leg_guides[0]}", f"{hand_ctl_offset}.matrixIn[1]")
+          
+            cmds.setAttr(f"{hand_ctl_offset}.matrixIn[0]",  -1, 0, 0, 0, 
+                                                            0, 1, 0, 0, 
+                                                            0, -0, 1, 0,
+                                                            0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(hand_ctl_offset + ".matrixSum", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+
+        else:
+            cmds.connectAttr(f"{self.leg_guides[0]}", f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
+          
+
+        # cmds.connectAttr(self.leg_guides[0] , f"{self.hand_ik_ctl_grp[0]}.offsetParentMatrix")
 
         cmds.addAttr(self.pv_ik_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.pv_ik_ctl+".extraAttr", channelBox=True, lock=True)
@@ -632,8 +647,16 @@ class LimbModule(object):
         hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{self.module_name}EndLocal_F4X", ss=True)
 
         hand_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}EndWM_MMX", ss=True)
-        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[1]")
+        if self.side == "R" and self.module_name == "arm":
+            cmds.setAttr(f"{hand_wm_multmatrix}.matrixIn[0]",  -1, 0, 0, 0,
+                                                    -0, 1, 0, 0,
+                                                    0, 0, 1, 0,
+                                                    0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[2]")
+        else:
+            cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[0]")
+            cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[1]")
 
 
         for i in range(0, 3):
@@ -805,9 +828,9 @@ class LimbModule(object):
             ro=True,
             parent=self.masterWalk_ctl
         )
-
+        cmds.addAttr(self.scapula_master_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(self.scapula_master_ctl+".extraAttr", channelBox=True, lock=True)
         cmds.addAttr(self.scapula_master_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=self.default_ik, keyable=True)
-        cmds.setAttr(f"{self.scapula_master_ctl}.switchIkFk", channelBox=True, lock=True) 
         switch_connections = cmds.listConnections(f"{self.switch_ctl}.switchIkFk", plugs=True, source=False, destination=True)
         for connection in switch_connections:
             cmds.connectAttr(f"{self.scapula_master_ctl}.switchIkFk", connection, f=True)

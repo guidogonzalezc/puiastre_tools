@@ -127,7 +127,6 @@ def make(asset_name = "", latest = False):
     data_exporter.new_build()
 
     final_path = core.DataManager.get_guide_data()
-    print("FINAL PATH:", final_path)
 
     # Load guides data from the specified file
     try:

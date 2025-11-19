@@ -219,7 +219,6 @@ class SpineModule():
             cmds.setAttr(f"{movable_ctl}.{attr}", 0)
         shape_movable = cmds.listRelatives(movable_ctl, shapes=True)
         for shape in shape_movable:
-            print(shape)
             cmds.setAttr(f"{shape}.alwaysDrawOnTop", 1)
 
         # Add visibility attribute to body controller

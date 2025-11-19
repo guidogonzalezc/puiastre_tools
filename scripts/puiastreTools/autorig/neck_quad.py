@@ -150,7 +150,8 @@ class NeckModule():
 
         cmds.addAttr(self.main_controllers[-1], shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.main_controllers[-1]+".attachedFk", channelBox=True, lock=True)
-        cmds.addAttr(self.main_controllers[-1], shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+        cmds.addAttr(self.main_controllers[-1], shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=False)
+        cmds.setAttr(self.main_controllers[-1]+".attachedFKVis", channelBox=True)
 
         
 
@@ -224,7 +225,7 @@ class NeckModule():
         cmds.connectAttr(f"{neck02_translate_offset}.output", f"{neck02_end_pos}.matrixIn[0]")
         cmds.connectAttr(f"{tan01_world_matrix}.outputMatrix", f"{neck02_end_pos}.matrixIn[1]")
 
-        neck_wm = cmds.createNode("blendMatrix", name=f"{self.side}_headWM_BMX", ss=True)
+        neck_wm = cmds.createNode("blendMatrix", name=f"{self.side}_head_BMX", ss=True)
         cmds.connectAttr(f"{neck02_end_pos}.matrixSum", f"{neck_wm}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[2]}.worldMatrix[0]", f"{neck_wm}.target[0].targetMatrix")
         cmds.setAttr(f"{neck_wm}.target[0].translateWeight", 0)
@@ -290,7 +291,6 @@ class NeckModule():
         for joint in self.old_joints:
             input_connection = cmds.listConnections(f"{joint}.offsetParentMatrix", source=True, destination=False, plugs=True)[0]
             self.input_connections.append(input_connection)
-
 
         self.attached_fk()
 

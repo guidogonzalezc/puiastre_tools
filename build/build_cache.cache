@@ -88,7 +88,7 @@
         "settings_ctl": "R_hand_CTL"
     },
     "C_jawModule": {
-        "skinning_transform": "C_jawSkinning_GRP"
+        "skinning_transform": "C_jawFacialSkinning_GRP"
     },
     "L_firstMetacarpalModule": {
         "skinning_transform": "L_firstMetacarpalSkinningJoints_GRP",
@@ -185,11 +185,11 @@
         "frontRoll": "L_backLegFrontRoll_CTL"
     },
     "R_eyeModule": {
-        "skinning_transform": "R_eyeSkinning_GRP",
+        "skinning_transform": "R_eyeFacialSkinning_GRP",
         "eyeMain": "C_eyeMain_CTL"
     },
     "L_eyeModule": {
-        "skinning_transform": "L_eyeSkinning_GRP",
+        "skinning_transform": "L_eyeFacialSkinning_GRP",
         "eyeMain": "C_eyeMain_CTL"
     },
     "R_membraneModule": {},

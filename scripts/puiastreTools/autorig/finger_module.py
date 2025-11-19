@@ -48,9 +48,6 @@ class FingersModule(object):
         data_exporter = data_export.DataExport()
         self.import_guides(guide_name)
 
-        print(f"{self.side}_{self.finger_front_name.lower()}LegModule")
-
-
         leg_skinning = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "skinning_transform")
         self.leg_ball_blm = cmds.listRelatives(leg_skinning, children=True)[-1]
         self.foot_rotation = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "frontRoll")

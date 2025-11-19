@@ -66,7 +66,7 @@ class EyeModule():
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_eyeModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyeControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.tangent_controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyeTangentControllers_GRP", ss=True, parent=self.controllers_trn)
-        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_eyeSkinning_GRP", ss=True, p=self.skel_grp)
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_eyeFacialSkinning_GRP", ss=True, p=self.skel_grp)
 
         self.create_chain()
 
@@ -367,7 +367,6 @@ class EyeModule():
                     multmatrix = core.local_space_parent(ctl, parents=[self.main_ctls[0], mid_ctl], default_weights=0.8)
                 elif cv_index == 4: # 9
                     multmatrix = core.local_space_parent(ctl, parents=[self.main_ctls[1], mid_ctl], default_weights=0.8)
-                    print(ctl, cmds.getAttr(f"{ctl}.worldMatrix[0]"), cmds.getAttr(f"{self.main_ctls[0]}.worldMatrix[0]"), cmds.getAttr(f"{mid_ctl}.worldMatrix[0]"))
                 else:
                     multmatrix = cmds.createNode("multMatrix", name=f"{curve.replace('_CRV', f'Secondary0{i+1}')}localSpaceParent_MMX", ss=True)
                     cmds.connectAttr(f"{mid_ctl}.worldMatrix[0]", f"{multmatrix}.matrixIn[0]", force=True)
@@ -408,8 +407,8 @@ class EyeModule():
                 dist = (om.MVector(*cmds.xform(self.guides_transforms[0], q=1, ws=1, t=1)) - om.MVector(*cmds.xform(cv, q=1, ws=1, t=1))).length()
                 cmds.setAttr(f"{fourbyfour}.in32", dist if self.side == "L" else -dist)
                 cmds.connectAttr(f"{fourbyfour}.output", f"{multmatrix}.matrixIn[0]", force=True)
-
-                joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
+                name_joint = name.replace("Aim","")
+                joint = cmds.createNode("joint", name=f"{name_joint}_JNT", ss=True, parent=self.skinning_trn)
 
                 cmds.connectAttr(f"{multmatrix}.matrixSum", f"{joint}.offsetParentMatrix", force=True)
         

@@ -64,7 +64,7 @@ class JawModule():
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_jawModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_jawControllers_GRP", ss=True, parent=self.masterWalk_ctl)
-        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_jawSkinning_GRP", ss=True, p=self.skel_grp)
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_jawFacialSkinning_GRP", ss=True, p=self.skel_grp)
 
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
 
@@ -489,7 +489,6 @@ class JawModule():
                 cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
                 if i % 3 == 0:
-                    print(ctl)
                     cmds.addAttr(ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
                     cmds.setAttr(ctl+".extraSep", channelBox=True, lock=True)
                     cmds.addAttr(ctl, shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
@@ -572,7 +571,8 @@ class JawModule():
 
                 cmds.connectAttr(f"{fourByFourMatrix}.output", f"{parent_matrix}.target[0].targetMatrix", f=True)
                 cmds.connectAttr(f"{fourOrigPos}.output", f"{parent_matrix}.inputMatrix", f=True)
-                joint = cmds.createNode("joint", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}Skinning_JNT", ss=True, parent = self.skinning_trn)
+
+                joint = cmds.createNode("joint", n=f"{cv_side}_{main_mid_name}Lip0{i}_JNT", ss=True, parent = self.skinning_trn)
                 cmds.connectAttr(f"{fourByFourMatrix}.output", f"{joint}.offsetParentMatrix", f=True)
 
                 cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", get_offset_matrix(f"{fourOrigPos}.output", joint), type="matrix")
