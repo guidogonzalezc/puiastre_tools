@@ -1,5 +1,5 @@
 {
-    "Dragon": {
+    "varyndor": {
         "R_wingSliding_GUIDE": {
             "degreeInU": 1,
             "degreeInV": 3,
@@ -147,9 +147,9 @@
         },
         "R_backToe_GUIDE": {
             "worldPosition": [
-                -258.6303731097388,
-                18.093181844028138,
-                85.00624667079683
+                -270.8724609051325,
+                0.17628387421655134,
+                152.33040226251376
             ],
             "parent": "R_backFoot_GUIDE",
             "jointTwist": "Child",
@@ -161,9 +161,9 @@
         },
         "R_backFoot_GUIDE": {
             "worldPosition": [
-                -234.66050888272815,
-                72.35277983538919,
-                -147.15854127472642
+                -242.09339913889045,
+                72.58741247451337,
+                -149.9245829100335
             ],
             "parent": "R_backAnkle_GUIDE",
             "jointTwist": "Child",
@@ -175,9 +175,9 @@
         },
         "R_backAnkle_GUIDE": {
             "worldPosition": [
-                -213.10079011821148,
-                352.08508769165087,
-                -175.63078880856654
+                -225.0874111715449,
+                342.97065663265545,
+                -177.22881955542658
             ],
             "parent": "R_backKnee_GUIDE",
             "jointTwist": "Child",
@@ -189,9 +189,9 @@
         },
         "R_backKnee_GUIDE": {
             "worldPosition": [
-                -230.1085097878379,
-                540.946379951487,
-                51.24073087145238
+                -237.57662131298636,
+                513.4220884633494,
+                88.14557253584502
             ],
             "parent": "R_hip_GUIDE",
             "jointTwist": "Child",
@@ -371,9 +371,9 @@
         },
         "R_backFootRoll_GUIDE": {
             "worldPosition": [
-                -234.85482500332594,
+                -267.50284151008066,
                 30.0,
-                -22.2745943069458
+                -7.266389790281778
             ],
             "parent": "R_backFootHeel_GUIDE",
             "jointTwist": "Child",
@@ -2191,9 +2191,9 @@
         },
         "L_backFootRoll_GUIDE": {
             "worldPosition": [
-                234.85482500332594,
+                267.50284151008066,
                 30.0,
-                -22.2745943069458
+                -7.266389790281778
             ],
             "parent": "L_backFootHeel_GUIDE",
             "jointTwist": "Child",
@@ -2387,9 +2387,9 @@
         },
         "L_backToe_GUIDE": {
             "worldPosition": [
-                258.6303731097388,
-                18.093181844028138,
-                85.00624667079683
+                270.8724609051325,
+                0.17628387421655134,
+                152.33040226251376
             ],
             "parent": "L_backFoot_GUIDE",
             "jointTwist": "Child",
@@ -2401,9 +2401,9 @@
         },
         "L_backFoot_GUIDE": {
             "worldPosition": [
-                234.66050888272815,
-                72.35277983538919,
-                -147.15854127472642
+                242.09339913889045,
+                72.58741247451337,
+                -149.9245829100335
             ],
             "parent": "L_backAnkle_GUIDE",
             "jointTwist": "Child",
@@ -2415,9 +2415,9 @@
         },
         "L_backAnkle_GUIDE": {
             "worldPosition": [
-                213.10079011821148,
-                352.08508769165087,
-                -175.63078880856654
+                225.0874111715449,
+                342.97065663265545,
+                -177.22881955542658
             ],
             "parent": "L_backKnee_GUIDE",
             "jointTwist": "Child",
@@ -2429,9 +2429,9 @@
         },
         "L_backKnee_GUIDE": {
             "worldPosition": [
-                230.1085097878379,
-                540.946379951487,
-                51.24073087145238
+                237.57662131298636,
+                513.4220884633494,
+                88.14557253584502
             ],
             "parent": "L_hip_GUIDE",
             "jointTwist": "Child",
@@ -2768,6 +2768,6 @@
             "guide_type_object": "Guide"
         }
     },
-    "controls": null,
-    "meshes": "Puiastre"
+    "controls": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_001.json",
+    "meshes": null
 }

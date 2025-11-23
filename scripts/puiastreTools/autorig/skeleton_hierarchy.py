@@ -113,6 +113,10 @@ def build_complete_hierarchy():
         om.MGlobal.displayError(f"Unexpected error while loading files: {e}")
         return
 
+    skelHierarchy_grp = data_exporter.get_data("basic_structure", "skeletonHierarchy_GRP")
+
+    freeze_joint = cmds.createNode("joint", n="C_freeze_JNT", ss=True, parent=skelHierarchy_grp)
+
     skel_grps = []
     skinning_joints = []
     modules_name = []

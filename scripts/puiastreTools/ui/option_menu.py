@@ -58,7 +58,7 @@ def build_rig(*args, asset_name = None):
         rig_builder.make(latest=True)
 
 
-def export_curves(*args, curves_path): 
+def export_curves(*args): 
     """
     Function to export all controller curves data.
 
@@ -88,14 +88,15 @@ def import_guides(*args, asset_name=None):
     project_manager.load_asset_configuration(asset_name)
     guide_creation.load_guides()
 
-def export_guides(*args): 
+def export_guides(*args, mirror = False): 
     """
     Function to export selected guides from the scene.
 
     Args:
         *args: Variable length argument list, not used in this function.
     """ 
-    guide_creation.guides_export()
+    core.load_data()
+    guide_creation.guides_export(mirror=mirror)
 
 def puiastre_ui():
     """
@@ -118,7 +119,9 @@ def puiastre_ui():
 
 
     cmds.menuItem(label="   Guides", subMenu=True, tearOff=True, boldFont=True, image="puiastreJoint.png")
-    cmds.menuItem(label="   Export Guides to latest", command=export_guides)
+    cmds.menuItem(label="Export Guides", command=export_guides)
+    cmds.menuItem(optionBox=True, command=partial(export_guides, mirror=True), label="Export Mirrored Guides")
+
     cmds.menuItem(label="   Import Guides", subMenu=True, tearOff=True)
     cmds.menuItem(label="   Aychedral Guides", command=partial(import_guides, asset_name="aychedral"))
     cmds.menuItem(label="   Varyndor Guides", command=partial(import_guides, asset_name="varyndor"))
