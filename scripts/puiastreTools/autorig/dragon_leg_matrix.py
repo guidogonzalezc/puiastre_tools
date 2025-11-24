@@ -1103,7 +1103,7 @@ class LimbModule(object):
         cmds.setAttr(f"{ball_wm}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{ball_wm}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{ball_wm}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{ball_wm}.secondaryMode", 0)
+        cmds.setAttr(f"{ball_wm}.secondaryMode", 2)
 
         front_roll_wm = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontRollWM_MMX", ss=True)
         cmds.connectAttr(f"{self.frontRoll_ctl}.worldMatrix[0]", f"{front_roll_wm}.matrixIn[2]")

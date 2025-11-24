@@ -1,8 +1,8 @@
 {
-    "project_path": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor",
-    "ctls_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_001.json",
-    "guide_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\guides\\CHAR_varyndor_002.guides",
+    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor",
+    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_001.json",
+    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\guides\\CHAR_varyndor_002.guides",
     "mesh_data": null,
     "asset_name": "varyndor",
-    "skinning_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\skinning\\CHAR_varyndor_001.skn"
+    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\skinning\\CHAR_varyndor_001.skn"
 }
