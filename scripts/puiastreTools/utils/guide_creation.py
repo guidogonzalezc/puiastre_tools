@@ -246,13 +246,10 @@ class GuideCreation(object):
                     parent = positions[1]
                     type = positions[-1]
                     positions = positions[0]
-                print(joint_name)
                 if len(joint_name.split("_")) > 1:
                     side = joint_name.split("_")[0]
                     joint_name =joint_name.split("_")[1]
 
-                print(joint_name)
-                print(side)
 
                 positions = [0,0,0] if positions is None else positions
                 parent = None if parent == None else parent
@@ -635,13 +632,16 @@ class MembraneCreation(GuideCreation):
         self.controller_number = None
         self.position_data = {
              
-            "wingSliding": get_data(f"{self.sides}_mouthSliding"),
+            "wingSliding": get_data(f"{self.sides}_wingSliding"),
+            "forearmSliding": get_data(f"{self.sides}_forearmSliding"),
 
             # "primaryMembran01": get_data(f"{self.sides}_primaryMembran01"),
             # "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
             # "primaryMembran03": get_data(f"{self.sides}_primaryMembran03"),
             # "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
         }
+
+        print(self.position_data)
 
 class HandGuideCreation(GuideCreation):
     """
@@ -869,7 +869,6 @@ class EyebrowGuideCreation(GuideCreation):
                 "centerBrow": get_data(f"{self.sides}_centerBrow"),
         }
         all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
-        print(all_child_guides)
 
         try:
             for guide in all_child_guides:
@@ -877,7 +876,6 @@ class EyebrowGuideCreation(GuideCreation):
                     guide.replace("_GUIDE", ""): get_data(guide.replace("_GUIDE", "")),
                 })
 
-            print(self.position_data)
         except:
             pass
 

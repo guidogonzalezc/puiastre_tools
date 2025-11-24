@@ -85,6 +85,7 @@ def import_guides(*args, asset_name=None):
         *args: Variable length argument list, not used in this function.
         value (bool, optional): If True, imports all guides. If None, opens an option box. Defaults to None.
     """
+    reload(guide_creation)
     project_manager.load_asset_configuration(asset_name)
     guide_creation.load_guides()
 
@@ -132,7 +133,7 @@ def puiastre_ui():
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Controls", subMenu=True, tearOff=True, boldFont=True, image="controllers.png")
-    cmds.menuItem(label="   Export all controllers", command=partial(export_curves, curves_path=curves_path))
+    cmds.menuItem(label="   Export all controllers", command=partial(export_curves))
     cmds.menuItem(label="   Mirror all L_ to R_", command=mirror_ctl)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
