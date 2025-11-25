@@ -633,7 +633,6 @@ class MembraneCreation(GuideCreation):
         self.position_data = {
              
             "wingSliding": get_data(f"{self.sides}_wingSliding"),
-            "forearmSliding": get_data(f"{self.sides}_forearmSliding"),
 
             # "primaryMembran01": get_data(f"{self.sides}_primaryMembran01"),
             # "primaryMembran02": get_data(f"{self.sides}_primaryMembran02"),
@@ -641,7 +640,6 @@ class MembraneCreation(GuideCreation):
             # "primaryMembran04": get_data(f"{self.sides}_primaryMembran04"),
         }
 
-        print(self.position_data)
 
 class HandGuideCreation(GuideCreation):
     """
@@ -1328,6 +1326,7 @@ def guides_export(mirror=False):
                 else:
                     guides_data[guides_name][guide] = {
                             "worldPosition": guides_get_translation[i],
+                            "worldRotation": cmds.xform(guide, q=True, ws=True, rotation=True),
                             "parent": guides_parents[i],
                             "jointTwist": guides_joint_twist[i],
                             "type": guides_type[i],
