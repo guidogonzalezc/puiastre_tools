@@ -67,7 +67,7 @@ def rename_ctl_shapes():
         parentName = cmds.listRelatives(shapes, parent=True)[0]
         cmds.rename(shapes, f"{parentName}Shape")
 
-def setIsHistoricallyInteresting(value=0):
+def setIsHistoricallyInteresting(value=2):
     cmds.select(r=True, allDependencyNodes=True)
     allNodes = cmds.ls(sl=True)
     allNodes.extend(cmds.ls(shapes=True))
@@ -197,9 +197,9 @@ def make(asset_name = "", latest = False):
 
                     jmm.JawModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "eyebrow":
+                # if guide_info.get("moduleName") == "eyebrow":
 
-                    ebm.EyebrowModule().make(guide_name)
+                #     ebm.EyebrowModule().make(guide_name)
 
                 
     # # Additional modules who depends on others modules

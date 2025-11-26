@@ -1,50 +1,9 @@
-"""
-skincluster_json_fast_dq.py
-
-Fast JSON-based skinCluster export/import using Maya API 2.0.
-Supports:
- - Classic Linear skinning
- - Dual Quaternion skinning
- - Blended DQ per-vertex map (blendWeights)
- - Per-vertex weight export via MFnSkinCluster.getWeights()
- - Bulk import via MFnSkinCluster.setWeights()
-
-DQ MAP (Correct):
- - In Maya, Dual Quaternion influence is per-vertex, stored in:
-       skinCluster.blendWeights[vtx_index]
- - NOT per influence!
- - Always exported, regardless of skinningMethod.
-
-JSON FORMAT:
-
-{
-  "skinClusterName": {
-    "mesh_name": "pSphereShape1",
-    "joint_list": [...],
-    "skinningMethod": 2,
-    "dq_vertex_map": [0.0, 0.34, 1.0, ...],   <-- OPTION B
-    "skin_percentage": {
-       "pSphereShape1.vtx[0]": {"joint1": 0.2, "joint2": 0.8},
-       ...
-    },
-    "attrs": {
-       "normalizeWeights": 1,
-       "maxInfluences": 4,
-       "dropoff": 4.0
-    }
-  }
-}
-"""
-
 import os
 import json
 import traceback
 import maya.cmds as cmds
 import maya.api.OpenMaya as om
 import maya.api.OpenMayaAnim as oma
-
-DEFAULT_EXPORT_PATH = r"/mnt/data/skincluster_export.skn.json"
-
 
 # ---------------------------------------------------------
 # Utility
@@ -55,18 +14,15 @@ def _ensure_dir(path):
     if d and not os.path.exists(d):
         os.makedirs(d)
 
-
 def _get_mobject(node):
     sel = om.MSelectionList()
     sel.add(node)
     return sel.getDependNode(0)
 
-
 def _get_dagpath(node):
     sel = om.MSelectionList()
     sel.add(node)
     return sel.getDagPath(0)
-
 
 def _safe_getattr(node, attr):
     try:
@@ -74,133 +30,193 @@ def _safe_getattr(node, attr):
     except Exception:
         return None
 
+def _get_user_attributes(node):
+    """
+    Scrapes keyable and channel-box attributes to save deformer settings.
+    Logic inspired by 'getSaveAttributesDict' in weights.py.
+    """
+    attrs = {}
+    # Get keyable attributes (standard settings)
+    keyable = cmds.listAttr(node, keyable=True, scalar=True) or []
+    # Get channel box attributes (non-keyable but visible)
+    cb = cmds.listAttr(node, channelBox=True, scalar=True) or []
+    
+    all_attrs = list(set(keyable + cb))
+    
+    # Attributes to skip (system attributes)
+    skip_list = ['weightList', 'weights', 'input', 'outputGeometry', 'groupId']
+    
+    for attr in all_attrs:
+        if any(x in attr for x in skip_list):
+            continue
+        try:
+            val = cmds.getAttr(f"{node}.{attr}")
+            # Only store simple types (int, float, bool)
+            if isinstance(val, (float, int, bool)):
+                attrs[attr] = val
+        except Exception:
+            continue
+    return attrs
+
+def _get_deformer_stack(mesh):
+    """
+    Returns a list of deformers on the mesh.
+    """
+    hist = cmds.listHistory(mesh, pruneDagObjects=True) or []
+    # Standard deformer types
+    deformer_types = cmds.listNodeTypes('deformer')
+    # Filter history for deformers
+    found = [h for h in hist if cmds.nodeType(h) in deformer_types and cmds.nodeType(h) != 'tweak']
+    return found
 
 # ---------------------------------------------------------
 # EXPORT
 # ---------------------------------------------------------
 
-def export_skinclusters_json(path=None, selection_only=False, verbose=True):
+def export_deformers_json(path=None, selection_only=False):
     """
-    Export all or selected skinClusters to JSON.
+    Export all deformers (SkinCluster, Cluster, DeltaMush, etc.) to JSON.
     Includes:
-      - classic weights
-      - skinningMethod
-      - blendWeights[] (the TRUE dual quaternion map)
+      - Deformer Type
+      - Weights (Map)
+      - Keyable Attributes
     """
     if path is None:
-        path = DEFAULT_EXPORT_PATH
+        path = r"C:\temp\deformers.json" # Default path
     path = os.path.abspath(path)
     _ensure_dir(path)
 
-    # find skinClusters
+    # 1. Gather Geometry
+    meshes = []
     if selection_only:
-        scs = []
-        sel = cmds.ls(sl=True, long=True) or []
-        for s in sel:
-            hist = cmds.listHistory(s, f=False) or []
-            scs += [h for h in hist if cmds.nodeType(h) == "skinCluster"]
-        scs = list(set(scs))
+        sel = cmds.ls(sl=True, long=True, dag=True, type='mesh') or []
+        meshes = sel
     else:
-        scs = cmds.ls(type="skinCluster") or []
+        # If nothing selected, maybe grab all meshes in scene? 
+        # For safety, let's stick to selection or explicit list, 
+        # but here we defaults to selection if selection_only is False for safety.
+        meshes = cmds.ls(sl=True, long=True, dag=True, type='mesh') or []
 
     data = {}
 
-    for sc in scs:
-        try:
-            geo_list = cmds.skinCluster(sc, q=True, geometry=True) or []
-            if not geo_list:
-                continue
-            geo = geo_list[0]
+    for mesh in meshes:
+        # Get Transform
+        transform = cmds.listRelatives(mesh, parent=True, fullPath=True)[0]
+        
+        # Get Deformers
+        deformers = _get_deformer_stack(transform)
+        
+        for dfm in deformers:
+            try:
+                dfm_type = cmds.nodeType(dfm)
+                
+                # Setup Base Block
+                block = {
+                    "mesh_name": transform,
+                    "type": dfm_type,
+                    "attrs": _get_user_attributes(dfm),
+                    "weights": {} # For generic
+                }
 
-            sc_mobj = _get_mobject(sc)
-            sc_fn = oma.MFnSkinCluster(sc_mobj)
+                # --- SKINCLUSTER LOGIC ---
+                if dfm_type == "skinCluster":
+                    sc_mobj = _get_mobject(dfm)
+                    sc_fn = oma.MFnSkinCluster(sc_mobj)
+                    geo_dp = _get_dagpath(transform)
 
-            inf_paths = sc_fn.influenceObjects()
-            inf_names = [om.MFnDagNode(p).fullPathName() for p in inf_paths]
+                    # Influences
+                    inf_paths = sc_fn.influenceObjects()
+                    inf_names = [om.MFnDagNode(p).fullPathName() for p in inf_paths]
+                    block["joint_list"] = inf_names
+                    
+                    # Store Skinning Method specifically
+                    block["skinningMethod"] = _safe_getattr(dfm, "skinningMethod") or 0
 
-            geo_dp = _get_dagpath(geo)
-            it_geo = om.MItGeometry(geo_dp)
+                    # Dual Quaternion Map (blendWeights)
+                    dq_array = []
+                    vtx_count = cmds.polyEvaluate(transform, vertex=True)
+                    # Try efficient getter, fallback to getAttr loop if needed
+                    # Note: OpenMaya doesn't have a clean getBlendWeights for all verts easily exposed in Python API 1.0 style
+                    # We will use MFnSkinCluster.getBlendWeights in API 2.0
+                    try:
+                         # API 2.0 getBlendWeights returns MDoubleArray
+                        weights_marray = sc_fn.getBlendWeights(geo_dp, _get_mobject(transform))
+                        dq_array = list(weights_marray)
+                    except:
+                        # Fallback
+                        pass 
+                    
+                    if not dq_array or len(dq_array) != vtx_count:
+                        # Zero fill if failed
+                        dq_array = [0.0] * vtx_count
+                        
+                    block["dq_vertex_map"] = dq_array
 
-            # -----------------------------------------
-            # EXPORT CLASSIC WEIGHTS
-            # -----------------------------------------
-            weights_data = {}
-            while not it_geo.isDone():
-                comp = it_geo.currentItem()
-                idx = it_geo.index()
-                vals, inf_count = sc_fn.getWeights(geo_dp, comp)
+                    # Weights extraction
+                    weights_data = {}
+                    it_geo = om.MItGeometry(geo_dp)
+                    while not it_geo.isDone():
+                        idx = it_geo.index()
+                        vals, inf_count = sc_fn.getWeights(geo_dp, it_geo.currentItem())
+                        
+                        # Compress weights (only store non-zero)
+                        row = {}
+                        for i, w in enumerate(vals):
+                            if w > 0.001: # Epsilon
+                                row[inf_names[i]] = float(w)
+                        if row:
+                            weights_data[f"{idx}"] = row # Use index as key to save space
+                        it_geo.next()
+                    
+                    block["skin_percentage"] = weights_data
 
-                row = {}
-                for i, w in enumerate(vals):
-                    if abs(w) > 0.0:
-                        row[inf_names[i]] = float(w)
+                # --- GENERIC DEFORMER LOGIC (Cluster, DeltaMush, etc) ---
+                else:
+                    # Logic derived from weights.py _saveDeformerToFile
+                    # Most deformers use MFnGeometryFilter and store weights in weightList[0]
+                    
+                    geo_dp = _get_dagpath(transform)
+                    dfm_mobj = _get_mobject(dfm)
+                    
+                    # Check if it is a geometry filter (has weights)
+                    if not dfm_mobj.hasFn(om.MFn.kGeometryFilter):
+                        print(f"[Export] Skipping {dfm} (Not a geometry filter)")
+                        continue
 
-                if row:
-                    weights_data[f"{geo}.vtx[{idx}]"] = row
+                    geo_filt_fn = oma.MFnGeometryFilter(dfm_mobj)
+                    
+                    # We need the index of the geometry in the deformer
+                    # Usually 0 if it's the only mesh, but let's be safe
+                    index = geo_filt_fn.indexForOutputShape(_get_mobject(mesh))
+                    
+                    # Get Components (All Vertices)
+                    # We create a component covering all verts
+                    vtx_count = cmds.polyEvaluate(transform, vertex=True)
+                    idx_fn = om.MFnSingleIndexedComponent()
+                    comp_obj = idx_fn.create(om.MFn.kMeshVertComponent)
+                    idx_fn.setElements(list(range(vtx_count)))
+                    
+                    # Get Weights
+                    # MFnGeometryFilter.weights(path, component, index) -> MFloatArray
+                    try:
+                        w_vals = geo_filt_fn.weights(geo_dp, comp_obj) # This returns a float array of weights
+                        block["weights"] = list(w_vals)
+                    except Exception as e:
+                        # Fallback for some deformers that might not expose standard weights via API
+                        print(f"[Export] API weight read failed for {dfm}: {e}. Trying attributes.")
+                        pass
 
-                it_geo.next()
+                # Save block
+                data[dfm] = block
+                print(f"[Export] Processed {dfm} ({dfm_type})")
 
-            # -----------------------------------------
-            # EXPORT DQ MAP (blendWeights), OPTION B
-            # -----------------------------------------
-            dq_array = []
-            vtx_count = cmds.polyEvaluate(geo, vertex=True)
-            for i in range(vtx_count):
-                try:
-                    dq_val = cmds.getAttr(f"{sc}.blendWeights[{i}]")
-                    dq_array.append(float(dq_val))
-                except Exception:
-                    dq_array.append(0.0)
+            except Exception:
+                traceback.print_exc()
 
-            # -----------------------------------------
-            # SKINCLUSTER ATTRIBUTES
-            # -----------------------------------------
-            attrs = {}
-            nw = _safe_getattr(sc, "normalizeWeights")
-            if nw is None:
-                nw = _safe_getattr(sc, "nw")
-            if nw is not None:
-                attrs["normalizeWeights"] = nw
-
-            mi = _safe_getattr(sc, "maxInfluences")
-            if mi is not None:
-                attrs["maxInfluences"] = mi
-
-            dr = _safe_getattr(sc, "dropoff")
-            if dr is not None:
-                if isinstance(dr, (list, tuple)):
-                    dr = dr[0][0]
-                attrs["dropoff"] = float(dr)
-
-            skin_method = _safe_getattr(sc, "skinningMethod")
-            if skin_method is not None:
-                skin_method = int(skin_method)
-
-            # -----------------------------------------
-            # BUILD JSON BLOCK
-            # -----------------------------------------
-            data[sc] = {
-                "mesh_name": geo,
-                "joint_list": inf_names,
-                "skinningMethod": skin_method,
-                "dq_vertex_map": dq_array,       # OPTION B
-                "skin_percentage": weights_data,
-                "attrs": attrs
-            }
-
-            if verbose:
-                print(f"[export] {sc} -> joints={len(inf_names)} verts={len(weights_data)} dqCount={len(dq_array)}")
-
-        except Exception:
-            traceback.print_exc()
-
-    # write file
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
 
-    if verbose:
-        print(f"[export] Wrote {len(data)} skinClusters to {path}")
-
+    print(f"[export] Wrote {len(data)} deformers to {path}")
     return path
 
 
@@ -208,17 +224,17 @@ def export_skinclusters_json(path=None, selection_only=False, verbose=True):
 # IMPORT
 # ---------------------------------------------------------
 
-def import_skinclusters_json(path=None, verbose=True, allow_missing_joints=True):
+def import_deformers_json(path=None, verbose=True):
     """
-    Import JSON skinClusters created by export_skinclusters_json().
-    Sets:
-       - mesh binding
-       - classic weights (fast API)
-       - skinningMethod
-       - blendWeights (dq_vertex_map array)
+    Import JSON deformers.
+    Handles:
+      - Recreation of Deformers (SkinCluster, Cluster, DeltaMush, etc.)
+      - Attributes
+      - Weights
     """
     if path is None:
-        path = DEFAULT_EXPORT_PATH
+        return
+        
     path = os.path.abspath(path)
     if not os.path.exists(path):
         raise IOError(f"File does not exist: {path}")
@@ -226,179 +242,177 @@ def import_skinclusters_json(path=None, verbose=True, allow_missing_joints=True)
     with open(path, "r") as f:
         data = json.load(f)
 
-    built = []
-
     for sc_name, block in data.items():
         try:
             geo = block["mesh_name"]
+            dfm_type = block.get("type", "skinCluster")
+            attrs = block.get("attrs", {})
+
             if not cmds.objExists(geo):
                 print(f"[import] Geo not found: {geo} (skip {sc_name})")
                 continue
 
-            joints = block["joint_list"]
-            skin_method = block.get("skinningMethod")
-            dq_array = block.get("dq_vertex_map", [])
-            weights_data = block.get("skin_percentage", {})
-            attrs = block.get("attrs", {})
-
             # ---------------------------------------------------------
-            # ENSURE JOINTS EXIST
+            # 1. GET OR CREATE DEFORMER
             # ---------------------------------------------------------
-            missing = [j for j in joints if not cmds.objExists(j)]
-            if missing:
-                if allow_missing_joints:
-                    for m in missing:
-                        cmds.select(clear=True)
-                        cmds.joint(name=m, position=(0, 0, 0))
-                    if verbose:
-                        print(f"[import] Created dummy joints: {missing}")
-                else:
-                    print(f"[import] Missing joints {missing} (skip {sc_name})")
-                    continue
-
-            # ---------------------------------------------------------
-            # CREATE / REUSE SKINCLUSTER
-            # ---------------------------------------------------------
-            existing = None
-            hist = cmds.listHistory(geo, f=False) or []
-            for h in hist:
-                if cmds.nodeType(h) == "skinCluster":
-                    existing = h
-                    break
-
-            if existing:
-                sc = existing
-                if verbose:
-                    print(f"[import] Using existing skinCluster {sc}")
+            dfm_node = None
+            
+            # Check if exists
+            if cmds.objExists(sc_name) and cmds.nodeType(sc_name) == dfm_type:
+                dfm_node = sc_name
             else:
-                sc = cmds.skinCluster(joints, geo, tsb=True, name=sc_name)[0]
-                if verbose:
-                    print(f"[import] Created skinCluster {sc}")
+                # --- CREATE SKINCLUSTER ---
+                if dfm_type == "skinCluster":
+                    joints = block.get("joint_list", [])
+                    # Ensure joints exist
+                    safe_joints = []
+                    for j in joints:
+                        if cmds.objExists(j):
+                            safe_joints.append(j)
+                        else:
+                            # Create dummy if needed (weights.py logic)
+                            print(f"[Import] Missing joint {j}, creating dummy.")
+                            cmds.select(cl=True)
+                            safe_joints.append(cmds.joint(n=j))
+                    
+                    if safe_joints:
+                        # Create SkinCluster
+                        # tsb=True (to selection bucket)
+                        try:
+                            res = cmds.skinCluster(safe_joints, geo, tsb=True, n=sc_name)
+                            dfm_node = res[0]
+                        except Exception as e:
+                            print(f"[Import] Failed to create skinCluster {sc_name}: {e}")
+                            continue
+                
+                # --- CREATE GENERIC DEFORMER ---
+                else:
+                    # Basic creation for standard types (deltaMush, cluster, etc)
+                    # Some deformers require specific creation commands.
+                    try:
+                        cmds.select(geo)
+                        if dfm_type == 'cluster':
+                            # Clusters need a handle
+                            res = cmds.cluster(n=sc_name)
+                            dfm_node = res[0]
+                        elif dfm_type == 'blendShape':
+                            res = cmds.blendShape(n=sc_name)
+                            dfm_node = res[0]
+                        elif dfm_type == 'deltaMush':
+                            res = cmds.deltaMush(geo, n=sc_name)
+                            dfm_node = res[0]
+                        else:
+                            # Generic fallback using deformer command
+                            # This works for: lattice, wire, non-linear, textureDeformer
+                            res = cmds.deformer(geo, type=dfm_type, n=sc_name)
+                            dfm_node = res[0]
+                    except Exception as e:
+                         print(f"[Import] Failed to create {dfm_type} '{sc_name}': {e}")
+                         continue
+
+            if not dfm_node:
+                continue
 
             # ---------------------------------------------------------
-            # APPLY SKINNING METHOD
+            # 2. RESTORE ATTRIBUTES
             # ---------------------------------------------------------
-            if skin_method is not None:
+            for attr, val in attrs.items():
                 try:
-                    cmds.setAttr(f"{sc}.skinningMethod", int(skin_method))
+                    cmds.setAttr(f"{dfm_node}.{attr}", val)
                 except Exception:
                     pass
-
+            
             # ---------------------------------------------------------
-            # DISABLE NORMALIZATION FOR PRECISE WEIGHT APPLICATION
+            # 3. RESTORE WEIGHTS
             # ---------------------------------------------------------
-            norm_save = _safe_getattr(sc, "normalizeWeights")
-            if norm_save is None:
-                norm_save = _safe_getattr(sc, "nw")
-
-            try:
-                cmds.setAttr(f"{sc}.normalizeWeights", 0)
-            except Exception:
-                try:
-                    cmds.setAttr(f"{sc}.nw", 0)
-                except Exception:
-                    pass
-
-            # ---------------------------------------------------------
-            # API FAST CLASSIC WEIGHT IMPORT
-            # ---------------------------------------------------------
-            sc_mobj = _get_mobject(sc)
-            sc_fn = oma.MFnSkinCluster(sc_mobj)
+            
             geo_dp = _get_dagpath(geo)
+            dfm_mobj = _get_mobject(dfm_node)
 
-            inf_paths = sc_fn.influenceObjects()
-            inf_names = [om.MFnDagNode(p).fullPathName() for p in inf_paths]
-            inf_index_map = {nm: i for i, nm in enumerate(inf_names)}
-            influence_count = len(inf_names)
+            # --- RESTORE SKIN WEIGHTS ---
+            if dfm_type == "skinCluster":
+                
+                # Disable Norm temporarily
+                try: cmds.setAttr(f"{dfm_node}.normalizeWeights", 0)
+                except: pass
 
-            comp_mfn = om.MFnSingleIndexedComponent()
-            comp_obj = comp_mfn.create(om.MFn.kMeshVertComponent)
-            comp_fn = om.MFnSingleIndexedComponent(comp_obj)
+                sc_fn = oma.MFnSkinCluster(dfm_mobj)
+                
+                # Remap Influences indices
+                inf_paths = sc_fn.influenceObjects()
+                current_inf_names = [om.MFnDagNode(p).fullPathName() for p in inf_paths]
+                inf_map = {name: i for i, name in enumerate(current_inf_names)}
+                
+                weights_data = block.get("skin_percentage", {})
+                
+                # Build MDoubleArray for SetWeights
+                # We need a flat array: [vtx0_inf0, vtx0_inf1, ... vtx1_inf0...]
+                num_inf = len(current_inf_names)
+                
+                # Create Component for all verts
+                vtx_count = cmds.polyEvaluate(geo, vertex=True)
+                
+                # Prepare bulk array (init zero)
+                full_weights = om.MDoubleArray(vtx_count * num_inf, 0.0)
+                
+                # Fill array from JSON
+                for vtx_idx_str, w_dict in weights_data.items():
+                    vtx_idx = int(vtx_idx_str)
+                    base_offset = vtx_idx * num_inf
+                    for j_name, w_val in w_dict.items():
+                        if j_name in inf_map:
+                            full_weights[base_offset + inf_map[j_name]] = w_val
 
-            weight_array = om.MDoubleArray()
+                # Apply
+                idx_fn = om.MFnSingleIndexedComponent()
+                comp_obj = idx_fn.create(om.MFn.kMeshVertComponent)
+                idx_fn.setElements(list(range(vtx_count)))
+                
+                sc_fn.setWeights(geo_dp, comp_obj, full_weights, normalize=False)
+                
+                # Restore Dual Quaternion (BlendWeights)
+                dq_map = block.get("dq_vertex_map", [])
+                if dq_map:
+                    dq_marray = om.MDoubleArray(dq_map)
+                    sc_fn.setBlendWeights(geo_dp, comp_obj, dq_marray)
 
-            it_geo = om.MItGeometry(geo_dp)
-            while not it_geo.isDone():
-                idx = it_geo.index()
-                comp_fn.addElement(idx)
+                # Re-enable Norm based on saved attr
+                nw_val = attrs.get("normalizeWeights", 1)
+                try: cmds.setAttr(f"{dfm_node}.normalizeWeights", nw_val)
+                except: pass
+                
+                if verbose: print(f"[Import] Restored SkinCluster {dfm_node}")
 
-                row = [0.0] * influence_count
-                vtx_name = f"{geo}.vtx[{idx}]"
-
-                if vtx_name in weights_data:
-                    for j, wv in weights_data[vtx_name].items():
-                        i = inf_index_map.get(j)
-                        if i is not None:
-                            row[i] = float(wv)
-
-                for wv in row:
-                    weight_array.append(wv)
-
-                it_geo.next()
-
-            sc_fn.setWeights(geo_dp, comp_obj, weight_array, normalize=False)
-
-            # ---------------------------------------------------------
-            # RESTORE BLENDWEIGHTS (DQ MAP) OPTION B
-            # ---------------------------------------------------------
-            if dq_array:
-                for idx, dq_val in enumerate(dq_array):
-                    try:
-                        cmds.setAttr(f"{sc}.blendWeights[{idx}]", float(dq_val))
-                    except Exception:
-                        pass
-
-            # ---------------------------------------------------------
-            # RESTORE ATTRIBUTES
-            # ---------------------------------------------------------
-            if norm_save is not None:
-                try:
-                    cmds.setAttr(f"{sc}.normalizeWeights", int(norm_save))
-                except Exception:
-                    try:
-                        cmds.setAttr(f"{sc}.nw", int(norm_save))
-                    except Exception:
-                        pass
-
-            if "maxInfluences" in attrs:
-                try:
-                    cmds.setAttr(f"{sc}.maxInfluences", int(attrs["maxInfluences"]))
-                except Exception:
-                    pass
-
-            if "dropoff" in attrs:
-                try:
-                    cmds.setAttr(f"{sc}.dropoff", float(attrs["dropoff"]))
-                except Exception:
-                    pass
-
-            if verbose:
-                print(f"[import] Imported weights + dq_map for {sc}")
-
-            built.append(sc)
+            # --- RESTORE GENERIC WEIGHTS ---
+            else:
+                weights = block.get("weights", [])
+                if weights:
+                    # Use MFnGeometryFilter to set weights
+                    if dfm_mobj.hasFn(om.MFn.kGeometryFilter):
+                        geo_filt_fn = oma.MFnGeometryFilter(dfm_mobj)
+                        
+                        vtx_count = cmds.polyEvaluate(geo, vertex=True)
+                        if len(weights) == vtx_count:
+                             # Component
+                            idx_fn = om.MFnSingleIndexedComponent()
+                            comp_obj = idx_fn.create(om.MFn.kMeshVertComponent)
+                            idx_fn.setElements(list(range(vtx_count)))
+                            
+                            # Float Array
+                            w_float = om.MFloatArray(weights)
+                            
+                            # Set
+                            geo_filt_fn.setWeights(geo_dp, comp_obj, w_float)
+                            if verbose: print(f"[Import] Restored weights for {dfm_node}")
+                        else:
+                            print(f"[Import] Weight count mismatch for {dfm_node} (Json:{len(weights)} vs Mesh:{vtx_count})")
 
         except Exception:
             traceback.print_exc()
+            print(f"[Import] Error processing block {sc_name}")
 
-    if verbose:
-        print(f"[import] Done. {len(built)} skinClusters processed.")
-
-    return built
-
-
-# ---------------------------------------------------------
 # UI WRAPPERS
-# ---------------------------------------------------------
 
-def export_ui():
-    path = cmds.fileDialog2(fileFilter="*.json", fileMode=0, caption="Export SkinClusters to JSON")
-    if path:
-        export_skinclusters_json(path[0], selection_only=False, verbose=True)
-
-def import_ui():
-    path = cmds.fileDialog2(fileFilter="*.json", fileMode=1, caption="Import SkinClusters JSON")
-    if path:
-        import_skinclusters_json(path[0], verbose=True)
-
-
-import_ui()
+path = r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\assets\varyndor\skinning\CHAR_varyndor_001.skn"
+export_deformers_json(path)#, selection_only=True)
+# import_deformers_json(path)

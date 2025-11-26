@@ -47,7 +47,7 @@ def leg_pv_spaceswitch(localHip, legPv, footCtl, root):
     cmds.connectAttr(f"{legPv}.spaceSwitchValue", f"{foot_trn}.blendAim1")
     cmds.connectAttr(f"{legPv}.automaticPoleVector", f"{pv_SPC}.blendParent1")
 
-def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, sources_names = []):
+def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, sources_names = [], pv=False):
     """
     Switch the matrix space of a target control to multiple source controls in Maya.
 
@@ -114,7 +114,15 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, s
     for z, driver in enumerate(sources):
         off_matrix = get_offset_matrix(target_grp, driver)
         cmds.connectAttr(f"{driver}.worldMatrix[0]", f"{parent_matrix_parents}.target[{z}].targetMatrix") 
-        cmds.setAttr(f"{parent_matrix_parents}.target[{z}].offsetMatrix", off_matrix, type="matrix")
+
+        if pv:
+            multmatrix = cmds.createNode("multMatrix", name=target.replace("_CTL", f"{spaces[z]}LiveOffset_MMX"), ss=True)
+            cmds.connectAttr(f"{connections}", f"{multmatrix}.matrixIn[0]")
+            matrix = cmds.getAttr(f"{driver}.worldInverseMatrix[0]")
+            cmds.setAttr(f"{multmatrix}.matrixIn[1]", matrix, type="matrix")
+            cmds.connectAttr(f"{multmatrix}.matrixSum", f"{parent_matrix_parents}.target[{z}].offsetMatrix")
+        else:
+            cmds.setAttr(f"{parent_matrix_parents}.target[{z}].offsetMatrix", off_matrix, type="matrix")
 
     cmds.connectAttr(f"{target}.RotateValue", f"{blend_matrix}.target[0].rotateWeight")
     cmds.connectAttr(f"{target}.TranslateValue", f"{blend_matrix}.target[0].translateWeight")

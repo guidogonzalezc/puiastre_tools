@@ -252,7 +252,7 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = root, sources= parents, sources_names=["LocalHip", "Body"])
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalHip", "Body"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalHip", "Body"])
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalHip", "Body"], pv=True)
 
         if "frontLeg" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
@@ -284,7 +284,7 @@ def build_complete_hierarchy():
             # parents.pop(0)
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"])
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"], pv=True)
 
             # ===== SCAPULA SPACES ===== #
             # space_switch.fk_switch(target = scapula_end, sources= [scapula], sources_names=["Scapula"], default_rotate=0.7, default_translate=0.7) # Follow the scapula ctl 70%
@@ -318,7 +318,7 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = root, sources= parents, sources_names=["Scapula", "LocalChest", "SpineEnd"])
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["Scapula", "LocalChest", "SpineEnd"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents, sources_names=["WristIK", "Scapula", "LocalChest", "SpineEnd"])
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["WristIK", "Scapula", "LocalChest", "SpineEnd"], pv=True)
         
         if "Metacarpal" in skel_grps[i]:
 
@@ -341,7 +341,7 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = root, sources= parents, sources_names=["Wrist"])
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=1, default_translate=1, sources_names=[ "Wrist"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"])
+            space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"], pv=True)
 
 
         # ===== SCAPULA SPACES ===== #
