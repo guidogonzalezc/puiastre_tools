@@ -1,6 +1,6 @@
-import maya.cmds as cmds
-import maya.api.OpenMaya as om2
-import maya.api.OpenMayaAnim as om2Anim
+# import maya.cmds as cmds
+# import maya.api.OpenMaya as om2
+# import maya.api.OpenMayaAnim as om2Anim
 
 # selection = cmds.ls(sl=True)
 
@@ -31,16 +31,19 @@ import maya.api.OpenMayaAnim as om2Anim
 #     cmds.setAttr(f"{item}.overrideEnabled", 1)
 #     cmds.setAttr(f"{item}.overrideColor", 18)
 
-sel = om2.MSelectionList()
-sel.add("pSphere1")
-shape_obj = sel.getDagPath(0)
-print(shape_obj)
+# sel = om2.MSelectionList()
+# sel.add("pSphere1")
+# shape_obj = sel.getDagPath(0)
+# print(shape_obj)
 
-it = om2.MItDependencyGraph(
-    shape_obj.node(),
-    om2.MFn.kSkinClusterFilter,
-    om2.MItDependencyGraph.kUpstream
-)
+# it = om2.MItDependencyGraph(
+#     shape_obj.node(),
+#     om2.MFn.kSkinClusterFilter,
+#     om2.MItDependencyGraph.kUpstream
+# )
 
-skin_mobj = it.currentNode()
-print(om2Anim.MFnSkinCluster(skin_mobj))
+# skin_mobj = it.currentNode()
+# print(om2Anim.MFnSkinCluster(skin_mobj))
+
+import numpy
+numpy.__version__
