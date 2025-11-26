@@ -366,10 +366,14 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
             else:
                 cmds.connectAttr(f'{up}.matrixSum', f'{up_off}.matrixIn[1]')
 
-            cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
-                                    0, 1, 0, 0,
-                                    0, 0, 1, 0,
-                                    0, 4, 0, 0], type='matrix')
+            fourbyfour = cmds.createNode('fourByFourMatrix', n=f'{name}UpFourByFour0{i}_FBF', ss=True)
+            cmds.setAttr(f'{fourbyfour}.in32', 10)
+            cmds.connectAttr(f'{fourbyfour}.output', f'{up_off}.matrixIn[0]')
+
+            # cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
+            #                         0, 1, 0, 0,
+            #                         0, 0, 1, 0,
+            #                         0, 4, 0, 0], type='matrix')
 
             up_plug = f'{up_off}.matrixSum'
 
