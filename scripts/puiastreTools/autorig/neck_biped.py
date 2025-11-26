@@ -70,6 +70,7 @@ class NeckModule():
         self.data_exporter.append_data(f"{self.side}_neckModule", 
                                     {"skinning_transform": self.skinning_trn,
                                     "neck_ctl": self.main_controllers[0],
+                                    "head_ctl": self.main_controllers[-1],
 
                                     }
                                   )

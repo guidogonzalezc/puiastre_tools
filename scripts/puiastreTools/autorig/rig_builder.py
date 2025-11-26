@@ -189,17 +189,7 @@ def make(asset_name = "", latest = False):
 
                     tmm.TailModule().make(guide_name)
                 
-                if guide_info.get("moduleName") == "eye":
 
-                    em.EyeModule().make(guide_name)
-                
-                if guide_info.get("moduleName") == "mouth":
-
-                    jmm.JawModule().make(guide_name)
-
-                # if guide_info.get("moduleName") == "eyebrow":
-
-                #     ebm.EyebrowModule().make(guide_name)
 
                 
     # # Additional modules who depends on others modules
@@ -219,12 +209,24 @@ def make(asset_name = "", latest = False):
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
                     fm.FingersModule().make(guide_name)
 
-    # Create the skeleton hierarchy and spaces
+                if guide_info.get("moduleName") == "eye":
+
+                    em.EyeModule().make(guide_name)
+                
+                if guide_info.get("moduleName") == "mouth":
+
+                    jmm.JawModule().make(guide_name)
+
+                if guide_info.get("moduleName") == "eyebrow":
+
+                    ebm.EyebrowModule().make(guide_name)
+
+    #Create the skeleton hierarchy and spaces
     skeleton_hierarchy = skh.build_complete_hierarchy() 
 
     # skt.load_skincluster()
 
-    # End commands to clean the scene
+    #End commands to clean the scene
     rename_ctl_shapes()
     joint_label()
     setIsHistoricallyInteresting(0)

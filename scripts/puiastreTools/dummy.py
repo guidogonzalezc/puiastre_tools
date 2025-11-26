@@ -1,6 +1,6 @@
-# import maya.cmds as cmds
-# import maya.api.OpenMaya as om2
-# import maya.api.OpenMayaAnim as om2Anim
+import maya.cmds as cmds
+import maya.api.OpenMaya as om2
+import maya.api.OpenMayaAnim as om2Anim
 
 # selection = cmds.ls(sl=True)
 
@@ -27,9 +27,9 @@
 #     cmds.delete(original_dupe)
 
 
-# for item in cmds.ls(sl=True):
-#     cmds.setAttr(f"{item}.overrideEnabled", 1)
-#     cmds.setAttr(f"{item}.overrideColor", 18)
+for item in cmds.ls(sl=True):
+    cmds.setAttr(f"{item}.overrideEnabled", 1)
+    cmds.setAttr(f"{item}.overrideColor", 4)
 
 # sel = om2.MSelectionList()
 # sel.add("pSphere1")
@@ -45,5 +45,5 @@
 # skin_mobj = it.currentNode()
 # print(om2Anim.MFnSkinCluster(skin_mobj))
 
-import numpy
-numpy.__version__
+# import numpy
+# numpy.__version__

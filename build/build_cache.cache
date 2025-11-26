@@ -66,7 +66,8 @@
     },
     "C_neckModule": {
         "skinning_transform": "C_neckSkinning_GRP",
-        "neck_ctl": "C_neck01_CTL"
+        "neck_ctl": "C_neck01_CTL",
+        "head_ctl": "C_head_CTL"
     },
     "L_eyeModule": {
         "skinning_transform": "L_eyeFacialSkinning_GRP",
@@ -78,5 +79,11 @@
     },
     "C_jawModule": {
         "skinning_transform": "C_jawFacialSkinning_GRP"
+    },
+    "R_eyebrowModule": {
+        "skinning_transform": "R_eyebrowFacialSkinning_GRP"
+    },
+    "L_eyebrowModule": {
+        "skinning_transform": "L_eyebrowFacialSkinning_GRP"
     }
 }

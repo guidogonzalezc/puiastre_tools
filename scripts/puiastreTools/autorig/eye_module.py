@@ -39,6 +39,8 @@ class EyeModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
+        self.head_ctl = self.data_exporter.get_data("C_neckModule", "head_ctl")
+
 
 
 
@@ -67,6 +69,12 @@ class EyeModule():
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyeControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.tangent_controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyeTangentControllers_GRP", ss=True, parent=self.controllers_trn)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_eyeFacialSkinning_GRP", ss=True, p=self.skel_grp)
+
+        parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_eyeModule_PM", ss=True)
+        cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
+        offset = core.get_offset_matrix(f"{self.controllers_trn}.worldMatrix", f"{self.head_ctl}.worldMatrix")
+        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", offset, type="matrix")
+        cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{self.controllers_trn}.offsetParentMatrix", force=True)
 
         self.create_chain()
 
