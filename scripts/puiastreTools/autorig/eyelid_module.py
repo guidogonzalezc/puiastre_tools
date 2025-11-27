@@ -1,0 +1,454 @@
+#Python libraries import
+from maya import cmds
+from importlib import reload
+import maya.api.OpenMaya as om
+import math
+
+# Local imports
+from puiastreTools.utils.curve_tool import controller_creator
+from puiastreTools.utils.guide_creation import guide_import
+from puiastreTools.utils import data_export
+from puiastreTools.utils import core
+from puiastreTools.utils.core import get_offset_matrix
+from puiastreTools.utils import basic_structure
+from puiastreTools.utils import de_boor_core_002
+from puiastreTools.utils.space_switch import fk_switch
+
+reload(data_export)
+
+AXIS_VECTOR = {'x': (1, 0, 0), '-x': (-1, 0, 0), 'y': (0, 1, 0), '-y': (0, -1, 0), 'z': (0, 0, 1), '-z': (0, 0, -1)}
+
+class EyelidModule():
+    """
+    Class to create a neck module in a Maya rigging setup.
+    This module handles the creation of neck joints, controllers, and various systems such as stretch, reverse, offset, squash, and volume preservation.
+    """
+    def __init__(self):
+        """
+        Initializes the NeckModule class, setting up paths and data exporters.
+        
+        Args:
+            self: Instance of the NeckModule class.
+        """
+        
+        self.data_exporter = data_export.DataExport()
+
+
+        self.modules_grp = self.data_exporter.get_data("basic_structure", "modules_GRP")
+        self.skel_grp = self.data_exporter.get_data("basic_structure", "skel_GRP")
+        self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
+        self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
+        self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
+        self.head_ctl = self.data_exporter.get_data("C_neckModule", "head_ctl")
+
+
+
+    def make(self, guide_name):
+        """
+        Creates the neck module, including the neck chain, controllers, and various systems.
+
+        Args:
+            self: Instance of the NeckModule class.
+        """
+
+        self.guide_name = guide_name
+
+        self.side = self.guide_name.split("_")[0]
+
+        if self.side == "L":
+            self.primary_aim_vector = om.MVector(AXIS_VECTOR["x"])
+            self.secondary_aim_vector = om.MVector(AXIS_VECTOR["y"])
+        else:
+            self.primary_aim_vector = om.MVector(AXIS_VECTOR["-x"])
+            self.secondary_aim_vector = om.MVector(AXIS_VECTOR["-y"])
+
+
+        self.module_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowModule_GRP", ss=True, parent=self.modules_grp)
+        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowControllers_GRP", ss=True, parent=self.masterWalk_ctl)
+        self.tangent_controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowTangentControllers_GRP", ss=True, parent=self.controllers_trn)
+
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowFacialSkinning_GRP", ss=True, p=self.skel_grp)
+
+        try:
+            parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_eyebrowModule_PM", ss=True)
+            cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
+            offset = core.get_offset_matrix(f"{self.controllers_trn}.worldMatrix", f"{self.head_ctl}.worldMatrix")
+            cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", offset, type="matrix")
+            cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{self.controllers_trn}.offsetParentMatrix", force=True)
+        except:
+            pass
+
+        self.create_chain()
+       
+        cmds.setAttr(f"C_preferences_CTL.showModules", 1)
+
+    def eye_rotation_4b4(self, four_by_four):
+        reshaped_matrix = [self.eyelid_rotation_matrix[i:i+4] for i in range(0, len(self.eyelid_rotation_matrix), 4)]
+        for row in range(4):
+            for col in range(4):
+                cmds.setAttr(f"{four_by_four}.in{row}{col}", reshaped_matrix[row][col]) 
+
+    def create_chain(self):
+        self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
+
+        if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
+            self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
+        cmds.addAttr(self.skinning_trn, longName="moduleName", attributeType="enum", enumName=self.enum_str, keyable=False)
+
+        self.eye = self.guides[0]
+
+        self.eyeEnd = None
+        self.curves = [None, None]
+
+        for guide in self.guides:
+            shape = cmds.listRelatives(guide, shapes=True)
+            if shape:
+                if cmds.objectType(shape[0]) == "nurbsCurve":
+                    if "upper" in guide.lower():
+                        self.curves[0] = guide
+                    elif "lower" in guide.lower():
+                        self.curves[1] = guide
+            else:
+                self.eyeEnd = guide
+
+        self.eyelid_rotation = cmds.createNode("aimMatrix", name=f"{self.side}_eyelidRotation_AMX", ss=True)
+
+        cvs = cmds.ls(f"{self.curves[0]}.cv[*]", fl=True)
+
+        pos = cmds.pointPosition(cvs[0], world=True)
+
+        corner_01_fbf = cmds.createNode("fourByFourMatrix", name=f"{self.side}_eyelid01CornerGuide_F4X", ss=True)
+        cmds.setAttr(f"{corner_01_fbf}.in30", pos[0])
+        cmds.setAttr(f"{corner_01_fbf}.in31", pos[1])
+        cmds.setAttr(f"{corner_01_fbf}.in32", pos[2])
+
+        pos = cmds.pointPosition(cvs[-1], world=True)
+
+        corner_02_fbf = cmds.createNode("fourByFourMatrix", name=f"{self.side}_eyelid02CornerGuide_F4X", ss=True)
+        cmds.setAttr(f"{corner_02_fbf}.in30", pos[0])
+        cmds.setAttr(f"{corner_02_fbf}.in31", pos[1])
+        cmds.setAttr(f"{corner_02_fbf}.in32", pos[2])
+
+
+        cmds.connectAttr(f"{corner_01_fbf}.output", f"{self.eyelid_rotation}.inputMatrix", force=True)
+        cmds.connectAttr(f"{corner_02_fbf}.output", f"{self.eyelid_rotation}.primaryTargetMatrix", force=True)
+        cmds.setAttr(f"{self.eyelid_rotation}.primaryInputAxis", *self.primary_aim_vector, type="double3")
+        cmds.setAttr(f"{self.eyelid_rotation}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
+        cmds.setAttr(f"{self.eyelid_rotation}.secondaryTargetVector", 0, 1, 0, type="double3")
+        cmds.setAttr(f"{self.eyelid_rotation}.secondaryMode", 2)
+
+        if self.side == "R":
+
+            multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_eyelidRotation_MMX", ss=True)
+            cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(f"{self.eyelid_rotation}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
+
+            self.eyelid_rotation = f"{multmatrix}.matrixSum"
+        else:
+            self.eyelid_rotation = f"{self.eyelid_rotation}.outputMatrix"   
+            
+
+
+        self.eyelid_rotation_matrix = cmds.getAttr(self.eyelid_rotation)
+
+        self.main_ctl, self.main_ctl_grp = controller_creator(
+                name=f"{self.side}_eyeDirect",
+                suffixes=["GRP", "OFF","ANM"],
+                lock=["sz", "sy", "sx", "visibility"],
+                ro=False,
+                parent= self.controllers_trn
+            )
+        
+        cmds.addAttr(self.main_ctl, shortName="extraSep", niceName="EXTRA_____", enumName="_____",attributeType="enum", keyable=True)
+        cmds.setAttr(self.main_ctl+".extraSep", channelBox=True, lock=True)
+        cmds.addAttr(self.main_ctl, shortName="blinkHeight", niceName="Blink Height",minValue=0,defaultValue=0.2, maxValue = 1, keyable=True)
+        cmds.addAttr(self.main_ctl, shortName="upperBlink", niceName="Upper Blink",minValue=-1,defaultValue=0, maxValue = 1, keyable=True)
+        cmds.addAttr(self.main_ctl, shortName="lowerBlink", niceName="Lower Blink",minValue=-1,defaultValue=0, maxValue = 1, keyable=True)
+        cmds.addAttr(self.main_ctl, shortName="fleshy", niceName="Fleshy",minValue=0,defaultValue=0.1, maxValue = 1, keyable=True)
+        cmds.addAttr(self.main_ctl, shortName="fleshyCorners", niceName="Fleshy Corners",minValue=0,defaultValue=0, maxValue = 1, keyable=True)
+        
+        self.eyeDirect_blm = cmds.createNode("blendMatrix", n=f"{self.side}_eyeDirect_BLM")
+        cmds.connectAttr(f"{self.eye}.worldMatrix[0]", f"{self.eyeDirect_blm}.inputMatrix")
+
+        cmds.connectAttr(f"{self.eyelid_rotation}", f"{self.eyeDirect_blm}.target[0].targetMatrix", force=True)
+        cmds.setAttr(f"{self.eyeDirect_blm}.target[0].translateWeight", 0)
+        cmds.connectAttr(f"{self.eyeDirect_blm}.outputMatrix", f"{self.main_ctl_grp[0]}.offsetParentMatrix", force=True)
+
+        corner_aim = []
+        corner_ctls = []
+        corner_grps = []
+
+        for name, item in zip(["Inner", "Outer"], [0, len(cmds.ls(f"{self.curves[0]}.cv[*]", fl=True)) - 1]):
+
+            four_by_four = cmds.createNode("fourByFourMatrix", name=f"{self.side}_eyelid{name}Pos_F4X", ss=True)
+            cmds.setAttr(f"{four_by_four}.in30", cmds.pointPosition(f"{self.curves[0]}.cv[{item}]")[0])
+            cmds.setAttr(f"{four_by_four}.in31", cmds.pointPosition(f"{self.curves[0]}.cv[{item}]")[1])
+            cmds.setAttr(f"{four_by_four}.in32", cmds.pointPosition(f"{self.curves[0]}.cv[{item}]")[2])
+
+            ctl, controller_grp = controller_creator(
+                name=f"{self.side}_{name}EyelidCorner",
+                suffixes=["GRP", "OFF", "ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                ro=True,
+                parent=self.controllers_trn
+            )
+
+            cmds.addAttr(ctl, shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
+            cmds.setAttr(ctl+".tangents", channelBox=True, lock=True)
+            cmds.addAttr(ctl, shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
+            cmds.setAttr(ctl+".tangentVisibility", channelBox=True)
+
+            aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{name}EyelidCorner_AMX", ss=True)
+            cmds.connectAttr(f"{four_by_four}.output", f"{aim_matrix}.inputMatrix", force=True)
+            cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{controller_grp[0]}.offsetParentMatrix", force=True)
+
+            corner_aim.append(aim_matrix)
+            corner_ctls.append(ctl)
+            corner_grps.append(controller_grp)
+
+        mid_pos_4b4 = []
+        rebuilded_curves = []
+        controllers = []
+        for curve in self.curves:
+            
+            rebuilded = cmds.rebuildCurve(curve, ch=0, rpo=0, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=2, d=3, tol=0.01)[0]
+            cmds.parent(rebuilded, self.module_trn)
+            cmds.select(rebuilded, r=True)
+            cmds.nurbsCurveToBezier()
+            rebuilded_curves.append(rebuilded)
+
+
+        blink_ref = cmds.duplicate(rebuilded_curves[1], n=f"{self.side}_blinkRef_CRV") # Tabula esto para Oswald
+
+        blink_ref_bls = cmds.blendShape(rebuilded_curves[0], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
+
+        cmds.connectAttr(self.main_ctl+".blinkHeight", f"{blink_ref_bls}.weight[0]")
+
+        negative_curves = []
+        for i, curve in enumerate(rebuilded_curves):
+            negative_blink_curve = cmds.duplicate(curve, n=curve.replace("_CRV", f"NegativeBlinkRef_CRV"))
+            value = 0 if i != 0 else 1
+            bls_tmp = cmds.blendShape(rebuilded_curves[value], negative_blink_curve, n=curve.replace("_CRV", f"NegativeBlinkRef_BLS"))[0]
+            cmds.setAttr(f"{bls_tmp}.weight[0]", -1)
+            cmds.delete(negative_blink_curve, constructionHistory=True)
+            negative_curves.append(negative_blink_curve)
+
+        blink_end_curves = []
+        bls_name = []
+
+        for i, curves in enumerate(rebuilded_curves):
+            name = curves.replace("_CRV", f"Blink")
+            blink_curve = cmds.duplicate(curves, n=curves.replace("_CRV", f"Blink_CRV"))[0]
+
+            blink_bls = cmds.blendShape(blink_ref, curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
+
+            attr = "upperBlink" if "upper" in curves.lower() else "lowerBlink"
+
+            clamp = cmds.createNode("clamp", n=f"{name}_CLP")
+            rev = cmds.createNode("reverse", n=f"{name}_REV")
+            flm = cmds.createNode("floatMath", n=f"{name}_FLM")
+            cmds.connectAttr(f"{self.main_ctl}.{attr}", clamp+".inputR")
+            cmds.connectAttr(f"{self.main_ctl}.{attr}", clamp+".inputG")
+            cmds.setAttr(clamp+".minG", -1)
+            cmds.setAttr(clamp+".maxR", 1)
+            cmds.connectAttr(clamp+".outputR", f"{blink_bls}.weight[0]")
+            cmds.connectAttr(clamp+".outputR", f"{rev}.inputX")
+            cmds.connectAttr(rev+".outputX", f"{blink_bls}.weight[1]")
+            cmds.connectAttr(clamp+".outputG", f"{flm}.floatA")
+            cmds.setAttr(flm+".operation", 2)
+            cmds.setAttr(flm+".floatB", -1)
+            cmds.connectAttr(flm+".outFloat", f"{blink_bls}.weight[2]")
+
+            blink_end_curves.append(blink_curve)
+            bls_name.append(blink_bls)
+
+        for curve in rebuilded_curves:
+            clts = [corner_ctls[0]]
+            ctls_grps = [corner_grps[0]]
+            print(curve)
+
+            main_4b4 = []
+            tan_4b4 = []
+            all_4b4 = []
+
+            if "upper" in curve.lower():
+                suffix_name = "Upper"
+            elif "lower" in curve.lower():
+                suffix_name = "Lower"
+
+            for i, cv in enumerate(cmds.ls(f"{rebuilded}.cv[*]", fl=True)):
+                if i != 0 and i != len(cmds.ls(f"{rebuilded}.cv[*]", fl=True))-1:
+                    base = (i // 3) + 1
+                    mod = i % 3
+                    if mod == 0:
+                        name = f"{self.side}_eyelids{suffix_name}{base:02d}"
+                        lock=["sz", "sy", "visibility"]
+                        if i == 0 or i == len(cmds.ls(f"{rebuilded}.cv[*]", fl=True))-1:
+                            tan_vis = False
+                        else:
+                            tan_vis = True
+
+                        parent = self.controllers_trn
+                        
+                    elif mod == 1:
+                        name = f"{self.side}_eyelids{suffix_name}{base:02d}Tan02"
+                        lock=["rz","ry","rx", "sz", "sy","sx", "visibility"]
+                        tan_vis=False
+
+                        parent = self.tangent_controllers_trn
+                    else:
+                        name = f"{self.side}_eyelids{suffix_name}{base+1:02d}Tan01"
+                        lock=["rz","ry","rx", "sz", "sy","sx", "visibility"]
+                        tan_vis=False
+                        parent = self.tangent_controllers_trn
+
+                    ctl, ctl_grp = controller_creator(
+                        name=name,
+                        suffixes=["GRP", "OFF","ANM"],
+                        lock=lock,
+                        ro=False,
+                        parent= parent
+                    )
+
+                    if tan_vis:
+                        cmds.addAttr(ctl, shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
+                        cmds.setAttr(ctl+".tangents", channelBox=True, lock=True)
+                        cmds.addAttr(ctl, shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
+                        cmds.setAttr(ctl+".tangentVisibility", channelBox=True)
+
+                    pos = cmds.pointPosition(cv, world=True)
+
+                    pos_init, parm = core.getClosestParamToWorldMatrixCurve(curve = rebuilded, pos=pos, both=True)  
+
+                    parm_sum = parm + 0.05 if parm+0.05 <= 1 else parm - 0.05
+
+                    pos_aim = core.getPositionFromParmCurve(curve = rebuilded, u_value=parm_sum)
+                    four_by_four_aim = cmds.createNode("fourByFourMatrix", name=f"{name}Aim_FBF", ss=True)
+                    cmds.setAttr(f"{four_by_four_aim}.in30", pos_aim[0])
+                    cmds.setAttr(f"{four_by_four_aim}.in31", pos_aim[1])
+                    cmds.setAttr(f"{four_by_four_aim}.in32", pos_aim[2])
+
+                    four_by_four_aim_init = cmds.createNode("fourByFourMatrix", name=f"{name}AimInit_FBF", ss=True)
+                    cmds.setAttr(f"{four_by_four_aim_init}.in30", pos_init[0])
+                    cmds.setAttr(f"{four_by_four_aim_init}.in31", pos_init[1])
+                    cmds.setAttr(f"{four_by_four_aim_init}.in32", pos_init[2])
+
+                    fourByFour = cmds.createNode("fourByFourMatrix", name=f"{name}_FBF", ss=True)
+
+                    if mod == 0:
+                        main_4b4.append(fourByFour)
+                    else:
+                        tan_4b4.append(fourByFour)
+                    all_4b4.append(fourByFour)
+                    ctls_grps.append(ctl_grp)
+                    clts.append(ctl)
+
+                    for j in pos:
+                        cmds.setAttr(f"{fourByFour}.in3{pos.index(j)}", j)
+
+                    aim_matrix = cmds.createNode("aimMatrix", name=f"{name}Controller_AMX", ss=True)
+                    cmds.connectAttr(f"{four_by_four_aim_init}.output", f"{aim_matrix}.inputMatrix", force=True)
+                    cmds.connectAttr(f"{four_by_four_aim}.output", f"{aim_matrix}.primaryTargetMatrix", force=True)
+                    
+                    aimVector = (1,0,0) if parm+0.05 <= 1 else (-1,0,0)
+                    secondaryVector = (0,1,0)
+                    secondaryTargetVector = (0,1,0)
+
+                    cmds.setAttr(f"{aim_matrix}.primaryInputAxis", *aimVector, type="double3")
+                    cmds.setAttr(f"{aim_matrix}.secondaryInputAxis", *secondaryVector, type="double3")
+                    cmds.setAttr(f"{aim_matrix}.secondaryTargetVector", *secondaryTargetVector, type="double3")
+                    cmds.setAttr(f"{aim_matrix}.secondaryMode", 2)  
+
+                    blend_matrix = cmds.createNode("blendMatrix", name=f"{name}_BMX", ss=True)
+                    cmds.connectAttr(f"{fourByFour}.output", f"{blend_matrix}.inputMatrix", force=True)
+                    cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{blend_matrix}.target[0].targetMatrix", force=True)
+                    cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", 0)
+
+                    if self.side == "L":
+                        cmds.connectAttr( f"{blend_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix", force=True)
+                        
+                    else:
+                        multmatrix = cmds.createNode("multMatrix", name=f"{name}_MMX", ss=True)
+                        cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
+                                                        0, 1, 0, 0,
+                                                        0, 0, -1, 0,
+                                                        0, 0, 0, 1, type="matrix")
+                        cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
+
+                        cmds.connectAttr( f"{multmatrix}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix", force=True)
+
+                    if i == int(len(cmds.ls(f"{rebuilded}.cv[*]", fl=True)) //2): 
+                        mid_pos = cmds.createNode("fourByFourMatrix", name=f"{name}MidPos_F4X", ss=True)
+                        cmds.setAttr(f"{mid_pos}.in30", pos[0])
+                        cmds.setAttr(f"{mid_pos}.in31", pos[1])
+                        cmds.setAttr(f"{mid_pos}.in32", pos[2])
+
+                        mid_pos_4b4.append(mid_pos)
+
+                    mmx = core.local_mmx(ctl, ctl_grp[0])
+                    
+                    row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{name}_RFM", ss=True)
+                    cmds.connectAttr(f"{mmx}", f"{row_from_matrix}.matrix", force=True)
+                    for axis in ["X", "Y", "Z"]:
+                        cmds.connectAttr(f"{row_from_matrix}.output{axis}", f"{rebuilded}.controlPoints[{i}].{axis.lower()}Value", force=True)
+    
+                    cmds.setAttr(f"{row_from_matrix}.input", 3)
+
+            clts.append(corner_ctls[1])
+            ctls_grps.append(corner_grps[1])
+            controllers.append(clts)
+
+        blend_mid_pos = cmds.createNode("blendMatrix", name=f"{self.side}_eyelidMidPos_BLM", ss=True)
+        cmds.connectAttr(f"{mid_pos_4b4[0]}.output", f"{blend_mid_pos}.inputMatrix")
+        cmds.connectAttr(f"{mid_pos_4b4[1]}.output", f"{blend_mid_pos}.target[0].targetMatrix", force=True)
+        cmds.setAttr(f"{blend_mid_pos}.target[0].translateWeight", 0.5)
+
+
+            
+
+        values = [(1,0,0), (-1,0,0)]
+        for i, aim in enumerate(corner_aim):
+            cmds.connectAttr(f"{blend_mid_pos}.outputMatrix", f"{aim}.primaryTargetMatrix", force=True)
+            cmds.setAttr(f"{aim}.primaryInputAxis", *values[i], type="double3")
+
+            for rebuilded in rebuilded_curves:
+                value = 0 if i == 0 else len(cmds.ls(f"{rebuilded}.cv[*]", fl=True)) -1
+
+                mmx = core.local_mmx(corner_ctls[i], corner_grps[i][0])
+                        
+                row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{name}_RFM", ss=True)
+                cmds.connectAttr(f"{mmx}", f"{row_from_matrix}.matrix", force=True)
+                for axis in ["X", "Y", "Z"]:
+                    cmds.connectAttr(f"{row_from_matrix}.output{axis}", f"{rebuilded}.controlPoints[{value}].{axis.lower()}Value", force=True)
+
+                cmds.setAttr(f"{row_from_matrix}.input", 3)
+
+
+        for clts in controllers:
+            
+            for i, ctl in enumerate(clts):
+                base = (i // 3) + 1
+                mod = i % 3
+                if mod == 0:
+                    core.local_space_parent(ctl, parents=[self.main_ctl], default_weights=0.5)
+
+
+                elif mod == 1:
+                    core.local_space_parent(ctl, parents=[clts[(base - 1) * 3]], default_weights=0.5)
+                    try:
+                        cmds.setAttr(f"{ctl}.visibility", lock=False)
+                        cmds.connectAttr(f"{clts[(base - 1) * 3]}.tangentVisibility", f"{ctl}.visibility", force=True)
+                        cmds.setAttr(f"{ctl}.visibility", lock=True)
+
+                    except:
+                        pass
+                else:
+                    core.local_space_parent(ctl, parents=[clts[base * 3]], default_weights=0.5)
+                    try:
+                        cmds.setAttr(f"{ctl}.visibility", lock=False)
+
+                        cmds.connectAttr(f"{clts[base * 3]}.tangentVisibility", f"{ctl}.visibility", force=True)
+                        cmds.setAttr(f"{ctl}.visibility", lock=True)
+
+                    except:
+                        pass

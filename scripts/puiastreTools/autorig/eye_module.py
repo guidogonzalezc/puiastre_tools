@@ -229,7 +229,7 @@ class EyeModule():
             rebuild_curve = cmds.rebuildCurve(curve, name=curve.replace("Curve_GUIDE", "_CRV") ,ch=False, rpo=False, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=4, d=3)[0]
             cmds.parent(rebuild_curve, self.module_trn)
             rebuilded_curves.append(rebuild_curve)
-
+        
         blink_ref = cmds.duplicate(rebuilded_curves[0], n=f"{self.side}_blinkRef_CRV") # Tabula esto para Oswald
 
         blink_ref_bls = cmds.blendShape(rebuilded_curves[1], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
