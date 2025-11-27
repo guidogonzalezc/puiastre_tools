@@ -82,12 +82,6 @@ class EyelidModule():
        
         cmds.setAttr(f"C_preferences_CTL.showModules", 1)
 
-    def eye_rotation_4b4(self, four_by_four):
-        reshaped_matrix = [self.eyelid_rotation_matrix[i:i+4] for i in range(0, len(self.eyelid_rotation_matrix), 4)]
-        for row in range(4):
-            for col in range(4):
-                cmds.setAttr(f"{four_by_four}.in{row}{col}", reshaped_matrix[row][col]) 
-
     def create_chain(self):
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
 
@@ -188,7 +182,7 @@ class EyelidModule():
             ctl, controller_grp = controller_creator(
                 name=f"{self.side}_{name}EyelidCorner",
                 suffixes=["GRP", "OFF", "ANM"],
-                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                lock=[ "scaleZ", "visibility"],
                 ro=True,
                 parent=self.controllers_trn
             )
@@ -212,17 +206,27 @@ class EyelidModule():
         for curve in self.curves:
             
             rebuilded = cmds.rebuildCurve(curve, ch=0, rpo=0, rt=0, end=1, kr=0, kcp=0, kep=1, kt=0, s=2, d=3, tol=0.01)[0]
+            rebuilded = cmds.rename(rebuilded, curve.replace("Curve_GUIDE", "Bezier_CRV"))
             cmds.parent(rebuilded, self.module_trn)
             cmds.select(rebuilded, r=True)
             cmds.nurbsCurveToBezier()
             rebuilded_curves.append(rebuilded)
 
-
         blink_ref = cmds.duplicate(rebuilded_curves[1], n=f"{self.side}_blinkRef_CRV") # Tabula esto para Oswald
 
-        blink_ref_bls = cmds.blendShape(rebuilded_curves[0], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
+        # blink_ref_bls = cmds.blendShape(rebuilded_curves[0], rebuilded_curves[1], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
 
-        cmds.connectAttr(self.main_ctl+".blinkHeight", f"{blink_ref_bls}.weight[0]")
+        # cmds.connectAttr(self.main_ctl+".blinkHeight", f"{blink_ref_bls}.weight[0]")
+
+        avg_curve = cmds.createNode("avgCurves", name=f"{self.side}_eyelidAvgCurve_AVC", ss=True)
+        cmds.connectAttr(f"{rebuilded_curves[0]}.worldSpace[0]", f"{avg_curve}.inputCurve1", force=True)
+        cmds.connectAttr(f"{rebuilded_curves[1]}.worldSpace[0]", f"{avg_curve}.inputCurve2", force=True)
+        cmds.connectAttr(f"{avg_curve}.outputCurve", f"{blink_ref[0]}.create", force=True)
+        cmds.connectAttr(self.main_ctl+".blinkHeight", f"{avg_curve}.weight1", force=True)
+        reverse_blink_height = cmds.createNode("reverse", name=f"{self.side}_blinkHeight_REV", ss=True)
+        cmds.connectAttr(self.main_ctl+".blinkHeight", f"{reverse_blink_height}.inputX", force=True)
+        cmds.connectAttr(f"{reverse_blink_height}.outputX", f"{avg_curve}.weight2", force=True)
+        cmds.setAttr(f"{avg_curve}.automaticWeight", 0)
 
         negative_curves = []
         for i, curve in enumerate(rebuilded_curves):
@@ -235,12 +239,14 @@ class EyelidModule():
 
         blink_end_curves = []
         bls_name = []
+        clamps = []
 
         for i, curves in enumerate(rebuilded_curves):
             name = curves.replace("_CRV", f"Blink")
             blink_curve = cmds.duplicate(curves, n=curves.replace("_CRV", f"Blink_CRV"))[0]
 
             blink_bls = cmds.blendShape(blink_ref, curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
+            # blink_bls = cmds.blendShape(curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
 
             attr = "upperBlink" if "upper" in curves.lower() else "lowerBlink"
 
@@ -258,14 +264,15 @@ class EyelidModule():
             cmds.setAttr(flm+".operation", 2)
             cmds.setAttr(flm+".floatB", -1)
             cmds.connectAttr(flm+".outFloat", f"{blink_bls}.weight[2]")
-
+            clamps.append(clamp)
             blink_end_curves.append(blink_curve)
             bls_name.append(blink_bls)
+
+
 
         for curve in rebuilded_curves:
             clts = [corner_ctls[0]]
             ctls_grps = [corner_grps[0]]
-            print(curve)
 
             main_4b4 = []
             tan_4b4 = []
@@ -276,14 +283,14 @@ class EyelidModule():
             elif "lower" in curve.lower():
                 suffix_name = "Lower"
 
-            for i, cv in enumerate(cmds.ls(f"{rebuilded}.cv[*]", fl=True)):
-                if i != 0 and i != len(cmds.ls(f"{rebuilded}.cv[*]", fl=True))-1:
+            for i, cv in enumerate(cmds.ls(f"{curve}.cv[*]", fl=True)):
+                if i != 0 and i != len(cmds.ls(f"{curve}.cv[*]", fl=True))-1:
                     base = (i // 3) + 1
                     mod = i % 3
                     if mod == 0:
                         name = f"{self.side}_eyelids{suffix_name}{base:02d}"
                         lock=["sz", "sy", "visibility"]
-                        if i == 0 or i == len(cmds.ls(f"{rebuilded}.cv[*]", fl=True))-1:
+                        if i == 0 or i == len(cmds.ls(f"{curve}.cv[*]", fl=True))-1:
                             tan_vis = False
                         else:
                             tan_vis = True
@@ -318,11 +325,11 @@ class EyelidModule():
 
                     pos = cmds.pointPosition(cv, world=True)
 
-                    pos_init, parm = core.getClosestParamToWorldMatrixCurve(curve = rebuilded, pos=pos, both=True)  
+                    pos_init, parm = core.getClosestParamToWorldMatrixCurve(curve = curve, pos=pos, both=True)  
 
                     parm_sum = parm + 0.05 if parm+0.05 <= 1 else parm - 0.05
 
-                    pos_aim = core.getPositionFromParmCurve(curve = rebuilded, u_value=parm_sum)
+                    pos_aim = core.getPositionFromParmCurve(curve = curve, u_value=parm_sum)
                     four_by_four_aim = cmds.createNode("fourByFourMatrix", name=f"{name}Aim_FBF", ss=True)
                     cmds.setAttr(f"{four_by_four_aim}.in30", pos_aim[0])
                     cmds.setAttr(f"{four_by_four_aim}.in31", pos_aim[1])
@@ -377,7 +384,7 @@ class EyelidModule():
 
                         cmds.connectAttr( f"{multmatrix}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix", force=True)
 
-                    if i == int(len(cmds.ls(f"{rebuilded}.cv[*]", fl=True)) //2): 
+                    if i == int(len(cmds.ls(f"{curve}.cv[*]", fl=True)) //2): 
                         mid_pos = cmds.createNode("fourByFourMatrix", name=f"{name}MidPos_F4X", ss=True)
                         cmds.setAttr(f"{mid_pos}.in30", pos[0])
                         cmds.setAttr(f"{mid_pos}.in31", pos[1])
@@ -386,17 +393,62 @@ class EyelidModule():
                         mid_pos_4b4.append(mid_pos)
 
                     mmx = core.local_mmx(ctl, ctl_grp[0])
-                    
                     row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{name}_RFM", ss=True)
                     cmds.connectAttr(f"{mmx}", f"{row_from_matrix}.matrix", force=True)
                     for axis in ["X", "Y", "Z"]:
-                        cmds.connectAttr(f"{row_from_matrix}.output{axis}", f"{rebuilded}.controlPoints[{i}].{axis.lower()}Value", force=True)
+                        cmds.connectAttr(f"{row_from_matrix}.output{axis}", f"{curve}.controlPoints[{i}].{axis.lower()}Value", force=True)
+
+                    # if suffix_name == "Lower":
+                    #     for axis in ["X", "Y", "Z"]:
+                    #         cmds.connectAttr(f"{row_from_matrix}.output{axis}", f"{blink_ref[0]}.controlPoints[{i}].{axis.lower()}Value", force=True)
+
     
                     cmds.setAttr(f"{row_from_matrix}.input", 3)
-
             clts.append(corner_ctls[1])
             ctls_grps.append(corner_grps[1])
             controllers.append(clts)
+
+        
+        # blink_ref_bls = cmds.blendShape(rebuilded_curves[0], rebuilded_curves[1], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
+
+        # cmds.connectAttr(self.main_ctl+".blinkHeight", f"{blink_ref_bls}.weight[0]")
+
+        # for i, (bls,curve) in enumerate(zip(bls_name, blink_end_curves)):
+        #     cmds.blendShape(bls, edit=True, t=(curve, 2, blink_ref[0], 1.0) )
+
+        #     cmds.connectAttr(clamps[i]+".outputR", f"{bls}.weight[2]")
+
+        """
+                bls_name = []
+
+        for i, curves in enumerate(rebuilded_curves):
+            name = curves.replace("_CRV", f"Blink")
+            blink_curve = cmds.duplicate(curves, n=curves.replace("_CRV", f"Blink_CRV"))[0]
+
+            # blink_bls = cmds.blendShape(blink_ref, curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
+            blink_bls = cmds.blendShape(curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
+
+            attr = "upperBlink" if "upper" in curves.lower() else "lowerBlink"
+
+            clamp = cmds.createNode("clamp", n=f"{name}_CLP")
+            rev = cmds.createNode("reverse", n=f"{name}_REV")
+            flm = cmds.createNode("floatMath", n=f"{name}_FLM")
+            cmds.connectAttr(f"{self.main_ctl}.{attr}", clamp+".inputR")
+            cmds.connectAttr(f"{self.main_ctl}.{attr}", clamp+".inputG")
+            cmds.setAttr(clamp+".minG", -1)
+            cmds.setAttr(clamp+".maxR", 1)
+            # cmds.connectAttr(clamp+".outputR", f"{blink_bls}.weight[2]")
+            cmds.connectAttr(clamp+".outputR", f"{rev}.inputX")
+            cmds.connectAttr(rev+".outputX", f"{blink_bls}.weight[0]")
+            cmds.connectAttr(clamp+".outputG", f"{flm}.floatA")
+            cmds.setAttr(flm+".operation", 2)
+            cmds.setAttr(flm+".floatB", -1)
+            cmds.connectAttr(flm+".outFloat", f"{blink_bls}.weight[1]")
+
+            blink_end_curves.append(blink_curve)
+            bls_name.append(blink_bls)
+        
+        """
 
         blend_mid_pos = cmds.createNode("blendMatrix", name=f"{self.side}_eyelidMidPos_BLM", ss=True)
         cmds.connectAttr(f"{mid_pos_4b4[0]}.output", f"{blend_mid_pos}.inputMatrix")
@@ -452,3 +504,5 @@ class EyelidModule():
 
                     except:
                         pass
+                    
+                    
