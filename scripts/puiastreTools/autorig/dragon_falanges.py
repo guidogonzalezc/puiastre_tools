@@ -266,7 +266,8 @@ class FalangeModule(object):
 
         cmds.addAttr(self.hand_ik_ctl, shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.hand_ik_ctl+".attachedFk", channelBox=True, lock=True)
-        cmds.addAttr(self.hand_ik_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+        cmds.addAttr(self.hand_ik_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=False)
+        cmds.setAttr(self.hand_ik_ctl+".attachedFKVis", channelBox=True)
 
         self.attached_fk_vis = cmds.createNode("condition", name=f"{self.side}_{self.names[-1]}AttachedFk_VIS", ss=True)
         cmds.setAttr(f"{self.attached_fk_vis}.operation", 0)

@@ -81,7 +81,6 @@ class FingersModule(object):
         self.primary_aim_vector = om.MVector(AXIS_VECTOR[self.primary_aim])
         self.secondary_aim_vector = om.MVector(AXIS_VECTOR[self.secondary_aim])
         self.create_controller()
-        # self.attributes_setup()
 
         self.data_exporter.append_data(
             f"{self.side}_foot{self.finger_front_name}FingersModule",
@@ -113,7 +112,8 @@ class FingersModule(object):
         self.skinning_grp = cmds.createNode("transform", name=f"{self.side}_footFinger{self.finger_front_name}SkinningJoints_GRP", parent=self.skel_grp, ss=True)
         self.controllers_grp_ik = cmds.createNode("transform", name=f"{self.side}_legFingers{self.finger_front_name}IkControllers_GRP", parent=self.masterWalk_ctl)
 
-
+        self.attached_fk_ctls = []
+        self.attached_fk_sdks = []
 
 
         cmds.setAttr(self.controllers_grp + ".inheritsTransform", 0)
@@ -160,12 +160,7 @@ class FingersModule(object):
         cmds.addAttr(self.finger_attributes_ctl, longName="Spread", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
         cmds.addAttr(self.finger_attributes_ctl, longName="Twist", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
         cmds.addAttr(self.finger_attributes_ctl, longName="Fan", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
-        cmds.addAttr(self.finger_attributes_ctl, longName="ThumbAttributes", attributeType="enum", enumName="____")
-        cmds.setAttr(f"{self.finger_attributes_ctl}.ThumbAttributes", lock=True, keyable=False, channelBox=True)
-        cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Curl", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
-        cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Spread", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
-        cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Twist", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
-        cmds.addAttr(self.finger_attributes_ctl, ln="Thumb_Fan", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
+
 
         final_path = core.DataManager.get_guide_data()
         self.controller_number = 5
@@ -241,30 +236,33 @@ class FingersModule(object):
                 )
                 if i == 0:
                     if j == 0:
-                        self.fingers_attributes_callback(grp[1], finger_values=[0,0,0,0,0,0, 0,0], thumb_values=[0,0,0,0,0,0, 10, -10])
-                    if j == 1:
-                        self.fingers_attributes_callback(grp[1], finger_values=[0,0,0,0,0,0, 0,0], thumb_values=[-90, 20, -20, 20, 20, -20, 0, 0])
-                if i == 1:
-                    if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])
+                        
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    # elif j == 2:
-                    #     self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    elif j == 2:
+                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                if i == 1:
+                    if j == 0:
+                        self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
+                    elif j == 1:
+                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    elif j == 2:
+                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 2: 
                     if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 2, -2, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    # elif j == 2:
-                    #     self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    elif j == 2:
+                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 3:
                     if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 30, -15, 20, -20, -50, 50], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    # elif j == 2:
-                    #     self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    elif j == 2:
+                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
 
                 if controllers:
                     offset_matrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}_MLT", ss=True)
@@ -286,12 +284,13 @@ class FingersModule(object):
                 controllers.append(ctl)
                 self.controllers.append(ctl)
 
-
             ik_matrices, grp_ik = self.ik_setup(aim_matrix_guides, finger_name)
 
             self.pairblends(ik_matrices, controller_matrices, fk_grps, finger_name, grp_ik)
 
-        cmds.delete(cmds.pointConstraint(self.controllers[3], self.controllers[4], self.controllers[6], self.controllers[7], self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
+        parent = self.controllers[::3]
+
+        cmds.delete(cmds.pointConstraint(parent, self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
 
     def pairblends(self, ik, fk, fk_grp, finger_name, ctl_ik):
 
@@ -359,6 +358,18 @@ class FingersModule(object):
                     parent= self.controllers_grp_ik
                 )
         
+        cmds.addAttr(ctl, shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(ctl+".attachedFk", channelBox=True, lock=True)
+        cmds.addAttr(ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=False)
+        cmds.setAttr(ctl+".attachedFKVis", channelBox=True)
+
+        self.attached_fk_vis = cmds.createNode("condition", name=f"{self.side}_{finger_name}AttachedFk_VIS", ss=True)
+        cmds.setAttr(f"{self.attached_fk_vis}.operation", 0)
+        cmds.setAttr(f"{self.attached_fk_vis}.colorIfFalseR", 0)
+        cmds.setAttr(f"{self.attached_fk_vis}.secondTerm", 0)
+        cmds.connectAttr(f"{ctl}.attachedFKVis", f"{self.attached_fk_vis}.colorIfTrueR")
+        cmds.connectAttr(f"{self.finger_attributes_ctl}.switchIkFk", f"{self.attached_fk_vis}.firstTerm")
+
         pv_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}PVPosition_MMX", ss=True)
         cmds.connectAttr(f"{guides_list[1]}.outputMatrix", f"{pv_pos_multMatrix}.matrixIn[1]")
         cmds.connectAttr(f"{pv_pos_multMatrix}.matrixSum", f"{pv_grp[0]}.offsetParentMatrix")
@@ -446,7 +457,7 @@ class FingersModule(object):
         cmds.connectAttr(f"{root_wm}.outputMatrix", f"{upper_arm_ik_aim_matrix}.inputMatrix")
         cmds.setAttr(f"{upper_arm_ik_aim_matrix}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
-        self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}WM_MMX", ss=True)
+        self.upperArmIkWM = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}01_MMX", ss=True)
         fourByfour = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{finger_name}UpperIkLocal_F4X", ss=True)
         sin = cmds.createNode("sin", name=f"{self.side}_{finger_name}UpperIkWM_SIN", ss=True)
         negate = cmds.createNode("negate", name=f"{self.side}_{finger_name}UpperIkWM_NEGATE", ss=True)
@@ -505,7 +516,7 @@ class FingersModule(object):
             cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, 1, 0, type="double3") ########################## CAMBIO QUIZAS
 
 
-        lower_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}WM_MMX", ss=True)
+        lower_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}02_MMX", ss=True)
         cmds.connectAttr(f"{fourByfour}.output", f"{lower_wm_multmatrix}.matrixIn[0]")
         cmds.connectAttr(f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixIn[1]")
 
@@ -519,7 +530,7 @@ class FingersModule(object):
 
         hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{finger_name}EndLocal_F4X", ss=True)
 
-        hand_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}WM_MMX", ss=True)
+        hand_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}03_MMX", ss=True)
         cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix_end}.matrixIn[0]")
         cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix_end}.matrixIn[1]")
 
@@ -540,34 +551,87 @@ class FingersModule(object):
 
         self.ik_wm = [ f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum",f"{hand_wm_multmatrix_end}.matrixSum"]
 
+        self.attached_fk()
+
         return self.ik_wm, grp[0]
 
-        
-
-
-
-        
-    def attributes_setup(self):
-
+    def attached_fk(self):
         """
-        Create attributes for finger controls
+        Creates the attached FK controllers for the neck module, including sub-neck controllers and joints.
+
+        Args:
+            self: Instance of the SpineModule class.
+        Returns:
+            list: A list of sub-neck joint names created for the attached FK system.
         """
         
-        self.fingers_attributes_callback(self.sdk_thumb_nodes[0], values=[0,0,0,0,0,0, 0,0], thumb_attributes=[0,0,0,0,0,0, 10, -10])
-        self.fingers_attributes_callback(self.sdk_thumb_nodes[1], values=[0,0,0,0,0,0, 0,0], thumb_attributes=[-90, 20, -20, 20, 20, -20, 0, 0])
-        self.fingers_attributes_callback(self.sdk_thumb_nodes[2], values=[0,0,0,0,0,0, 0,0], thumb_attributes=[-80, 18, 0, 0, 10, -10, 0, 0])
+        ctls_sub = []
+        ctls_sdk = []
+        for i, joint in enumerate(self.ik_wm):
+            name = joint.split(".")[0].split("_")[1]
 
-        self.fingers_attributes_callback(self.sdk_index_nodes[1], values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_attributes=[0,0,0,0,0,0, 0,0])
-        self.fingers_attributes_callback(self.sdk_index_nodes[2], values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_attributes=[0,0,0,0,0,0, 0,0])
-        self.fingers_attributes_callback(self.sdk_index_nodes[3], values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_attributes=[0,0,0,0,0,0, 0,0])
+            ctl, controller_grp = controller_creator(
+                name=f"{self.side}_{name}AttachedFk",
+                suffixes=["GRP", "SDK", "ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                ro=True,
+                parent=ctls_sub[-1] if ctls_sub else self.controllers_grp_ik
+            )
+            if "thumb" in name.lower():
+                if i == 0:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])
+                    
+                elif i == 1:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                elif i == 2:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+            if "index" in name.lower():
+                if i == 0:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
+                elif i == 1:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                elif i == 2:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+            if "middle" in name.lower(): 
+                if i == 0:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 2, -2, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
+                elif i == 1:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                elif i == 2:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+            if "ring" in name.lower():
+                if i == 0:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 30, -15, 20, -20, -50, 50], thumb_values=[0,0,0,0,0,0, 0,0])
+                elif i == 1:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                elif i == 2:
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
 
-        self.fingers_attributes_callback(self.sdk_middle_nodes[1], values=[-90, 20, 2, -2, 20, -20, -2, 2], thumb_attributes=[0,0,0,0,0,0, 0,0])
-        self.fingers_attributes_callback(self.sdk_middle_nodes[2], values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_attributes=[0,0,0,0,0,0, 0,0])
-        self.fingers_attributes_callback(self.sdk_middle_nodes[3], values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_attributes=[0,0,0,0,0,0, 0,0])
+            if i == 0:  
+                cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
+                # cmds.connectAttr(f"{self.hand_ik_ctl}.attachedFKVis", f"{controller_grp[0]}.visibility")
+                cmds.connectAttr(f"{self.attached_fk_vis}.outColorR", f"{controller_grp[0]}.visibility")
+                cmds.connectAttr(f"{joint}", f"{controller_grp[0]}.offsetParentMatrix")
 
-        self.fingers_attributes_callback(self.sdk_pinky_nodes[1], values=[-90, 20, 30, -15, 20, -20, -50, 50], thumb_attributes=[0,0,0,0,0,0, 0,0])
-        self.fingers_attributes_callback(self.sdk_pinky_nodes[2], values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_attributes=[0,0,0,0,0,0, 0,0])
-        self.fingers_attributes_callback(self.sdk_pinky_nodes[3], values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_attributes=[0,0,0,0,0,0, 0,0])
+            else:
+                mmt = cmds.createNode("multMatrix", n=f"{self.side}_{name}AttachedFk0{i+1}_MMT")
+
+                inverse = cmds.createNode("inverseMatrix", n=f"{self.side}_{name}AttachedFk0{i+1}_IMX")
+                cmds.connectAttr(f"{self.ik_wm[i-1]}", f"{inverse}.inputMatrix")
+                cmds.connectAttr(f"{joint}", f"{mmt}.matrixIn[0]")
+                cmds.connectAttr(f"{inverse}.outputMatrix", f"{mmt}.matrixIn[1]")
+                cmds.connectAttr(f"{mmt}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
+
+                for attr in ["translateX","translateY","translateZ", "rotateX", "rotateY", "rotateZ"]:
+                    cmds.setAttr(f"{controller_grp[0]}.{attr}", 0)
+
+            ctls_sub.append(ctl)
+            ctls_sdk.append(controller_grp[1])
+
+        self.attached_fk_ctls.append(ctls_sub)
+        self.attached_fk_sdks.append(ctls_sdk)
+
+        self.ik_wm = [f"{ctl}.worldMatrix[0]" for ctl in ctls_sub]     
 
     def fingers_attributes_callback(self, ctl, finger_values=[None], thumb_values=[None]):
 
@@ -588,23 +652,6 @@ class FingersModule(object):
         cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Fan", v=0)
         cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[6])
         cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[7])
-
-        cmds.select(ctl)
-        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Thumb_Curl", v=0)
-        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Thumb_Curl", v=thumb_values[0])
-        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Thumb_Curl", v=thumb_values[1])
-
-        cmds.setDrivenKeyframe(at="ry", dv=0, cd=f"{self.finger_attributes_ctl}.Thumb_Spread", v=0)
-        cmds.setDrivenKeyframe(at="ry", dv=10, cd=f"{self.finger_attributes_ctl}.Thumb_Spread", v=thumb_values[2])
-        cmds.setDrivenKeyframe(at="ry", dv=-10, cd=f"{self.finger_attributes_ctl}.Thumb_Spread", v=thumb_values[3])
-
-        cmds.setDrivenKeyframe(at="rx", dv=0, cd=f"{self.finger_attributes_ctl}.Thumb_Twist", v=0)
-        cmds.setDrivenKeyframe(at="rx", dv=10, cd=f"{self.finger_attributes_ctl}.Thumb_Twist", v=thumb_values[4])
-        cmds.setDrivenKeyframe(at="rx", dv=-10, cd=f"{self.finger_attributes_ctl}.Thumb_Twist", v=thumb_values[5])
-
-        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Thumb_Fan", v=0)
-        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Thumb_Fan", v=thumb_values[6])
-        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Thumb_Fan", v=thumb_values[7])
 
         
     
