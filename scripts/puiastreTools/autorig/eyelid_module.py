@@ -82,6 +82,21 @@ class EyelidModule():
        
         cmds.setAttr(f"C_preferences_CTL.showModules", 1)
 
+    def socket_local(self, grp, off, multmatrix_name):
+        parentMatrix = cmds.createNode("parentMatrix", name=f"{multmatrix_name.replace('_MMX', '')}_PMX", ss=True)
+        cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{parentMatrix}.inputMatrix", force=True)
+        cmds.connectAttr(f"{multmatrix_name}.matrixSum", f"{parentMatrix}.target[0].targetMatrix", force=True)
+        
+        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", get_offset_matrix(grp, f"{multmatrix_name}.matrixSum"), type="matrix")
+
+        multmatrix = cmds.createNode("multMatrix", name=f"{multmatrix_name.replace('_MMX', 'Offset_MMX')}", ss=True)
+        cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
+        # cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+        cmds.setAttr(f"{multmatrix}.matrixIn[1]", cmds.getAttr(f"{grp}.worldInverseMatrix[0]"), type="matrix")
+        cmds.connectAttr(f"{multmatrix}.matrixSum", f"{off}.offsetParentMatrix", force=True)
+
+        return parentMatrix
+
     def create_chain(self):
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
 
@@ -268,11 +283,58 @@ class EyelidModule():
             blink_end_curves.append(blink_curve)
             bls_name.append(blink_bls)
 
+        # Fleshy Sockets
 
+        mmtx = cmds.createNode("multMatrix", n=f"{self.side}_fleshySockets_MMT", ss=True)
+        cmds.connectAttr(self.main_ctl + ".worldMatrix[0]", mmtx + ".matrixIn[0]")
+        cmds.connectAttr(self.main_ctl_grp[0] + ".worldInverseMatrix[0]", mmtx + ".matrixIn[1]")
+
+        dcmp = cmds.createNode("decomposeMatrix", n=f"{self.side}_fleshySockets_DMP", ss=True)
+        cmds.connectAttr(mmtx + ".matrixSum", dcmp + ".inputMatrix")
+
+        mult = cmds.createNode("multiply", n=f"{self.side}_fleshySockets_MLT", ss=True)
+        cmds.connectAttr(self.main_ctl + ".fleshy", mult + ".input[0]")
+        cmds.connectAttr(self.main_ctl + ".fleshyCorners", mult + ".input[1]")
+
+        blc01 = cmds.createNode("blendColors", n=f"{self.side}_fleshySockets01_BLC", ss=True)
+        cmds.connectAttr(mult + ".output", blc01 + ".blender")
+        cmds.connectAttr(dcmp + ".outputRotateX", blc01 + ".color1R")
+        cmds.connectAttr(dcmp + ".outputRotateY", blc01 + ".color1G")
+
+        blc02 = cmds.createNode("blendColors", n=f"{self.side}_fleshySockets02_BLC", ss=True)
+        cmds.connectAttr(self.main_ctl + ".fleshy", blc02 + ".blender")
+        cmds.connectAttr(dcmp + ".outputRotateX", blc02 + ".color1R")
+        cmds.connectAttr(dcmp + ".outputRotateY", blc02 + ".color1G")
+
+        for attr in ["color1B", "color2B", "color2R", "color2G"]:
+            cmds.setAttr(blc01 + "." + attr, 0)
+            cmds.setAttr(blc02 + "." + attr, 0)
+
+        compose01 = cmds.createNode("composeMatrix", n=f"{self.side}_fleshySockets01_CMP", ss=True) # Corners
+        cmds.connectAttr(blc01 + ".output", compose01 + ".inputRotate")
+
+        compose02 = cmds.createNode("composeMatrix", n=f"{self.side}_fleshySockets02_CMP", ss=True) # Mid
+        cmds.connectAttr(blc02 + ".output", compose02 + ".inputRotate")
+
+        multMatrix01 = cmds.createNode("multMatrix", n=f"{self.side}_fleshySocketsIniPos_MMX", ss=True)
+        cmds.connectAttr(f"{compose01}.outputMatrix", f"{multMatrix01}.matrixIn[0]", force=True)
+        self.fleshySocketMMX = multMatrix01
+
+        self.fleshySocketMMXOuter = cmds.createNode("multMatrix", n=f"{self.side}_fleshySocketsIniPosOuter_MMX", ss=True)
+        cmds.connectAttr(f"{compose01}.outputMatrix", f"{self.fleshySocketMMXOuter}.matrixIn[0]", force=True)
+
+
+        self.middle_fleshy = compose02
+
+
+        main_ctls = []
+        main_ctls_grps = []
 
         for curve in rebuilded_curves:
             clts = [corner_ctls[0]]
             ctls_grps = [corner_grps[0]]
+
+
 
             main_4b4 = []
             tan_4b4 = []
@@ -316,6 +378,11 @@ class EyelidModule():
                         ro=False,
                         parent= parent
                     )
+
+                    if mod == 0:
+                        main_ctls.append(ctl)
+                        main_ctls_grps.append(ctl_grp)
+                        
 
                     if tan_vis:
                         cmds.addAttr(ctl, shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
@@ -408,47 +475,16 @@ class EyelidModule():
             ctls_grps.append(corner_grps[1])
             controllers.append(clts)
 
-        
-        # blink_ref_bls = cmds.blendShape(rebuilded_curves[0], rebuilded_curves[1], blink_ref, n=f"{self.side}_blinkHeight_BLS")[0]
 
-        # cmds.connectAttr(self.main_ctl+".blinkHeight", f"{blink_ref_bls}.weight[0]")
+        for ctl , grp in zip(main_ctls, main_ctls_grps):
+            name = ctl.split("_ANM")[0]
+            fleshySocketsUpperMid = cmds.createNode("multMatrix", n=f"{self.side}_{name}fleshySocketsMidPosUpper_MMX", ss=True)
+            cmds.connectAttr(f"{self.middle_fleshy}.outputMatrix", f"{fleshySocketsUpperMid}.matrixIn[0]", force=True)
 
-        # for i, (bls,curve) in enumerate(zip(bls_name, blink_end_curves)):
-        #     cmds.blendShape(bls, edit=True, t=(curve, 2, blink_ref[0], 1.0) )
+            parentMatrix_fleshy = self.socket_local(grp[0], grp[1], fleshySocketsUpperMid)
 
-        #     cmds.connectAttr(clamps[i]+".outputR", f"{bls}.weight[2]")
-
-        """
-                bls_name = []
-
-        for i, curves in enumerate(rebuilded_curves):
-            name = curves.replace("_CRV", f"Blink")
-            blink_curve = cmds.duplicate(curves, n=curves.replace("_CRV", f"Blink_CRV"))[0]
-
-            # blink_bls = cmds.blendShape(blink_ref, curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
-            blink_bls = cmds.blendShape(curves, negative_curves[i], blink_curve, n=f"{name}_BLS")[0]
-
-            attr = "upperBlink" if "upper" in curves.lower() else "lowerBlink"
-
-            clamp = cmds.createNode("clamp", n=f"{name}_CLP")
-            rev = cmds.createNode("reverse", n=f"{name}_REV")
-            flm = cmds.createNode("floatMath", n=f"{name}_FLM")
-            cmds.connectAttr(f"{self.main_ctl}.{attr}", clamp+".inputR")
-            cmds.connectAttr(f"{self.main_ctl}.{attr}", clamp+".inputG")
-            cmds.setAttr(clamp+".minG", -1)
-            cmds.setAttr(clamp+".maxR", 1)
-            # cmds.connectAttr(clamp+".outputR", f"{blink_bls}.weight[2]")
-            cmds.connectAttr(clamp+".outputR", f"{rev}.inputX")
-            cmds.connectAttr(rev+".outputX", f"{blink_bls}.weight[0]")
-            cmds.connectAttr(clamp+".outputG", f"{flm}.floatA")
-            cmds.setAttr(flm+".operation", 2)
-            cmds.setAttr(flm+".floatB", -1)
-            cmds.connectAttr(flm+".outFloat", f"{blink_bls}.weight[1]")
-
-            blink_end_curves.append(blink_curve)
-            bls_name.append(blink_bls)
-        
-        """
+            cmds.setAttr(f"{fleshySocketsUpperMid}.matrixIn[1]", cmds.getAttr(f"{ctl}.worldMatrix[0]"), type="matrix")
+            cmds.setAttr(f"{parentMatrix_fleshy}.target[0].offsetMatrix", get_offset_matrix(grp[0], f"{fleshySocketsUpperMid}.matrixSum"), type="matrix")
 
         blend_mid_pos = cmds.createNode("blendMatrix", name=f"{self.side}_eyelidMidPos_BLM", ss=True)
         cmds.connectAttr(f"{mid_pos_4b4[0]}.output", f"{blend_mid_pos}.inputMatrix")
@@ -456,14 +492,19 @@ class EyelidModule():
         cmds.setAttr(f"{blend_mid_pos}.target[0].translateWeight", 0.5)
 
 
-            
-
         values = [(1,0,0), (-1,0,0)]
+        mmx_fleshy = [self.fleshySocketMMX, self.fleshySocketMMXOuter]
         for i, aim in enumerate(corner_aim):
             cmds.connectAttr(f"{blend_mid_pos}.outputMatrix", f"{aim}.primaryTargetMatrix", force=True)
             cmds.setAttr(f"{aim}.primaryInputAxis", *values[i], type="double3")
 
+            parentMatrix_fleshy = self.socket_local(corner_grps[i][0], corner_grps[i][1], mmx_fleshy[i])
+
+            cmds.setAttr(f"{mmx_fleshy[i]}.matrixIn[1]", cmds.getAttr(f"{aim}.outputMatrix"), type="matrix")
+            cmds.setAttr(f"{parentMatrix_fleshy}.target[0].offsetMatrix", get_offset_matrix(corner_grps[i][0], f"{mmx_fleshy[i]}.matrixSum"), type="matrix")
+
             for rebuilded in rebuilded_curves:
+                name = aim.split("_AMX")[0] + "Upper" if "upper" in rebuilded.lower() else aim.split("_AMX")[0] + "Lower"
                 value = 0 if i == 0 else len(cmds.ls(f"{rebuilded}.cv[*]", fl=True)) -1
 
                 mmx = core.local_mmx(corner_ctls[i], corner_grps[i][0])
@@ -482,11 +523,15 @@ class EyelidModule():
                 base = (i // 3) + 1
                 mod = i % 3
                 if mod == 0:
-                    core.local_space_parent(ctl, parents=[self.main_ctl], default_weights=0.5)
-
+                    pass
 
                 elif mod == 1:
-                    core.local_space_parent(ctl, parents=[clts[(base - 1) * 3]], default_weights=0.5)
+                    if ctl == clts[1]:
+                        core.local_space_parent(ctl, parents=[main_ctls[0], clts[(base - 1) * 3]], default_weights=0.5)
+                    elif ctl == clts[-2]:
+                        core.local_space_parent(ctl, parents=[main_ctls[-1], clts[(base - 1) * 3]], default_weights=0.5)
+                    else:
+                        core.local_space_parent(ctl, parents=[clts[(base - 1) * 3]], default_weights=0.5)
                     try:
                         cmds.setAttr(f"{ctl}.visibility", lock=False)
                         cmds.connectAttr(f"{clts[(base - 1) * 3]}.tangentVisibility", f"{ctl}.visibility", force=True)

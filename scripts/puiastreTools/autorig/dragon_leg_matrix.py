@@ -806,7 +806,7 @@ class LimbModule(object):
                 t = 0.95 if index == self.twist_number - 1 else index / (float(self.twist_number) - 1)
                 t_values.append(t)
 
-            self.skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvMatrices, num_joints=self.twist_number, name=f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change = False)
+            self.skinning_joints = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=cvMatrices, num_joints=self.twist_number, name=f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change = True)
 
             if bendy == "LowerBendy":
                 joint = cmds.createNode("joint", name=f"{self.side}_{self.module_name}LowerBendy0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)

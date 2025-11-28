@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 from maya.api import OpenMaya as om
+from puiastreTools.utils import core
 
 OPEN = 'open'
 PERIODIC = 'periodic'
@@ -277,7 +278,7 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
             sca_off_plugs.append(f'{sca_off}.outputMatrix')
 
     jnts = []
-
+    up_offsets =[]
     for i, param in enumerate(params):
 
         jnt = cmds.createNode("joint", n=f'{name}0{i}_JNT', ss=True, parent=jnts_grp)
@@ -330,54 +331,71 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
         # ----- up setup
         if use_up:
+            if float(param) < 0.9 or float(param) > 0.99: 
+                temp = cmds.createNode('transform', ss=True)
+                ori_con = cmds.orientConstraint(m_cvs, temp)[0]
+                cmds.setAttr(f'{ori_con}.interpType', 2)
+                for j, wt in enumerate(wts):
+                    cmds.setAttr(f'{ori_con}.{m_cvs[j]}W{j}', wt)
 
-            temp = cmds.createNode('transform', ss=True)
-            ori_con = cmds.orientConstraint(m_cvs, temp)[0]
-            cmds.setAttr(f'{ori_con}.interpType', 2)
-            for j, wt in enumerate(wts):
-                cmds.setAttr(f'{ori_con}.{m_cvs[j]}W{j}', wt)
+                up = create_wt_add_matrix(par_off_plugs, wts, f'{name}Up0{i}_WAM', tol=tol)
 
-            up = create_wt_add_matrix(par_off_plugs, wts, f'{name}Up0{i}_WAM', tol=tol)
-
-            up_off = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
-
-
-            if axis_change:
-                blend_up = cmds.createNode('blendMatrix', n=f'{name}UpAxisChange0{i}_BM', ss=True)
-                cmds.connectAttr(f'{up}.matrixSum', f'{blend_up}.inputMatrix')
-                cmds.connectAttr(f'{cvs[0]}.outputMatrix', f'{blend_up}.target[0].targetMatrix')
-                cmds.setAttr(f'{blend_up}.target[0].translateWeight', 0)
-
-                parent_matrix = cmds.createNode("parentMatrix", n=f"{name}ParentMatrix0{i}_PM", ss=True)
-                cmds.connectAttr(f'{blend_up}.outputMatrix', f'{parent_matrix}.inputMatrix')
-                cmds.connectAttr(f'{up}.matrixSum', f'{parent_matrix}.target[0].targetMatrix')
-              
-                inverse_parent = cmds.createNode("inverseMatrix", n=f"{name}InverseParent0{i}_IM", ss=True)
-                mult_offset = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
-                cmds.connectAttr(f'{up}.matrixSum', f'{inverse_parent}.inputMatrix')
-                cmds.connectAttr(f'{inverse_parent}.outputMatrix', f'{mult_offset}.matrixIn[1]')
-                cmds.connectAttr(f'{blend_up}.outputMatrix', f'{mult_offset}.matrixIn[0]')
-                cmds.connectAttr(f'{mult_offset}.matrixSum', f'{parent_matrix}.target[0].offsetMatrix')
+                up_off = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
 
 
+                if axis_change:
+                    blend_up = cmds.createNode('blendMatrix', n=f'{name}UpAxisChange0{i}_BM', ss=True)
+                    cmds.connectAttr(f'{up}.matrixSum', f'{blend_up}.inputMatrix')
+                    cmds.connectAttr(f'{cvs[0]}.outputMatrix', f'{blend_up}.target[0].targetMatrix')
+                    cmds.setAttr(f'{blend_up}.target[0].translateWeight', 0)
 
-                cmds.connectAttr(f'{parent_matrix}.outputMatrix', f'{up_off}.matrixIn[1]')
+                    parent_matrix = cmds.createNode("parentMatrix", n=f"{name}ParentMatrix0{i}_PM", ss=True)
+                    cmds.connectAttr(f'{blend_up}.outputMatrix', f'{parent_matrix}.inputMatrix')
+                    cmds.connectAttr(f'{up}.matrixSum', f'{parent_matrix}.target[0].targetMatrix')
 
+                    parent_matrix_offset_axis = parent_matrix
+                    up_offset_axis = up
+                    blend_up_axis = blend_up
+                    cmds.setAttr(f"{parent_matrix_offset_axis}.target[0].offsetMatrix", core.get_offset_matrix(f'{up_offset_axis}.matrixSum', f'{blend_up_axis}.outputMatrix'), type='matrix')
+                
+                    # inverse_parent = cmds.createNode("inverseMatrix", n=f"{name}InverseParent0{i}_IM", ss=True)
+                    # mult_offset = cmds.createNode('multMatrix', n=f'{name}UpOffset0{i}_MM', ss=True)
+                    # cmds.connectAttr(f'{up}.matrixSum', f'{inverse_parent}.inputMatrix')
+                    # cmds.connectAttr(f'{inverse_parent}.outputMatrix', f'{mult_offset}.matrixIn[1]')
+                    # cmds.connectAttr(f'{blend_up}.outputMatrix', f'{mult_offset}.matrixIn[0]')
+                    # cmds.connectAttr(f'{mult_offset}.matrixSum', f'{parent_matrix}.target[0].offsetMatrix')
+
+
+
+                    cmds.connectAttr(f'{parent_matrix}.outputMatrix', f'{up_off}.matrixIn[1]')
+
+                else:
+                    cmds.connectAttr(f'{up}.matrixSum', f'{up_off}.matrixIn[1]')
+
+                fourbyfour = cmds.createNode('fourByFourMatrix', n=f'{name}UpFourByFour0{i}_FBF', ss=True)
+
+                if up_axis == 'x' or up_axis == '-x':
+                    cmds.setAttr(f'{fourbyfour}.in30', 10)
+                elif up_axis == 'y' or up_axis == '-y':
+                    cmds.setAttr(f'{fourbyfour}.in31', 10)
+                elif up_axis == 'z' or up_axis == '-z':
+                    cmds.setAttr(f'{fourbyfour}.in32', 10)
+
+
+                cmds.connectAttr(f'{fourbyfour}.output', f'{up_off}.matrixIn[0]')
+
+
+                up_plug = f'{up_off}.matrixSum'
+                up_offsets.append(up_off)
+
+                cmds.delete(temp)
+
+                secondaryMode = 2
             else:
-                cmds.connectAttr(f'{up}.matrixSum', f'{up_off}.matrixIn[1]')
+                up_plug = f'{up_offsets[-1]}.matrixSum'
 
-            fourbyfour = cmds.createNode('fourByFourMatrix', n=f'{name}UpFourByFour0{i}_FBF', ss=True)
-            cmds.setAttr(f'{fourbyfour}.in32', 10)
-            cmds.connectAttr(f'{fourbyfour}.output', f'{up_off}.matrixIn[0]')
+                secondaryMode = 1
 
-            # cmds.setAttr(f'{up_off}.matrixIn[0]', [1, 0, 0, 0,
-            #                         0, 1, 0, 0,
-            #                         0, 0, 1, 0,
-            #                         0, 4, 0, 0], type='matrix')
-
-            up_plug = f'{up_off}.matrixSum'
-
-            cmds.delete(temp)
 
         aim = cmds.createNode('aimMatrix', n=f'{name}PointOnCurve0{i}_AM', ss=True)
 
@@ -436,6 +454,11 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
             output_plug = f'{scale_mm}.matrixSum'
 
         cmds.connectAttr(output_plug, f'{jnt}.offsetParentMatrix')
+
+        if axis_change:
+
+            cmds.setAttr(f"{parent_matrix_offset_axis}.target[0].offsetMatrix", core.get_offset_matrix(f'{blend_up_axis}.outputMatrix', f'{up_offset_axis}.matrixSum'), type='matrix')
+
 
     for i, cv_temp in enumerate(m_cvs):
         if cv_temp != original_cvs[i]:
