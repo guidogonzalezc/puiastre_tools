@@ -149,7 +149,7 @@ def build_complete_hierarchy():
             if "backLeg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0] or "leg" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
                 leg_joints.append(joints[-1])
-            elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0] or "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
+            elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0] or "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower() or "Metacarpal" in skinning_joint_list[0]:
                 pass
             elif "Scapula" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=[skinning_joint_list[0], skinning_joint_list[1]], parent=spine_joints[-2], hand_value=False)
@@ -178,7 +178,28 @@ def build_complete_hierarchy():
 
     hand_settings_value = None
     for i, skinning_joint_list in enumerate(skinning_joints):
-        if "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
+        if "thumbMetacarpal" in skinning_joint_list[0] :
+            side = skinning_joint_list[0].split("_")[0]
+            index = l_arm_index if side == "L" else r_arm_index
+            parent_joint = next((j for j in arm_joints if f"{side}_" in j), None)
+
+            child_joints = []
+            for item in skinning_joint_list:
+                if "Metacarpal" in item:
+                    parented_chain(skinning_joints=child_joints, parent=parent_joint, hand_value=False)
+                    child_joints = []
+                    child_joints.append(item)
+                else:
+                    child_joints.append(item)
+            if child_joints:                    
+                parented_chain(skinning_joints=child_joints, parent=parent_joint, hand_value=False)
+
+            attributes = data_exporter.get_data(f"{side}_FkFingersModule", "attributes_ctl")
+
+            space_switch.fk_switch(target = attributes, sources= [parent_joint], sources_names=["Wrist"])
+
+
+        elif "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
             side = skinning_joint_list[0].split("_")[0]
 
             if "back" in skinning_joint_list[0].lower():
@@ -199,15 +220,16 @@ def build_complete_hierarchy():
                 parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=False)
 
             continue
+        
 
         
-        if "Finger" in skinning_joint_list[0]:
+        elif "Finger" in skinning_joint_list[0]:
             side = skinning_joint_list[0].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
             parent_joint = next((j for j in arm_joints if f"{side}_" in j), None)
             parented_chain(skinning_joints=skinning_joint_list, parent=parent_joint, hand_value=False)
 
-        if "Membran" in skinning_joint_list[0]:
+        elif "Membran" in skinning_joint_list[0]:
             side = skinning_joint_list[0].split("_")[0]
 
             parent_joint = None
@@ -238,6 +260,7 @@ def build_complete_hierarchy():
                         parented_chain(skinning_joints=joint_list, parent=closest01, hand_value=False)
                     else:
                         parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
+
 
         # ===== SPACE SWITCHES ===== #
         if "backLeg" in skel_grps[i] or "leg" in skel_grps[i]:

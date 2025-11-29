@@ -317,34 +317,39 @@ class EyebrowModule():
                 cmds.connectAttr(f"{matrix_node}.in31", f"{closest_point_on_surface}.inPositionY", force=True)
                 cmds.connectAttr(f"{matrix_node}.in32", f"{closest_point_on_surface}.inPositionZ", force=True)
 
-                point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{name}Sliding_POSI", ss=True)
-                cmds.connectAttr(f"{self.nurbsSurface}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
-                cmds.connectAttr(f"{closest_point_on_surface}.parameterU", f"{point_on_surface}.parameterU", force=True)
-                cmds.connectAttr(f"{closest_point_on_surface}.parameterV", f"{point_on_surface}.parameterV", force=True)
+                # point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{name}Sliding_POSI", ss=True)
+                # cmds.connectAttr(f"{self.nurbsSurface}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
+                # cmds.connectAttr(f"{closest_point_on_surface}.parameterU", f"{point_on_surface}.parameterU", force=True)
+                # cmds.connectAttr(f"{closest_point_on_surface}.parameterV", f"{point_on_surface}.parameterV", force=True)
                 # cmds.setAttr(f"{point_on_surface}.parameterU", u)
                 # cmds.setAttr(f"{point_on_surface}.parameterV", v)
 
 
 
-                matrix_node = cmds.createNode('fourByFourMatrix', name=f"{name}Sliding_FBF", ss=True)
+                # matrix_node = cmds.createNode('fourByFourMatrix', name=f"{name}Sliding_FBF", ss=True)
 
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
 
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
 
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
 
-                cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
-                cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
-                cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
+                # cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
 
-                sliding_fbf.append(matrix_node)
+                uv_pin = cmds.createNode("uvPin", name=f"{name}Sliding_UVP", ss=True)
+                cmds.connectAttr(f"{self.nurbsSurface}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+                cmds.connectAttr(f"{closest_point_on_surface}.parameterU", f"{uv_pin}.coordinate[0].coordinateU", force=True)
+                cmds.connectAttr(f"{closest_point_on_surface}.parameterV", f"{uv_pin}.coordinate[0].coordinateV", force=True)
+
+                sliding_fbf.append(uv_pin)
 
 
             for i, node in enumerate(fbf_positions):
@@ -366,9 +371,9 @@ class EyebrowModule():
 
                 parentMatrix = cmds.createNode("parentMatrix", name=f"{name}Sliding_PM", ss=True)
                 cmds.setAttr(f"{parentMatrix}.inputMatrix", cmds.getAttr(f"{aim_matrix}.outputMatrix"), type="matrix")
-                cmds.connectAttr(f"{sliding_fbf[i]}.output", f"{parentMatrix}.target[0].targetMatrix", force=True)
+                cmds.connectAttr(f"{sliding_fbf[i]}.outputMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
 
-                offset = core.get_offset_matrix(f"{aim_matrix}.outputMatrix", f"{sliding_fbf[i]}.output")
+                offset = core.get_offset_matrix(f"{aim_matrix}.outputMatrix", f"{sliding_fbf[i]}.outputMatrix[0]")
                 cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", offset, type="matrix")
 
                 cmds.connectAttr(f"{self.main_ctl}.sliding", f"{parentMatrix}.target[0].weight", force=True)

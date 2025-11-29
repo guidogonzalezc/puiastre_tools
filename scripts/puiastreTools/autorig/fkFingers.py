@@ -162,13 +162,13 @@ class FingersModule(object):
         
         core.DataManager.set_finger_data(core.DataManager, side=self.side, data=data)
 
-        # self.data_exporter.append_data(
-        #     f"{self.side}_{self.name}FingersModule",
-        #     {
-        #         "skinning_transform": self.skinning_grp,
-        #         "ik_controllers": self.ik_controllers,
-        #     }
-        # )
+        self.data_exporter.append_data(
+            f"{self.side}_FkFingersModule",
+            {
+                "skinning_transform": self.skinning_grp,
+                "attributes_ctl": self.finger_attributes_ctl,
+            }
+        )
             
     def create_controller(self):
 
@@ -178,6 +178,19 @@ class FingersModule(object):
         """
 
         aim_matrix_guides = [f"{guide}.worldMatrix[0]" for guide in self.guides[:-1]]
+        try:
+            cmds.getAttr(f"{self.finger_attributes_ctl}.FingerAttributes")
+        except:
+            cmds.addAttr(self.finger_attributes_ctl, longName="FingerAttributes", attributeType="enum", enumName="———")
+            cmds.setAttr(f"{self.finger_attributes_ctl}.FingerAttributes", lock=True, keyable=False, channelBox=True)
+
+
+        for attr in ["Curl", "Spread", "Twist", "Fan"]:
+            try:
+                cmds.getAttr(f"{self.finger_attributes_ctl}.{attr}")
+            except:
+                cmds.addAttr(self.finger_attributes_ctl, longName=attr, attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
+
 
         controllers = []
         fk_grps = []
@@ -207,12 +220,37 @@ class FingersModule(object):
                 cmds.setAttr(f"{grp[0]}.translate", 0,0,0, type="double3")
             else:
                 cmds.connectAttr(guide, grp[0] + ".offsetParentMatrix")     
-                cmds.matchTransform(grp[0], guide.replace(".worldMatrix[0]", ""))           
+                cmds.matchTransform(grp[0], guide.replace(".worldMatrix[0]", ""))      
 
-            
+            # Add setDrivenKeyframe for Curl and Spread
+            if controllers:
+                for attr in ["Curl", "Fan"]:
+                    self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])
+
+            joint = cmds.createNode("joint", name=f"{self.side}_{finger_name}_JNT", ss=True, parent=self.skinning_grp)
+            cmds.connectAttr(ctl + ".worldMatrix[0]", joint + ".offsetParentMatrix")
 
             fk_grps.append(grp)
             controllers.append(ctl)
 
 
         
+    def fingers_attributes_callback(self, ctl, finger_values=[None], thumb_values=[None]):
+
+        cmds.select(ctl)
+        
+        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Curl", v=0)
+        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Curl", v=finger_values[0])
+        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Curl", v=finger_values[1])
+
+        cmds.setDrivenKeyframe(at="ry", dv=0, cd=f"{self.finger_attributes_ctl}.Spread", v=0)
+        cmds.setDrivenKeyframe(at="ry", dv=10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[2])
+        cmds.setDrivenKeyframe(at="ry", dv=-10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[3])
+
+        cmds.setDrivenKeyframe(at="rx", dv=0, cd=f"{self.finger_attributes_ctl}.Twist", v=0)
+        cmds.setDrivenKeyframe(at="rx", dv=10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[4])
+        cmds.setDrivenKeyframe(at="rx", dv=-10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[5])
+
+        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Fan", v=0)
+        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[6])
+        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[7])

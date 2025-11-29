@@ -348,7 +348,7 @@ def local_space_parent(ctl, parents=[], default_weights=0.5):
 
     name = ctl.replace("_CTL", "")
 
-    parentMatrix = cmds.createNode("parentMatrix", name=f"{name}localSpaceParent_PMX", ss=True)
+    parentMatrix = cmds.createNode("parentMatrix", name=f"{name}LocalSpaceParent_PMX", ss=True)
 
     grp = ctl.replace("_CTL", "_GRP")
     off = ctl.replace("_CTL", "_OFF")
@@ -364,18 +364,21 @@ def local_space_parent(ctl, parents=[], default_weights=0.5):
     # cmds.setAttr(f"{parentMatrix}.target[1].offsetMatrix", get_offset_matrix(grp, parents[0]), type="matrix")
     # cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", get_offset_matrix(grp, parents[1]), type="matrix")
 
-    multmatrix = cmds.createNode("multMatrix", name=f"{name}localSpaceParent_MMX", ss=True)
+    multmatrix = cmds.createNode("multMatrix", name=f"{name}LocalSpaceParent_MMX", ss=True)
     cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
     cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
     cmds.connectAttr(f"{multmatrix}.matrixSum", f"{off}.offsetParentMatrix", force=True)
 
     if len(parents) == 2:
-        cmds.addAttr(ctl, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
-        cmds.setAttr(f"{ctl}.SpaceSwitchSep", channelBox=True, lock=True)   
+        try:
+            cmds.addAttr(ctl, longName="SpaceSwitchSep", niceName = "Space Switches  ———", attributeType="enum", enumName="———", keyable=True)
+            cmds.setAttr(f"{ctl}.SpaceSwitchSep", channelBox=True, lock=True)   
 
-        cmds.addAttr(ctl, longName="SpaceFollow", attributeType="float", min=0, max=1, defaultValue=default_weights, keyable=True)
+            cmds.addAttr(ctl, longName="SpaceFollow", attributeType="float", min=0, max=1, defaultValue=default_weights, keyable=True)
+        except:
+            pass
         cmds.connectAttr(f"{ctl}.SpaceFollow", f"{parentMatrix}.target[0].weight", force=True)
-        rev = cmds.createNode("reverse", name=f"{name}localSpaceParent_REV", ss=True)
+        rev = cmds.createNode("reverse", name=f"{name}LocalSpaceParent_REV", ss=True)
         cmds.connectAttr(f"{ctl}.SpaceFollow", f"{rev}.inputX", force=True)
         cmds.connectAttr(f"{rev}.outputX", f"{parentMatrix}.target[1].weight", force=True)
 

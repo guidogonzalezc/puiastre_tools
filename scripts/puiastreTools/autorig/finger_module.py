@@ -154,7 +154,7 @@ class FingersModule(object):
         cmds.addAttr(self.finger_attributes_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.finger_attributes_ctl+".extraAttr", channelBox=True, lock=True)
         cmds.addAttr(self.finger_attributes_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
-        cmds.addAttr(self.finger_attributes_ctl, longName="FingerAttributes", attributeType="enum", enumName="____")
+        cmds.addAttr(self.finger_attributes_ctl, longName="FingerAttributes ———", attributeType="enum", enumName="———")
         cmds.setAttr(f"{self.finger_attributes_ctl}.FingerAttributes", lock=True, keyable=False, channelBox=True)
         cmds.addAttr(self.finger_attributes_ctl, longName="Curl", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
         cmds.addAttr(self.finger_attributes_ctl, longName="Spread", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
