@@ -205,8 +205,6 @@ def make(asset_name = "", latest = False):
                 if guide_info.get("moduleName") == "membran":
                     mm.MembraneModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "fkFinger":
-                    fkf.FingersModule().make(guide_name)
 
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
                     fm.FingersModule().make(guide_name)
@@ -226,6 +224,17 @@ def make(asset_name = "", latest = False):
                 # if guide_info.get("moduleName") == "eye":
 
                 #     elm.EyelidModule().make(guide_name)
+    
+    # Additional modules who depends on others modules
+    for template_name, guides in guides_data.items():
+        if not isinstance(guides, dict):
+            continue
+
+        for guide_name, guide_info in guides.items():
+            if guide_info.get("moduleName") != "Child":
+
+                if guide_info.get("moduleName") == "fkFinger":
+                    fkf.FingersModule().make(guide_name)
 
     #Create the skeleton hierarchy and spaces
     skeleton_hierarchy = skh.build_complete_hierarchy() 
