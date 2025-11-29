@@ -244,7 +244,8 @@ class GuideCreation(object):
             for i, (joint_name, positions) in enumerate(self.position_data.items()):
                 if len(positions) >= 3 or None in positions:
                     parent = positions[1]
-                    type = positions[-1]
+                    type = positions[-2]
+                    rotation = positions[-1]
                     positions = positions[0]
                 if len(joint_name.split("_")) > 1:
                     side = joint_name.split("_")[0]
@@ -252,6 +253,7 @@ class GuideCreation(object):
 
 
                 positions = [0,0,0] if positions is None else positions
+                rotation = [0,0,0] if rotation is None else rotation
                 parent = None if parent == None else parent
                 type = "joint" if type == None else type
 
@@ -275,6 +277,7 @@ class GuideCreation(object):
                 if not "Sliding" in joint_name and not "Curve" in joint_name:
                     temp_pos = cmds.createNode("transform", name=f"{side}_{joint_name}_temp")
                     cmds.setAttr(temp_pos + ".translate", positions[0], positions[1], positions[2], type="double3")
+                    cmds.setAttr(temp_pos + ".rotate", rotation[0], rotation[1], rotation[2], type="double3")
                     if "Transform" in joint_name:
                         guide = cmds.createNode("transform", name=f"{side}_{joint_name}_GUIDE")
                         cmds.parent(guide, parent)
@@ -426,17 +429,22 @@ def get_data(name, module_name=False):
                     world_position = guide_info.get("worldPosition")
                 except:
                     world_position = None
+                try:
+                    world_rotation = guide_info.get("worldRotation")
+                except:
+                    world_rotation = None
+
                 parent = guide_info.get("parent")
                 guideTyep = guide_info.get("guide_type_object")
 
                 if module_name:
                         moduleName = guide_info.get("moduleName")
                         prefix = guide_info.get("prefix")
-                        return world_position, parent, moduleName, prefix, guideTyep
+                        return world_position, parent, moduleName, prefix, guideTyep, world_rotation
                 
 
                 else:
-                    return world_position, parent, guideTyep
+                    return world_position, parent, guideTyep, world_rotation
     if module_name:
         return None, None, None, None, None
     else:
@@ -744,7 +752,7 @@ class FkFingersGuideCreation(GuideCreation):
         self.position_data = {}
         for i in range(0, int(self.controller_number)):
             if i == 0:
-                name = f"{limb_name}Metacarpal" if len(limb_name) >= 4 else f"{limb_name}0{i}"
+                name = f"{limb_name}Metacarpal" if int(controller_number) >= 4 else f"{limb_name}0{i}"
             else:
                 name = f"{limb_name}0{i}"
             self.position_data[f"{name}"] = get_data(f"{self.sides}_{name}")
@@ -1200,22 +1208,26 @@ def guides_export(mirror=False):
 
 
                 guides_get_translation = []
+                guides_get_rotation = []
                 if mirror == True:
                     for guide in guides_descendents:
                         if "R_" in guide:
                             guide_l = guide.replace("R_", "L_")
                             xform_value = cmds.xform(guide_l, q=True, ws=True, translation=True)
                             xform_value = [xform_value[0]*-1, xform_value[1], xform_value[2]]
-                        elif "L_" in guide:
-                            xform_value = cmds.xform(guide, q=True, ws=True, translation=True)
 
-                        elif "C_" in guide:
+                            xform_value_rotate = cmds.xform(guide_l, q=True, ws=True, rotation=True)
+                            xform_value_rotate = [xform_value_rotate[0], xform_value_rotate[1]*-1, xform_value_rotate[2]*-1]
+                        elif "L_" in guide or "C_" in guide:
                             xform_value = cmds.xform(guide, q=True, ws=True, translation=True)
+                            xform_value_rotate = cmds.xform(guide, q=True, ws=True, rotation=True)
 
                         guides_get_translation.append(xform_value)
+                        guides_get_rotation.append(xform_value_rotate)
 
                 else:
                     guides_get_translation = [cmds.xform(guide, q=True, ws=True, translation=True) for guide in guides_descendents]
+                    guides_get_rotation = [cmds.xform(guide, q=True, ws=True, rotation=True) for guide in guides_descendents]
               
                 guides_parents = [cmds.listRelatives(guide, parent=True)[0] for guide in guides_descendents]
                 guides_joint_twist = []
@@ -1326,7 +1338,7 @@ def guides_export(mirror=False):
                 else:
                     guides_data[guides_name][guide] = {
                             "worldPosition": guides_get_translation[i],
-                            "worldRotation": cmds.xform(guide, q=True, ws=True, rotation=True),
+                            "worldRotation": guides_get_rotation[i],
                             "parent": guides_parents[i],
                             "jointTwist": guides_joint_twist[i],
                             "type": guides_type[i],
@@ -1343,7 +1355,7 @@ def guides_export(mirror=False):
 
         om.MGlobal.displayInfo(f"Guides data exported to {TEMPLATE_FILE}")
 
-def guide_import(joint_name, all_descendents=True, path=None):
+def guide_import(joint_name, all_descendents=True, path=None, useGuideRotation=False):
         """
         Imports guides from a JSON file into the Maya scene.
         
@@ -1368,10 +1380,12 @@ def guide_import(joint_name, all_descendents=True, path=None):
         if all_descendents:
                 
             if all_descendents is True:
-                world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
+                world_position, parent, moduleName, prefix, guideType, world_rotation = get_data(joint_name, module_name=True)
                 if guideType == "Guide" or guideType == "Transform":
                     guide_transform = cmds.createNode('transform', name=joint_name)
                     cmds.xform(guide_transform, ws=True, t=world_position)
+                    if useGuideRotation:    
+                        cmds.xform(guide_transform, ws=True, ro=world_rotation)
                 elif guideType == "NurbsSurface":
                     guide_transform = curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint_name)
                 elif guideType == "Curve":
@@ -1402,12 +1416,15 @@ def guide_import(joint_name, all_descendents=True, path=None):
                         if "Settings" in joint:
                                 continue
                         cmds.select(clear=True)
-                        world_position, parent, moduleName, prefix, guideType = get_data(joint, module_name=True)
+                        world_position, parent, moduleName, prefix, guideType, world_rotation = get_data(joint, module_name=True)
 
 
                         if guideType == "Guide" or guideType == "Transform":
                             imported_transform = cmds.createNode('transform', name=joint)
                             position = guides_data[guide_set_name][joint]["worldPosition"]
+                            rotation = guides_data[guide_set_name][joint]["worldRotation"]
+                            if useGuideRotation:
+                                cmds.xform(imported_transform, ws=True, ro=rotation)
                             cmds.xform(imported_transform, ws=True, t=position)
                         elif guideType == "NurbsSurface":
                             imported_transform=curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint)
@@ -1427,11 +1444,13 @@ def guide_import(joint_name, all_descendents=True, path=None):
         else:
 
 
-            world_position, parent, moduleName, prefix, guideType = get_data(joint_name, module_name=True)
+            world_position, parent, moduleName, prefix, guideType, world_rotation = get_data(joint_name, module_name=True)
 
             if guideType == "Guide" or guideType == "Transform":
                 guide_transform = cmds.createNode('transform', name=joint_name)
                 cmds.xform(guide_transform, ws=True, t=world_position)
+                if useGuideRotation:
+                    cmds.xform(guide_transform, ws=True, ro=world_rotation)
             elif guideType == "NurbsSurface":
                 guide_transform=curve_tool.build_surfaces_from_template(path=core.DataManager.get_guide_data(), target_transform_name=joint_name)
 
@@ -1455,12 +1474,14 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "moana")
+    project_manager.load_asset_configuration(asset_name = "varyndor")
 
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
+    FkFingersGuideCreation(side="L", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
+    FkFingersGuideCreation(side="R", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
 
 # add_module_to_guide()
 
