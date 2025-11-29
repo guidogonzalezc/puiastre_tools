@@ -1,4 +1,5 @@
 import maya.cmds as cmds
+import maya.api.OpenMaya as om2
 from functools import partial
 import os
 from importlib import reload
@@ -97,6 +98,7 @@ def export_guides(*args, mirror = False):
         *args: Variable length argument list, not used in this function.
     """ 
     core.load_data()
+    om2.MGlobal.displayInfo(f"Exporting guides with mirror set to {mirror}")
     guide_creation.guides_export(mirror=mirror)
 
 def puiastre_ui():
