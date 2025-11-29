@@ -116,6 +116,15 @@ class FalangeModule(object):
                                          "settings_ctl": self.switch_ctl,
                                         }
                                         )
+                    
+        data={
+            "module": self.individual_module_grp,
+            "skinning_transform": self.skinnging_grp,
+            "controllers": self.individual_controllers_grp,
+            "attributes_ctl": self.switch_ctl
+        }
+        
+        core.DataManager.set_finger_data(core.DataManager, side=self.side, data=data)
 
     def make(self, guide_name):
 
