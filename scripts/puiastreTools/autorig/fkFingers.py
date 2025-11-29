@@ -47,7 +47,7 @@ class FingersModule(object):
 
         data_exporter = data_export.DataExport()
 
-        self.guides = guide_import(guide_name, all_descendents=True, path=None)
+        self.guides = guide_import(guide_name, all_descendents=True, useGuideRotation=True)
         self.side = self.guides[0].split("_")[0]
 
         self.name = guide_name.split("_")[1].replace("Metacarpal", "")
@@ -177,37 +177,7 @@ class FingersModule(object):
         :param guide_name: name of the guide to import
         """
 
-        aim_matrix_guides = []
-        values = [2, 2, -1, -1]
-
-        for index in range(len(self.guides)-1):
-            if not "thumbMetacarpal" in self.guides[index]:
-                aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.guides[index].split('_')[1]}_AMX", ss=True)
-
-                cmds.setAttr(aim_matrix + ".primaryInputAxis", *self.primary_aim_vector, type="double3")
-                cmds.setAttr(aim_matrix + ".secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-                cmds.setAttr(aim_matrix + ".secondaryTargetVector", 0,0, 1, type="double3")
-                
-                cmds.setAttr(aim_matrix + ".primaryMode", 1)
-                cmds.setAttr(aim_matrix + ".secondaryMode", 1)
-
-
-                cmds.connectAttr(self.guides[index] + ".worldMatrix[0]", aim_matrix + ".inputMatrix")
-                cmds.connectAttr(self.guides[index+1] + ".worldMatrix[0]", aim_matrix + ".primaryTargetMatrix")
-                cmds.connectAttr(self.guides[(values[index] + index)] + ".worldMatrix[0]", aim_matrix + ".secondaryTargetMatrix")
-
-                aim_matrix_guides.append(aim_matrix)
-            else:
-                pick = cmds.createNode("pickMatrix", name=f"{self.side}_{self.guides[index].split('_')[1]}_PMX", ss=True)
-                cmds.connectAttr(self.guides[index] + ".worldMatrix[0]", pick + ".inputMatrix")
-                cmds.setAttr(pick + ".useRotate", 0)
-                aim_matrix_guides.append(pick)
-
-        # blm_matrix = cmds.createNode("blendMatrix", name=f"{self.side}_{self.guides[index+1].split('_')[1]}_BLM", ss=True)
-        # cmds.connectAttr(self.guides[-1] + ".worldMatrix[0]", blm_matrix + ".inputMatrix")
-        # cmds.connectAttr(aim_matrix_guides[-1] + ".outputMatrix", blm_matrix + ".target[0].targetMatrix")
-        # cmds.setAttr(blm_matrix + ".target[0].translateWeight", 0)
-        # aim_matrix_guides.append(blm_matrix)
+        aim_matrix_guides = [f"{guide}.worldMatrix[0]" for guide in self.guides[:-1]]
 
         controllers = []
         fk_grps = []
@@ -221,23 +191,25 @@ class FingersModule(object):
                 suffixes=["GRP", "SDK", "ANM"],
                 lock=["tx", "ty", "tz" ,"sx", "sy", "sz", "visibility"],
                 ro=False,
-                parent= controllers[-1] if controllers else self.controllers_grp
+                parent= controllers[-1] if controllers else self.finger_attributes_ctl
             )
 
             if controllers:
                 offset_matrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}_MLT", ss=True)
                 inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{finger_name}_INV", ss=True)
-                cmds.connectAttr(aim_matrix_guides[j-1] + ".outputMatrix", inverse + ".inputMatrix")
-                cmds.connectAttr(guide + ".outputMatrix", offset_matrix + ".matrixIn[0]")
+                cmds.connectAttr(aim_matrix_guides[j-1], inverse + ".inputMatrix")
+                cmds.connectAttr(guide, offset_matrix + ".matrixIn[0]")
                 cmds.connectAttr(controllers[-1] + ".worldInverseMatrix[0]", offset_matrix + ".matrixIn[1]")
                 cmds.connectAttr(controllers[-1] + ".worldMatrix[0]", offset_matrix + ".matrixIn[2]")
                 cmds.connectAttr(inverse + ".outputMatrix", offset_matrix + ".matrixIn[3]")
                 cmds.connectAttr(offset_matrix + ".matrixSum", grp[0] + ".offsetParentMatrix")
+                cmds.setAttr(f"{grp[0]}.rotate", 0,0,0, type="double3")
+                cmds.setAttr(f"{grp[0]}.translate", 0,0,0, type="double3")
             else:
-                cmds.connectAttr(guide + ".outputMatrix", grp[0] + ".offsetParentMatrix")                
+                cmds.connectAttr(guide, grp[0] + ".offsetParentMatrix")     
+                cmds.matchTransform(grp[0], guide.replace(".worldMatrix[0]", ""))           
 
-            cmds.setAttr(f"{grp[0]}.rotate", 0,0,0, type="double3")
-            cmds.setAttr(f"{grp[0]}.translate", 0,0,0, type="double3")
+            
 
             fk_grps.append(grp)
             controllers.append(ctl)
