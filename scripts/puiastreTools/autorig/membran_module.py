@@ -177,77 +177,56 @@ class MembraneModule(object):
         for i, (name) in enumerate(["Inner", "Middle", "Outer"]):
             secondary_controllers = []
             pick_matrices = []
+            ctls = []
             for index in range(len(cv_list)-1):
                 u, v = core.getClosestParamsToPositionSurface(self.guides[0], cmds.pointPosition(f"{rebuilded_surface}.cv[{i+1}][{index}]", world=True))
 
-                point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{name}Membrane0{index+1}_POSI", ss=True)
-                cmds.setAttr(f"{point_on_surface}.parameterU", u)
-                cmds.setAttr(f"{point_on_surface}.parameterV", v)
+                uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{name}Membrane0{index+1}_UVP", ss=True)
+                cmds.connectAttr(f"{self.guides[0]}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateU", u)
+                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateV", v)
 
-                cmds.connectAttr(f"{guide_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
-
-                matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{name}Membrane0{index+1}", ss=True)
-
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
-
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
-
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
-
-                cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
-                cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
-                cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
-
-                pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{name}Membrane0{index+1}_PMX", ss=True)
-                cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
-                cmds.setAttr(f"{pickMatrix}.useScale", 0)
-                cmds.setAttr(f"{pickMatrix}.useShear", 0)
-
-
-                if index != 0:
-
-                    main_controller, main_controller_grp = controller_creator(
-                        name=f"{self.side}_{name}PrimaryMembrane0{index+1}",
-                        suffixes=["GRP", "ANM"],
-                        lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-                        ro=True,
-                        parent=self.individual_controllers_grp
+                ctl = None
+                if index == int((len(cv_list)-1)*0.25) or index == int((len(cv_list)-1)*0.5) or index == int((len(cv_list)-1)*0.75):
+                    ctl, ctl_grp = controller_creator(
+                    name=f"{self.side}_{name}PrimaryMembrane0{index+1}",
+                    suffixes=["GRP", "ANM"],
+                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                    ro=True,
+                    parent=self.individual_controllers_grp
                     )
+                
 
-                    cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
+                joint = cmds.createNode("joint",  name=f"{self.side}_{name}PrimaryMembrane0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
+                
 
-                    joint = cmds.createNode("joint", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
-                    cmds.connectAttr(f"{main_controller}.worldMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
-
-                    if secondary_controllers:
-
-                        grp = f"{pick_matrices[-1]}.outputMatrix"
-                        inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_IMX", ss=True)
-                        cmds.connectAttr(f"{grp}", f"{inverse}.inputMatrix", force=True)
-
-                        multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_MMX", ss=True)
-                        cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
-                        cmds.connectAttr(f"{inverse}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
-                        cmds.connectAttr(f"{secondary_controllers[-1]}.worldMatrix[0]", f"{multmatrix}.matrixIn[2]", force=True)
-                        cmds.connectAttr(f"{multmatrix}.matrixSum", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
-
-                    secondary_controllers.append(main_controller)
+                
+                if index == 0:
+                    cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{joint}.offsetParentMatrix")
+                    ctls.append(joint)
 
                 else:
-                    joint = cmds.createNode("joint", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
-                    cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
-               
-                pick_matrices.append(pickMatrix)
+                    multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}Offset_MMX", ss=True)
+                    multMatrix_wm = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}WM_MMX", ss=True)
+                    inverseMatrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}IMX", ss=True)
+                    cmds.connectAttr(f"{pick_matrices[-1]}.outputMatrix[0]", f"{inverseMatrix}.inputMatrix")
+
+                    cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{multMatrix}.matrixIn[0]")
+                    cmds.connectAttr(f"{inverseMatrix}.outputMatrix", f"{multMatrix}.matrixIn[1]")
+                    cmds.connectAttr(f"{multMatrix}.matrixSum", f"{multMatrix_wm}.matrixIn[0]")
+                    cmds.connectAttr(f"{ctls[-1]}.worldMatrix[0]", f"{multMatrix_wm}.matrixIn[1]")
+                    if ctl:
+                        cmds.connectAttr(f"{multMatrix_wm}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix")
+                        cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
+                        ctls.append(ctl)
+                    else:
+                        cmds.connectAttr(f"{multMatrix_wm}.matrixSum", f"{joint}.offsetParentMatrix")
+                        ctls.append(joint)
+
+                pick_matrices.append(uv_pin)
 
                 secondary_skinning_joints.append(joint)
                 
-
         nurbs_skincluster = cmds.skinCluster(secondary_skinning_joints, rebuilded_surface, toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_MainMembraneRebuild_SKN")[0]
 
         rebuilded_shape = cmds.listRelatives(rebuilded_surface, shapes=True, noIntermediate=True)[0]
@@ -257,216 +236,15 @@ class MembraneModule(object):
 
         for i in range(u_row):
             for index in range(v_row):
-                point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_primaryMembrane{i}{index+1}_POSI", ss=True)
                 # split 1.0 into 'range(6)' steps -> 0.0, 0.2, 0.4, 0.6, 0.8, 1.0
-                cmds.setAttr(f"{point_on_surface}.parameterU", float(i) / (u_row - 1))
-                cmds.setAttr(f"{point_on_surface}.parameterV", float(index) / (v_row - 1))
+                uv_pin = cmds.createNode("uvPin", name=f"{self.side}_primaryMembrane{i}{index+1}_UVP", ss=True)
+                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateU", float(i) / (u_row - 1))
+                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateV", float(index) / (v_row - 1))
 
-                cmds.connectAttr(f"{rebuilded_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
-
-                matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_primaryMembrane{i}{index+1}_MX", ss=True)
-
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
-
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
-
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
-                cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
-
-                cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
-                cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
-                cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
-
-                pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_primaryMembrane{i}{index+1}_PMX", ss=True)
-                cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
-                cmds.setAttr(f"{pickMatrix}.useScale", 0)
-                cmds.setAttr(f"{pickMatrix}.useShear", 0)
+                cmds.connectAttr(f"{rebuilded_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
 
                 joint = cmds.createNode("joint", name=f"{self.side}_primaryMembrane{i}{index+1}_JNT", ss=True, parent=self.skinning_grp)
-                cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
-                cmds.setAttr(f"{joint}.radius", 30)
-
-    def forearm_membrane(self):
-        data_exporter = data_export.DataExport()
-
-        arm_joints = cmds.listRelatives(data_exporter.get_data(f"{self.side}_armModule", "skinning_transform"), allDescendents=True, type="joint")
-
-        cmds.delete(self.forearm_guide, ch=True)
-
-        shapes = cmds.listRelatives(self.forearm_guide, shapes=True, noIntermediate=True) or []
-        guide_shape = shapes[0] if shapes else self.forearm_guide
-
-        skinning_joint_joints = [arm_joints[1]]
-
-        for i in [1, 2, 3]:
-            closest_pos = cmds.pointPosition(f"{guide_shape}.cv[{i}][1]", world=True) 
-            closest_transform = core.get_closest_transform(closest_pos, arm_joints)
-
-            blend_matrix = cmds.createNode("blendMatrix", name=f"{self.side}_foreArmMembrane0{i}_BMX", ss=True)
-
-            cmds.connectAttr(f"{arm_joints[-1]}.worldMatrix[0]", f"{blend_matrix}.inputMatrix", force=True)
-            cmds.connectAttr(f"{arm_joints[1]}.worldMatrix[0]", f"{blend_matrix}.target[0].targetMatrix", force=True)
-            cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", i*0.25)
-            pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_foreArmMembrane0{i}_PMX", ss=True)
-            cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{pickMatrix}.inputMatrix", force=True)
-            # cmds.setAttr(f"{pickMatrix}.useRotate", 0)
-
-            aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_foreArmMembrane0{i}_AMX", ss=True)
-            cmds.connectAttr(f"{closest_transform}.worldMatrix[0]", f"{aim_matrix}.inputMatrix")
-            cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{aim_matrix}.primaryTargetMatrix")
-            cmds.connectAttr(f"{arm_joints[1]}.worldMatrix[0]", f"{aim_matrix}.secondaryTargetMatrix")
-            cmds.setAttr(f"{aim_matrix}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-            cmds.setAttr(f"{aim_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-
-            skinning_joint = cmds.createNode("joint", name=f"{self.side}_foreArmMembrane0{i}_JNT", ss=True, parent=self.individual_module_grp)
-            cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{skinning_joint}.offsetParentMatrix", force=True)
-
-            skinning_joint_joints.append(skinning_joint)
-
-        skinning_joint_joints.append(arm_joints[-1])
-        # skinning_list = first_row_closest
-        # skinning_list.extend(third_row_closest)
-        # skinning_list.append(skinning_joint)
-
-        nurbs_skincluster = cmds.skinCluster(skinning_joint_joints, self.forearm_guide, toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_MainMembrane_SKN")[0]
-        for secondary_index in range(5):
-            cmds.skinPercent(nurbs_skincluster, f"{self.forearm_guide}.cv[{secondary_index}][1]", transformValue=[(skinning_joint_joints[secondary_index], 1)])
-            cmds.skinPercent(nurbs_skincluster, f"{self.forearm_guide}.cv[{secondary_index}][0]", transformValue=[(skinning_joint_joints[secondary_index], 1)])
-
-        # rebuilded_surface = cmds.rebuildSurface(
-        #     guide_shape,
-        #     ch=True, rpo=0, rt=0, end=1, kr=0, kcp=0, kc=0,
-        #     su=2, du=3, sv=4, dv=3, tol=0.01, fr=0, dir=2
-        # )[0]
-        # cmds.delete(rebuilded_surface, constructionHistory=True)
-
-        # rebuilded_surface = cmds.rename(rebuilded_surface, f"{self.side}_MainMembrane_NURBS")
-        # cmds.parent(rebuilded_surface, self.individual_module_grp)
-
-        # secondary_skinning_joints = []
-        # secondary_skinning_joints = first_row_closest
-        # secondary_skinning_joints.extend(third_row_closest)
-        # for i, (name) in enumerate(["Inner", "Middle", "Outer"]):
-        #     secondary_controllers = []
-        #     pick_matrices = []
-        #     for index in range(len(cv_list)-1):
-        #         u, v = core.getClosestParamsToPositionSurface(self.guides[0], cmds.pointPosition(f"{rebuilded_surface}.cv[{i+1}][{index}]", world=True))
-
-        #         point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{name}Membrane0{index+1}_POSI", ss=True)
-        #         cmds.setAttr(f"{point_on_surface}.parameterU", u)
-        #         cmds.setAttr(f"{point_on_surface}.parameterV", v)
-
-        #         cmds.connectAttr(f"{guide_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
-
-        #         matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{name}Membrane0{index+1}", ss=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
-
-        #         pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{name}Membrane0{index+1}_PMX", ss=True)
-        #         cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
-        #         cmds.setAttr(f"{pickMatrix}.useScale", 0)
-        #         cmds.setAttr(f"{pickMatrix}.useShear", 0)
-
-
-        #         if index != 0:
-
-        #             main_controller, main_controller_grp = controller_creator(
-        #                 name=f"{self.side}_{name}PrimaryMembrane0{index+1}",
-        #                 suffixes=["GRP", "ANM"],
-        #                 lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-        #                 ro=True,
-        #                 parent=self.individual_controllers_grp
-        #             )
-
-        #             cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
-
-        #             joint = cmds.createNode("joint", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
-        #             cmds.connectAttr(f"{main_controller}.worldMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
-
-        #             if secondary_controllers:
-
-        #                 grp = f"{pick_matrices[-1]}.outputMatrix"
-        #                 inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_IMX", ss=True)
-        #                 cmds.connectAttr(f"{grp}", f"{inverse}.inputMatrix", force=True)
-
-        #                 multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_MMX", ss=True)
-        #                 cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
-        #                 cmds.connectAttr(f"{inverse}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
-        #                 cmds.connectAttr(f"{secondary_controllers[-1]}.worldMatrix[0]", f"{multmatrix}.matrixIn[2]", force=True)
-        #                 cmds.connectAttr(f"{multmatrix}.matrixSum", f"{main_controller_grp[0]}.offsetParentMatrix", force=True)
-
-        #             secondary_controllers.append(main_controller)
-
-        #         else:
-        #             joint = cmds.createNode("joint", name=f"{self.side}_{name}PrimaryMembrane0{index+1}_JNT", ss=True, parent=self.individual_module_grp)
-        #             cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
-               
-        #         pick_matrices.append(pickMatrix)
-
-        #         secondary_skinning_joints.append(joint)
-                
-
-        # nurbs_skincluster = cmds.skinCluster(secondary_skinning_joints, rebuilded_surface, toSelectedBones=True, maximumInfluences=1, normalizeWeights=1, name=f"{self.side}_MainMembraneRebuild_SKN")[0]
-
-        # rebuilded_shape = cmds.listRelatives(rebuilded_surface, shapes=True, noIntermediate=True)[0]
-
-        # u_row = 10
-        # v_row = 10
-
-        # for i in range(u_row):
-        #     for index in range(v_row):
-        #         point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_primaryMembrane{i}{index+1}_POSI", ss=True)
-        #         # split 1.0 into 'range(6)' steps -> 0.0, 0.2, 0.4, 0.6, 0.8, 1.0
-        #         cmds.setAttr(f"{point_on_surface}.parameterU", float(i) / (u_row - 1))
-        #         cmds.setAttr(f"{point_on_surface}.parameterV", float(index) / (v_row - 1))
-
-        #         cmds.connectAttr(f"{rebuilded_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
-
-        #         matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_primaryMembrane{i}{index+1}_MX", ss=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
-
-        #         cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
-        #         cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
-
-        #         pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_primaryMembrane{i}{index+1}_PMX", ss=True)
-        #         cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
-        #         cmds.setAttr(f"{pickMatrix}.useScale", 0)
-        #         cmds.setAttr(f"{pickMatrix}.useShear", 0)
-
-        #         joint = cmds.createNode("joint", name=f"{self.side}_primaryMembrane{i}{index+1}_JNT", ss=True, parent=self.skinning_grp)
-        #         cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
-        #         cmds.setAttr(f"{joint}.radius", 30)
+                cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
 
     def secondary_membranes(self):
 
@@ -628,36 +406,12 @@ class MembraneModule(object):
                 for i_u_row in range(u_row):
 
                     for index in range(v_row):
-                        point_on_surface = cmds.createNode("pointOnSurfaceInfo", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_POSI", ss=True)
-                        cmds.setAttr(f"{point_on_surface}.parameterU", float(i_u_row) / (u_row - 1))
-                        cmds.setAttr(f"{point_on_surface}.parameterV", float(index) / (v_row - 1))
+                        uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_UVP", ss=True)
+                        cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateU", float(i_u_row) / (u_row - 1))
+                        cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateV", float(index) / (v_row - 1))
 
-                        cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{point_on_surface}.inputSurface", force=True)
-
-                        matrix_node = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_FBF", ss=True)
-
-                        cmds.connectAttr(f"{point_on_surface}.normalizedNormalX", f"{matrix_node}.in10", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.normalizedNormalY", f"{matrix_node}.in11", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.normalizedNormalZ", f"{matrix_node}.in12", force=True)
-
-                        cmds.connectAttr(f"{point_on_surface}.normalizedTangentVX", f"{matrix_node}.in00", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.normalizedTangentVY", f"{matrix_node}.in01", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.normalizedTangentVZ", f"{matrix_node}.in02", force=True)
-
-                        cmds.connectAttr(f"{point_on_surface}.normalizedTangentUX", f"{matrix_node}.in20", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.normalizedTangentUY", f"{matrix_node}.in21", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.normalizedTangentUZ", f"{matrix_node}.in22", force=True)
-
-                        cmds.connectAttr(f"{point_on_surface}.positionX", f"{matrix_node}.in30", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.positionY", f"{matrix_node}.in31", force=True)
-                        cmds.connectAttr(f"{point_on_surface}.positionZ", f"{matrix_node}.in32", force=True)
-
-                        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_PMX", ss=True)
-                        cmds.connectAttr(f"{matrix_node}.output", f"{pickMatrix}.inputMatrix", force=True)
-                        cmds.setAttr(f"{pickMatrix}.useScale", 0)
-                        cmds.setAttr(f"{pickMatrix}.useShear", 0)
+                        cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
 
                         joint = cmds.createNode("joint", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_JNT", ss=True, parent=self.skinning_grp)
-                        cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
-                        cmds.setAttr(f"{joint}.radius", 20)
+                        cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
 
