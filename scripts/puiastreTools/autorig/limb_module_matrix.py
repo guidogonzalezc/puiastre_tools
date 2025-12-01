@@ -828,20 +828,41 @@ class LimbModule(object):
 
             cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix") 
     
-            cvMatrices = [self.blend_wm[i], f"{ctl}.worldMatrix[0]", self.blend_wm[i+1]]
+            joint01 = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}Roll01_JNT", ss=True, parent=self.individual_module_grp)
+            joint02 = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}Roll02_JNT", ss=True, parent=joint01)
+            pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}{bendy}Roll_PIM", ss=True)
+            cmds.setAttr(f"{pickMatrix}.useRotate", 0)
+
+            cmds.connectAttr(self.blend_wm[i], f"{pickMatrix}.inputMatrix")
+            cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{joint01}.offsetParentMatrix")
+
+
+            distance_node = cmds.createNode("distanceBetween", name=f"{self.side}_{self.module_name}{bendy}Distance_DB", ss=True)
+            cmds.connectAttr(f"{self.blend_wm[i]}", f"{distance_node}.inMatrix1")
+            cmds.connectAttr(f"{self.blend_wm[i+1]}", f"{distance_node}.inMatrix2")
+
+            cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
+
+            ik_handle_sc = cmds.ikHandle(name=f"{self.side}_{self.module_name}{bendy}Roll_IK", sj=joint01, ee=joint02, sol="ikSCsolver")[0]
+            cmds.parent(ik_handle_sc, self.individual_module_grp)
+            cmds.connectAttr(self.blend_wm[i+1], f"{ik_handle_sc}.offsetParentMatrix")
+            for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
+                cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{ik_handle_sc}.{attr}")
+
+            cvMatrices = [self.blend_wm[i], f"{ctl}.worldMatrix[0]", f"{joint02}.worldMatrix[0]"]
 
             self.twist_number = 5
 
             t_values = []
-            for i in range(self.twist_number):
-                t = 0.95 if i == self.twist_number - 1 else i / (float(self.twist_number) - 1)
+            for index in range(self.twist_number):
+                t = 0.95 if index == self.twist_number - 1 else index / (float(self.twist_number) - 1)
                 t_values.append(t)
 
-            joint = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change=True)
-
+            
+            joint = de_boors_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs= cvMatrices, num_joints=self.twist_number, name = f"{self.side}_{self.module_name}{bendy}", parent=self.skinnging_grp, custom_parm=t_values, axis_change=False)
             if bendy == "LowerBendy":
                 joint_end = cmds.createNode("joint", name=f"{self.side}_{self.module_name}{bendy}0{self.twist_number}_JNT", ss=True, parent=self.skinnging_grp)
-                cmds.connectAttr(f"{cvMatrices[-1]}", f"{joint_end}.offsetParentMatrix")
+                cmds.connectAttr(f"{self.blend_wm[i+1]}", f"{joint_end}.offsetParentMatrix")
                 joint.append(joint_end)
 
             joints.append(joint)
