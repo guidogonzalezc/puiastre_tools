@@ -546,6 +546,12 @@ class SpineModule():
                     self.main_chain.remove(joint)
             else:
                 main_spine_joint.append(f"{joint}")
+        # AUN FALTA POR APLICAR
+        values = []
+        x = len(main_spine_joint)
+        for i in range(1, 6):
+            v = int((i - 1) * (x - 1) / 4)
+            values.append(v)
 
         ctls_sub_spine = []
         sub_spine_ctl_trn = cmds.createNode("transform", n="C_subSpineControllers_GRP", parent=self.masterWalk_ctl)

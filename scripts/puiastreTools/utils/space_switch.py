@@ -83,6 +83,7 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, s
     spaces = [src.split("_")[1] for src in sources]
     name_space = [src_name for src_name in sources_names]
 
+    print("sources:", sources, "target:", target)
 
     if len(sources) > 1:
         cmds.addAttr(target, longName="SpaceFollow", attributeType="enum", enumName=":".join(name_space), keyable=True)
@@ -98,18 +99,22 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, s
 
 
             cmds.connectAttr(f"{condition}.outColorR", f"{parent_matrix_parents}.target[{i}].weight")
+    print("sources:", sources, "target:", target)
 
     cmds.addAttr(target, longName="TranslateValue", attributeType="float", min=0, max=1, defaultValue=default_translate, keyable=True)
     cmds.addAttr(target, longName="RotateValue", attributeType="float", min=0, max=1, defaultValue=default_rotate, keyable=True)
+    print("sources:", sources, "target:", target)
 
     cmds.connectAttr(connections, f"{parent_matrix_parents}.inputMatrix")
     cmds.connectAttr(connections, f"{parent_matrix_masterwalk}.inputMatrix")
     cmds.connectAttr(f"{parent_matrix_parents}.outputMatrix", f"{blend_matrix}.target[0].targetMatrix")
     cmds.connectAttr(f"{parent_matrix_masterwalk}.outputMatrix", f"{blend_matrix}.inputMatrix")
+    print("sources:", sources, "target:", target)
 
     offset_masterwalk = get_offset_matrix(target_grp, masterWalk_ctl)
     cmds.connectAttr(f"{masterWalk_ctl}.worldMatrix[0]", f"{parent_matrix_masterwalk}.target[0].targetMatrix")
     cmds.setAttr(f"{parent_matrix_masterwalk}.target[0].offsetMatrix", offset_masterwalk, type="matrix")
+    print("sources:", sources, "target:", target)
 
     for z, driver in enumerate(sources):
         off_matrix = get_offset_matrix(target_grp, driver)
