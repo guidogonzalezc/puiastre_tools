@@ -530,9 +530,19 @@ class FingersModule(object):
 
         hand_local_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_{finger_name}EndLocal_F4X", ss=True)
 
-        hand_wm_multmatrix_end = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}03_MMX", ss=True)
-        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix_end}.matrixIn[0]")
-        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix_end}.matrixIn[1]")
+
+        # Depen de si alex es subnormal o no necessitas el blend matrix
+        hand_wm_multmatrix_end_own_rotation = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}03_MMX", ss=True)
+        cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix_end_own_rotation}.matrixIn[0]")
+        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix_end_own_rotation}.matrixIn[1]")
+
+        hand_wm_multmatrix_end = cmds.createNode("blendMatrix", name=f"{self.side}_{finger_name}End_BLM", ss=True)
+        cmds.connectAttr(f"{hand_wm_multmatrix_end_own_rotation}.matrixSum", f"{hand_wm_multmatrix_end}.inputMatrix")
+        cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix_end}.target[0].targetMatrix")
+        cmds.setAttr(f"{hand_wm_multmatrix_end}.target[0].translateWeight", 0)
+        cmds.setAttr(f"{hand_wm_multmatrix_end}.target[0].rotateWeight", 1)
+        cmds.setAttr(f"{hand_wm_multmatrix_end}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{hand_wm_multmatrix_end}.target[0].shearWeight", 0)
 
 
         for i in range(0, 3):
@@ -549,7 +559,7 @@ class FingersModule(object):
         else:
             cmds.connectAttr(f"{self.distance_between_output[1]}", f"{hand_local_matrix}.in30")    
 
-        self.ik_wm = [ f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum",f"{hand_wm_multmatrix_end}.matrixSum"]
+        self.ik_wm = [ f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum",f"{hand_wm_multmatrix_end}.outputMatrix"]
 
         self.attached_fk()
 
