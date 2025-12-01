@@ -79,7 +79,8 @@ class FingersModule(object):
             else:
                 self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_fkFingersModule", parent=self.modules_grp, ss=True)
 
-            if cmds.objExists(dict.get("skinning_transform")):
+
+            if dict.get("skinning_transform") and cmds.objExists(dict.get("skinning_transform")):
                 self.skinning_grp = dict.get("skinning_transform")
             else:
                 self.skinning_grp = cmds.createNode("transform", name=f"{self.side}_fkFingersSkinningJoints", parent=self.skel_grp, ss=True)

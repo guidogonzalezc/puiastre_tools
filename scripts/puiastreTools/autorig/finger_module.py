@@ -154,7 +154,7 @@ class FingersModule(object):
         cmds.addAttr(self.finger_attributes_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.finger_attributes_ctl+".extraAttr", channelBox=True, lock=True)
         cmds.addAttr(self.finger_attributes_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=0, keyable=True)
-        cmds.addAttr(self.finger_attributes_ctl, longName="FingerAttributes ———", attributeType="enum", enumName="———")
+        cmds.addAttr(self.finger_attributes_ctl, longName="FingerAttributes", attributeType="enum", enumName="———")
         cmds.setAttr(f"{self.finger_attributes_ctl}.FingerAttributes", lock=True, keyable=False, channelBox=True)
         cmds.addAttr(self.finger_attributes_ctl, longName="Curl", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
         cmds.addAttr(self.finger_attributes_ctl, longName="Spread", attributeType="float", defaultValue=0, max=10, min=-10, keyable=True)
@@ -302,7 +302,7 @@ class FingersModule(object):
         cmds.connectAttr(f"{self.finger_attributes_ctl}.switchIkFk", f"{fk_grp[0][0]}.visibility", force=True)
         self.ik_visibility_rev = cmds.createNode("reverse", name=f"{self.side}_FkVisibility_REV", ss=True)
         cmds.connectAttr(f"{self.finger_attributes_ctl}.switchIkFk", f"{self.ik_visibility_rev}.inputX")
-        cmds.connectAttr(f"{self.ik_visibility_rev}.outputX", f"{ctl_ik}.visibility")
+        cmds.connectAttr(f"{self.ik_visibility_rev}.outputX", f"{self.controllers_grp_ik}.visibility", force=True)
 
 
         self.blend_wm = []

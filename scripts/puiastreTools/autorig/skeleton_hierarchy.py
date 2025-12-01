@@ -52,7 +52,7 @@ def parented_chain(skinning_joints, parent, hand_value=False):
         joints = []
         for joint in chain:
             joint_env = cmds.createNode("joint", n=joint.replace("_JNT", "_ENV"), ss=True)
-            cmds.setAttr(joint_env + ".inheritsTransform", 0)
+            # cmds.setAttr(joint_env + ".inheritsTransform", 0)
 
 
             if "localHip" in joint_env:
@@ -71,14 +71,56 @@ def parented_chain(skinning_joints, parent, hand_value=False):
 
             elif parent is None:
                 cmds.parent(joint_env, skelHierarchy_grp)
+
+            
             
             joints.append(joint_env)
             end_joints.append(joint_env)
 
         for i, joint in enumerate(joints):
             
-            cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", joint + ".offsetParentMatrix", force=True)
-        
+            if parent is None and i == 0:
+                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", joint + ".offsetParentMatrix", force=True)
+            
+            elif parent:
+                mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "Envelop_MMX"), ss=True)
+                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
+                cmds.connectAttr(parent + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
+
+                decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
+                cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+
+                cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
+                cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
+                cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
+                cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+              
+            if "localHip" in joint:
+                mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "Envelop_MMX"), ss=True)
+                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
+                cmds.connectAttr(joints[0] + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
+
+                decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
+                cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+
+                cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
+                cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
+                cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
+                cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+
+            elif i != 0:
+                mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "Envelop_MMX"), ss=True)
+                cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
+                cmds.connectAttr(joints[i-1] + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
+
+                decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
+                cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+
+                cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
+                cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
+                cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
+                cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+
             cmds.setAttr(joint + ".jointOrient", 0, 0, 0, type="double3")
 
     return end_joints
@@ -127,7 +169,6 @@ def build_complete_hierarchy():
                     skel_grps.append((value[1]))
                     skinning_joints.append(joints)
                     modules_name.append(module)
-
     spine_index = next((i for i, grp in enumerate(skel_grps) if "spine" in grp.lower()), None)
     l_arm_index = next((i for i, grp in enumerate(skel_grps) if "L_arm" in grp), None)
     r_arm_index = next((i for i, grp in enumerate(skel_grps) if "R_arm" in grp), None)
@@ -149,7 +190,7 @@ def build_complete_hierarchy():
             if "backLeg" in skinning_joint_list[0] or "tail" in skinning_joint_list[0] or "leg" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-1], hand_value=False)
                 leg_joints.append(joints[-1])
-            elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0] or "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower() or "Metacarpal" in skinning_joint_list[0]:
+            elif "Finger" in skinning_joint_list[0] or "Membran" in skinning_joint_list[0] or "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower() or "Metacarpal" in skinning_joint_list[0] or "handThumb" in skinning_joint_list[0]:
                 pass
             elif "Scapula" in skinning_joint_list[0]:
                 joints = parented_chain(skinning_joints=[skinning_joint_list[0], skinning_joint_list[1]], parent=spine_joints[-2], hand_value=False)
@@ -178,7 +219,7 @@ def build_complete_hierarchy():
 
     hand_settings_value = None
     for i, skinning_joint_list in enumerate(skinning_joints):
-        if "thumbMetacarpal" in skinning_joint_list[0] :
+        if "thumbMetacarpal" in skinning_joint_list[0] or "handThumb" in skinning_joint_list[0]:
             side = skinning_joint_list[0].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
             parent_joint = next((j for j in arm_joints if f"{side}_" in j), None)
@@ -195,8 +236,11 @@ def build_complete_hierarchy():
                 parented_chain(skinning_joints=child_joints, parent=parent_joint, hand_value=False)
 
             attributes = data_exporter.get_data(f"{side}_FkFingersModule", "attributes_ctl")
-
-            space_switch.fk_switch(target = attributes, sources= [parent_joint], sources_names=["Wrist"])
+            try:
+                space_switch.fk_switch(target = attributes, sources= [parent_joint], sources_names=["Wrist"])
+            except:
+                pass
+            
 
 
         elif "thumb01" in skinning_joint_list[0].split("_", 1)[1].lower():
@@ -215,12 +259,9 @@ def build_complete_hierarchy():
                     if f"{side}_" in joint:
                         parent_joint = joint
                         
-            for i in range(0, 12, 3):
-                joint_list = skinning_joint_list[i:i+3]
+            for index in range(0, 12, 3):
+                joint_list = skinning_joint_list[index:index+3]
                 parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=False)
-
-            continue
-        
 
         
         elif "Finger" in skinning_joint_list[0]:
@@ -229,7 +270,8 @@ def build_complete_hierarchy():
             parent_joint = next((j for j in arm_joints if f"{side}_" in j), None)
             parented_chain(skinning_joints=skinning_joint_list, parent=parent_joint, hand_value=False)
 
-        elif "Membran" in skinning_joint_list[0]:
+
+        if "Membran" in skinning_joint_list[0]:
             side = skinning_joint_list[0].split("_")[0]
 
             parent_joint = None
@@ -262,7 +304,13 @@ def build_complete_hierarchy():
                         parented_chain(skinning_joints=joint_list, parent=parent_joint, hand_value=True)
 
 
+
+        print(skel_grps[i])
+
         # ===== SPACE SWITCHES ===== #
+        if "fkFingers" in skel_grps[i]:
+            continue
+
         if "backLeg" in skel_grps[i] or "leg" in skel_grps[i]:
             fk = data_exporter.get_data(modules_name[i], "fk_ctl")[0]
             pv = data_exporter.get_data(modules_name[i], "pv_ctl")
@@ -302,17 +350,10 @@ def build_complete_hierarchy():
                 cmds.setAttr(pick_matrix + ".useRotate", 0)
                 cmds.connectAttr(root_connection[0] + ".outputMatrix", pick_matrix + ".inputMatrix")
                 cmds.connectAttr(pick_matrix + ".outputMatrix", root_grp + ".offsetParentMatrix", force=True)
-            # parents.insert(0, first_bendy)
             space_switch.fk_switch(target = scapula_master, sources= parents, sources_names=["LocalChest", "SpineEnd"])
-            # parents.pop(0)
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["AnkleIK", "LocalChest", "SpineEnd"], pv=True)
-
-            # ===== SCAPULA SPACES ===== #
-            # space_switch.fk_switch(target = scapula_end, sources= [scapula], sources_names=["Scapula"], default_rotate=0.7, default_translate=0.7) # Follow the scapula ctl 70%
-            # space_switch.fk_switch(target = scapula, sources= [scapula_master], sources_names=["ScapulaMaster"])
-
 
         if "tail" in skel_grps[i]:
             main_ctl= data_exporter.get_data(modules_name[i], "main_ctl")
@@ -342,14 +383,13 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["Scapula", "LocalChest", "SpineEnd"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["WristIK", "Scapula", "LocalChest", "SpineEnd"], pv=True)
-        
         if "Metacarpal" in skel_grps[i]:
 
             fk = data_exporter.get_data(modules_name[i], "fk_ctls")[0]
             pv = data_exporter.get_data(modules_name[i], "pv_ctl")
             root = data_exporter.get_data(modules_name[i], "root_ctl")
             ik = data_exporter.get_data(modules_name[i], "end_ik")
-            
+
             side = skel_grps[i].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
             parent_joint = next((j for j in arm_joints if f"{side}_" in j), None)
@@ -365,7 +405,6 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=1, default_translate=1, sources_names=[ "Wrist"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"], pv=True)
-
 
         # ===== SCAPULA SPACES ===== #
 

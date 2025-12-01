@@ -119,7 +119,8 @@ class FalangeModule(object):
                     
         data={
             "module": self.individual_module_grp,
-            "skinning_transform": self.skinnging_grp,
+            # "skinning_transform": self.skinnging_grp,
+            "skinning_transform": None,
             "controllers": self.individual_controllers_grp,
             "attributes_ctl": self.switch_ctl
         }
