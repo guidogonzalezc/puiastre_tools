@@ -1084,7 +1084,7 @@ class LimbModule(object):
         
         blendMatrix_frontRoll = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}FrontRoll_BLM", ss=True)
         cmds.connectAttr(f"{self.reverse_ctl[3]}.worldMatrix[0]", f"{blendMatrix_frontRoll}.target[0].targetMatrix")
-        cmds.connectAttr(f"{blendMatrix_frontRoll}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+        # cmds.connectAttr(f"{blendMatrix_frontRoll}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
         cmds.setAttr(f"{blendMatrix_frontRoll}.target[0].translateWeight", 0)
 
         cmds.connectAttr(f"{self.frontRoll_ctl}.worldMatrix[0]", f"{self.foot_rotation_multmatrix}.matrixIn[0]")
@@ -1120,7 +1120,7 @@ class LimbModule(object):
         ball_wm = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}BallWM_AIM", ss=True)
         cmds.connectAttr(f"{ball_wm_no_rotation}.matrixSum", f"{ball_wm}.inputMatrix")
         cmds.connectAttr(f"{self.reverse_ctl[-3]}.worldMatrix[0]", f"{ball_wm}.primaryTargetMatrix") ##### -2
-        cmds.connectAttr(f"{self.hand_ik_ctl}.worldMatrix[0]", f"{ball_wm}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.reverse_ctl[-1]}.worldMatrix[0]", f"{ball_wm}.secondaryTargetMatrix")
         cmds.setAttr(f"{ball_wm}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{ball_wm}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{ball_wm}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
@@ -1229,6 +1229,8 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blendMatrix}.target[0].weight")
 
         cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{blendMatrix_frontRoll}.inputMatrix")
+        cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+
 
 
         self.blend_wm.append(f"{blendMatrix}.outputMatrix")
