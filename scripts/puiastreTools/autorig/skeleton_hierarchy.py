@@ -305,8 +305,6 @@ def build_complete_hierarchy():
 
 
 
-        print(skel_grps[i])
-
         # ===== SPACE SWITCHES ===== #
         if "fkFingers" in skel_grps[i]:
             continue

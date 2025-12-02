@@ -852,32 +852,34 @@ class LimbModule(object):
             for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
                 cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{ik_handle_sc}.{attr}")
 
-            # for n_index, value in enumerate([0.25, 0.75]):
-            #     print("Creating bendy tan control", n_index+1)
-            #     print( value )
-            #     ctl_tan, ctl_grp_tan = controller_creator(
-            #     name=f"{self.side}_{self.module_name}{bendy}Tan0{n_index+1}",
-            #     suffixes=["GRP", "ANM"],
-            #     lock=["scaleX", "scaleY", "scaleZ", "visibility", "rx", "ry", "rz"],
-            #     ro=True,
-            #     )
+            tan = []
+            for n_index, value in enumerate([0.25, 0.75]):
+                print("Creating bendy tan control", n_index+1)
+                print( value )
+                ctl_tan, ctl_grp_tan = controller_creator(
+                name=f"{self.side}_{self.module_name}{bendy}Tan0{n_index+1}",
+                suffixes=["GRP", "ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility", "rx", "ry", "rz"],
+                ro=True,
+                )
 
-            #     blend_matrix_pos = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}{bendy}Tan0{n_index+1}Init_BLM", ss=True)
-            #     cmds.connectAttr(f"{self.guides_matrix[i]}.outputMatrix", f"{blend_matrix_pos}.inputMatrix")
-            #     cmds.connectAttr(f"{self.guides_matrix[i+1]}.outputMatrix", f"{blend_matrix_pos}.target[0].targetMatrix")
-            #     cmds.setAttr(f"{blend_matrix_pos}.target[0].scaleWeight", 0)
-            #     cmds.setAttr(f"{blend_matrix_pos}.target[0].rotateWeight", 0)
-            #     cmds.setAttr(f"{blend_matrix_pos}.target[0].shearWeight", 0)
-            #     cmds.setAttr(f"{blend_matrix_pos}.target[0].translateWeight", value)
+                blend_matrix_pos = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}{bendy}Tan0{n_index+1}Init_BLM", ss=True)
+                cmds.connectAttr(f"{self.guides_matrix[i]}.outputMatrix", f"{blend_matrix_pos}.inputMatrix")
+                cmds.connectAttr(f"{self.guides_matrix[i+1]}.outputMatrix", f"{blend_matrix_pos}.target[0].targetMatrix")
+                cmds.setAttr(f"{blend_matrix_pos}.target[0].scaleWeight", 0)
+                cmds.setAttr(f"{blend_matrix_pos}.target[0].rotateWeight", 0)
+                cmds.setAttr(f"{blend_matrix_pos}.target[0].shearWeight", 0)
+                cmds.setAttr(f"{blend_matrix_pos}.target[0].translateWeight", value)
 
-            #     cmds.connectAttr(f"{blend_matrix_pos}.outputMatrix", f"{ctl_grp_tan[0]}.offsetParentMatrix")
-            #     ss.fk_switch(target = ctl_tan, sources= ctl)
-            #     # print(ctl_tan)
+                cmds.connectAttr(f"{blend_matrix_pos}.outputMatrix", f"{ctl_grp_tan[0]}.offsetParentMatrix")
+                ss.fk_switch(target = ctl_tan, sources= [ctl])
+                # print(ctl_tan)
+                tan.append(f"{ctl_tan}.worldMatrix[0]")
 
 
 
 
-            cvMatrices = [self.blend_wm[i], f"{ctl}.worldMatrix[0]", f"{joint02}.worldMatrix[0]"]
+            cvMatrices = [self.blend_wm[i],tan[0], f"{ctl}.worldMatrix[0]", tan[1], f"{joint02}.worldMatrix[0]"]
 
             self.twist_number = 5
 

@@ -39,7 +39,10 @@ class EyelidModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
-        self.head_ctl = self.data_exporter.get_data("C_neckModule", "head_ctl")
+        self.head_ctl = self.data_exporter.get_data("C_neckModule", "skinning_transform")
+        relatives = cmds.listRelatives(self.head_ctl, ad=True)
+        self.head_ctl = relatives[-1]
+        self.head_controller = self.data_exporter.get_data("C_neckModule", "head_ctl")
 
 
 

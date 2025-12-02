@@ -194,7 +194,7 @@ def make(asset_name = "", latest = False):
 
 
                 
-    # # Additional modules who depends on others modules
+    # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
             continue
@@ -217,13 +217,13 @@ def make(asset_name = "", latest = False):
 
                 #     jmm.JawModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eyebrow":
+                if guide_info.get("moduleName") == "eyebrow":
 
-                #     ebm.EyebrowModule().make(guide_name)
+                    ebm.EyebrowModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eye":
+                if guide_info.get("moduleName") == "eye":
 
-                #     elm.EyelidModule().make(guide_name)
+                    elm.EyelidModule().make(guide_name)
     
     # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
@@ -241,7 +241,7 @@ def make(asset_name = "", latest = False):
 
     # # skt.load_skincluster()
 
-    # # End commands to clean the scene
+    # End commands to clean the scene
     rename_ctl_shapes()
     joint_label()
     setIsHistoricallyInteresting(0)

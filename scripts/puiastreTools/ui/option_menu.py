@@ -3,6 +3,7 @@ import maya.api.OpenMaya as om2
 from functools import partial
 import os
 from importlib import reload
+import traceback
 
 from puiastreTools.ui import option_menu
 from puiastreTools.utils import guide_creation 
@@ -52,11 +53,14 @@ def build_rig(*args, asset_name = None):
     Args:
         *args: Variable length argument list, not used in this function.
     """
-    reload(rig_builder)
-    if asset_name:
-        rig_builder.make(asset_name)
-    else:
-        rig_builder.make(latest=True)
+    try:
+        reload(rig_builder)
+        if asset_name:
+            rig_builder.make(asset_name)
+        else:
+            rig_builder.make(latest=True)
+    except Exception:
+        traceback.print_exc()
 
 
 def export_curves(*args): 
