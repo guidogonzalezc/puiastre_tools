@@ -810,7 +810,12 @@ class LimbModule(object):
             cmds.connectAttr(f"{self.blend_wm[i]}", f"{distance_node}.inMatrix1")
             cmds.connectAttr(f"{self.blend_wm[i+1]}", f"{distance_node}.inMatrix2")
 
-            cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
+            if self.side == "L":
+                cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
+            else:
+                negate_translate = cmds.createNode("negate", name=f"{self.side}_{self.module_name}{bendy}NegateTranslate_NEG", ss=True)
+                cmds.connectAttr(f"{distance_node}.distance", f"{negate_translate}.input")
+                cmds.connectAttr(f"{negate_translate}.output", f"{joint02}.translateX")
 
             ik_handle_sc = cmds.ikHandle(name=f"{self.side}_{self.module_name}{bendy}Roll_IK", sj=joint01, ee=joint02, sol="ikSCsolver")[0]
             cmds.parent(ik_handle_sc, self.individual_module_grp)
@@ -1230,10 +1235,22 @@ class LimbModule(object):
 
         cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{blendMatrix_frontRoll}.inputMatrix")
 
-        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}FronRollNoRot_PCM", ss=True)
-        cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{pickMatrix}.inputMatrix")
-        cmds.setAttr(f"{pickMatrix}.useRotate", 0)
-        cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+        # pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}FronRollNoRot_PCM", ss=True)
+        # cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{pickMatrix}.inputMatrix")
+        # cmds.setAttr(f"{pickMatrix}.useRotate", 0)
+        # cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+
+        blendMatrix_frontRollNegate = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}FrontRollNegate_BLM", ss=True)
+        cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{blendMatrix_frontRollNegate}.inputMatrix")
+        cmds.connectAttr(f"{self.reverse_ctl[-2]}.worldMatrix[0]", f"{blendMatrix_frontRollNegate}.target[0].targetMatrix")
+        cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].translateWeight", 0)
+        cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].shearWeight", 0)
+        cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].scaleWeight", 0)
+
+        cmds.connectAttr(f"{blendMatrix_frontRollNegate}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+
+
+
 
 
 
