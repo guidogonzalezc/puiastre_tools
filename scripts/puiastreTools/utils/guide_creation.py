@@ -1474,14 +1474,17 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "varyndor")
+    project_manager.load_asset_configuration(asset_name = "maiasaura")
 
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
-    FkFingersGuideCreation(side="L", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
-    FkFingersGuideCreation(side="R", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="L", limb_name="footBack", prefix=True, controller_number=3).create_guides(guides_trn, buffers_trn)
+    FootFingersGuideCreation(side="R", limb_name="footBack", prefix=True, controller_number=3).create_guides(guides_trn, buffers_trn)
+
+    # FkFingersGuideCreation(side="L", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
+    # FkFingersGuideCreation(side="R", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
 
 # add_module_to_guide()
 

@@ -1229,7 +1229,11 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{blendMatrix}.target[0].weight")
 
         cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{blendMatrix_frontRoll}.inputMatrix")
-        cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
+
+        pickMatrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}FronRollNoRot_PCM", ss=True)
+        cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{pickMatrix}.inputMatrix")
+        cmds.setAttr(f"{pickMatrix}.useRotate", 0)
+        cmds.connectAttr(f"{pickMatrix}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
 
 
 
