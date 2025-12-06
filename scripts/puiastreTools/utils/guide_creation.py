@@ -798,6 +798,48 @@ class JiggleJoint(GuideCreation):
         }
         self.position_data.update(position_data)
 
+class NoseGuideCreation(GuideCreation):
+    """
+    Guide creation for feet.
+    """
+    def __init__(self, side = "L", limb_name="nose"):
+        self.sides = side
+        self.reverse_foot_name = limb_name
+        self.limb_name = "nose"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = None
+        self.prefix = None
+
+        self.position_data = {
+        f"noseBase": get_data(f"C_noseBase"),
+        f"noseMain": get_data(f"C_noseMain"),
+        f"noseTip": get_data(f"C_noseTip"),
+        f"L_noseFlare": get_data(f"L_noseFlare"),
+        f"R_noseFlare": get_data(f"R_noseFlare"),
+        f"L_innerNose": get_data(f"L_innerNose"),
+        f"R_innerNose": get_data(f"R_innerNose"),
+
+
+    }
+        
+class CheekGuideCreation(GuideCreation):
+    """
+    Guide creation for feet.
+    """
+    def __init__(self, side = "L", limb_name="cheek"):
+        self.sides = side
+        self.reverse_foot_name = limb_name
+        self.limb_name = "cheek"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = None
+        self.prefix = None
+
+        self.position_data = {
+        f"cheek": get_data(f"{self.sides}_cheek"),
+    }
+
 class MouthGuideCreation(GuideCreation):
     """
     Guide creation for mouth.
@@ -1085,6 +1127,12 @@ def load_guides(path = ""):
 
                 if guide_info.get("moduleName") == "mouth":
                     MouthGuideCreation(side=guide_name.split("_")[0],input_name=guide_name).create_guides(guides_trn, buffers_trn)
+
+                if guide_info.get("moduleName") == "nose":
+                    NoseGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
+
+                if guide_info.get("moduleName") == "cheek":
+                    CheekGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
 
 def create_curve_guide(name=""):
 
@@ -1474,14 +1522,15 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "maiasaura")
+    project_manager.load_asset_configuration(asset_name = "moana")
 
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footBack", prefix=True, controller_number=3).create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="R", limb_name="footBack", prefix=True, controller_number=3).create_guides(guides_trn, buffers_trn)
+    # NoseGuideCreation(side="C",).create_guides(guides_trn, buffers_trn)
+    CheekGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
+    CheekGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
 
     # FkFingersGuideCreation(side="L", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
     # FkFingersGuideCreation(side="R", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
