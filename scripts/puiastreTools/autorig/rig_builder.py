@@ -23,6 +23,8 @@ from puiastreTools.autorig import fkFingers as fkf
 from puiastreTools.autorig import jaw_module_matrix as jmm
 from puiastreTools.autorig import eyebrow_module as ebm
 from puiastreTools.autorig import eyelid_module as elm
+from puiastreTools.autorig import nose_module as nm
+from puiastreTools.autorig import cheek_module as cm
 
 import puiastreTools.utils.skinning_transfer as skt
 
@@ -53,6 +55,8 @@ reload(fkf)
 reload(jmm)
 reload(ebm)
 reload(elm)
+reload(nm)
+reload(cm)
 
 reload(skt)
 reload(project_manager)
@@ -209,13 +213,10 @@ def make(asset_name = "", latest = False):
                 if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
                     fm.FingersModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eye":
+                     
+                if guide_info.get("moduleName") == "mouth":
 
-                #     em.EyeModule().make(guide_name)
-                
-                # if guide_info.get("moduleName") == "mouth":
-
-                #     jmm.JawModule().make(guide_name)
+                    jmm.JawModule().make(guide_name)
 
                 if guide_info.get("moduleName") == "eyebrow":
 
@@ -224,6 +225,13 @@ def make(asset_name = "", latest = False):
                 if guide_info.get("moduleName") == "eye":
 
                     elm.EyelidModule().make(guide_name)
+
+                if guide_info.get("moduleName") == "nose":
+
+                    nm.NoseModule().make(guide_name)
+                
+                if guide_info.get("moduleName") == "cheek":
+                    cm.CheekModule().make(guide_name)
     
     # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
