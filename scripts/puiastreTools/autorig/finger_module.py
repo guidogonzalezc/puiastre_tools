@@ -396,9 +396,9 @@ class FingersModule(object):
         # distance02 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos3, pos4)]))
 
         if self.side == "R":
-            cmds.setAttr(f"{pv_pos_4b4}.in31", -20)#(distance01+distance02)*-1)
+            cmds.setAttr(f"{pv_pos_4b4}.in31", -50)#(distance01+distance02)*-1)
         else:
-            cmds.setAttr(f"{pv_pos_4b4}.in31", 20)#(distance01+distance02))
+            cmds.setAttr(f"{pv_pos_4b4}.in31", 50)#(distance01+distance02))
         
 
         
