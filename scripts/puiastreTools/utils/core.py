@@ -343,30 +343,59 @@ def number_to_ordinal_word(n):
         return tens_prefix[ten] + "-" + base_ordinal[unit]
     else:
         return str(n)
+
+def check_name(variable = "", suffix = ""):
     
-def local_space_parent(ctl, parents=[], default_weights=0.5):
+    while cmds.objExists(f"{variable}{suffix}"):
+        try:
+            _ls_counter
+            _ls_base_name
+        except NameError:
+            _ls_base_name = variable
+            _ls_counter = 1
+        variable = f"{_ls_base_name}{_ls_counter:02d}"
+        _ls_counter += 1
+    
+    return f"{variable}{suffix}"
+
+def local_space_parent(ctl, parents=[], default_weights=0.5, parent_suff = "_OFF", local_parent=False):
 
     name = ctl.replace("_CTL", "")
 
-    parentMatrix = cmds.createNode("parentMatrix", name=f"{name}LocalSpaceParent_PMX", ss=True)
+
+    parentMatrix = cmds.createNode("parentMatrix", name=check_name(f"{name}", "LocalSpaceParent_PMX"), ss=True)
 
     grp = ctl.replace("_CTL", "_GRP")
-    off = ctl.replace("_CTL", "_OFF")
+    off = ctl.replace("_CTL", parent_suff)
 
-    cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{parentMatrix}.inputMatrix", force=True)
+    if local_parent:
+        inverse = cmds.createNode("inverseMatrix", name=check_name(f"{name}", "LocalSpaceParent_INV"), ss=True)
+        cmds.connectAttr(f"{local_parent}", f"{inverse}.inputMatrix", force=True)
+        multmatrix_negate = cmds.createNode("multMatrix", name=check_name(f"{name}", "LocalSpaceParentNegateMMX"), ss=True)
+        cmds.connectAttr(f"{inverse}.outputMatrix", f"{multmatrix_negate}.matrixIn[1]", force=True)
+        cmds.connectAttr(f"{grp}.worldMatrix[0]", f"{multmatrix_negate}.matrixIn[0]", force=True)
+        multmatrix_negate = f"{multmatrix_negate}.matrixSum"
+    
+    else:
+        multmatrix_negate = f"{grp}.worldMatrix[0]"
+
+    cmds.connectAttr(multmatrix_negate, f"{parentMatrix}.inputMatrix", force=True)
 
     for i, parent in enumerate(parents):
-        cmds.connectAttr(f"{parent}.worldMatrix[0]", f"{parentMatrix}.target[{i}].targetMatrix", force=True)
+
+        if len(parent.split(".")) > 1:
+            cmds.connectAttr(f"{parent}", f"{parentMatrix}.target[{i}].targetMatrix", force=True)
+        else:
+            cmds.connectAttr(f"{parent}.worldMatrix[0]", f"{parentMatrix}.target[{i}].targetMatrix", force=True)
         cmds.setAttr(f"{parentMatrix}.target[{i}].offsetMatrix", get_offset_matrix(grp, parent), type="matrix")
 
-    # cmds.connectAttr(f"{parents[0]}.worldMatrix[0]", f"{parentMatrix}.target[1].targetMatrix", force=True)
-    # cmds.connectAttr(f"{parents[1]}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
-    # cmds.setAttr(f"{parentMatrix}.target[1].offsetMatrix", get_offset_matrix(grp, parents[0]), type="matrix")
-    # cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", get_offset_matrix(grp, parents[1]), type="matrix")
 
-    multmatrix = cmds.createNode("multMatrix", name=f"{name}LocalSpaceParent_MMX", ss=True)
+
+    multmatrix = cmds.createNode("multMatrix", name=check_name(f"{name}", "LocalSpaceParent_MMX"), ss=True)
+    inverse_grp = cmds.createNode("inverseMatrix", name=check_name(f"{name}", "LocalSpaceParentGrp_INV"), ss=True)
+    cmds.connectAttr(multmatrix_negate, f"{inverse_grp}.inputMatrix", force=True)
     cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{multmatrix}.matrixIn[0]", force=True)
-    cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+    cmds.connectAttr(f"{inverse_grp}.outputMatrix", f"{multmatrix}.matrixIn[1]", force=True)
     cmds.connectAttr(f"{multmatrix}.matrixSum", f"{off}.offsetParentMatrix", force=True)
 
     if len(parents) == 2:
@@ -378,7 +407,7 @@ def local_space_parent(ctl, parents=[], default_weights=0.5):
         except:
             pass
         cmds.connectAttr(f"{ctl}.SpaceFollow", f"{parentMatrix}.target[0].weight", force=True)
-        rev = cmds.createNode("reverse", name=f"{name}LocalSpaceParent_REV", ss=True)
+        rev = cmds.createNode("reverse", name=check_name(f"{name}", "LocalSpaceParent_REV"), ss=True)
         cmds.connectAttr(f"{ctl}.SpaceFollow", f"{rev}.inputX", force=True)
         cmds.connectAttr(f"{rev}.outputX", f"{parentMatrix}.target[1].weight", force=True)
 
@@ -387,7 +416,7 @@ def local_space_parent(ctl, parents=[], default_weights=0.5):
 def local_mmx(ctl, grp):
     name = ctl.replace("_CTL", "")
 
-    multmatrix = cmds.createNode("multMatrix", name=f"{name}local_MMX", ss=True)
+    multmatrix = cmds.createNode("multMatrix", name=check_name(f"{name}", "Local_MMX"), ss=True)
     cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{multmatrix}.matrixIn[0]", force=True)
     cmds.connectAttr(f"{grp}.worldInverseMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
     cmds.setAttr(f"{multmatrix}.matrixIn[2]", cmds.getAttr(f"{ctl}.worldMatrix[0]"), type="matrix")
