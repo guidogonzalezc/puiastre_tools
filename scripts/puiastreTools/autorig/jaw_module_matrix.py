@@ -18,6 +18,7 @@ from puiastreTools.utils.space_switch import fk_switch
 
 reload(data_export)
 reload(guide_creation)
+reload(core)
 
 AXIS_VECTOR = {'x': (1, 0, 0), '-x': (-1, 0, 0), 'y': (0, 1, 0), '-y': (0, -1, 0), 'z': (0, 0, 1), '-z': (0, 0, -1)}
 
@@ -42,7 +43,9 @@ class JawModule():
         self.masterWalk_ctl = self.data_exporter.get_data("basic_structure", "masterWalk_CTL")
         self.guides_grp = self.data_exporter.get_data("basic_structure", "guides_GRP")
         self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
-        self.head_ctl = self.data_exporter.get_data("C_neckModule", "head_ctl")
+        self.head_ctl = self.data_exporter.get_data("C_neckModule", "skinning_transform")
+        relatives = cmds.listRelatives(self.head_ctl, ad=True)
+        self.head_ctl = relatives[-1]
 
 
 
@@ -66,14 +69,14 @@ class JawModule():
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_jawModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_jawControllers_GRP", ss=True, parent=self.masterWalk_ctl)
+        cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_jawFacialSkinning_GRP", ss=True, p=self.skel_grp)
 
-        parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_jawModule_PM", ss=True)
-        cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
+        self.controllersParentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_jawModule_PM", ss=True)
+        cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{self.controllersParentMatrix}.target[0].targetMatrix", force=True)
         offset = core.get_offset_matrix(f"{self.controllers_trn}.worldMatrix", f"{self.head_ctl}.worldMatrix")
-        cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", offset, type="matrix")
-        cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{self.controllers_trn}.offsetParentMatrix", force=True)
-
+        cmds.setAttr(f"{self.controllersParentMatrix}.target[0].offsetMatrix", offset, type="matrix")
+        cmds.connectAttr(f"{self.controllersParentMatrix}.outputMatrix", f"{self.controllers_trn}.offsetParentMatrix", force=True)
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
 
 
@@ -164,26 +167,10 @@ class JawModule():
         cmds.addAttr(self.jaw_ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.jaw_ctl+".extraSep", channelBox=True, lock=True)
         cmds.addAttr(self.jaw_ctl, shortName="collision", niceName="Collision", maxValue=1, minValue=0,defaultValue=1, keyable=True)
-
-        # Create set driven keyframes to improve jaw movement
-        # cmds.select(self.jaw_ctl_grp[1])
-        # cmds.setDrivenKeyframe(at="rotateX", cd=f"{self.jaw_ctl}.rotateX", dv=0, v=0)
-        # cmds.setDrivenKeyframe(at="rotateX", cd=f"{self.jaw_ctl}.rotateX", dv=15, v=0)
-        # cmds.setDrivenKeyframe(at="rotateX", cd=f"{self.jaw_ctl}.rotateX", dv=35, v=0)
-        # cmds.setDrivenKeyframe(at="rotateX", cd=f"{self.jaw_ctl}.rotateX", dv=45, v=0)
-        # cmds.setDrivenKeyframe(at="rotateX", cd=f"{self.jaw_ctl}.rotateX", dv=60, v=0)
-        # cmds.setDrivenKeyframe(at="rotateX", cd=f"{self.jaw_ctl}.rotateX", dv=90, v=0)
-
-        # cmds.setDrivenKeyframe(at="translateY", cd=f"{self.jaw_ctl}.rotateX", dv=0, v=0)
-        # cmds.setDrivenKeyframe(at="translateY", cd=f"{self.jaw_ctl}.rotateX", dv=15, v=2)
-        # cmds.setDrivenKeyframe(at="translateY", cd=f"{self.jaw_ctl}.rotateX", dv=30, v=1.75)
-        # cmds.setDrivenKeyframe(at="translateY", cd=f"{self.jaw_ctl}.rotateX", dv=45, v=1.5)
-        # cmds.setDrivenKeyframe(at="translateY", cd=f"{self.jaw_ctl}.rotateX", dv=60, v=1.25)
-        # cmds.setDrivenKeyframe(at="translateY", cd=f"{self.jaw_ctl}.rotateX", dv=90, v=-3.5)
-
-        # cmds.setDrivenKeyframe(at="translateZ", cd=f"{self.jaw_ctl}.rotateX", dv=0, v=0)
-        # cmds.setDrivenKeyframe(at="translateZ", cd=f"{self.jaw_ctl}.rotateX", dv=45, v=2)
-        # cmds.setDrivenKeyframe(at="translateZ", cd=f"{self.jaw_ctl}.rotateX", dv=90, v=15)
+        cmds.addAttr(self.jaw_ctl, shortName="mouthHeight", niceName="Mouth Height", maxValue=1, minValue=0,defaultValue=0.5, keyable=True)
+        cmds.addAttr(self.jaw_ctl, shortName="zip", niceName="Zip", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.jaw_ctl, shortName="stickyLips", niceName="Sticky Lips", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.jaw_ctl, shortName="stickyFalloff", niceName="Sticky Falloff", maxValue=1, minValue=0.001, defaultValue=0.2, keyable=True)
 
         self.upper_jaw_ctl, self.upper_jaw_ctl_grp = controller_creator(
                 name=f"{self.side}_upperJaw",
@@ -192,7 +179,6 @@ class JawModule():
                 ro=True,
                 parent=self.controllers_trn,
             )
-        
         
         cmds.connectAttr(f"{jaw_guide}.worldMatrix[0]", f"{self.upper_jaw_ctl_grp[0]}.offsetParentMatrix")
         local_upper_jaw = self.local_setup(self.upper_jaw_ctl_grp[0], self.upper_jaw_ctl)
@@ -276,6 +262,19 @@ class JawModule():
                     cmds.reverseCurve(guides, ch=False, rpo=True)
                 self.linear_curves.append(guides)
 
+        self.bezier_curves = []
+
+        self.average_curve_node = cmds.createNode("avgCurves", name=f"{self.side}_lipsAverage_ACV", ss=True)
+        cmds.setAttr(f"{self.average_curve_node}.automaticWeight", 0)
+        reverse = cmds.createNode("reverse", name=f"{self.side}_lipsAverageReverse_REV", ss=True)
+        cmds.connectAttr(f"{reverse}.outputX", f"{self.average_curve_node}.weight1")
+        cmds.connectAttr(f"{self.jaw_ctl}.mouthHeight", f"{reverse}.inputX")
+        cmds.connectAttr(f"{self.jaw_ctl}.mouthHeight", f"{self.average_curve_node}.weight2")
+        print(self.average_curve_node)
+
+        offset_calculation = []
+
+
         for index, curve in enumerate(self.linear_curves):
             rebuilded_curve = cmds.rebuildCurve(
                     curve,
@@ -307,37 +306,34 @@ class JawModule():
                     parent=self.controllers_trn,
                 )
 
-                cmds.addAttr(self.r_side_jaw_ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
-                cmds.setAttr(self.r_side_jaw_ctl+".extraSep", channelBox=True, lock=True)
-                cmds.addAttr(self.r_side_jaw_ctl, shortName="height", niceName="Height", maxValue=1, minValue=0,defaultValue=0.5, keyable=True)
-
                 r_lip_corner_4b4 = cmds.createNode("fourByFourMatrix", name="R_lipCorner_4B4", ss=True)
-                cmds.connectAttr(f"{curve}.editPoints[0].xValueEp", f"{r_lip_corner_4b4}.in30")
-                cmds.connectAttr(f"{curve}.editPoints[0].yValueEp", f"{r_lip_corner_4b4}.in31")
-                cmds.connectAttr(f"{curve}.editPoints[0].zValueEp", f"{r_lip_corner_4b4}.in32")
-                cmds.setAttr(f"{r_lip_corner_4b4}.in00", -1)
+                pos = cmds.pointPosition(f"{curve}.cv[0]", w=True)
+                cmds.setAttr(f"{r_lip_corner_4b4}.in30", pos[0])
+                cmds.setAttr(f"{r_lip_corner_4b4}.in31", pos[1])
+                cmds.setAttr(f"{r_lip_corner_4b4}.in32", pos[2])
+                front_corner_4b4 = cmds.createNode("fourByFourMatrix", name="R_lipCornerFront_4B4", ss=True)
+                pos_front = cmds.pointPosition(f"{curve}.cv[1]", w=True)
+                cmds.setAttr(f"{front_corner_4b4}.in30", pos_front[0])
+                cmds.setAttr(f"{front_corner_4b4}.in31", pos[1])
+                cmds.setAttr(f"{front_corner_4b4}.in32", pos_front[2])
 
-                cmds.connectAttr(f"{r_lip_corner_4b4}.output", f"{self.r_side_jaw_ctl_grp[0]}.offsetParentMatrix")
+                aimMatrix_corner = cmds.createNode("aimMatrix", name="R_lipCorner_AMX", ss=True)
+                cmds.connectAttr(f"{r_lip_corner_4b4}.output", f"{aimMatrix_corner}.inputMatrix")
+                cmds.connectAttr(f"{front_corner_4b4}.output", f"{aimMatrix_corner}.primaryTargetMatrix")
+                cmds.setAttr(f"{aimMatrix_corner}.primaryInputAxis", 1,0,0)
+
+                multmatrix_corner = cmds.createNode("multMatrix", name="R_lipCorner_MMX", ss=True)
+                cmds.setAttr(f"{multmatrix_corner}.matrixIn[0]", -1, 0, 0, 0,
+                                                    0, 1, 0, 0,
+                                                    0, 0, 1, 0,
+                                                    0, 0, 0, 1, type="matrix")
+                cmds.connectAttr(f"{aimMatrix_corner}.outputMatrix", f"{multmatrix_corner}.matrixIn[1]")
 
 
-                parent_matrix_r_side = cmds.createNode("parentMatrix", name="R_lipCorner_PMX", ss=True)
-                cmds.connectAttr(f"{self.jaw_ctl}.worldMatrix[0]", f"{parent_matrix_r_side}.target[0].targetMatrix")
-                cmds.connectAttr(f"{self.upper_jaw_ctl}.worldMatrix[0]", f"{parent_matrix_r_side}.target[1].targetMatrix")
-                cmds.connectAttr(f"{self.r_side_jaw_ctl}.height", f"{parent_matrix_r_side}.target[1].weight")
-                reverse = cmds.createNode("reverse", name="R_lipCorner_REV", ss=True)
-                cmds.connectAttr(f"{self.r_side_jaw_ctl}.height", f"{reverse}.inputX")
-                cmds.connectAttr(f"{reverse}.outputX", f"{parent_matrix_r_side}.target[0].weight")
-                jaw_offset_r = get_offset_matrix(f"{r_lip_corner_4b4}.output", self.jaw_ctl)
-                cmds.setAttr(f"{parent_matrix_r_side}.target[0].offsetMatrix", jaw_offset_r, type="matrix")
-                cmds.setAttr(f"{parent_matrix_r_side}.target[1].offsetMatrix", jaw_offset_r, type="matrix")
+                cmds.connectAttr(f"{multmatrix_corner}.matrixSum", f"{self.r_side_jaw_ctl_grp[0]}.offsetParentMatrix")
 
-                cmds.connectAttr(f"{r_lip_corner_4b4}.output", f"{parent_matrix_r_side}.inputMatrix")
+                parent_mouth_pos = core.local_space_parent(self.r_side_jaw_ctl, parents=[f"{self.jaw_ctl}", f"{self.upper_jaw_ctl}"], default_weights=0.5)
 
-                jaw_offset_child = cmds.createNode("multMatrix", name="R_lipCornerOffset_MMX", ss=True)
-                cmds.connectAttr(f"{parent_matrix_r_side}.outputMatrix", f"{jaw_offset_child}.matrixIn[0]")
-                cmds.connectAttr(f"{self.r_side_jaw_ctl_grp[0]}.parentInverseMatrix[0]", f"{jaw_offset_child}.matrixIn[1]")
-
-                cmds.connectAttr(f"{jaw_offset_child}.matrixSum", f"{self.r_side_jaw_ctl_grp[1]}.offsetParentMatrix", f=True)
 
                 self.l_side_jaw_ctl, self.l_side_jaw_ctl_grp = controller_creator(
                     name=f"L_lipCorner",
@@ -347,34 +343,33 @@ class JawModule():
                     parent=self.controllers_trn,
                 )
 
-                cmds.addAttr(self.l_side_jaw_ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
-                cmds.setAttr(self.l_side_jaw_ctl+".extraSep", channelBox=True, lock=True)
-                cmds.addAttr(self.l_side_jaw_ctl, shortName="height", niceName="Height", maxValue=1, minValue=0,defaultValue=0.5, keyable=True)
-
                 last_cv = len(cmds.ls(f"{curve}.cv[*]", flatten=True))-1
                 l_lip_corner_4b4 = cmds.createNode("fourByFourMatrix", name="L_lipCorner_4B4", ss=True)
                 cmds.connectAttr(f"{curve}.editPoints[{last_cv}].xValueEp", f"{l_lip_corner_4b4}.in30")
                 cmds.connectAttr(f"{curve}.editPoints[{last_cv}].yValueEp", f"{l_lip_corner_4b4}.in31")
                 cmds.connectAttr(f"{curve}.editPoints[{last_cv}].zValueEp", f"{l_lip_corner_4b4}.in32")
 
-                parent_matrix_l_side = cmds.createNode("parentMatrix", name="L_lipCorner_PMX", ss=True)
-                cmds.connectAttr(f"{self.jaw_ctl}.worldMatrix[0]", f"{parent_matrix_l_side}.target[0].targetMatrix")
-                cmds.connectAttr(f"{self.upper_jaw_ctl}.worldMatrix[0]", f"{parent_matrix_l_side}.target[1].targetMatrix")
-                cmds.connectAttr(f"{self.l_side_jaw_ctl}.height", f"{parent_matrix_l_side}.target[1].weight")
-                reverse = cmds.createNode("reverse", name="L_lipCorner_REV", ss=True)
-                cmds.connectAttr(f"{self.l_side_jaw_ctl}.height", f"{reverse}.inputX")
-                cmds.connectAttr(f"{reverse}.outputX", f"{parent_matrix_l_side}.target[0].weight")
-                jaw_offset_l = get_offset_matrix(f"{l_lip_corner_4b4}.output", self.jaw_ctl)
-                cmds.setAttr(f"{parent_matrix_l_side}.target[0].offsetMatrix", jaw_offset_l, type="matrix")
-                cmds.setAttr(f"{parent_matrix_l_side}.target[1].offsetMatrix", jaw_offset_l, type="matrix")
+                l_lip_corner_4b4 = cmds.createNode("fourByFourMatrix", name="L_lipCorner_4B4", ss=True)
+                pos = cmds.pointPosition(f"{curve}.cv[{last_cv}]", w=True)
+                cmds.setAttr(f"{l_lip_corner_4b4}.in30", pos[0])
+                cmds.setAttr(f"{l_lip_corner_4b4}.in31", pos[1])
+                cmds.setAttr(f"{l_lip_corner_4b4}.in32", pos[2])
+                front_corner_4b4 = cmds.createNode("fourByFourMatrix", name="L_lipCornerFront_4B4", ss=True)
+                pos_front = cmds.pointPosition(f"{curve}.cv[{last_cv-1}]", w=True)
+                cmds.setAttr(f"{front_corner_4b4}.in30", pos_front[0])
+                cmds.setAttr(f"{front_corner_4b4}.in31", pos[1])
+                cmds.setAttr(f"{front_corner_4b4}.in32", pos_front[2])
 
-                cmds.connectAttr(f"{l_lip_corner_4b4}.output", f"{self.l_side_jaw_ctl_grp[0]}.offsetParentMatrix")
+                aimMatrix_corner = cmds.createNode("aimMatrix", name="L_lipCorner_AMX", ss=True)
+                cmds.connectAttr(f"{l_lip_corner_4b4}.output", f"{aimMatrix_corner}.inputMatrix")
+                cmds.connectAttr(f"{front_corner_4b4}.output", f"{aimMatrix_corner}.primaryTargetMatrix")
+                cmds.setAttr(f"{aimMatrix_corner}.primaryInputAxis", -1,0,0)
 
-                jaw_offset_child = cmds.createNode("multMatrix", name="L_lipCornerOffset_MMX", ss=True)
-                cmds.connectAttr(f"{parent_matrix_l_side}.outputMatrix", f"{jaw_offset_child}.matrixIn[0]")
-                cmds.connectAttr(f"{self.l_side_jaw_ctl_grp[0]}.parentInverseMatrix[0]", f"{jaw_offset_child}.matrixIn[1]")
+                cmds.connectAttr(f"{aimMatrix_corner}.outputMatrix", f"{self.l_side_jaw_ctl_grp[0]}.offsetParentMatrix")
 
-                cmds.connectAttr(f"{jaw_offset_child}.matrixSum", f"{self.l_side_jaw_ctl_grp[1]}.offsetParentMatrix", f=True)
+             
+                parent_mouth_pos = core.local_space_parent(self.l_side_jaw_ctl, parents=[f"{self.jaw_ctl}", f"{self.upper_jaw_ctl}"], default_weights=0.5)
+
 
                 self.r_corner_local = self.local_setup(ctl = self.r_side_jaw_ctl, grp = self.r_side_jaw_ctl_grp[0])
                 self.l_corner_local = self.local_setup(ctl = self.l_side_jaw_ctl, grp = self.l_side_jaw_ctl_grp[0])
@@ -413,20 +408,10 @@ class JawModule():
             cmds.connectAttr(f"{curve}.editPoints[{last_cv}].xValueEp", f"{mid_pos_4b4}.in30")
             cmds.connectAttr(f"{curve}.editPoints[{last_cv}].yValueEp", f"{mid_pos_4b4}.in31")
             cmds.connectAttr(f"{curve}.editPoints[{last_cv}].zValueEp", f"{mid_pos_4b4}.in32")
-
-            parent_matrix_mid = cmds.createNode("parentMatrix", name=f"C_{main_mid_name}Lip_PMX", ss=True)
-            cmds.connectAttr(f"{mid_pos_4b4}.output", f"{parent_matrix_mid}.inputMatrix")
-            cmds.connectAttr(f"{jaw_controller}.worldMatrix[0]", f"{parent_matrix_mid}.target[0].targetMatrix")
-            jaw_offset_r = get_offset_matrix(f"{mid_pos_4b4}.output", jaw_controller)
-            cmds.setAttr(f"{parent_matrix_mid}.target[0].offsetMatrix", jaw_offset_r, type="matrix")
-
-            jaw_offset_child = cmds.createNode("multMatrix", name=f"C_{main_mid_name}Lip_MMX", ss=True)
-            cmds.connectAttr(f"{parent_matrix_mid}.outputMatrix", f"{jaw_offset_child}.matrixIn[0]")
-            cmds.connectAttr(f"{self.main_mid_ctl_grp[0]}.worldInverseMatrix[0]", f"{jaw_offset_child}.matrixIn[1]")
-
-            cmds.connectAttr(f"{jaw_offset_child}.matrixSum", f"{self.main_mid_ctl_grp[1]}.offsetParentMatrix", f=True)
-
             cmds.connectAttr(f"{mid_pos_4b4}.output", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
+
+            parent_mouth_pos = core.local_space_parent(self.main_mid_ctl, parents=[f"{jaw_controller}"])
+
 
             self.mid_local = self.local_setup(ctl = self.main_mid_ctl, grp = self.main_mid_ctl_grp[0])
             
@@ -466,47 +451,92 @@ class JawModule():
             cmds.nurbsCurveToBezier()
             cmds.select(clear=True)
 
+            cmds.connectAttr(f"{bezierCurve}.worldSpace[0]", f"{self.average_curve_node}.inputCurve{index+1}", f=True)
+
+            self.bezier_curves.append(bezierCurve)
+
             rebuilded_curve_shape = cmds.listRelatives(rebuilded_curve, shapes=True)[0]
 
             path_joints = []
             ctls = []
             clts_grps = []
 
+            controllers_parenting = []
+            local_matrices = []
+            parent_mouth_positions = []
+            local_matrices_offset = []
+            number = 1
             for i, cv in enumerate(cmds.ls(f"{bezierCurve}.cv[*]", flatten=True)):
-                if i % 3 == 0:
-                    name = "secondary"
+                total_cvs = len(cmds.ls(f"{bezierCurve}.cv[*]", flatten=True))
+                mid_index = total_cvs // 2
+                if i < mid_index:
+                    cv_side = "R"
+                elif i == mid_index:
+                    cv_side = "C"
                 else:
-                    name = "secondaryTan"
+                    cv_side = "L"
+
+                base = (i // 3) + 1
+                mod = i % 3
                 position = cmds.xform(cv, q=True, ws=True, t=True)
                 parameter = self.getClosestParamToPosition(rebuilded_curve, position)
 
-                cv_side = "C" if position[0] == 0 else ("R" if position[0] < 0 else "L")
+                if mod == 0:
 
-                motionPath = cmds.createNode("motionPath", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}_MPA", ss=True)
-                joint = cmds.createNode("joint", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}_JNT", ss=True, p=self.module_trn)
-                fourByFourMatrix = cmds.createNode("fourByFourMatrix", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}_4B4", ss=True)
+
+                    name = f"{cv_side}_{main_mid_name}Lips0{number}"
+                    lock=["sz", "sy", "visibility"]
+                    tan_vis = True
+
+                    parent = self.controllers_trn
+                    
+                elif mod == 1:
+                    name = f"{cv_side}_{main_mid_name}Lips0{number}Tan02"
+                    lock=["rz","ry","rx", "sz", "sy","sx", "visibility"]
+                    tan_vis=False
+
+                    parent = self.controllers_trn
+                    
+                    if cv_side == "R":
+                        number = number + 1
+
+                    elif cv_side == "C":
+                        number = "Center"
+                    
+                    else:
+                        number = number - 1
+
+                        
+                else:
+                    name = f"{cv_side}_{main_mid_name}Lips0{number}Tan01"
+                    lock=["rz","ry","rx", "sz", "sy","sx", "visibility"]
+                    tan_vis=False
+                    parent = self.controllers_trn
 
                 ctl, ctl_grp = controller_creator(
-                    name=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}",
-                    suffixes=["GRP", "OFF", "ANM"],
-                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
-                    ro=True,
-                    parent=self.controllers_trn,
+                    name=name,
+                    suffixes=["GRP", "OFF","ANM"],
+                    lock=lock,
+                    ro=False,
+                    parent= parent
                 )
-
-                cmds.connectAttr(f"{ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
-
-                if i % 3 == 0:
-                    cmds.addAttr(ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
-                    cmds.setAttr(ctl+".extraSep", channelBox=True, lock=True)
-                    cmds.addAttr(ctl, shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
-                    cmds.setAttr(f"{ctl}.tangentVisibility", keyable=False, channelBox=True)
-
-
-
+                controllers_parenting.append(ctl)
                 ctls.append(ctl)
                 clts_grps.append(ctl_grp)
-                
+                # cmds.setAttr(f"{ctl_grp[0]}.inheritsTransform", 0)
+
+                if tan_vis:
+                    cmds.addAttr(ctl, shortName="tangents", niceName="Tangents ———", enumName="———",attributeType="enum", keyable=True)
+                    cmds.setAttr(ctl+".tangents", channelBox=True, lock=True)
+                    cmds.addAttr(ctl, shortName="tangentVisibility", niceName="Tangent Visibility", attributeType="bool", keyable=False)
+                    cmds.setAttr(ctl+".tangentVisibility", channelBox=True)
+
+
+                motionPath = cmds.createNode("motionPath", n=f"{name}_MPA", ss=True)
+                joint = cmds.createNode("joint", n=f"{name}_JNT", ss=True, p=self.module_trn)
+                fourByFourMatrix = cmds.createNode("fourByFourMatrix", n=f"{name}_4B4", ss=True)
+
+
                 cmds.connectAttr(f"{rebuilded_curve_shape}.worldSpace[0]", f"{motionPath}.geometryPath", f=True)
                 
                 cmds.setAttr(f"{motionPath}.uValue", parameter)
@@ -514,56 +544,143 @@ class JawModule():
                 cmds.connectAttr(f"{motionPath}.allCoordinates.xCoordinate", f"{fourByFourMatrix}.in30", f=True)
                 cmds.connectAttr(f"{motionPath}.allCoordinates.yCoordinate", f"{fourByFourMatrix}.in31", f=True)
                 cmds.connectAttr(f"{motionPath}.allCoordinates.zCoordinate", f"{fourByFourMatrix}.in32", f=True)
-                if cv_side == "R":
-                    cmds.setAttr(f"{fourByFourMatrix}.in00", -1)
 
-                cmds.connectAttr(f"{fourByFourMatrix}.output", f"{ctl_grp[0]}.offsetParentMatrix", f=True)
+                front_motionPath = cmds.createNode("motionPath", n=f"{name}Front_MPA", ss=True)
+                cmds.connectAttr(f"{rebuilded_curve_shape}.worldSpace[0]", f"{front_motionPath}.geometryPath", f=True)
+                cmds.setAttr(f"{front_motionPath}.uValue", parameter + 0.05 if parameter + 0.05 <= 1 else parameter - 0.05)
+
+                aimMatrix_pos = cmds.createNode("aimMatrix", name=f"{name}_AMX", ss=True)
+                cmds.connectAttr(f"{fourByFourMatrix}.output", f"{aimMatrix_pos}.inputMatrix", f=True)
+                cmds.connectAttr(f"{front_motionPath}.allCoordinates.xCoordinate", f"{aimMatrix_pos}.primaryTargetVectorX", f=True)
+                cmds.connectAttr(f"{motionPath}.allCoordinates.yCoordinate", f"{aimMatrix_pos}.primaryTargetVectorY", f=True)
+                cmds.connectAttr(f"{front_motionPath}.allCoordinates.zCoordinate", f"{aimMatrix_pos}.primaryTargetVectorZ", f=True)
+                aimVector = (1,0,0) if parameter + 0.05 <= 1 else (-1,0,0)
+                cmds.setAttr(f"{aimMatrix_pos}.primaryInputAxis", *aimVector)
+
+                if cv_side == "L" or cv_side == "C":
+                    output_matrix = f"{aimMatrix_pos}.outputMatrix"
+                else:
+                    multmatrix_corner = cmds.createNode("multMatrix", name=f"{name}Mirror_MMX", ss=True)
+                    cmds.setAttr(f"{multmatrix_corner}.matrixIn[0]", -1, 0, 0, 0,
+                                                        0, 1, 0, 0,
+                                                        0, 0, 1, 0,
+                                                        0, 0, 0, 1, type="matrix")
+                    cmds.connectAttr(f"{aimMatrix_pos}.outputMatrix", f"{multmatrix_corner}.matrixIn[1]")
+                    output_matrix = f"{multmatrix_corner}.matrixSum"
+
+
+                ctl_rotation = cmds.getAttr(f"{output_matrix}")
+
+                reshaped_matrix = [ctl_rotation[i:i+4] for i in range(0, len(ctl_rotation), 4)]
+                for row in range(4):
+                    for col in range(4):
+                        try:
+                            cmds.setAttr(f"{fourByFourMatrix}.in{row}{col}", reshaped_matrix[row][col])
+                        except:
+                            pass
+                    
+
+
+                # cmds.connectAttr(f"{fourByFourMatrix}.output", f"{ctl_grp[0]}.offsetParentMatrix", f=True)
+
+                multmatrix = cmds.createNode("multMatrix", name=f"{name}InitPos_MMX", ss=True)
+                cmds.setAttr(f"{multmatrix}.matrixIn[0]", cmds.getAttr(f"{fourByFourMatrix}.output"), type="matrix")
+                cmds.connectAttr(f"{multmatrix}.matrixSum", f"{ctl_grp[0]}.offsetParentMatrix", f=True)
+
+                parent_mouth_pos = core.local_space_parent(ctl, parents=[f"{fourByFourMatrix}.output"], local_parent=f"{self.controllersParentMatrix}.outputMatrix")
+                parent_mouth_positions.append(parent_mouth_pos)
+
+
+                local_ctl = self.local_setup(ctl=ctl, grp=ctl_grp[0])
+                local_ctl_off = self.local_setup(ctl=ctl, grp=ctl_grp[1])
+                local_matrices_offset.append(local_ctl_off)
+                local_matrices.append(local_ctl)
+
+                row_from_matrix = cmds.createNode("rowFromMatrix", name=f"{name}_ROW", ss=True)
+                cmds.connectAttr(local_ctl, f"{row_from_matrix}.matrix")
+                cmds.setAttr(f"{row_from_matrix}.input", 3)
+
+                cmds.connectAttr(f"{row_from_matrix}.outputX", f"{bezierCurve}.controlPoints[{i}].xValue", f=True)
+                cmds.connectAttr(f"{row_from_matrix}.outputY", f"{bezierCurve}.controlPoints[{i}].yValue", f=True)
+                cmds.connectAttr(f"{row_from_matrix}.outputZ", f"{bezierCurve}.controlPoints[{i}].zValue", f=True)
+
+                # cmds.connectAttr(f"{local_ctl}", f"{joint}.offsetParentMatrix", f=True)
+
                 
                 path_joints.append(joint)
 
-            for i, joint in enumerate(path_joints):
-                if "Tan" in joint:
-                    closest_main_joint_index = None
-                    for jnt in path_joints:
-                        if not "Tan" in jnt:
-                            if closest_main_joint_index is None or abs(path_joints.index(jnt) - path_joints.index(joint)) < abs(closest_main_joint_index - path_joints.index(joint)):
-                                closest_main_joint_index = path_joints.index(jnt)
-                                    
-                    offset_input = cmds.listConnections(f"{clts_grps[i][0]}.offsetParentMatrix", s=True, d=False, plugs=True)[0]
-                    multMatrix = cmds.createNode("multMatrix", name=joint.replace("_JNT", "Parent_MMX"), ss=True)
-                    cmds.connectAttr(offset_input, f"{multMatrix}.matrixIn[1]")
-                    cmds.connectAttr(f"{ctls[closest_main_joint_index]}.matrix", f"{multMatrix}.matrixIn[0]")
+            for i, ctl in enumerate(controllers_parenting):
+                base = (i // 3) + 1
+                mod = i % 3
 
-                    cmds.connectAttr(f"{multMatrix}.matrixSum", f"{clts_grps[i][0]}.offsetParentMatrix", f=True)
-
-                    cmds.connectAttr(f"{ctls[closest_main_joint_index]}.tangentVisibility", f"{clts_grps[i][0]}.visibility", f=True)
+                name = ctl.split("_CTL")[0] + ctl.split("_CTL")[1]  
 
 
-            bezier_skinned_curve = cmds.skinCluster(
-                path_joints,
-                bezierCurve,
-                toSelectedBones=True,
-                bindMethod=0,
-                normalizeWeights=1,
-                weightDistribution=0,
-                maximumInfluences=1,
-                dropoffRate=4,
-                removeUnusedInfluence=False
-            )[0]
+                if mod == 0:
+                    pass
+
+
+                elif mod == 1:
+                    multmatrix = cmds.createNode("multMatrix", name=f"{name}DoubleParent_MMX", ss=True)
+                    cmds.connectAttr(f"{parent_mouth_positions[i]}.matrixSum", f"{multmatrix}.matrixIn[1]")
+                    secondary_parent = core.local_space_parent(ctl, parents=[local_matrices_offset[(base - 1) * 3]], local_parent=f"{self.controllersParentMatrix}.outputMatrix")
+                    cmds.connectAttr(f"{secondary_parent}.matrixSum", f"{multmatrix}.matrixIn[0]")
+                    cmds.connectAttr(f"{multmatrix}.matrixSum", f"{name}_OFF.offsetParentMatrix", f=True)
+                    try:
+                        cmds.setAttr(f"{ctl}.visibility", lock=False)
+                        cmds.connectAttr(f"{controllers_parenting[(base - 1) * 3]}.tangentVisibility", f"{ctl}.visibility", force=True)
+                        cmds.setAttr(f"{ctl}.visibility", lock=True)
+
+                    except:
+                        pass
+                else:
+                    multmatrix = cmds.createNode("multMatrix", name=f"{name}DoubleParent_MMX", ss=True)
+                    cmds.connectAttr(f"{parent_mouth_positions[i]}.matrixSum", f"{multmatrix}.matrixIn[1]")
+                    secondary_parent = core.local_space_parent(ctl, parents=[local_matrices_offset[base * 3]], local_parent=f"{self.controllersParentMatrix}.outputMatrix")
+                    cmds.connectAttr(f"{secondary_parent}.matrixSum", f"{multmatrix}.matrixIn[0]")
+                    cmds.connectAttr(f"{multmatrix}.matrixSum", f"{name}_OFF.offsetParentMatrix", f=True)
+                
+                    try:
+                        cmds.setAttr(f"{ctl}.visibility", lock=False)
+
+                        cmds.connectAttr(f"{controllers_parenting[base * 3]}.tangentVisibility", f"{ctl}.visibility", force=True)
+                        cmds.setAttr(f"{ctl}.visibility", lock=True)
+
+                    except:
+                        pass
+
 
             bezier_shape = cmds.listRelatives(bezierCurve, shapes=True, type="bezierCurve")[0]
+            
+            cv_list = cmds.ls(f"{curve}.cv[*]", flatten=True)
+            total_cvs = len(cv_list)
+            mid_index_calc = int(total_cvs // 2)
 
-            for i, cv in enumerate(cmds.ls(f"{curve}.cv[*]", flatten=True)):
+            for i, cv in enumerate(cv_list):
+                mid_index = int(len(cmds.ls(f"{curve}.cv[*]", flatten=True)) // 2)
+                if i < mid_index:
+                    cv_side = "R"
+                elif i == mid_index:
+                    cv_side = "C"
+                else:
+                    cv_side = "L"
+
+                name = f"{cv_side}_{main_mid_name}Lips0{number}End"
+
                 cv_pos = cmds.xform(cv, q=True, ws=True, t=True)
                 parameter = self.getClosestParamToPosition(bezierCurve, cv_pos)
 
-
-                motionPath = cmds.createNode("motionPath", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}_MPA", ss=True)
-                fourByFourMatrix = cmds.createNode("fourByFourMatrix", n=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}_4B4", ss=True)
+                motionPath = cmds.createNode("motionPath", n=f"{name}0{i}_MPA", ss=True)
+                motionPath_closed = cmds.createNode("motionPath", n=f"{name}0{i}Closed_MPA", ss=True)
+                
+                fourByFourMatrix = cmds.createNode("fourByFourMatrix", n=f"{name}0{i}_4B4", ss=True)
+                fourByFourMatrix_closed = cmds.createNode("fourByFourMatrix", n=f"{name}0{i}Closed_4B4", ss=True)
 
                 cmds.connectAttr(f"{bezier_shape}.worldSpace[0]", f"{motionPath}.geometryPath", f=True)
+                cmds.connectAttr(f"{self.average_curve_node}.outputCurve", f"{motionPath_closed}.geometryPath", f=True)
                 
                 cmds.setAttr(f"{motionPath}.uValue", parameter)
+                cmds.setAttr(f"{motionPath_closed}.uValue", parameter)
                 
                 cmds.connectAttr(f"{motionPath}.allCoordinates.xCoordinate", f"{fourByFourMatrix}.in30", f=True)
                 cmds.connectAttr(f"{motionPath}.allCoordinates.yCoordinate", f"{fourByFourMatrix}.in31", f=True)
@@ -571,24 +688,75 @@ class JawModule():
                 if cv_side == "R":
                     cmds.setAttr(f"{fourByFourMatrix}.in00", -1)
 
-                fourOrigPos = cmds.createNode("fourByFourMatrix", name=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}Orig_4B4", ss=True)
-                parent_matrix = cmds.createNode("parentMatrix", name=f"{cv_side}_{name}{main_mid_name.capitalize()}0{i}_PMX", ss=True)
+                cmds.connectAttr(f"{motionPath_closed}.allCoordinates.xCoordinate", f"{fourByFourMatrix_closed}.in30", f=True)
+                cmds.connectAttr(f"{motionPath_closed}.allCoordinates.yCoordinate", f"{fourByFourMatrix_closed}.in31", f=True)
+                cmds.connectAttr(f"{motionPath_closed}.allCoordinates.zCoordinate", f"{fourByFourMatrix_closed}.in32", f=True)
+                if cv_side == "R":
+                    cmds.setAttr(f"{fourByFourMatrix_closed}.in00", -1)
+
+                fourOrigPos = cmds.createNode("fourByFourMatrix", name=f"{name}0{i}Orig_4B4", ss=True)
+                parent_matrix = cmds.createNode("parentMatrix", name=f"{name}0{i}_PMX", ss=True)
+                
                 cmds.connectAttr(f"{curve}Shape.editPoints[{i}].xValueEp", f"{fourOrigPos}.in30", f=True)
                 cmds.connectAttr(f"{curve}Shape.editPoints[{i}].yValueEp", f"{fourOrigPos}.in31", f=True)
                 cmds.connectAttr(f"{curve}Shape.editPoints[{i}].zValueEp", f"{fourOrigPos}.in32", f=True)
 
-                cmds.connectAttr(f"{fourByFourMatrix}.output", f"{parent_matrix}.target[0].targetMatrix", f=True)
                 cmds.connectAttr(f"{fourOrigPos}.output", f"{parent_matrix}.inputMatrix", f=True)
+                cmds.connectAttr(f"{fourByFourMatrix}.output", f"{parent_matrix}.target[0].targetMatrix", f=True)
+                cmds.connectAttr(f"{fourByFourMatrix_closed}.output", f"{parent_matrix}.target[1].targetMatrix", f=True)
 
-                joint = cmds.createNode("joint", n=f"{cv_side}_{main_mid_name}Lip0{i}_JNT", ss=True, parent = self.skinning_trn)
+            
+                dist_from_center = abs(i - mid_index_calc)
+                normalized_pos = 1.0 - (float(dist_from_center) / float(mid_index_calc)) if mid_index_calc > 0 else 1.0
+
+                sticky_remap = cmds.createNode("remapValue", name=f"{name}0{i}Sticky_RMV", ss=True)
+                cmds.connectAttr(f"{self.jaw_ctl}.stickyLips", f"{sticky_remap}.inputValue", force=True)
+
+                threshold_start = normalized_pos * 0.8
+                
+                cmds.setAttr(f"{sticky_remap}.inputMin", threshold_start)
+                
+            
+                falloff_add = cmds.createNode("addDoubleLinear", name=f"{name}0{i}Falloff_ADL", ss=True)
+                cmds.setAttr(f"{falloff_add}.input1", threshold_start)
+                cmds.connectAttr(f"{self.jaw_ctl}.stickyFalloff", f"{falloff_add}.input2", force=True)
+                
+                cmds.connectAttr(f"{falloff_add}.output", f"{sticky_remap}.inputMax", force=True)
+
+                cmds.setAttr(f"{sticky_remap}.outputMin", 0)
+                cmds.setAttr(f"{sticky_remap}.outputMax", 1)
+
+                weight_sum = cmds.createNode("plusMinusAverage", name=f"{name}0{i}Weight_PMA", ss=True)
+                cmds.setAttr(f"{weight_sum}.operation", 1)
+                cmds.connectAttr(f"{self.jaw_ctl}.zip", f"{weight_sum}.input1D[0]", force=True)
+                cmds.connectAttr(f"{sticky_remap}.outValue", f"{weight_sum}.input1D[1]", force=True)
+
+                weight_clamp = cmds.createNode("clamp", name=f"{name}0{i}Weight_CLP", ss=True)
+                cmds.connectAttr(f"{weight_sum}.output1D", f"{weight_clamp}.inputR", force=True)
+                cmds.setAttr(f"{weight_clamp}.minR", 0)
+                cmds.setAttr(f"{weight_clamp}.maxR", 1)
+
+                cmds.connectAttr(f"{weight_clamp}.outputR", f"{parent_matrix}.target[1].weight", force=True)
+
+                reverse_node = cmds.createNode("reverse", name=f"{name}0{i}Weight_REV", ss=True)
+                cmds.connectAttr(f"{weight_clamp}.outputR", f"{reverse_node}.inputX", force=True)
+                cmds.connectAttr(f"{reverse_node}.outputX", f"{parent_matrix}.target[0].weight", force=True)
+
+                joint = cmds.createNode("joint", n=f"{name}0{i}_JNT", ss=True, parent=self.skinning_trn)
                 cmds.connectAttr(f"{fourByFourMatrix}.output", f"{joint}.offsetParentMatrix", f=True)
 
-                cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", get_offset_matrix(f"{fourOrigPos}.output", joint), type="matrix")
-
-
-
+                offset_calculation.append([parent_matrix, fourOrigPos, fourByFourMatrix, fourByFourMatrix_closed])
 
                 cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", f=True)
+
+        for offset in offset_calculation:
+            parent = offset[0]
+            orig = offset[1]
+            open_mat = offset[2]
+            closed_mat = offset[3]
+
+            cmds.setAttr(f"{parent}.target[0].offsetMatrix", get_offset_matrix(f"{orig}.output", f"{open_mat}.output"), type="matrix")
+            cmds.setAttr(f"{parent}.target[1].offsetMatrix", get_offset_matrix(f"{orig}.output", f"{closed_mat}.output"), type="matrix")
 
 
 
