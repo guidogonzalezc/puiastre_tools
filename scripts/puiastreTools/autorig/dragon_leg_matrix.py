@@ -1242,10 +1242,13 @@ class LimbModule(object):
 
         blendMatrix_frontRollNegate = cmds.createNode("blendMatrix", name=f"{self.side}_{self.module_name}FrontRollNegate_BLM", ss=True)
         cmds.connectAttr(f"{blendMatrix}.outputMatrix", f"{blendMatrix_frontRollNegate}.inputMatrix")
-        cmds.connectAttr(f"{self.reverse_ctl[-2]}.worldMatrix[0]", f"{blendMatrix_frontRollNegate}.target[0].targetMatrix")
-        cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].translateWeight", 0)
-        cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].shearWeight", 0)
-        cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].scaleWeight", 0)
+        print(core.DataManager.get_asset_name)
+        if core.DataManager.get_asset_name == "maiasaura":
+            cmds.connectAttr(f"{self.reverse_ctl[-2]}.worldMatrix[0]", f"{blendMatrix_frontRollNegate}.target[0].targetMatrix")
+            cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].translateWeight", 0)
+            cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].shearWeight", 0)
+            cmds.setAttr(f"{blendMatrix_frontRollNegate}.target[0].scaleWeight", 0)
+
 
         cmds.connectAttr(f"{blendMatrix_frontRollNegate}.outputMatrix", f"{self.frontRoll_grp[0]}.offsetParentMatrix")
 
