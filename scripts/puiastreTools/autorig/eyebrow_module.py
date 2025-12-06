@@ -67,6 +67,7 @@ class EyebrowModule():
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowControllers_GRP", ss=True, parent=self.masterWalk_ctl)
+        cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0)
         self.tangent_controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowTangentControllers_GRP", ss=True, parent=self.controllers_trn)
 
         parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_eyebrowModule_PM", ss=True)
@@ -101,12 +102,27 @@ class EyebrowModule():
             om.MGlobal.displayError("No NURBS curves found in the eyebrow guide. Please create at least one to proceed.")
             return
         
+        self.center_main_ctl, self.center_main_ctl_grp = controller_creator(
+                            name=f"C_eyebrowCenter",
+                            suffixes=["GRP", "OFF","ANM"],
+                            lock=["visibility"],
+                            ro=False,
+                            parent= self.controllers_trn
+                        )
+        
+        cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{self.center_main_ctl_grp[0]}.offsetParentMatrix", force=True)
+
+        mmx = core.local_mmx(self.center_main_ctl, self.center_main_ctl_grp[0]) 
+        self.center_joint = cmds.createNode("joint", name=f"C_eyebrowCenter_JNT")
+        cmds.connectAttr(mmx, f"{self.center_joint}.offsetParentMatrix", force=True)
+
 
 
         for curve in self.curves:
             
             self.side = curve.split("_")[0]
             self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_eyebrowFacialSkinning_GRP", ss=True, p=self.skel_grp)
+            cmds.parent(self.center_joint, self.skinning_trn)
 
             if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
                 self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
