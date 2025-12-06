@@ -68,6 +68,7 @@ class EyelidModule():
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_eyelidModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyelidControllers_GRP", ss=True, parent=self.masterWalk_ctl)
+        cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0)
         self.tangent_controllers_trn = cmds.createNode("transform", name=f"{self.side}_eyelidTangentControllers_GRP", ss=True, parent=self.controllers_trn)
 
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_eyelidFacialSkinning_GRP", ss=True, p=self.skel_grp)
