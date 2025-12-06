@@ -236,10 +236,10 @@ def build_complete_hierarchy():
                 parented_chain(skinning_joints=child_joints, parent=parent_joint, hand_value=False)
 
             attributes = data_exporter.get_data(f"{side}_FkFingersModule", "attributes_ctl")
-            try:
-                space_switch.fk_switch(target = attributes, sources= [parent_joint], sources_names=["Wrist"])
-            except:
-                pass
+            # try:
+            #     space_switch.fk_switch(target = attributes, sources= [parent_joint], sources_names=["Wrist"])
+            # except:
+            #     pass
             
 
 
