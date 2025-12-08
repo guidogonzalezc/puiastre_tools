@@ -871,6 +871,8 @@ class LimbModule(object):
             parent=self.masterWalk_ctl
         ) # Will be driven by spaces of scapula master
 
+        cmds.setAttr(f"{self.scapula_ctl_grp[0]}.inheritsTransform", 0)
+
         autoScapula_guide = self.guides_matrix[0]
         autoScapulaEnd_guide = self.scapula_guide
 

@@ -423,7 +423,7 @@ class EyelidModule():
                 cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", get_offset_matrix(f"{linear_guide_4b4}.output", f"{multmatrix_end_pox}.matrixSum"), type="matrix")
 
                 joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
-                cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
+                cmds.connectAttr(f"{multmatrix_end_pox}.matrixSum", f"{joint}.offsetParentMatrix", force=True)
 
 
             main_4b4 = []

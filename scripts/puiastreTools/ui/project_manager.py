@@ -198,3 +198,5 @@ def load_asset_configuration(asset_name):
     core.DataManager.set_asset_name(asset_name)
     core.DataManager.set_project_path(asset_path)
     om.MGlobal.displayInfo(f"Asset configuration loaded for: {asset_name}")
+
+# asset_structure_creation("rigoberta", asset_type="CHAR")

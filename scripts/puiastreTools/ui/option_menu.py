@@ -137,6 +137,7 @@ def puiastre_ui():
     cmds.menuItem(label="   Cheetah Guides", command=partial(import_guides, asset_name="cheetah"))
     cmds.menuItem(label="   Moana Guides", command=partial(import_guides, asset_name="moana"))
     cmds.menuItem(label="   Marcelo Guides", command=partial(import_guides, asset_name="marcelo"))
+    cmds.menuItem(label="   Rigoberta Guides", command=partial(import_guides, asset_name="rigoberta"))
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
@@ -154,6 +155,7 @@ def puiastre_ui():
     cmds.menuItem(label="   Cheetah Rig", command=partial(build_rig, asset_name="cheetah"))
     cmds.menuItem(label="   Moana Rig", command=partial(build_rig, asset_name="moana"))
     cmds.menuItem(label="   Marcelo Rig", command=partial(build_rig, asset_name="marcelo"))
+    cmds.menuItem(label="   Rigoberta Rig", command=partial(build_rig, asset_name="rigoberta"))
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
