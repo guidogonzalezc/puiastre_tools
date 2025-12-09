@@ -82,6 +82,16 @@ def mirror_ctl(*args):
     """
     curve_tool.mirror_shapes()
 
+def replace_shapes(*args):
+
+    """
+    Funtion to replace the selected shapes with the first selection.
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+
+    curve_tool.replace_shape_colored()
+
 def import_guides(*args, asset_name=None): 
     """
     Function to import guides into the scene. If value is True, imports all guides; if None, opens an option box.
@@ -144,6 +154,7 @@ def puiastre_ui():
     cmds.menuItem(label="   Controls", subMenu=True, tearOff=True, boldFont=True, image="controllers.png")
     cmds.menuItem(label="   Export all controllers", command=partial(export_curves))
     cmds.menuItem(label="   Mirror all L_ to R_", command=mirror_ctl)
+    cmds.menuItem(label="   Replace Shapes", command=replace_shapes)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 

@@ -773,9 +773,108 @@ def build_surfaces_from_template(path=None, target_transform_name=None):
 
     return created_transforms[0]
 
+def replace_shape_colored():
+    """
+    1. Source = First Selection. Targets = All other selections.
+    2. Replaces Target shapes with Source shape.
+    3. Renames new shapes.
+    4. Sets Color based on Naming Convention:
+       - Starts with 'L' -> Color 6  (Blue)
+       - Starts with 'R' -> Color 13 (Red)
+       - Starts with 'C' -> Color 17 (Yellow)
+    """
+    
+    # 1. Get current selection
+    sel = cmds.ls(selection=True, long=True)
+    
+    if len(sel) < 2:
+        cmds.warning("Please select at least two objects: [Source, Target1, Target2...]")
+        return
+
+    source_obj = sel[0]
+    target_list = sel[1:]
+
+    print(f"Source: {source_obj}")
+    
+    for target_obj in target_list:
+        # --- SHAPE REPLACEMENT LOGIC ---
+        
+        # Duplicate source to create fresh shapes
+        temp_obj = cmds.duplicate(source_obj, name="TEMP_REPLACE_SHAPE")[0]
+        
+        target_existing_shapes = cmds.listRelatives(target_obj, shapes=True, fullPath=True) or []
+        temp_shapes = cmds.listRelatives(temp_obj, shapes=True, fullPath=True) or []
+
+        if not temp_shapes:
+            cmds.warning(f"Skipping '{target_obj}': Source has no shapes.")
+            cmds.delete(temp_obj)
+            continue
+
+        # Parent new shapes to target
+        try:
+            cmds.parent(temp_shapes, target_obj, relative=True, shape=True)
+        except Exception as e:
+            print(f"Error on {target_obj}: {e}")
+            cmds.delete(temp_obj)
+            continue
+
+        # Delete old shapes
+        if target_existing_shapes:
+            cmds.delete(target_existing_shapes)
+            
+        cmds.delete(temp_obj)
+        
+        # --- RENAMING & COLOR LOGIC ---
+        
+        # Get the new shapes that are now part of the target
+        new_shapes = cmds.listRelatives(target_obj, shapes=True, fullPath=True)
+        
+        # Determine the "Short Name" (remove group path) for logic checks
+        short_target_name = target_obj.split("|")[-1]
+        
+        # Determine Color based on prefix
+        # 6 = Blue, 13 = Red, 17 = Yellow
+        color_index = None
+        
+        if short_target_name.startswith("L"):
+            color_index = 6
+        elif short_target_name.startswith("R"):
+            color_index = 13
+        elif short_target_name.startswith("C"):
+            color_index = 17
+            
+        if new_shapes:
+            for i, shape in enumerate(new_shapes):
+                # 1. Rename
+                suffix = "Shape" if i == 0 else f"Shape{i}"
+                new_name = f"{short_target_name}{suffix}"
+                cmds.rename(shape, new_name)
+                
+                # We must update the shape variable with the new name for the setAttr command
+                # (Since rename changes the name, the old 'shape' variable might be stale, 
+                # though usually Maya handles this, it's safer to use the return of rename if needed.
+                # In this simple case, we know the new name path.)
+                
+                # Note: cmds.rename returns the short name, we need the path for safety if objects have same names
+                # Ideally, we query the renamed shape, but for setting attrs immediately, this works:
+                current_shape_path = f"{target_obj}|{new_name}"
+
+                # 2. Apply Color if a match was found
+                if color_index is not None:
+                    try:
+                        # Turn on "Enable Overrides"
+                        cmds.setAttr(f"{current_shape_path}.overrideEnabled", 1)
+                        # Set the Color Index
+                        cmds.setAttr(f"{current_shape_path}.overrideColor", color_index)
+                    except:
+                        pass # Fail silently if attributes are locked or unavailable
+
+
 # core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_009.guides")
 
-# core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\assets\varyndor\curves\CHAR_varyndor_001.json")
+#core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\assets\varyndor\curves\CHAR_varyndor_001.json")
+# core.DataManager.set_ctls_data(r"P:\VFX_Project_20\DCC_CUSTOM\MAYA\modules\puiastre_tools\assets\aychedral\curves\CHAR_aychedral_002.json")
+
 # core.DataManager.set_ctls_data(r"D:\git\maya\puiastre_tools\assets\moana\curves\CHAR_moana_001.json")
 # core.DataManager.set_asset_name("varyndor")
 # core.DataManager.set_mesh_data("C_body_MSH")

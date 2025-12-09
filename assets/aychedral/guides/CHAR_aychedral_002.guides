@@ -196,8 +196,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_eye_GUIDE",
             "jointTwist": "Child",
@@ -365,8 +365,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -378,8 +378,8 @@
         },
         "L_backToe_GUIDE": {
             "worldPosition": [
-                86.21012436991293,
-                4.738108369464779,
+                80.0,
+                0.0,
                 66.15769006624393
             ],
             "worldRotation": [
@@ -739,9 +739,9 @@
         },
         "L_backFootBankIn_GUIDE": {
             "worldPosition": [
-                38.35557556152344,
+                50.442662590016226,
                 0.0,
-                -7.424864768981934
+                -7.424864768981932
             ],
             "worldRotation": [
                 0.0,
@@ -758,7 +758,7 @@
         },
         "L_backFootBankOut_GUIDE": {
             "worldPosition": [
-                114.91361999511719,
+                106.6179369482614,
                 0.0,
                 -7.424864768981934
             ],
@@ -892,7 +892,7 @@
         "L_firstFinger03_GUIDE": {
             "worldPosition": [
                 898.618728669918,
-                331.92034143192757,
+                334.0257076822628,
                 -531.6241096078652
             ],
             "worldRotation": [
@@ -1120,8 +1120,8 @@
         "L_fourthFinger03_GUIDE": {
             "worldPosition": [
                 1436.896579766903,
-                343.0032887789732,
-                548.5782233275453
+                335.3816050161837,
+                545.6027963103152
             ],
             "worldRotation": [
                 0.0,
@@ -2409,13 +2409,13 @@
         "R_firstFinger03_GUIDE": {
             "worldPosition": [
                 -898.618728669918,
-                331.92034143192757,
+                334.0253414319276,
                 -531.6241096078652
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_firstFinger02_GUIDE",
             "jointTwist": "Child",
@@ -2433,8 +2433,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_firstFinger01_GUIDE",
             "jointTwist": "Child",
@@ -2452,8 +2452,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_firstMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -2471,8 +2471,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_hand_GUIDE",
             "jointTwist": "Child",
@@ -2490,8 +2490,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_secondFinger02_GUIDE",
             "jointTwist": "Child",
@@ -2509,8 +2509,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_secondFinger01_GUIDE",
             "jointTwist": "Child",
@@ -2528,8 +2528,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_secondMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -2547,8 +2547,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_hand_GUIDE",
             "jointTwist": "Child",
@@ -2566,8 +2566,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_thirdFinger02_GUIDE",
             "jointTwist": "Child",
@@ -2585,8 +2585,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_thirdFinger01_GUIDE",
             "jointTwist": "Child",
@@ -2604,8 +2604,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_thirdMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -2623,8 +2623,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_hand_GUIDE",
             "jointTwist": "Child",
@@ -2637,13 +2637,13 @@
         "R_fourthFinger03_GUIDE": {
             "worldPosition": [
                 -1436.896579766903,
-                343.0032887789732,
-                548.5782233275453
+                335.3818194530219,
+                545.6023286169426
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_fourthFinger02_GUIDE",
             "jointTwist": "Child",
@@ -2661,8 +2661,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_fourthFinger01_GUIDE",
             "jointTwist": "Child",
@@ -2680,8 +2680,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_fourthMetacarpal_GUIDE",
             "jointTwist": "Child",
@@ -2699,8 +2699,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_hand_GUIDE",
             "jointTwist": "Child",
@@ -2718,8 +2718,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -2737,8 +2737,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_elbow_GUIDE",
             "jointTwist": "Child",
@@ -2756,8 +2756,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_shoulder_GUIDE",
             "jointTwist": "Child",
@@ -2775,8 +2775,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_clavicle_GUIDE",
             "jointTwist": "Child",
@@ -2794,8 +2794,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_clavicle_GUIDE",
             "jointTwist": "Child",
@@ -2813,8 +2813,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": 5.0,
@@ -2832,8 +2832,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -2845,14 +2845,14 @@
         },
         "R_backFootRoll_GUIDE": {
             "worldPosition": [
-                -78.28494166777531,
+                -90.37236610625187,
                 10.0,
                 -7.424864768981934
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_backFootHeel_GUIDE",
             "jointTwist": "Child",
@@ -2864,14 +2864,14 @@
         },
         "R_backFootHeel_GUIDE": {
             "worldPosition": [
-                -78.28494166777531,
+                -90.37236610625187,
                 0.0,
                 -43.09489689992629
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_backFootBankIn_GUIDE",
             "jointTwist": "Child",
@@ -2883,14 +2883,14 @@
         },
         "R_backFootBankIn_GUIDE": {
             "worldPosition": [
-                -38.35557556152344,
+                -50.443,
                 0.0,
                 -7.424864768981934
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_backFootBankOut_GUIDE",
             "jointTwist": "Child",
@@ -2902,14 +2902,14 @@
         },
         "R_backFootBankOut_GUIDE": {
             "worldPosition": [
-                -114.91361999511719,
+                -106.618,
                 0.0,
                 -7.424864768981934
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -2927,8 +2927,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_middle02_GUIDE",
             "jointTwist": "Child",
@@ -2946,8 +2946,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_middle01_GUIDE",
             "jointTwist": "Child",
@@ -2965,8 +2965,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_index03_GUIDE",
             "jointTwist": "Child",
@@ -2984,8 +2984,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_index02_GUIDE",
             "jointTwist": "Child",
@@ -3003,8 +3003,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_index01_GUIDE",
             "jointTwist": "Child",
@@ -3022,8 +3022,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_thumb03_GUIDE",
             "jointTwist": "Child",
@@ -3041,8 +3041,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_thumb02_GUIDE",
             "jointTwist": "Child",
@@ -3060,8 +3060,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_thumb01_GUIDE",
             "jointTwist": "Child",
@@ -3079,8 +3079,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -3092,14 +3092,14 @@
         },
         "R_backToe_GUIDE": {
             "worldPosition": [
-                -86.21012436991293,
-                4.738108369464779,
+                -80.00016962757606,
+                -0.00035896674820534713,
                 66.15769006624393
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_backFoot_GUIDE",
             "jointTwist": "Child",
@@ -3117,8 +3117,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_backAnkle_GUIDE",
             "jointTwist": "Child",
@@ -3136,8 +3136,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_backKnee_GUIDE",
             "jointTwist": "Child",
@@ -3155,8 +3155,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_hip_GUIDE",
             "jointTwist": "Child",
@@ -3174,8 +3174,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "R_hip_GUIDE",
             "jointTwist": "Child",
@@ -3193,8 +3193,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": 5.0,
@@ -3212,8 +3212,8 @@
             ],
             "worldRotation": [
                 0.0,
-                -0.0,
-                -0.0
+                0.0,
+                0.0
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",

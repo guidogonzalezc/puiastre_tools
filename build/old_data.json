@@ -1,8 +1,8 @@
 {
-    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\rigoberta",
-    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\rigoberta\\curves\\CHAR_rigoberta_001.json",
-    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\rigoberta\\guides\\CHAR_rigoberta_001.guides",
+    "project_path": null,
+    "ctls_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\aychedral\\curves\\CHAR_aychedral_002.json",
+    "guide_data": null,
     "mesh_data": null,
-    "asset_name": "rigoberta",
-    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\rigoberta\\skinning\\CHAR_rigoberta_001.skn"
+    "asset_name": null,
+    "skinning_data": null
 }
