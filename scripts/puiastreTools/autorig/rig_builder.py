@@ -210,8 +210,8 @@ def make(asset_name = "", latest = False):
                     mm.MembraneModule().make(guide_name)
 
 
-                # if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
-                #     fm.FingersModule().make(guide_name)
+                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
+                    fm.FingersModule().make(guide_name)
 
                      
                 # if guide_info.get("moduleName") == "mouth":

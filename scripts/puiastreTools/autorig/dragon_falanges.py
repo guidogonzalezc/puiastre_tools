@@ -523,7 +523,14 @@ class FalangeModule(object):
             cmds.connectAttr(f"{self.blend_wm[i]}", f"{distance_node}.inMatrix1")
             cmds.connectAttr(f"{self.blend_wm[i+1]}", f"{distance_node}.inMatrix2")
 
-            cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
+            if self.side == "L":
+                cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
+            else:
+                negate_translate = cmds.createNode("negate", name=f"{self.side}_{self.names[i]}{bendy}NegateTranslate_NEG", ss=True)
+                cmds.connectAttr(f"{distance_node}.distance", f"{negate_translate}.input")
+                cmds.connectAttr(f"{negate_translate}.output", f"{joint02}.translateX")
+
+            # cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
 
             ik_handle_sc = cmds.ikHandle(name=f"{self.side}_{self.names[i]}{bendy}Roll_IK", sj=joint01, ee=joint02, sol="ikSCsolver")[0]
             cmds.parent(ik_handle_sc, self.individual_module_grp)

@@ -52,6 +52,7 @@ class FingersModule(object):
         self.leg_ball_blm = cmds.listRelatives(leg_skinning, children=True)[-1]
         self.foot_rotation = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "frontRoll")
         self.ikSwitch_ctl = data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "ikFkSwitch")
+        
 
         parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_legFingersParent_PMX", ss=True)
         cmds.connectAttr(self.leg_ball_blm + ".worldMatrix[0]", parent_matrix + ".target[0].targetMatrix")
@@ -125,7 +126,8 @@ class FingersModule(object):
         :param guide_name: name of the guide to import
         """
 
-        self.finger_attributes_ctl, self.finger_attributes_nodes, = controller_creator(name=f"{self.side}_fingers{self.finger_front_name}Attributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
+        # self.finger_attributes_ctl, self.finger_attributes_nodes = controller_creator(name=f"{self.side}_fingers{self.finger_front_name}Attributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
+        self.finger_attributes_ctl = self.foot_rotation
 
         self.finger_plane, self.finger_plane_grp = controller_creator(
                     name=f"{self.side}_fingers{self.finger_front_name}PlaneIk",
@@ -290,7 +292,7 @@ class FingersModule(object):
 
         parent = self.controllers[::3]
 
-        cmds.delete(cmds.pointConstraint(parent, self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
+        # cmds.delete(cmds.pointConstraint(parent, self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
 
     def pairblends(self, ik, fk, fk_grp, finger_name, ctl_ik):
 
