@@ -9,9 +9,10 @@ import re
 class DeformerManager(object):
     """
     Production tool to Export/Import deformer data.
-    - Automatic creation of missing Deformers (Tension, DeltaMush, Skin, etc).
-    - Robust Index Resolution for plugins.
-    - MGlobal Logging.
+    Updated to support:
+    - Exact node naming.
+    - Input/Output connection reconstruction (Deformation Chain).
+    - Manual node creation via createNode.
     """
     
     def __init__(self):
@@ -57,10 +58,6 @@ class DeformerManager(object):
         return comp_obj, fn_mesh.numVertices
 
     def resolve_deformer_index(self, deformer_node, shape_node_name):
-        """
-        Robustly finds the logical index of the shape in the deformer.
-        """
-        # 1. Try API
         try:
             mobj_def = self.get_mobject(deformer_node)
             mobj_geo = self.get_mobject(shape_node_name)
@@ -68,23 +65,28 @@ class DeformerManager(object):
             return fn_filter.indexForOutputShape(mobj_geo)
         except:
             pass 
-        
-        # 2. Trace Connections
-        try:
-            conns = cmds.listConnections(deformer_node + ".outputGeometry", 
-                                       source=False, destination=True, plugs=True, c=True) or []
-            shape_short = shape_node_name.split("|")[-1]
-            for i in range(0, len(conns), 2):
-                src_plug = conns[i]
-                dst_plug = conns[i+1]
-                if shape_short in dst_plug:
-                    match = re.search(r"\[(\d+)\]", src_plug)
-                    if match:
-                        return int(match.group(1))
-        except Exception as e:
-            self.log(f"Connection trace failed: {e}", "warning")
-
         return 0
+
+    def get_connections(self, deformer_node):
+        """
+        Captures the upstream and downstream geometry connections.
+        This allows us to rebuild the deformation stack order.
+        """
+        connections = {"input": None, "output": None}
+        
+        # 1. Input (Upstream) - Usually input[0].inputGeometry
+        # We store the Source Plug (e.g., 'previousDeformer.outputGeometry[0]')
+        inputs = cmds.listConnections(f"{deformer_node}.input[0].inputGeometry", plugs=True, source=True, destination=False)
+        if inputs:
+            connections["input"] = inputs[0]
+
+        # 2. Output (Downstream) - Usually outputGeometry[0]
+        # We store the Destination Plug (e.g., 'nextDeformer.input[0].inputGeometry' or 'meshShape.inMesh')
+        outputs = cmds.listConnections(f"{deformer_node}.outputGeometry[0]", plugs=True, source=False, destination=True)
+        if outputs:
+            connections["output"] = outputs[0]
+            
+        return connections
 
     # ------------------------------------------------------------------------
     # EXPORT LOGIC
@@ -101,8 +103,10 @@ class DeformerManager(object):
             "normalizeWeights": cmds.getAttr(f"{deformer_node}.normalizeWeights"),
             "maintainMaxInfluences": cmds.getAttr(f"{deformer_node}.maintainMaxInfluences"),
             "maxInfluences": cmds.getAttr(f"{deformer_node}.maxInfluences"),
-            "weightDistribution": cmds.getAttr(f"{deformer_node}.weightDistribution") 
         }
+
+        # Connections
+        conns = self.get_connections(deformer_node)
 
         # Joint Weights
         weights_flat, num_infl = fn_skin.getWeights(geometry_path, components)
@@ -131,6 +135,7 @@ class DeformerManager(object):
             "type": "skinCluster",
             "vertex_count": vtx_count,
             "attributes": attrs,
+            "connections": conns,
             "influences": infl_names,
             "weights": sparse_weights,
             "blend_weights": blend_weights
@@ -145,28 +150,20 @@ class DeformerManager(object):
         
         # Resolve Index
         idx = self.resolve_deformer_index(deformer_node, geometry_path.partialPathName())
+        conns = self.get_connections(deformer_node)
         
         # Extract
-        max_val = 0.0
         try:
             for i in range(vtx_count):
                 w = fn_filter.weightAtIndex(geometry_path, idx, i)
-                if w > max_val: max_val = w
                 dense_weights.append([i, round(w, 5)])
         except Exception as e:
             self.log(f"API Read Error on {deformer_node}: {e}", "error")
 
-        # Handle Defaults
-        default_ones = ["deltaMush", "tension", "cluster", "softMod", "textureDeformer"]
-        is_generic_type = any(t in deformer_type for t in default_ones)
-        
-        if max_val <= self.tolerance and is_generic_type:
-            self.log(f"{deformer_node} unpainted. Auto-filling 1.0s.", "warning")
-            dense_weights = [[i, 1.0] for i in range(vtx_count)]
-
         return {
             "type": deformer_type,
             "vertex_count": vtx_count,
+            "connections": conns,
             "influences": [], 
             "weights": dense_weights
         }
@@ -189,6 +186,10 @@ class DeformerManager(object):
             deformers = cmds.ls(history, type="geometryFilter")
             if not deformers: continue
             
+            # Reverse deformers so we export bottom-up (Input -> Output) 
+            # or keep them as is. Usually ls history returns newest first. 
+            # We will store them in a dict, order matters for re-construction.
+            
             mesh_data = {}
             dag_path = self.get_dag_path(mesh)
             
@@ -196,6 +197,7 @@ class DeformerManager(object):
                 if cmds.nodeType(def_node) == "tweak": continue
                 
                 node_type = cmds.nodeType(def_node)
+                # Keep simple name for key
                 def_name = def_node.split(":")[-1]
                 
                 self.log(f"Processing: {short_name} -> {def_name}")
@@ -222,149 +224,205 @@ class DeformerManager(object):
     # IMPORT LOGIC
     # ------------------------------------------------------------------------
     
-    def create_deformer_node(self, mesh_name, deformer_name, deformer_type):
+    def reconstruct_connections(self, node_name, data, mesh_fallback=None):
         """
-        Creates a deformer if it is missing.
+        Reconnects the deformer. 
+        FAIL-SAFE: If the recorded input source is missing (common with Orig shapes),
+        it attempts to use the mesh_fallback (the current mesh shape) as the input
+        to ensure the deformer has valid geometry data.
         """
-        self.log(f"Creating missing deformer: {deformer_name} ({deformer_type})")
+        conns = data.get("connections", {})
         
-        try:
-            cmds.deformer(mesh_name, type=deformer_type, name=deformer_name)
-                
-            return True
-        except Exception as e:
-            self.log(f"Failed to create {deformer_name}: {e}", "error")
-            return False
+        # 1. Connect Inputs (Upstream)
+        input_src = conns.get("input")
+        input_connected = False
+        
+        if input_src and cmds.objExists(input_src):
+            try:
+                cmds.connectAttr(input_src, f"{node_name}.input[0].inputGeometry", f=True)
+                self.log(f"Connected Input: {input_src} -> {node_name}")
+                input_connected = True
+            except Exception as e:
+                self.log(f"Failed to connect recorded Input {input_src}: {e}", "warning")
+        
+        # FALLBACK: If recorded input is missing, find a valid shape
+        if not input_connected and mesh_fallback:
+            self.log(f"Input source {input_src} missing. Attempting fallback...", "warning")
+            # Try to find an 'Orig' shape or use the mesh itself if it's the start of the chain
+            shapes = cmds.listRelatives(cmds.listRelatives(mesh_fallback, p=True)[0], s=True, f=True)
+            orig_shape = [s for s in shapes if s.endswith("Orig")]
+            
+            source_plug = None
+            if orig_shape:
+                source_plug = f"{orig_shape[0]}.worldMesh[0]"
+            else:
+                # Dangerous but better than nothing: feed the mesh itself (circular check needed usually)
+                # Ideally, we look for the last deformer in the chain, but for now let's warn.
+                self.log("Could not auto-find an Orig shape. SkinCluster might be missing input geometry.", "error")
 
-    def set_skin_weights(self, mesh_name, data):
-        mesh_path = self.get_dag_path(mesh_name)
-        if not mesh_path: return
+            if source_plug:
+                try:
+                    cmds.connectAttr(source_plug, f"{node_name}.input[0].inputGeometry", f=True)
+                    self.log(f"Connected Fallback Input: {source_plug} -> {node_name}")
+                    input_connected = True
+                except Exception as e:
+                    self.log(f"Fallback connection failed: {e}", "error")
 
-        # Influences
+        # 2. Connect Deformer -> Outputs (Downstream)
+        output_dst = conns.get("output")
+        if output_dst:
+            node_dst = output_dst.split('.')[0]
+            if cmds.objExists(node_dst):
+                try:
+                    cmds.connectAttr(f"{node_name}.outputGeometry[0]", output_dst, f=True)
+                    self.log(f"Connected Output: {node_name} -> {output_dst}")
+                except Exception as e:
+                    self.log(f"Failed to connect Output {output_dst}: {e}", "warning")
+                    
+        return input_connected
+
+    def create_bare_node(self, node_type, name):
+        """
+        Creates the node using createNode (pure dependency graph node).
+        Does NOT attach it to geometry automatically.
+        """
+        if cmds.objExists(name):
+            # Decide if you want to delete or skip. Here we skip/return existing.
+            if cmds.nodeType(name) == node_type:
+                return name
+            else:
+                self.log(f"Name collision: {name} exists but is wrong type.", "error")
+                return None
+        
+        return cmds.createNode(node_type, name=name)
+
+    def set_skin_weights(self, mesh_name, node_name, data):
+        # 1. Create Node Manually
+        skin_node = self.create_bare_node("skinCluster", node_name)
+        if not skin_node: return
+        
+        # Lock node during setup to prevent premature evaluation crashes
+        cmds.setAttr(f"{skin_node}.nodeState", 1) # 1 = PassThrough/Cache
+
+        # 2. Re-establish Graph Connections
+        # We pass mesh_name as fallback to ensure we get *some* input geometry
+        has_input = self.reconstruct_connections(skin_node, data, mesh_fallback=mesh_name)
+        
+        # 3. Add Influences
         file_influences = data['influences']
         scene_influences = [j for j in file_influences if cmds.objExists(j)]
         
-        if not scene_influences:
-            self.log(f"Skipping {mesh_name}: No influences found.", "error")
-            return
+        if scene_influences:
+            # IMPORTANT: We add 'geometry=mesh_name'. 
+            # This forces the SkinCluster to register the geometry association 
+            # even if the connections above were "weird".
+            try:
+                cmds.skinCluster(skin_node, e=True, 
+                                 addInfluence=scene_influences, 
+                                 geometry=mesh_name, # Explicit association
+                                 wt=0)
+            except Exception as e:
+                self.log(f"Add Influence Error: {e}", "error")
 
-        # SkinCluster Creation
-        hist = cmds.listHistory(mesh_name, pruneDagObjects=True)
-        skins = cmds.ls(hist, type="skinCluster")
-        skin_name = ""
-        
-        if skins:
-            skin_name = skins[0]
-            curr_infls = cmds.skinCluster(skin_name, q=True, influence=True) or []
-            to_add = list(set(scene_influences) - set(curr_infls))
-            if to_add:
-                cmds.skinCluster(skin_name, e=True, addInfluence=to_add, wt=0)
-        else:
-            skin_name = cmds.skinCluster(scene_influences, mesh_name, toSelectedBones=True, tsb=True)[0]
-
-        # Attributes
+        # 4. Attributes
         attrs = data.get("attributes", {})
-        cmds.setAttr(f"{skin_name}.normalizeWeights", 0) 
+        cmds.setAttr(f"{skin_node}.normalizeWeights", 0) 
         if "skinningMethod" in attrs:
-            cmds.setAttr(f"{skin_name}.skinningMethod", attrs["skinningMethod"])
+            cmds.setAttr(f"{skin_node}.skinningMethod", attrs["skinningMethod"])
 
-        # Weights
-        mobj = self.get_mobject(skin_name)
-        fn_skin = oma.MFnSkinCluster(mobj)
-        
-        file_to_scene_map = {}
-        scene_infl_paths = fn_skin.influenceObjects()
-        scene_infl_names = [p.partialPathName() for p in scene_infl_paths]
-        
-        for file_idx, name in enumerate(file_influences):
-            if name in scene_infl_names:
-                file_to_scene_map[file_idx] = scene_infl_names.index(name)
+        # 5. Set Weights (API)
+        # Only proceed if we have valid input geometry, otherwise API crashes
+        if has_input:
+            try:
+                mesh_path = self.get_dag_path(mesh_name)
+                mobj = self.get_mobject(skin_node)
+                fn_skin = oma.MFnSkinCluster(mobj)
+                
+                # Map file indices to scene indices
+                file_to_scene_map = {}
+                scene_infl_paths = fn_skin.influenceObjects()
+                scene_infl_names = [p.partialPathName() for p in scene_infl_paths]
+                
+                for file_idx, name in enumerate(file_influences):
+                    if name in scene_infl_names:
+                        file_to_scene_map[file_idx] = scene_infl_names.index(name)
 
-        num_scene_infl = len(scene_infl_names)
-        num_verts = data['vertex_count']
-        full_weights = om.MDoubleArray(num_verts * num_scene_infl, 0.0)
-        
-        for item in data['weights']:
-            vtx, file_inf_idx, val = int(item[0]), int(item[1]), float(item[2])
-            if file_inf_idx in file_to_scene_map:
-                scene_inf_idx = file_to_scene_map[file_inf_idx]
-                flat_idx = (vtx * num_scene_infl) + scene_inf_idx
-                full_weights[flat_idx] = val
+                num_scene_infl = len(scene_infl_names)
+                num_verts = data['vertex_count']
+                full_weights = om.MDoubleArray(num_verts * num_scene_infl, 0.0)
+                
+                for item in data['weights']:
+                    vtx, file_inf_idx, val = int(item[0]), int(item[1]), float(item[2])
+                    if file_inf_idx in file_to_scene_map:
+                        scene_inf_idx = file_to_scene_map[file_inf_idx]
+                        flat_idx = (vtx * num_scene_infl) + scene_inf_idx
+                        full_weights[flat_idx] = val
 
-        components, _ = self.get_mesh_components(mesh_path)
-        infl_indices = om.MIntArray(range(num_scene_infl))
-        fn_skin.setWeights(mesh_path, components, infl_indices, full_weights, False)
+                components, _ = self.get_mesh_components(mesh_path)
+                infl_indices = om.MIntArray(range(num_scene_infl))
+                
+                # Verify size matches perfectly to avoid 'Unexpected Internal Failure'
+                if len(full_weights) == len(infl_indices) * num_verts:
+                    fn_skin.setWeights(mesh_path, components, infl_indices, full_weights, False)
+                else:
+                    self.log(f"Weight Array Mismatch on {node_name}. Skipping SetWeights.", "error")
+            except Exception as e:
+                self.log(f"API SetWeights Failed on {node_name}: {e}", "error")
+        else:
+             self.log(f"Skipping API Weights on {node_name} due to missing Input Geometry.", "error")
 
         # DQ Blend
         blend_data = data.get("blend_weights", [])
-        if blend_data:
-            full_blend = om.MDoubleArray(num_verts, 0.0)
-            for item in blend_data:
-                full_blend[int(item[0])] = float(item[1])
-            fn_skin.setBlendWeights(mesh_path, components, full_blend)
+        if blend_data and has_input:
+            try:
+                full_blend = om.MDoubleArray(num_verts, 0.0)
+                for item in blend_data:
+                    full_blend[int(item[0])] = float(item[1])
+                fn_skin.setBlendWeights(mesh_path, components, full_blend)
+            except:
+                pass
+
+        # Unlock Node
+        cmds.setAttr(f"{skin_node}.nodeState", 0) # Normal
 
         # Restore Attributes
         if "normalizeWeights" in attrs:
-            cmds.setAttr(f"{skin_name}.normalizeWeights", attrs["normalizeWeights"])
-        if "maintainMaxInfluences" in attrs:
-            cmds.setAttr(f"{skin_name}.maintainMaxInfluences", attrs["maintainMaxInfluences"])
+            cmds.setAttr(f"{skin_node}.normalizeWeights", attrs["normalizeWeights"])
         if "maxInfluences" in attrs:
-            cmds.setAttr(f"{skin_name}.maxInfluences", attrs["maxInfluences"])
+            cmds.setAttr(f"{skin_node}.maxInfluences", attrs["maxInfluences"])
 
-        self.log(f"Rebuilt SkinCluster: {skin_name}")
+        self.log(f"Rebuilt SkinCluster: {skin_node}")
 
     def set_generic_weights(self, mesh_name, node_name, data):
-            # 1. Create if Missing (Using your simplified creator)
-            if not cmds.objExists(node_name):
-                success = self.create_deformer_node(mesh_name, node_name, data['type'])
-                if not success: return
+        # 1. Create Node Manually
+        def_node = self.create_bare_node(data['type'], node_name)
+        if not def_node: return
 
-            # 2. Resolve Index
-            # We need the logical index of the geometry to know WHICH weight array to target.
-            mesh_path = self.get_dag_path(mesh_name)
-            idx = self.resolve_deformer_index(node_name, mesh_path.partialPathName())
-            
-            # 3. Prepare Data
-            # The data['weights'] is a list of [vtx_id, value]. 
-            # For efficiency, we want to construct a dense list to set in one command 
-            # if the data covers all vertices (which my dense export does).
-            
-            # Helper: Construct full list matching vertex count
-            # (This ensures we don't get mismatch errors if the file is sparse)
-            vtx_count = data['vertex_count']
-            full_weights = [1.0] * vtx_count # Default to 1.0 (safest for deformers)
-            
-            # Fill from data
-            for item in data['weights']:
-                vtx = int(item[0])
-                val = float(item[1])
-                if vtx < vtx_count:
-                    full_weights[vtx] = val
-                    
-            # 4. Apply using cmds (Fastest for Batch)
-            # API 2.0 MPlug iteration is slow for 10k+ verts. cmds.setAttr with a list is instant.
-            # Syntax: setAttr node.weightList[idx].weights[0:N] v1 v2 v3 ...
-            
-            attr_path = f"{node_name}.weightList[{idx}].weights[0:{vtx_count-1}]"
-            
-            try:
-                # *full_weights expands the list into arguments
-                cmds.setAttr(attr_path, *full_weights) 
-                self.log(f"Applied {vtx_count} weights to: {node_name}")
+        # 2. Re-establish Graph Connections
+        self.reconstruct_connections(def_node, data)
+        
+        # 3. Set Weights
+        # Resolve Index - Since we just connected it, logical index is likely 0
+        # But we verify via API
+        mesh_path = self.get_dag_path(mesh_name)
+        idx = self.resolve_deformer_index(def_node, mesh_path.partialPathName())
+        
+        vtx_count = data['vertex_count']
+        full_weights = [1.0] * vtx_count
+        
+        for item in data['weights']:
+            vtx = int(item[0])
+            val = float(item[1])
+            if vtx < vtx_count:
+                full_weights[vtx] = val
                 
-            except Exception as e:
-                self.log(f"Batch setAttr failed on {node_name}: {e}. Falling back to slow loop.", "warning")
-                # Fallback: Plug Iteration (API 2.0 style)
-                try:
-                    mobj = self.get_mobject(node_name)
-                    fn_filter = oma.MFnGeometryFilter(mobj)
-                    wl_plug = fn_filter.findPlug("weightList", False).elementByLogicalIndex(idx)
-                    w_plug = wl_plug.child(0) # The 'weights' array
-                    
-                    for vtx, val in enumerate(full_weights):
-                        w_plug.elementByLogicalIndex(vtx).setFloat(val)
-                except Exception as e2:
-                    self.log(f"Critical Fail on {node_name}: {e2}", "error")
+        attr_path = f"{def_node}.weightList[{idx}].weights[0:{vtx_count-1}]"
+        
+        try:
+            cmds.setAttr(attr_path, *full_weights) 
+            self.log(f"Applied weights to: {def_node}")
+        except Exception as e:
+            self.log(f"Batch setAttr failed on {def_node}: {e}", "warning")
 
     def import_data(self, file_path):
         if not os.path.exists(file_path):
@@ -379,13 +437,19 @@ class DeformerManager(object):
                 self.log(f"Mesh not found: {mesh_name}", "warning")
                 continue
             
+            # Sort keys logic could be added here if needed, 
+            # currently relying on JSON save order.
+            
             for def_name, data in deformers.items():
                 if data['type'] == "skinCluster":
-                    self.set_skin_weights(mesh_name, data)
+                    self.set_skin_weights(mesh_name, def_name, data)
                 else:
                     self.set_generic_weights(mesh_name, def_name, data)
+
+
+
 # --- Usage ---
 import os
 manager = DeformerManager()
-# manager.export_data(r"C:\Users\guido.gonzalez\Downloads\scene_weights.json")
-manager.import_data(r"C:\Users\guido.gonzalez\Downloads\scene_weights.json")
+# manager.export_data(r"C:\Users\guido\Downloads\scene_weights.json")
+manager.import_data(r"C:\Users\guido\Downloads\scene_weights.json")
