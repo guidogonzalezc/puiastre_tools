@@ -86,13 +86,6 @@ class JawModule():
 
         self.jaw_module()
 
-        # cmds.setAttr("guides_GRP.visibility", 1) # To visualize guides while working on the rig
-        # cmds.setAttr("C_preferences_CTL.showModules", 1) # To visualize guides while working on the rig
-
-        for joint in cmds.ls(type="joint"):
-            cmds.setAttr(f"{joint}.radius", 10)
-
-
         self.data_exporter.append_data(f"{self.side}_jawModule", 
                                     {"skinning_transform": self.skinning_trn,
                                     # "neck_ctl": self.main_controllers[0],
@@ -716,12 +709,20 @@ class JawModule():
                 
                 cmds.setAttr(f"{sticky_remap}.inputMin", threshold_start)
                 
-            
-                falloff_add = cmds.createNode("addDoubleLinear", name=f"{name}0{i}Falloff_ADL", ss=True)
-                cmds.setAttr(f"{falloff_add}.input1", threshold_start)
-                cmds.connectAttr(f"{self.jaw_ctl}.stickyFalloff", f"{falloff_add}.input2", force=True)
+                float_constant = cmds.createNode("floatConstant", name=f"{name}0{i}Falloff_FC", ss=True)
+                cmds.setAttr(f"{float_constant}.inFloat", threshold_start)
+
+                falloff_sum = cmds.createNode("sum", name=f"{name}0{i}Falloff_SUM", ss=True)
+                cmds.connectAttr(f"{self.jaw_ctl}.stickyFalloff", f"{falloff_sum}.input[1]", force=True)
+                cmds.connectAttr(f"{float_constant}.outFloat", f"{falloff_sum}.input[0]", force=True)
+                cmds.connectAttr(f"{falloff_sum}.output", f"{sticky_remap}.inputMax", force=True)
+
+                # falloff_add = cmds.createNode("addDoubleLinear", name=f"{name}0{i}Falloff_ADL", ss=True)
+                # print(falloff_add)
+                # cmds.setAttr(f"{falloff_add}.input1", threshold_start)
+                # cmds.connectAttr(f"{self.jaw_ctl}.stickyFalloff", f"{falloff_add}.input2", force=True)
                 
-                cmds.connectAttr(f"{falloff_add}.output", f"{sticky_remap}.inputMax", force=True)
+                # cmds.connectAttr(f"{falloff_add}.output", f"{sticky_remap}.inputMax", force=True)
 
                 cmds.setAttr(f"{sticky_remap}.outputMin", 0)
                 cmds.setAttr(f"{sticky_remap}.outputMax", 1)

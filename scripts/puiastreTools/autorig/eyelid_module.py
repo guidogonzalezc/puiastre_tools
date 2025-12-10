@@ -687,7 +687,7 @@ class EyelidModule():
             cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
                                             0, 1, 0, 0,
                                             0, 0, 1, 0,
-                                            20, 0, 0, 1, type="matrix")
+                                            0, 0, 20, 1, type="matrix")
         else:
             cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
                                             0, 1, 0, 0,
