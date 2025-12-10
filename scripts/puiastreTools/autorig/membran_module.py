@@ -174,6 +174,18 @@ class MembraneModule(object):
         secondary_skinning_joints = []
         secondary_skinning_joints = first_row_closest
         secondary_skinning_joints.extend(third_row_closest)
+
+        uv_pin = cmds.createNode("uvPin", name=f"{self.side}_primaryMembraneFirstLayer_UVP", ss=True)
+        cmds.connectAttr(f"{self.guides[0]}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+
+        if self.side == "L":
+            cmds.setAttr(f"{uv_pin}.normalAxis", 1)
+            cmds.setAttr(f"{uv_pin}.tangentAxis", 2)
+        else:
+            cmds.setAttr(f"{uv_pin}.normalAxis", 1)
+            cmds.setAttr(f"{uv_pin}.tangentAxis", 5)
+
+        count = 0
         for i, (name) in enumerate(["Inner", "Middle", "Outer"]):
             secondary_controllers = []
             pick_matrices = []
@@ -181,10 +193,10 @@ class MembraneModule(object):
             for index in range(len(cv_list)-1):
                 u, v = core.getClosestParamsToPositionSurface(self.guides[0], cmds.pointPosition(f"{rebuilded_surface}.cv[{i+1}][{index}]", world=True))
 
-                uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{name}Membrane0{index+1}_UVP", ss=True)
-                cmds.connectAttr(f"{self.guides[0]}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
-                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateU", u)
-                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateV", v)
+                # uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{name}Membrane0{index+1}_UVP", ss=True)
+                # cmds.connectAttr(f"{self.guides[0]}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+                cmds.setAttr(f"{uv_pin}.coordinate[{count}].coordinateU", u)
+                cmds.setAttr(f"{uv_pin}.coordinate[{count}].coordinateV", v)
 
                 ctl = None
                 if index == int((len(cv_list)-1)*0.25) or index == int((len(cv_list)-1)*0.5) or index == int((len(cv_list)-1)*0.75):
@@ -202,16 +214,16 @@ class MembraneModule(object):
 
                 
                 if index == 0:
-                    cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{joint}.offsetParentMatrix")
+                    cmds.connectAttr(f"{uv_pin}.outputMatrix[{count}]", f"{joint}.offsetParentMatrix")
                     ctls.append(joint)
 
                 else:
                     multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}Offset_MMX", ss=True)
                     multMatrix_wm = cmds.createNode("multMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}WM_MMX", ss=True)
                     inverseMatrix = cmds.createNode("inverseMatrix", name=f"{self.side}_{name}PrimaryMembrane0{index+1}IMX", ss=True)
-                    cmds.connectAttr(f"{pick_matrices[-1]}.outputMatrix[0]", f"{inverseMatrix}.inputMatrix")
+                    cmds.connectAttr(f"{uv_pin}.outputMatrix[{count-1}]", f"{inverseMatrix}.inputMatrix")
 
-                    cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{multMatrix}.matrixIn[0]")
+                    cmds.connectAttr(f"{uv_pin}.outputMatrix[{count}]", f"{multMatrix}.matrixIn[0]")
                     cmds.connectAttr(f"{inverseMatrix}.outputMatrix", f"{multMatrix}.matrixIn[1]")
                     cmds.connectAttr(f"{multMatrix}.matrixSum", f"{multMatrix_wm}.matrixIn[0]")
                     cmds.connectAttr(f"{ctls[-1]}.worldMatrix[0]", f"{multMatrix_wm}.matrixIn[1]")
@@ -223,6 +235,7 @@ class MembraneModule(object):
                         cmds.connectAttr(f"{multMatrix_wm}.matrixSum", f"{joint}.offsetParentMatrix")
                         ctls.append(joint)
 
+                count += 1
                 pick_matrices.append(uv_pin)
 
                 secondary_skinning_joints.append(joint)
@@ -234,17 +247,27 @@ class MembraneModule(object):
         u_row = 10
         v_row = 10
 
+        uv_pin = cmds.createNode("uvPin", name=f"{self.side}_primaryMembraneEnd_UVP", ss=True)
+        cmds.connectAttr(f"{rebuilded_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+
+        if self.side == "L":
+            cmds.setAttr(f"{uv_pin}.normalAxis", 1)
+            cmds.setAttr(f"{uv_pin}.tangentAxis", 2)
+        else:
+            cmds.setAttr(f"{uv_pin}.normalAxis", 1)
+            cmds.setAttr(f"{uv_pin}.tangentAxis", 5)
+
+        count = 0
         for i in range(u_row):
             for index in range(v_row):
                 # split 1.0 into 'range(6)' steps -> 0.0, 0.2, 0.4, 0.6, 0.8, 1.0
-                uv_pin = cmds.createNode("uvPin", name=f"{self.side}_primaryMembrane{i}{index+1}_UVP", ss=True)
-                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateU", float(i) / (u_row - 1))
-                cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateV", float(index) / (v_row - 1))
+                cmds.setAttr(f"{uv_pin}.coordinate[{count}].coordinateU", float(i) / (u_row - 1))
+                cmds.setAttr(f"{uv_pin}.coordinate[{count}].coordinateV", float(index) / (v_row - 1))
 
-                cmds.connectAttr(f"{rebuilded_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
 
                 joint = cmds.createNode("joint", name=f"{self.side}_primaryMembrane{i}{index+1}_JNT", ss=True, parent=self.skinning_grp)
-                cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
+                cmds.connectAttr(f"{uv_pin}.outputMatrix[{count}]", f"{joint}.offsetParentMatrix", force=True)
+                count += 1
 
     def secondary_membranes(self):
 
@@ -402,16 +425,29 @@ class MembraneModule(object):
 
                 u_row = 10
                 v_row = 15
+                uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane_UVP", ss=True)
+                cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+
+                if self.side == "L":
+                    cmds.setAttr(f"{uv_pin}.normalAxis", 1)
+                    cmds.setAttr(f"{uv_pin}.tangentAxis", 2)
+                else:
+                    cmds.setAttr(f"{uv_pin}.normalAxis", 1)
+                    cmds.setAttr(f"{uv_pin}.tangentAxis", 5)
+
+
+                count = 0
 
                 for i_u_row in range(u_row):
 
                     for index in range(v_row):
-                        uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_UVP", ss=True)
-                        cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateU", float(i_u_row) / (u_row - 1))
-                        cmds.setAttr(f"{uv_pin}.coordinate[0].coordinateV", float(index) / (v_row - 1))
+                        # uv_pin = cmds.createNode("uvPin", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_UVP", ss=True)
+                        cmds.setAttr(f"{uv_pin}.coordinate[{count}].coordinateU", float(i_u_row) / (u_row - 1))
+                        cmds.setAttr(f"{uv_pin}.coordinate[{count}].coordinateV", float(index) / (v_row - 1))
 
-                        cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
+                        # cmds.connectAttr(f"{plane_shape}.worldSpace[0]", f"{uv_pin}.deformedGeometry", force=True)
 
                         joint = cmds.createNode("joint", name=f"{self.side}_{core.number_to_ordinal_word(i+1).capitalize()}Membrane{i_u_row}{index+1}_JNT", ss=True, parent=self.skinning_grp)
-                        cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{joint}.offsetParentMatrix", force=True)
+                        cmds.connectAttr(f"{uv_pin}.outputMatrix[{count}]", f"{joint}.offsetParentMatrix", force=True)
+                        count += 1
 
