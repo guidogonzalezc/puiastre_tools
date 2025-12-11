@@ -126,8 +126,8 @@ class FingersModule(object):
         :param guide_name: name of the guide to import
         """
 
-        # self.finger_attributes_ctl, self.finger_attributes_nodes = controller_creator(name=f"{self.side}_fingers{self.finger_front_name}Attributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
-        self.finger_attributes_ctl = self.foot_rotation
+        self.finger_attributes_ctl, self.finger_attributes_nodes = controller_creator(name=f"{self.side}_fingers{self.finger_front_name}Attributes", suffixes=["GRP"], parent=self.controllers_grp, lock=["tx", "ty", "tz" ,"rx", "ry", "rz", "sx", "sy", "sz", "visibility"], ro=False)
+        # self.finger_attributes_ctl = self.foot_rotation
 
         self.finger_plane, self.finger_plane_grp = controller_creator(
                     name=f"{self.side}_fingers{self.finger_front_name}PlaneIk",
