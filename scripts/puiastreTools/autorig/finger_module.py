@@ -292,7 +292,7 @@ class FingersModule(object):
 
         parent = self.controllers[::3]
 
-        # cmds.delete(cmds.pointConstraint(parent, self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
+        cmds.delete(cmds.pointConstraint(parent, self.finger_attributes_nodes[0], mo=False)) # Position the main attr grp
 
     def pairblends(self, ik, fk, fk_grp, finger_name, ctl_ik):
 
