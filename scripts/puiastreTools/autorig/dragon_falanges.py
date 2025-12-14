@@ -523,11 +523,15 @@ class FalangeModule(object):
             cmds.connectAttr(f"{self.blend_wm[i]}", f"{distance_node}.inMatrix1")
             cmds.connectAttr(f"{self.blend_wm[i+1]}", f"{distance_node}.inMatrix2")
 
+            distance_normalized = cmds.createNode("divide", name=f"{self.side}_{self.names[i]}{bendy}DistanceNormalized_DIV", ss=True)
+            cmds.connectAttr(f"{distance_node}.distance", f"{distance_normalized}.input1")
+            cmds.connectAttr(f"{self.masterWalk_ctl}.globalScale", f"{distance_normalized}.input2")
+
             if self.side == "L":
-                cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")
+                cmds.connectAttr(f"{distance_normalized}.output", f"{joint02}.translateX")
             else:
                 negate_translate = cmds.createNode("negate", name=f"{self.side}_{self.names[i]}{bendy}NegateTranslate_NEG", ss=True)
-                cmds.connectAttr(f"{distance_node}.distance", f"{negate_translate}.input")
+                cmds.connectAttr(f"{distance_normalized}.output", f"{negate_translate}.input")
                 cmds.connectAttr(f"{negate_translate}.output", f"{joint02}.translateX")
 
             # cmds.connectAttr(f"{distance_node}.distance", f"{joint02}.translateX")

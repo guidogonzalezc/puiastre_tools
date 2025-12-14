@@ -1,8 +1,8 @@
 {
-    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\oto",
-    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\oto\\curves\\CHAR_oto_001.json",
-    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\oto\\guides\\CHAR_oto_001.guides",
+    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor",
+    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_003.json",
+    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\guides\\CHAR_varyndor_003.guides",
     "mesh_data": null,
-    "asset_name": "oto",
-    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\oto\\skinning\\CHAR_oto_001.skn"
+    "asset_name": "varyndor",
+    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\skinning\\CHAR_varyndor_001.skn"
 }
