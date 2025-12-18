@@ -1,9 +1,11 @@
 import os
+from sys import modules
 import maya.cmds as cmds
 from maya.api import OpenMaya as om
 import json
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
+
+# SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
 class DataManager:
     """
@@ -18,6 +20,7 @@ class DataManager:
     _asset_name = None
     _skinning_data = None
     _finger_data = None
+    _extra_data = None
 
     @classmethod
     def set_project_path(cls, path):
@@ -72,6 +75,15 @@ class DataManager:
     @classmethod
     def get_skinning_data(cls):
         return cls._skinning_data
+    
+    @classmethod
+    def set_extra_data_path(cls, path):
+        cls._extra_data = path
+        store_data()
+    
+    @classmethod
+    def get_extra_data_path(cls):
+        return cls._extra_data
     
     def set_finger_data(cls, side, data):
         # ensure dict storage per side
@@ -457,3 +469,86 @@ def getPositionFromParmCurve(curve, u_value):
     point_pos = curveFn.getPointAtParam(u_value, space=om.MSpace.kWorld)
 
     return [point_pos.x, point_pos.y, point_pos.z]
+
+
+def custom_driven_keys(input_object = "", output_attr = "", attribute_name = "", module_grp = "", values_dict = [-10, 0, 10]):
+    """
+    Placeholder for custom driven keys functionality.
+    """
+
+    # Create the attribute 
+    if not cmds.attributeQuery("extraAttr", node=input_object, exists=True):
+        cmds.addAttr(input_object, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(f"{input_object}.extraAttr", channelBox=True, lock=True)
+
+    
+    if not cmds.attributeQuery(attribute_name, node=input_object, exists=True):
+        cmds.addAttr(input_object, longName=attribute_name, maxValue=values_dict[2], minValue=values_dict[0],defaultValue=values_dict[1], keyable=True)
+
+    name = input_object.split("_")[0] + input_object.split("_")[1]+"_" + attribute_name.capitalize()
+
+    # Create remap node
+
+    remap_node = cmds.createNode("remapValue", name=f"{name}_RMV", ss=True)
+    cmds.setAttr(f"{remap_node}.inputMin", values_dict[0])
+    cmds.setAttr(f"{remap_node}.inputMax", values_dict[2])
+    cmds.connectAttr(f"{input_object}.{attribute_name}", f"{remap_node}.inputValue", force=True)
+
+    cmds.connectAttr(f"{remap_node}.outValue", f"{output_attr}", force=True)
+
+    file_path = DataManager.get_extra_data_path()
+    # file_path = r"D:\git\maya\puiastre_tools\assets\varyndor\CHAR_varyndor_extraAttrs.settings"
+
+    with open(file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    attrs = data.get("modules")
+    attribute_max = None
+    attribute_min = None
+    for attr, value in attrs.items():
+        for key, val in value.items():
+            if key == f"{output_attr}_{attribute_name}MAX":
+                attribute_max = val
+            elif key == f"{output_attr}_{attribute_name}MIN":
+                attribute_min = val
+
+    if attribute_max is None:
+        cmds.addAttr(module_grp, longName=f"{output_attr.split('_')[1]}{attribute_name}MAX", defaultValue=0, keyable=True)
+    else:
+        cmds.addAttr(module_grp, longName=f"{output_attr.split('_')[1]}{attribute_name}MAX", defaultValue=attribute_max, keyable=True)
+
+    if attribute_min is None:
+        cmds.addAttr(module_grp, longName=f"{output_attr.split('_')[1]}{attribute_name}MIN", defaultValue=0, keyable=True)
+    else:
+        cmds.addAttr(module_grp, longName=f"{output_attr.split('_')[1]}{attribute_name}MIN", defaultValue=attribute_min, keyable=True)
+
+    cmds.connectAttr(f"{module_grp}.{output_attr.split('_')[1]}{attribute_name}MAX", f"{remap_node}.outputMax", force=True)
+    cmds.connectAttr(f"{module_grp}.{output_attr.split('_')[1]}{attribute_name}MIN", f"{remap_node}.outputMin", force=True)
+
+    
+# custom_driven_keys(module_grp= "C_jawModule_GRP", output_attr= "C_jawModule_CTL.worldMatrix[0]", attribute_name= "Open", values_dict= [0, 1, 10])
+    
+    
+def save_custom_driven_keys():
+    """
+    Placeholder for saving custom driven keys functionality.
+    """
+
+    file_path = DataManager.get_extra_data_path()
+
+    items = cmds.ls(type="transform")
+
+    modules_data = {}
+    modules = []
+    for item in items:
+        if "Module_GRP" in item:
+            modules.append(item)
+            custom_attrs = cmds.listAttr(item, userDefined=True) or []
+            attr_data = {}
+            for attr in custom_attrs:
+                value = cmds.getAttr(f"{item}.{attr}")
+                attr_data[attr] = value
+            modules_data[item] = attr_data
+
+    with open(file_path, 'w') as json_file:
+        json.dump({"modules": modules_data}, json_file, indent=4)

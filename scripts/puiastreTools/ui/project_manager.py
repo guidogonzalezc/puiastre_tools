@@ -95,6 +95,14 @@ def asset_structure_creation(asset_name, model_path = False, guides_path = False
     else:
         om.MGlobal.displayInfo(f"Configuration file already exists at: {config_file_path}")
 
+    extra_attrs_file_path = os.path.join(asset_path, f"{asset_type.upper()}_{asset_name}_extraAttrs.settings")
+    if not os.path.exists(extra_attrs_file_path):
+        with open(extra_attrs_file_path, 'w') as config_file:
+            json.dump(configurations, config_file, indent=4)
+        om.MGlobal.displayInfo(f"Extra Attrs file created at: {extra_attrs_file_path}")
+    else:
+        om.MGlobal.displayInfo(f"Extra Attrs file already exists at: {extra_attrs_file_path}")
+
 def _highest_version_file_in_directory(folder_path, extension):
     """
     Function to load the highest versioned model file from a directory.
@@ -129,6 +137,7 @@ def load_asset_configuration(asset_name):
             full_path = os.path.join(asset_path, fname)
             if os.path.isfile(full_path) and fname.lower().endswith('.config') and asset_name in fname:
                 config_files.append(full_path)
+
 
     # If multiple .config files are found, use the first one
     if config_files:
@@ -194,6 +203,15 @@ def load_asset_configuration(asset_name):
                 om.MGlobal.displayError(f"Models folder does not exist repathed to: {folder_path}")
                 return
 
+    if os.path.exists(asset_path):
+        for fname in os.listdir(asset_path):
+            full_path = os.path.join(asset_path, fname)
+            if os.path.isfile(full_path) and fname.lower().endswith('.settings') and asset_name in fname:
+                core.DataManager.set_extra_data_path(full_path)
+                om.MGlobal.displayInfo(f"Extra Attrs file loaded from: {full_path}")
+                break
+
+    
 
     core.DataManager.set_asset_name(asset_name)
     core.DataManager.set_project_path(asset_path)
