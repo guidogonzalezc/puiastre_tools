@@ -236,20 +236,20 @@ def make(asset_name = "", latest = False):
 
                     jmm.JawModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eyebrow":
+                if guide_info.get("moduleName") == "eyebrow":
 
-                #     ebm.EyebrowModule().make(guide_name)
+                    ebm.EyebrowModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eye":
+                if guide_info.get("moduleName") == "eye":
 
-                #     elm.EyelidModule().make(guide_name)
+                    elm.EyelidModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "nose":
+                if guide_info.get("moduleName") == "nose":
 
-                #     nm.NoseModule().make(guide_name)
+                    nm.NoseModule().make(guide_name)
                 
-                # if guide_info.get("moduleName") == "cheek":
-                #     cm.CheekModule().make(guide_name)
+                if guide_info.get("moduleName") == "cheek":
+                    cm.CheekModule().make(guide_name)
     
     # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
