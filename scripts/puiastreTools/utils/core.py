@@ -5,7 +5,7 @@ from maya.api import OpenMaya as om
 import json
 
 
-# SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
+SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
 class DataManager:
     """
