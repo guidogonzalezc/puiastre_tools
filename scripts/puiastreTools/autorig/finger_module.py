@@ -236,6 +236,21 @@ class FingersModule(object):
                     ro=False,
                     parent= controllers[-1] if controllers else self.controllers_grp
                 )
+
+
+                # cmds.setDrivenKeyframe(at="ry", dv=0, cd=f"{self.finger_attributes_ctl}.Spread", v=0)
+                # cmds.setDrivenKeyframe(at="ry", dv=10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[2])
+                # cmds.setDrivenKeyframe(at="ry", dv=-10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[3])
+
+                # cmds.setDrivenKeyframe(at="rx", dv=0, cd=f"{self.finger_attributes_ctl}.Twist", v=0)
+                # cmds.setDrivenKeyframe(at="rx", dv=10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[4])
+                # cmds.setDrivenKeyframe(at="rx", dv=-10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[5])
+
+                # cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Fan", v=0)
+                # cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[6])
+                # cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[7])
+
+
                 if i == 0:
                     if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])
@@ -246,14 +261,14 @@ class FingersModule(object):
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 1:
                     if j == 0:
-                        self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
+                        self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 0, 0, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 2:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 2: 
                     if j == 0:
-                        self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 2, -2, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
+                        self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 25, -15, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 2:
@@ -599,14 +614,14 @@ class FingersModule(object):
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
             if "index" in name.lower():
                 if i == 0:
-                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 0, 0, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
                 elif i == 1:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 elif i == 2:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
             if "middle" in name.lower(): 
                 if i == 0:
-                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 2, -2, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
+                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 25, -15, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
                 elif i == 1:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 elif i == 2:
@@ -634,7 +649,7 @@ class FingersModule(object):
                 cmds.connectAttr(f"{inverse}.outputMatrix", f"{mmt}.matrixIn[1]")
                 cmds.connectAttr(f"{mmt}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix")
 
-                for attr in ["translateX","translateY","translateZ", "rotateX", "rotateY", "rotateZ"]:
+                for attr in ["translateX","translateY","translateZ", "rotateX", "rotateY", "rotateZ"]:  
                     cmds.setAttr(f"{controller_grp[0]}.{attr}", 0)
 
             ctls_sub.append(ctl)
@@ -649,22 +664,20 @@ class FingersModule(object):
 
         cmds.select(ctl)
         
-        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Curl", v=0)
-        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Curl", v=finger_values[0])
-        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Curl", v=finger_values[1])
+        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Curl", v=0, inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Curl", v=finger_values[0], inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Curl", v=finger_values[1], inTangentType="linear", outTangentType="linear")
 
-        cmds.setDrivenKeyframe(at="ry", dv=0, cd=f"{self.finger_attributes_ctl}.Spread", v=0)
-        cmds.setDrivenKeyframe(at="ry", dv=10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[2])
-        cmds.setDrivenKeyframe(at="ry", dv=-10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[3])
+        cmds.setDrivenKeyframe(at="ry", dv=0, cd=f"{self.finger_attributes_ctl}.Spread", v=0, inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="ry", dv=10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[2], inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="ry", dv=-10, cd=f"{self.finger_attributes_ctl}.Spread", v=finger_values[3], inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rx", dv=0, cd=f"{self.finger_attributes_ctl}.Twist", v=0, inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rx", dv=10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[4], inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rx", dv=-10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[5], inTangentType="linear", outTangentType="linear")
 
-        cmds.setDrivenKeyframe(at="rx", dv=0, cd=f"{self.finger_attributes_ctl}.Twist", v=0)
-        cmds.setDrivenKeyframe(at="rx", dv=10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[4])
-        cmds.setDrivenKeyframe(at="rx", dv=-10, cd=f"{self.finger_attributes_ctl}.Twist", v=finger_values[5])
-
-        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Fan", v=0)
-        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[6])
-        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[7])
-
+        cmds.setDrivenKeyframe(at="rz", dv=0, cd=f"{self.finger_attributes_ctl}.Fan", v=0, inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rz", dv=10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[6], inTangentType="linear", outTangentType="linear")
+        cmds.setDrivenKeyframe(at="rz", dv=-10, cd=f"{self.finger_attributes_ctl}.Fan", v=finger_values[7], inTangentType="linear", outTangentType="linear")
         
     
 
