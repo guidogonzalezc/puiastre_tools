@@ -94,6 +94,8 @@ def parented_chain(skinning_joints, parent, hand_value=False):
                 cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
                 cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
                 cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+
+
               
             if "localHip" in joint:
                 mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "Envelop_MMX"), ss=True)
@@ -381,12 +383,18 @@ def build_complete_hierarchy():
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["Scapula", "LocalChest", "SpineEnd"])
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["WristIK", "Scapula", "LocalChest", "SpineEnd"], pv=True)
-        if "Metacarpal" in skel_grps[i]:
+
+        print("SKEL GRP:", skel_grps[i])
+
+        if "Finger00" in skel_grps[i]:
 
             fk = data_exporter.get_data(modules_name[i], "fk_ctls")[0]
             pv = data_exporter.get_data(modules_name[i], "pv_ctl")
             root = data_exporter.get_data(modules_name[i], "root_ctl")
             ik = data_exporter.get_data(modules_name[i], "end_ik")
+            metacarpal = data_exporter.get_data(modules_name[i], "metacarpal_ctl")
+
+            print("FINGER CONTROLS:", fk, pv, root, ik, metacarpal)
 
             side = skel_grps[i].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
@@ -397,12 +405,15 @@ def build_complete_hierarchy():
                 space_switch.fk_switch(target = hand_settings, sources=[parent_joint])
                 hand_settings_value = modules_name[i].split("_")[0]
             parents = [parent_joint]
+            print(parents)
 
-            space_switch.fk_switch(target = fk, sources= parents, sources_names=["Wrist"])
-            space_switch.fk_switch(target = root, sources= parents, sources_names=["Wrist"])
-            space_switch.fk_switch(target = ik, sources= parents, default_rotate=1, default_translate=1, sources_names=[ "Wrist"])
+            space_switch.fk_switch(target = metacarpal, sources= parents, sources_names=["Hand"])
+
+            space_switch.fk_switch(target = fk, sources= [metacarpal], sources_names=["Metacarpal"])
+            space_switch.fk_switch(target = root, sources= [metacarpal], sources_names=["Metacarpal"])
+            space_switch.fk_switch(target = ik, sources= [metacarpal], default_rotate=1, default_translate=1, sources_names=[ "Metacarpal"])
             parents.insert(0, ik)
-            space_switch.fk_switch(target = pv, sources= parents, sources_names=["MiddleFingerIK", "Wrist"], pv=True)
+            space_switch.fk_switch(target = pv, sources= [metacarpal, ik], sources_names=["fingerIK", "Wrist"], pv=True)
 
         # ===== SCAPULA SPACES ===== #
 
