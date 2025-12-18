@@ -699,6 +699,7 @@ class HandGuideCreation(GuideCreation):
                 if name == "first":
                     self.position_data.update({
                         f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
+                        f"{name}Finger00": get_data(f"{self.sides}_{name}Finger00"),
                         f"{name}Finger01": get_data(f"{self.sides}_{name}Finger01"),
                         f"{name}Finger02": get_data(f"{self.sides}_{name}Finger02"),
                         f"{name}Finger03": get_data(f"{self.sides}_{name}Finger03"),
@@ -706,6 +707,7 @@ class HandGuideCreation(GuideCreation):
                 else:
                     self.position_data.update({
                         f"{name}Metacarpal": get_data(f"{self.sides}_{name}Metacarpal"),
+                        f"{name}Finger00": get_data(f"{self.sides}_{name}Finger00"),
                         f"{name}Finger01": get_data(f"{self.sides}_{name}Finger01"),
                         f"{name}Finger02": get_data(f"{self.sides}_{name}Finger02"),
                         f"{name}Finger03": get_data(f"{self.sides}_{name}Finger03"),
@@ -756,6 +758,51 @@ class FkFingersGuideCreation(GuideCreation):
             else:
                 name = f"{limb_name}0{i}"
             self.position_data[f"{name}"] = get_data(f"{self.sides}_{name}")
+
+class SpikesGuideCreation(GuideCreation):
+    """
+    Guide creation for feet.
+    """
+    def __init__(self, side = "L", limb_name="spikes", prefix=False):
+        self.sides = side
+        self.reverse_foot_name = limb_name
+        self.limb_name = "spikes"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = 0
+        self.prefix = None
+
+        final_path = core.DataManager.get_guide_data()
+        try:
+            with open(final_path, "r") as infile:
+                guides_data = json.load(infile)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading guides data: {e}")
+
+        guide_set_name = next(iter(guides_data))
+        parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
+
+        def collect_descendants(parent, parent_map):
+            descendants = []
+            children = [joint for joint, p in parent_map.items() if p == parent]
+            for child in children:
+                descendants.append(child)
+                descendants.extend(collect_descendants(child, parent_map))
+            return descendants
+
+        all_child_guides = collect_descendants(limb_name, parent_map)
+        self.position_data = {
+                limb_name: get_data(limb_name),
+        }
+        try:
+            for guide in all_child_guides:
+                self.position_data.update({
+                    guide.replace("_GUIDE", ""): get_data(guide.replace("_GUIDE", "")),
+                })
+
+        except:
+            pass
+
 
 
 class FootFingersGuideCreation(GuideCreation):
@@ -916,7 +963,7 @@ class EyebrowGuideCreation(GuideCreation):
         self.position_data = {
                 "centerBrow": get_data(f"{self.sides}_centerBrow"),
         }
-        all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+        all_child_guides = collect_descendants(input_name, parent_map)
 
         try:
             for guide in all_child_guides:
@@ -1133,6 +1180,10 @@ def load_guides(path = ""):
 
                 if guide_info.get("moduleName") == "cheek":
                     CheekGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
+
+                if guide_info.get("moduleName") == "spikes":
+                    SpikesGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
+
 
 def create_curve_guide(name=""):
 
@@ -1522,17 +1573,19 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "moana")
+    project_manager.load_asset_configuration(asset_name = "varyndor")
 
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
     # NoseGuideCreation(side="C",).create_guides(guides_trn, buffers_trn)
-    CheekGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
-    CheekGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
+    # CheekGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
+    # CheekGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
 
-    # FkFingersGuideCreation(side="L", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
+
+    SpikesGuideCreation(side="L", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
+    SpikesGuideCreation(side="R", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
     # FkFingersGuideCreation(side="R", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
 
 # add_module_to_guide()
