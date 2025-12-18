@@ -92,7 +92,7 @@ class MembraneModule(object):
         spine_joints = cmds.listRelatives(data_exporter.get_data("C_spineModule", "skinning_transform"), allDescendents=True, type="joint")
         tail_joints = cmds.listRelatives(data_exporter.get_data("C_tailModule", "skinning_transform"), allDescendents=True, type="joint")
         arm_joints = cmds.listRelatives(data_exporter.get_data(f"{self.side}_armModule", "skinning_transform"), allDescendents=True, type="joint")
-        membran_joints = cmds.listRelatives(data_exporter.get_data(f"{self.side}_firstMetacarpalModule", "skinning_transform"), allDescendents=True, type="joint")
+        membran_joints = cmds.listRelatives(data_exporter.get_data(f"{self.side}_firstFinger00Module", "skinning_transform"), allDescendents=True, type="joint")
 
         ctls = []
 
@@ -274,7 +274,7 @@ class MembraneModule(object):
         input_val = 0
         skinning_joints = []
         while True:
-            joint_name = f"{self.side}_{core.number_to_ordinal_word(input_val + 1)}MetacarpalModule"
+            joint_name = f"{self.side}_{core.number_to_ordinal_word(input_val + 1)}Finger00Module"
             joint = self.data_exporter.get_data(joint_name, "skinning_transform")
             if joint is None:
                 break
