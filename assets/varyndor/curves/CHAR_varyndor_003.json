@@ -12672,7 +12672,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalFk_GRP|L_firstMetacarpalFk_SDK|L_firstMetacarpalFk_ANM|L_firstMetacarpalFk_CTL|L_firstFinger01Fk_GRP|L_firstFinger01Fk_SDK|L_firstFinger01Fk_ANM|L_firstFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00Fk_GRP|L_firstFinger00Fk_SDK|L_firstFinger00Fk_ANM|L_firstFinger00Fk_CTL|L_firstFinger01Fk_GRP|L_firstFinger01Fk_SDK|L_firstFinger01Fk_ANM|L_firstFinger01Fk_CTL": {
         "transform": {
             "name": "L_firstFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -12810,7 +12810,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkAttachedFk_GRP|L_firstMetacarpalIkAttachedFk_SDK|L_firstMetacarpalIkAttachedFk_ANM|L_firstMetacarpalIkAttachedFk_CTL|L_firstFinger01IkAttachedFk_GRP|L_firstFinger01IkAttachedFk_SDK|L_firstFinger01IkAttachedFk_ANM|L_firstFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkAttachedFk_GRP|L_firstFinger00IkAttachedFk_SDK|L_firstFinger00IkAttachedFk_ANM|L_firstFinger00IkAttachedFk_CTL|L_firstFinger01IkAttachedFk_GRP|L_firstFinger01IkAttachedFk_SDK|L_firstFinger01IkAttachedFk_ANM|L_firstFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "L_firstFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -13040,7 +13040,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkControllers_GRP|L_firstFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkControllers_GRP|L_firstFinger01PVLocator_CTL": {
         "transform": {
             "name": "L_firstFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -13076,7 +13076,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkControllers_GRP|L_firstFinger01PV_GRP|L_firstFinger01PV_ANM|L_firstFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkControllers_GRP|L_firstFinger01PV_GRP|L_firstFinger01PV_ANM|L_firstFinger01PV_CTL": {
         "transform": {
             "name": "L_firstFinger01PV_CTL",
             "overrideEnabled": true,
@@ -13196,7 +13196,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalFk_GRP|L_firstMetacarpalFk_SDK|L_firstMetacarpalFk_ANM|L_firstMetacarpalFk_CTL|L_firstFinger01Fk_GRP|L_firstFinger01Fk_SDK|L_firstFinger01Fk_ANM|L_firstFinger01Fk_CTL|L_firstFinger02Fk_GRP|L_firstFinger02Fk_SDK|L_firstFinger02Fk_ANM|L_firstFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00Fk_GRP|L_firstFinger00Fk_SDK|L_firstFinger00Fk_ANM|L_firstFinger00Fk_CTL|L_firstFinger01Fk_GRP|L_firstFinger01Fk_SDK|L_firstFinger01Fk_ANM|L_firstFinger01Fk_CTL|L_firstFinger02Fk_GRP|L_firstFinger02Fk_SDK|L_firstFinger02Fk_ANM|L_firstFinger02Fk_CTL": {
         "transform": {
             "name": "L_firstFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -13334,7 +13334,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkAttachedFk_GRP|L_firstMetacarpalIkAttachedFk_SDK|L_firstMetacarpalIkAttachedFk_ANM|L_firstMetacarpalIkAttachedFk_CTL|L_firstFinger01IkAttachedFk_GRP|L_firstFinger01IkAttachedFk_SDK|L_firstFinger01IkAttachedFk_ANM|L_firstFinger01IkAttachedFk_CTL|L_firstFinger02IkAttachedFk_GRP|L_firstFinger02IkAttachedFk_SDK|L_firstFinger02IkAttachedFk_ANM|L_firstFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkAttachedFk_GRP|L_firstFinger00IkAttachedFk_SDK|L_firstFinger00IkAttachedFk_ANM|L_firstFinger00IkAttachedFk_CTL|L_firstFinger01IkAttachedFk_GRP|L_firstFinger01IkAttachedFk_SDK|L_firstFinger01IkAttachedFk_ANM|L_firstFinger01IkAttachedFk_CTL|L_firstFinger02IkAttachedFk_GRP|L_firstFinger02IkAttachedFk_SDK|L_firstFinger02IkAttachedFk_ANM|L_firstFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "L_firstFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -13564,7 +13564,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalFk_GRP|L_firstMetacarpalFk_SDK|L_firstMetacarpalFk_ANM|L_firstMetacarpalFk_CTL|L_firstFinger01Fk_GRP|L_firstFinger01Fk_SDK|L_firstFinger01Fk_ANM|L_firstFinger01Fk_CTL|L_firstFinger02Fk_GRP|L_firstFinger02Fk_SDK|L_firstFinger02Fk_ANM|L_firstFinger02Fk_CTL|L_firstFinger03Fk_GRP|L_firstFinger03Fk_SDK|L_firstFinger03Fk_ANM|L_firstFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00Fk_GRP|L_firstFinger00Fk_SDK|L_firstFinger00Fk_ANM|L_firstFinger00Fk_CTL|L_firstFinger01Fk_GRP|L_firstFinger01Fk_SDK|L_firstFinger01Fk_ANM|L_firstFinger01Fk_CTL|L_firstFinger02Fk_GRP|L_firstFinger02Fk_SDK|L_firstFinger02Fk_ANM|L_firstFinger02Fk_CTL|L_firstFinger03Fk_GRP|L_firstFinger03Fk_SDK|L_firstFinger03Fk_ANM|L_firstFinger03Fk_CTL": {
         "transform": {
             "name": "L_firstFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -13702,7 +13702,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkAttachedFk_GRP|L_firstMetacarpalIkAttachedFk_SDK|L_firstMetacarpalIkAttachedFk_ANM|L_firstMetacarpalIkAttachedFk_CTL|L_firstFinger01IkAttachedFk_GRP|L_firstFinger01IkAttachedFk_SDK|L_firstFinger01IkAttachedFk_ANM|L_firstFinger01IkAttachedFk_CTL|L_firstFinger02IkAttachedFk_GRP|L_firstFinger02IkAttachedFk_SDK|L_firstFinger02IkAttachedFk_ANM|L_firstFinger02IkAttachedFk_CTL|L_firstFinger03IkAttachedFk_GRP|L_firstFinger03IkAttachedFk_SDK|L_firstFinger03IkAttachedFk_ANM|L_firstFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkAttachedFk_GRP|L_firstFinger00IkAttachedFk_SDK|L_firstFinger00IkAttachedFk_ANM|L_firstFinger00IkAttachedFk_CTL|L_firstFinger01IkAttachedFk_GRP|L_firstFinger01IkAttachedFk_SDK|L_firstFinger01IkAttachedFk_ANM|L_firstFinger01IkAttachedFk_CTL|L_firstFinger02IkAttachedFk_GRP|L_firstFinger02IkAttachedFk_SDK|L_firstFinger02IkAttachedFk_ANM|L_firstFinger02IkAttachedFk_CTL|L_firstFinger03IkAttachedFk_GRP|L_firstFinger03IkAttachedFk_SDK|L_firstFinger03IkAttachedFk_ANM|L_firstFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "L_firstFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -13840,7 +13840,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkControllers_GRP|L_firstFinger03Ik_GRP|L_firstFinger03Ik_ANM|L_firstFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkControllers_GRP|L_firstFinger03Ik_GRP|L_firstFinger03Ik_ANM|L_firstFinger03Ik_CTL": {
         "transform": {
             "name": "L_firstFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -14296,15 +14296,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalFk_GRP|L_firstMetacarpalFk_SDK|L_firstMetacarpalFk_ANM|L_firstMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00Fk_GRP|L_firstFinger00Fk_SDK|L_firstFinger00Fk_ANM|L_firstFinger00Fk_CTL": {
         "transform": {
-            "name": "L_firstMetacarpalFk_CTL",
+            "name": "L_firstFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_firstMetacarpalFk_CTLShape",
+                "name": "L_firstFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -14434,15 +14434,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkAttachedFk_GRP|L_firstMetacarpalIkAttachedFk_SDK|L_firstMetacarpalIkAttachedFk_ANM|L_firstMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkAttachedFk_GRP|L_firstFinger00IkAttachedFk_SDK|L_firstFinger00IkAttachedFk_ANM|L_firstFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "L_firstMetacarpalIkAttachedFk_CTL",
+            "name": "L_firstFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_firstMetacarpalIkAttachedFk_CTLShape",
+                "name": "L_firstFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -14572,15 +14572,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstMetacarpalIkControllers_GRP|L_firstMetacarpalRootIk_GRP|L_firstMetacarpalRootIk_ANM|L_firstMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger00IkControllers_GRP|L_firstFinger00RootIk_GRP|L_firstFinger00RootIk_ANM|L_firstFinger00RootIk_CTL": {
         "transform": {
-            "name": "L_firstMetacarpalRootIk_CTL",
+            "name": "L_firstFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_firstMetacarpalRootIk_CTLShape",
+                "name": "L_firstFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -14712,15 +14712,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger01BendyControllers_GRP|L_firstMetacarpalUpperBendy_GRP|L_firstMetacarpalUpperBendy_ANM|L_firstMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_firstFinger01BendyControllers_GRP|L_firstFinger00UpperBendy_GRP|L_firstFinger00UpperBendy_ANM|L_firstFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "L_firstMetacarpalUpperBendy_CTL",
+            "name": "L_firstFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_firstMetacarpalUpperBendy_CTLShape",
+                "name": "L_firstFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -14804,7 +14804,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalFk_GRP|L_fourthMetacarpalFk_SDK|L_fourthMetacarpalFk_ANM|L_fourthMetacarpalFk_CTL|L_fourthFinger01Fk_GRP|L_fourthFinger01Fk_SDK|L_fourthFinger01Fk_ANM|L_fourthFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00Fk_GRP|L_fourthFinger00Fk_SDK|L_fourthFinger00Fk_ANM|L_fourthFinger00Fk_CTL|L_fourthFinger01Fk_GRP|L_fourthFinger01Fk_SDK|L_fourthFinger01Fk_ANM|L_fourthFinger01Fk_CTL": {
         "transform": {
             "name": "L_fourthFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -14942,7 +14942,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkAttachedFk_GRP|L_fourthMetacarpalIkAttachedFk_SDK|L_fourthMetacarpalIkAttachedFk_ANM|L_fourthMetacarpalIkAttachedFk_CTL|L_fourthFinger01IkAttachedFk_GRP|L_fourthFinger01IkAttachedFk_SDK|L_fourthFinger01IkAttachedFk_ANM|L_fourthFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkAttachedFk_GRP|L_fourthFinger00IkAttachedFk_SDK|L_fourthFinger00IkAttachedFk_ANM|L_fourthFinger00IkAttachedFk_CTL|L_fourthFinger01IkAttachedFk_GRP|L_fourthFinger01IkAttachedFk_SDK|L_fourthFinger01IkAttachedFk_ANM|L_fourthFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "L_fourthFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -15172,7 +15172,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkControllers_GRP|L_fourthFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkControllers_GRP|L_fourthFinger01PVLocator_CTL": {
         "transform": {
             "name": "L_fourthFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -15208,7 +15208,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkControllers_GRP|L_fourthFinger01PV_GRP|L_fourthFinger01PV_ANM|L_fourthFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkControllers_GRP|L_fourthFinger01PV_GRP|L_fourthFinger01PV_ANM|L_fourthFinger01PV_CTL": {
         "transform": {
             "name": "L_fourthFinger01PV_CTL",
             "overrideEnabled": true,
@@ -15328,7 +15328,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalFk_GRP|L_fourthMetacarpalFk_SDK|L_fourthMetacarpalFk_ANM|L_fourthMetacarpalFk_CTL|L_fourthFinger01Fk_GRP|L_fourthFinger01Fk_SDK|L_fourthFinger01Fk_ANM|L_fourthFinger01Fk_CTL|L_fourthFinger02Fk_GRP|L_fourthFinger02Fk_SDK|L_fourthFinger02Fk_ANM|L_fourthFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00Fk_GRP|L_fourthFinger00Fk_SDK|L_fourthFinger00Fk_ANM|L_fourthFinger00Fk_CTL|L_fourthFinger01Fk_GRP|L_fourthFinger01Fk_SDK|L_fourthFinger01Fk_ANM|L_fourthFinger01Fk_CTL|L_fourthFinger02Fk_GRP|L_fourthFinger02Fk_SDK|L_fourthFinger02Fk_ANM|L_fourthFinger02Fk_CTL": {
         "transform": {
             "name": "L_fourthFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -15466,7 +15466,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkAttachedFk_GRP|L_fourthMetacarpalIkAttachedFk_SDK|L_fourthMetacarpalIkAttachedFk_ANM|L_fourthMetacarpalIkAttachedFk_CTL|L_fourthFinger01IkAttachedFk_GRP|L_fourthFinger01IkAttachedFk_SDK|L_fourthFinger01IkAttachedFk_ANM|L_fourthFinger01IkAttachedFk_CTL|L_fourthFinger02IkAttachedFk_GRP|L_fourthFinger02IkAttachedFk_SDK|L_fourthFinger02IkAttachedFk_ANM|L_fourthFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkAttachedFk_GRP|L_fourthFinger00IkAttachedFk_SDK|L_fourthFinger00IkAttachedFk_ANM|L_fourthFinger00IkAttachedFk_CTL|L_fourthFinger01IkAttachedFk_GRP|L_fourthFinger01IkAttachedFk_SDK|L_fourthFinger01IkAttachedFk_ANM|L_fourthFinger01IkAttachedFk_CTL|L_fourthFinger02IkAttachedFk_GRP|L_fourthFinger02IkAttachedFk_SDK|L_fourthFinger02IkAttachedFk_ANM|L_fourthFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "L_fourthFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -15696,7 +15696,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalFk_GRP|L_fourthMetacarpalFk_SDK|L_fourthMetacarpalFk_ANM|L_fourthMetacarpalFk_CTL|L_fourthFinger01Fk_GRP|L_fourthFinger01Fk_SDK|L_fourthFinger01Fk_ANM|L_fourthFinger01Fk_CTL|L_fourthFinger02Fk_GRP|L_fourthFinger02Fk_SDK|L_fourthFinger02Fk_ANM|L_fourthFinger02Fk_CTL|L_fourthFinger03Fk_GRP|L_fourthFinger03Fk_SDK|L_fourthFinger03Fk_ANM|L_fourthFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00Fk_GRP|L_fourthFinger00Fk_SDK|L_fourthFinger00Fk_ANM|L_fourthFinger00Fk_CTL|L_fourthFinger01Fk_GRP|L_fourthFinger01Fk_SDK|L_fourthFinger01Fk_ANM|L_fourthFinger01Fk_CTL|L_fourthFinger02Fk_GRP|L_fourthFinger02Fk_SDK|L_fourthFinger02Fk_ANM|L_fourthFinger02Fk_CTL|L_fourthFinger03Fk_GRP|L_fourthFinger03Fk_SDK|L_fourthFinger03Fk_ANM|L_fourthFinger03Fk_CTL": {
         "transform": {
             "name": "L_fourthFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -15834,7 +15834,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkAttachedFk_GRP|L_fourthMetacarpalIkAttachedFk_SDK|L_fourthMetacarpalIkAttachedFk_ANM|L_fourthMetacarpalIkAttachedFk_CTL|L_fourthFinger01IkAttachedFk_GRP|L_fourthFinger01IkAttachedFk_SDK|L_fourthFinger01IkAttachedFk_ANM|L_fourthFinger01IkAttachedFk_CTL|L_fourthFinger02IkAttachedFk_GRP|L_fourthFinger02IkAttachedFk_SDK|L_fourthFinger02IkAttachedFk_ANM|L_fourthFinger02IkAttachedFk_CTL|L_fourthFinger03IkAttachedFk_GRP|L_fourthFinger03IkAttachedFk_SDK|L_fourthFinger03IkAttachedFk_ANM|L_fourthFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkAttachedFk_GRP|L_fourthFinger00IkAttachedFk_SDK|L_fourthFinger00IkAttachedFk_ANM|L_fourthFinger00IkAttachedFk_CTL|L_fourthFinger01IkAttachedFk_GRP|L_fourthFinger01IkAttachedFk_SDK|L_fourthFinger01IkAttachedFk_ANM|L_fourthFinger01IkAttachedFk_CTL|L_fourthFinger02IkAttachedFk_GRP|L_fourthFinger02IkAttachedFk_SDK|L_fourthFinger02IkAttachedFk_ANM|L_fourthFinger02IkAttachedFk_CTL|L_fourthFinger03IkAttachedFk_GRP|L_fourthFinger03IkAttachedFk_SDK|L_fourthFinger03IkAttachedFk_ANM|L_fourthFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "L_fourthFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -15972,7 +15972,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkControllers_GRP|L_fourthFinger03Ik_GRP|L_fourthFinger03Ik_ANM|L_fourthFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkControllers_GRP|L_fourthFinger03Ik_GRP|L_fourthFinger03Ik_ANM|L_fourthFinger03Ik_CTL": {
         "transform": {
             "name": "L_fourthFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -16098,15 +16098,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalFk_GRP|L_fourthMetacarpalFk_SDK|L_fourthMetacarpalFk_ANM|L_fourthMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00Fk_GRP|L_fourthFinger00Fk_SDK|L_fourthFinger00Fk_ANM|L_fourthFinger00Fk_CTL": {
         "transform": {
-            "name": "L_fourthMetacarpalFk_CTL",
+            "name": "L_fourthFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_fourthMetacarpalFk_CTLShape",
+                "name": "L_fourthFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16236,15 +16236,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkAttachedFk_GRP|L_fourthMetacarpalIkAttachedFk_SDK|L_fourthMetacarpalIkAttachedFk_ANM|L_fourthMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkAttachedFk_GRP|L_fourthFinger00IkAttachedFk_SDK|L_fourthFinger00IkAttachedFk_ANM|L_fourthFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "L_fourthMetacarpalIkAttachedFk_CTL",
+            "name": "L_fourthFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_fourthMetacarpalIkAttachedFk_CTLShape",
+                "name": "L_fourthFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16374,15 +16374,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthMetacarpalIkControllers_GRP|L_fourthMetacarpalRootIk_GRP|L_fourthMetacarpalRootIk_ANM|L_fourthMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger00IkControllers_GRP|L_fourthFinger00RootIk_GRP|L_fourthFinger00RootIk_ANM|L_fourthFinger00RootIk_CTL": {
         "transform": {
-            "name": "L_fourthMetacarpalRootIk_CTL",
+            "name": "L_fourthFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_fourthMetacarpalRootIk_CTLShape",
+                "name": "L_fourthFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16514,15 +16514,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger01BendyControllers_GRP|L_fourthMetacarpalUpperBendy_GRP|L_fourthMetacarpalUpperBendy_ANM|L_fourthMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_fourthFinger01BendyControllers_GRP|L_fourthFinger00UpperBendy_GRP|L_fourthFinger00UpperBendy_ANM|L_fourthFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "L_fourthMetacarpalUpperBendy_CTL",
+            "name": "L_fourthFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_fourthMetacarpalUpperBendy_CTLShape",
+                "name": "L_fourthFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21723,7 +21723,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalFk_GRP|L_secondMetacarpalFk_SDK|L_secondMetacarpalFk_ANM|L_secondMetacarpalFk_CTL|L_secondFinger01Fk_GRP|L_secondFinger01Fk_SDK|L_secondFinger01Fk_ANM|L_secondFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00Fk_GRP|L_secondFinger00Fk_SDK|L_secondFinger00Fk_ANM|L_secondFinger00Fk_CTL|L_secondFinger01Fk_GRP|L_secondFinger01Fk_SDK|L_secondFinger01Fk_ANM|L_secondFinger01Fk_CTL": {
         "transform": {
             "name": "L_secondFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -21861,7 +21861,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkAttachedFk_GRP|L_secondMetacarpalIkAttachedFk_SDK|L_secondMetacarpalIkAttachedFk_ANM|L_secondMetacarpalIkAttachedFk_CTL|L_secondFinger01IkAttachedFk_GRP|L_secondFinger01IkAttachedFk_SDK|L_secondFinger01IkAttachedFk_ANM|L_secondFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkAttachedFk_GRP|L_secondFinger00IkAttachedFk_SDK|L_secondFinger00IkAttachedFk_ANM|L_secondFinger00IkAttachedFk_CTL|L_secondFinger01IkAttachedFk_GRP|L_secondFinger01IkAttachedFk_SDK|L_secondFinger01IkAttachedFk_ANM|L_secondFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "L_secondFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -22091,7 +22091,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkControllers_GRP|L_secondFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkControllers_GRP|L_secondFinger01PVLocator_CTL": {
         "transform": {
             "name": "L_secondFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -22127,7 +22127,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkControllers_GRP|L_secondFinger01PV_GRP|L_secondFinger01PV_ANM|L_secondFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkControllers_GRP|L_secondFinger01PV_GRP|L_secondFinger01PV_ANM|L_secondFinger01PV_CTL": {
         "transform": {
             "name": "L_secondFinger01PV_CTL",
             "overrideEnabled": true,
@@ -22247,7 +22247,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalFk_GRP|L_secondMetacarpalFk_SDK|L_secondMetacarpalFk_ANM|L_secondMetacarpalFk_CTL|L_secondFinger01Fk_GRP|L_secondFinger01Fk_SDK|L_secondFinger01Fk_ANM|L_secondFinger01Fk_CTL|L_secondFinger02Fk_GRP|L_secondFinger02Fk_SDK|L_secondFinger02Fk_ANM|L_secondFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00Fk_GRP|L_secondFinger00Fk_SDK|L_secondFinger00Fk_ANM|L_secondFinger00Fk_CTL|L_secondFinger01Fk_GRP|L_secondFinger01Fk_SDK|L_secondFinger01Fk_ANM|L_secondFinger01Fk_CTL|L_secondFinger02Fk_GRP|L_secondFinger02Fk_SDK|L_secondFinger02Fk_ANM|L_secondFinger02Fk_CTL": {
         "transform": {
             "name": "L_secondFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -22385,7 +22385,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkAttachedFk_GRP|L_secondMetacarpalIkAttachedFk_SDK|L_secondMetacarpalIkAttachedFk_ANM|L_secondMetacarpalIkAttachedFk_CTL|L_secondFinger01IkAttachedFk_GRP|L_secondFinger01IkAttachedFk_SDK|L_secondFinger01IkAttachedFk_ANM|L_secondFinger01IkAttachedFk_CTL|L_secondFinger02IkAttachedFk_GRP|L_secondFinger02IkAttachedFk_SDK|L_secondFinger02IkAttachedFk_ANM|L_secondFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkAttachedFk_GRP|L_secondFinger00IkAttachedFk_SDK|L_secondFinger00IkAttachedFk_ANM|L_secondFinger00IkAttachedFk_CTL|L_secondFinger01IkAttachedFk_GRP|L_secondFinger01IkAttachedFk_SDK|L_secondFinger01IkAttachedFk_ANM|L_secondFinger01IkAttachedFk_CTL|L_secondFinger02IkAttachedFk_GRP|L_secondFinger02IkAttachedFk_SDK|L_secondFinger02IkAttachedFk_ANM|L_secondFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "L_secondFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -22615,7 +22615,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalFk_GRP|L_secondMetacarpalFk_SDK|L_secondMetacarpalFk_ANM|L_secondMetacarpalFk_CTL|L_secondFinger01Fk_GRP|L_secondFinger01Fk_SDK|L_secondFinger01Fk_ANM|L_secondFinger01Fk_CTL|L_secondFinger02Fk_GRP|L_secondFinger02Fk_SDK|L_secondFinger02Fk_ANM|L_secondFinger02Fk_CTL|L_secondFinger03Fk_GRP|L_secondFinger03Fk_SDK|L_secondFinger03Fk_ANM|L_secondFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00Fk_GRP|L_secondFinger00Fk_SDK|L_secondFinger00Fk_ANM|L_secondFinger00Fk_CTL|L_secondFinger01Fk_GRP|L_secondFinger01Fk_SDK|L_secondFinger01Fk_ANM|L_secondFinger01Fk_CTL|L_secondFinger02Fk_GRP|L_secondFinger02Fk_SDK|L_secondFinger02Fk_ANM|L_secondFinger02Fk_CTL|L_secondFinger03Fk_GRP|L_secondFinger03Fk_SDK|L_secondFinger03Fk_ANM|L_secondFinger03Fk_CTL": {
         "transform": {
             "name": "L_secondFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -22753,7 +22753,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkAttachedFk_GRP|L_secondMetacarpalIkAttachedFk_SDK|L_secondMetacarpalIkAttachedFk_ANM|L_secondMetacarpalIkAttachedFk_CTL|L_secondFinger01IkAttachedFk_GRP|L_secondFinger01IkAttachedFk_SDK|L_secondFinger01IkAttachedFk_ANM|L_secondFinger01IkAttachedFk_CTL|L_secondFinger02IkAttachedFk_GRP|L_secondFinger02IkAttachedFk_SDK|L_secondFinger02IkAttachedFk_ANM|L_secondFinger02IkAttachedFk_CTL|L_secondFinger03IkAttachedFk_GRP|L_secondFinger03IkAttachedFk_SDK|L_secondFinger03IkAttachedFk_ANM|L_secondFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkAttachedFk_GRP|L_secondFinger00IkAttachedFk_SDK|L_secondFinger00IkAttachedFk_ANM|L_secondFinger00IkAttachedFk_CTL|L_secondFinger01IkAttachedFk_GRP|L_secondFinger01IkAttachedFk_SDK|L_secondFinger01IkAttachedFk_ANM|L_secondFinger01IkAttachedFk_CTL|L_secondFinger02IkAttachedFk_GRP|L_secondFinger02IkAttachedFk_SDK|L_secondFinger02IkAttachedFk_ANM|L_secondFinger02IkAttachedFk_CTL|L_secondFinger03IkAttachedFk_GRP|L_secondFinger03IkAttachedFk_SDK|L_secondFinger03IkAttachedFk_ANM|L_secondFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "L_secondFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -22891,7 +22891,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkControllers_GRP|L_secondFinger03Ik_GRP|L_secondFinger03Ik_ANM|L_secondFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkControllers_GRP|L_secondFinger03Ik_GRP|L_secondFinger03Ik_ANM|L_secondFinger03Ik_CTL": {
         "transform": {
             "name": "L_secondFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -23347,15 +23347,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalFk_GRP|L_secondMetacarpalFk_SDK|L_secondMetacarpalFk_ANM|L_secondMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00Fk_GRP|L_secondFinger00Fk_SDK|L_secondFinger00Fk_ANM|L_secondFinger00Fk_CTL": {
         "transform": {
-            "name": "L_secondMetacarpalFk_CTL",
+            "name": "L_secondFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_secondMetacarpalFk_CTLShape",
+                "name": "L_secondFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23485,15 +23485,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkAttachedFk_GRP|L_secondMetacarpalIkAttachedFk_SDK|L_secondMetacarpalIkAttachedFk_ANM|L_secondMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkAttachedFk_GRP|L_secondFinger00IkAttachedFk_SDK|L_secondFinger00IkAttachedFk_ANM|L_secondFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "L_secondMetacarpalIkAttachedFk_CTL",
+            "name": "L_secondFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_secondMetacarpalIkAttachedFk_CTLShape",
+                "name": "L_secondFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23623,15 +23623,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondMetacarpalIkControllers_GRP|L_secondMetacarpalRootIk_GRP|L_secondMetacarpalRootIk_ANM|L_secondMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger00IkControllers_GRP|L_secondFinger00RootIk_GRP|L_secondFinger00RootIk_ANM|L_secondFinger00RootIk_CTL": {
         "transform": {
-            "name": "L_secondMetacarpalRootIk_CTL",
+            "name": "L_secondFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_secondMetacarpalRootIk_CTLShape",
+                "name": "L_secondFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23763,15 +23763,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger01BendyControllers_GRP|L_secondMetacarpalUpperBendy_GRP|L_secondMetacarpalUpperBendy_ANM|L_secondMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_secondFinger01BendyControllers_GRP|L_secondFinger00UpperBendy_GRP|L_secondFinger00UpperBendy_ANM|L_secondFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "L_secondMetacarpalUpperBendy_CTL",
+            "name": "L_secondFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_secondMetacarpalUpperBendy_CTLShape",
+                "name": "L_secondFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -24067,7 +24067,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalFk_GRP|L_thirdMetacarpalFk_SDK|L_thirdMetacarpalFk_ANM|L_thirdMetacarpalFk_CTL|L_thirdFinger01Fk_GRP|L_thirdFinger01Fk_SDK|L_thirdFinger01Fk_ANM|L_thirdFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00Fk_GRP|L_thirdFinger00Fk_SDK|L_thirdFinger00Fk_ANM|L_thirdFinger00Fk_CTL|L_thirdFinger01Fk_GRP|L_thirdFinger01Fk_SDK|L_thirdFinger01Fk_ANM|L_thirdFinger01Fk_CTL": {
         "transform": {
             "name": "L_thirdFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -24205,7 +24205,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkAttachedFk_GRP|L_thirdMetacarpalIkAttachedFk_SDK|L_thirdMetacarpalIkAttachedFk_ANM|L_thirdMetacarpalIkAttachedFk_CTL|L_thirdFinger01IkAttachedFk_GRP|L_thirdFinger01IkAttachedFk_SDK|L_thirdFinger01IkAttachedFk_ANM|L_thirdFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkAttachedFk_GRP|L_thirdFinger00IkAttachedFk_SDK|L_thirdFinger00IkAttachedFk_ANM|L_thirdFinger00IkAttachedFk_CTL|L_thirdFinger01IkAttachedFk_GRP|L_thirdFinger01IkAttachedFk_SDK|L_thirdFinger01IkAttachedFk_ANM|L_thirdFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "L_thirdFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -24435,7 +24435,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkControllers_GRP|L_thirdFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkControllers_GRP|L_thirdFinger01PVLocator_CTL": {
         "transform": {
             "name": "L_thirdFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -24471,7 +24471,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkControllers_GRP|L_thirdFinger01PV_GRP|L_thirdFinger01PV_ANM|L_thirdFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkControllers_GRP|L_thirdFinger01PV_GRP|L_thirdFinger01PV_ANM|L_thirdFinger01PV_CTL": {
         "transform": {
             "name": "L_thirdFinger01PV_CTL",
             "overrideEnabled": true,
@@ -24591,7 +24591,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalFk_GRP|L_thirdMetacarpalFk_SDK|L_thirdMetacarpalFk_ANM|L_thirdMetacarpalFk_CTL|L_thirdFinger01Fk_GRP|L_thirdFinger01Fk_SDK|L_thirdFinger01Fk_ANM|L_thirdFinger01Fk_CTL|L_thirdFinger02Fk_GRP|L_thirdFinger02Fk_SDK|L_thirdFinger02Fk_ANM|L_thirdFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00Fk_GRP|L_thirdFinger00Fk_SDK|L_thirdFinger00Fk_ANM|L_thirdFinger00Fk_CTL|L_thirdFinger01Fk_GRP|L_thirdFinger01Fk_SDK|L_thirdFinger01Fk_ANM|L_thirdFinger01Fk_CTL|L_thirdFinger02Fk_GRP|L_thirdFinger02Fk_SDK|L_thirdFinger02Fk_ANM|L_thirdFinger02Fk_CTL": {
         "transform": {
             "name": "L_thirdFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -24729,7 +24729,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkAttachedFk_GRP|L_thirdMetacarpalIkAttachedFk_SDK|L_thirdMetacarpalIkAttachedFk_ANM|L_thirdMetacarpalIkAttachedFk_CTL|L_thirdFinger01IkAttachedFk_GRP|L_thirdFinger01IkAttachedFk_SDK|L_thirdFinger01IkAttachedFk_ANM|L_thirdFinger01IkAttachedFk_CTL|L_thirdFinger02IkAttachedFk_GRP|L_thirdFinger02IkAttachedFk_SDK|L_thirdFinger02IkAttachedFk_ANM|L_thirdFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkAttachedFk_GRP|L_thirdFinger00IkAttachedFk_SDK|L_thirdFinger00IkAttachedFk_ANM|L_thirdFinger00IkAttachedFk_CTL|L_thirdFinger01IkAttachedFk_GRP|L_thirdFinger01IkAttachedFk_SDK|L_thirdFinger01IkAttachedFk_ANM|L_thirdFinger01IkAttachedFk_CTL|L_thirdFinger02IkAttachedFk_GRP|L_thirdFinger02IkAttachedFk_SDK|L_thirdFinger02IkAttachedFk_ANM|L_thirdFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "L_thirdFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -24959,7 +24959,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalFk_GRP|L_thirdMetacarpalFk_SDK|L_thirdMetacarpalFk_ANM|L_thirdMetacarpalFk_CTL|L_thirdFinger01Fk_GRP|L_thirdFinger01Fk_SDK|L_thirdFinger01Fk_ANM|L_thirdFinger01Fk_CTL|L_thirdFinger02Fk_GRP|L_thirdFinger02Fk_SDK|L_thirdFinger02Fk_ANM|L_thirdFinger02Fk_CTL|L_thirdFinger03Fk_GRP|L_thirdFinger03Fk_SDK|L_thirdFinger03Fk_ANM|L_thirdFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00Fk_GRP|L_thirdFinger00Fk_SDK|L_thirdFinger00Fk_ANM|L_thirdFinger00Fk_CTL|L_thirdFinger01Fk_GRP|L_thirdFinger01Fk_SDK|L_thirdFinger01Fk_ANM|L_thirdFinger01Fk_CTL|L_thirdFinger02Fk_GRP|L_thirdFinger02Fk_SDK|L_thirdFinger02Fk_ANM|L_thirdFinger02Fk_CTL|L_thirdFinger03Fk_GRP|L_thirdFinger03Fk_SDK|L_thirdFinger03Fk_ANM|L_thirdFinger03Fk_CTL": {
         "transform": {
             "name": "L_thirdFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -25097,7 +25097,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkAttachedFk_GRP|L_thirdMetacarpalIkAttachedFk_SDK|L_thirdMetacarpalIkAttachedFk_ANM|L_thirdMetacarpalIkAttachedFk_CTL|L_thirdFinger01IkAttachedFk_GRP|L_thirdFinger01IkAttachedFk_SDK|L_thirdFinger01IkAttachedFk_ANM|L_thirdFinger01IkAttachedFk_CTL|L_thirdFinger02IkAttachedFk_GRP|L_thirdFinger02IkAttachedFk_SDK|L_thirdFinger02IkAttachedFk_ANM|L_thirdFinger02IkAttachedFk_CTL|L_thirdFinger03IkAttachedFk_GRP|L_thirdFinger03IkAttachedFk_SDK|L_thirdFinger03IkAttachedFk_ANM|L_thirdFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkAttachedFk_GRP|L_thirdFinger00IkAttachedFk_SDK|L_thirdFinger00IkAttachedFk_ANM|L_thirdFinger00IkAttachedFk_CTL|L_thirdFinger01IkAttachedFk_GRP|L_thirdFinger01IkAttachedFk_SDK|L_thirdFinger01IkAttachedFk_ANM|L_thirdFinger01IkAttachedFk_CTL|L_thirdFinger02IkAttachedFk_GRP|L_thirdFinger02IkAttachedFk_SDK|L_thirdFinger02IkAttachedFk_ANM|L_thirdFinger02IkAttachedFk_CTL|L_thirdFinger03IkAttachedFk_GRP|L_thirdFinger03IkAttachedFk_SDK|L_thirdFinger03IkAttachedFk_ANM|L_thirdFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "L_thirdFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -25235,7 +25235,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkControllers_GRP|L_thirdFinger03Ik_GRP|L_thirdFinger03Ik_ANM|L_thirdFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkControllers_GRP|L_thirdFinger03Ik_GRP|L_thirdFinger03Ik_ANM|L_thirdFinger03Ik_CTL": {
         "transform": {
             "name": "L_thirdFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -25691,15 +25691,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalFk_GRP|L_thirdMetacarpalFk_SDK|L_thirdMetacarpalFk_ANM|L_thirdMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00Fk_GRP|L_thirdFinger00Fk_SDK|L_thirdFinger00Fk_ANM|L_thirdFinger00Fk_CTL": {
         "transform": {
-            "name": "L_thirdMetacarpalFk_CTL",
+            "name": "L_thirdFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_thirdMetacarpalFk_CTLShape",
+                "name": "L_thirdFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -25829,15 +25829,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkAttachedFk_GRP|L_thirdMetacarpalIkAttachedFk_SDK|L_thirdMetacarpalIkAttachedFk_ANM|L_thirdMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkAttachedFk_GRP|L_thirdFinger00IkAttachedFk_SDK|L_thirdFinger00IkAttachedFk_ANM|L_thirdFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "L_thirdMetacarpalIkAttachedFk_CTL",
+            "name": "L_thirdFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_thirdMetacarpalIkAttachedFk_CTLShape",
+                "name": "L_thirdFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -25967,15 +25967,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdMetacarpalIkControllers_GRP|L_thirdMetacarpalRootIk_GRP|L_thirdMetacarpalRootIk_ANM|L_thirdMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger00IkControllers_GRP|L_thirdFinger00RootIk_GRP|L_thirdFinger00RootIk_ANM|L_thirdFinger00RootIk_CTL": {
         "transform": {
-            "name": "L_thirdMetacarpalRootIk_CTL",
+            "name": "L_thirdFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 6
         },
         "shapes": [
             {
-                "name": "L_thirdMetacarpalRootIk_CTLShape",
+                "name": "L_thirdFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26107,15 +26107,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger01BendyControllers_GRP|L_thirdMetacarpalUpperBendy_GRP|L_thirdMetacarpalUpperBendy_ANM|L_thirdMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|L_handControllers_GRP|L_thirdFinger01BendyControllers_GRP|L_thirdFinger00UpperBendy_GRP|L_thirdFinger00UpperBendy_ANM|L_thirdFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "L_thirdMetacarpalUpperBendy_CTL",
+            "name": "L_thirdFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 18
         },
         "shapes": [
             {
-                "name": "L_thirdMetacarpalUpperBendy_CTLShape",
+                "name": "L_thirdFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35236,7 +35236,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalFk_GRP|R_firstMetacarpalFk_SDK|R_firstMetacarpalFk_ANM|R_firstMetacarpalFk_CTL|R_firstFinger01Fk_GRP|R_firstFinger01Fk_SDK|R_firstFinger01Fk_ANM|R_firstFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00Fk_GRP|R_firstFinger00Fk_SDK|R_firstFinger00Fk_ANM|R_firstFinger00Fk_CTL|R_firstFinger01Fk_GRP|R_firstFinger01Fk_SDK|R_firstFinger01Fk_ANM|R_firstFinger01Fk_CTL": {
         "transform": {
             "name": "R_firstFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -35374,7 +35374,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkAttachedFk_GRP|R_firstMetacarpalIkAttachedFk_SDK|R_firstMetacarpalIkAttachedFk_ANM|R_firstMetacarpalIkAttachedFk_CTL|R_firstFinger01IkAttachedFk_GRP|R_firstFinger01IkAttachedFk_SDK|R_firstFinger01IkAttachedFk_ANM|R_firstFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkAttachedFk_GRP|R_firstFinger00IkAttachedFk_SDK|R_firstFinger00IkAttachedFk_ANM|R_firstFinger00IkAttachedFk_CTL|R_firstFinger01IkAttachedFk_GRP|R_firstFinger01IkAttachedFk_SDK|R_firstFinger01IkAttachedFk_ANM|R_firstFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "R_firstFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -35604,7 +35604,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkControllers_GRP|R_firstFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkControllers_GRP|R_firstFinger01PVLocator_CTL": {
         "transform": {
             "name": "R_firstFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -35640,7 +35640,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkControllers_GRP|R_firstFinger01PV_GRP|R_firstFinger01PV_ANM|R_firstFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkControllers_GRP|R_firstFinger01PV_GRP|R_firstFinger01PV_ANM|R_firstFinger01PV_CTL": {
         "transform": {
             "name": "R_firstFinger01PV_CTL",
             "overrideEnabled": true,
@@ -35760,7 +35760,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalFk_GRP|R_firstMetacarpalFk_SDK|R_firstMetacarpalFk_ANM|R_firstMetacarpalFk_CTL|R_firstFinger01Fk_GRP|R_firstFinger01Fk_SDK|R_firstFinger01Fk_ANM|R_firstFinger01Fk_CTL|R_firstFinger02Fk_GRP|R_firstFinger02Fk_SDK|R_firstFinger02Fk_ANM|R_firstFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00Fk_GRP|R_firstFinger00Fk_SDK|R_firstFinger00Fk_ANM|R_firstFinger00Fk_CTL|R_firstFinger01Fk_GRP|R_firstFinger01Fk_SDK|R_firstFinger01Fk_ANM|R_firstFinger01Fk_CTL|R_firstFinger02Fk_GRP|R_firstFinger02Fk_SDK|R_firstFinger02Fk_ANM|R_firstFinger02Fk_CTL": {
         "transform": {
             "name": "R_firstFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -35898,7 +35898,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkAttachedFk_GRP|R_firstMetacarpalIkAttachedFk_SDK|R_firstMetacarpalIkAttachedFk_ANM|R_firstMetacarpalIkAttachedFk_CTL|R_firstFinger01IkAttachedFk_GRP|R_firstFinger01IkAttachedFk_SDK|R_firstFinger01IkAttachedFk_ANM|R_firstFinger01IkAttachedFk_CTL|R_firstFinger02IkAttachedFk_GRP|R_firstFinger02IkAttachedFk_SDK|R_firstFinger02IkAttachedFk_ANM|R_firstFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkAttachedFk_GRP|R_firstFinger00IkAttachedFk_SDK|R_firstFinger00IkAttachedFk_ANM|R_firstFinger00IkAttachedFk_CTL|R_firstFinger01IkAttachedFk_GRP|R_firstFinger01IkAttachedFk_SDK|R_firstFinger01IkAttachedFk_ANM|R_firstFinger01IkAttachedFk_CTL|R_firstFinger02IkAttachedFk_GRP|R_firstFinger02IkAttachedFk_SDK|R_firstFinger02IkAttachedFk_ANM|R_firstFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "R_firstFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -36128,7 +36128,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalFk_GRP|R_firstMetacarpalFk_SDK|R_firstMetacarpalFk_ANM|R_firstMetacarpalFk_CTL|R_firstFinger01Fk_GRP|R_firstFinger01Fk_SDK|R_firstFinger01Fk_ANM|R_firstFinger01Fk_CTL|R_firstFinger02Fk_GRP|R_firstFinger02Fk_SDK|R_firstFinger02Fk_ANM|R_firstFinger02Fk_CTL|R_firstFinger03Fk_GRP|R_firstFinger03Fk_SDK|R_firstFinger03Fk_ANM|R_firstFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00Fk_GRP|R_firstFinger00Fk_SDK|R_firstFinger00Fk_ANM|R_firstFinger00Fk_CTL|R_firstFinger01Fk_GRP|R_firstFinger01Fk_SDK|R_firstFinger01Fk_ANM|R_firstFinger01Fk_CTL|R_firstFinger02Fk_GRP|R_firstFinger02Fk_SDK|R_firstFinger02Fk_ANM|R_firstFinger02Fk_CTL|R_firstFinger03Fk_GRP|R_firstFinger03Fk_SDK|R_firstFinger03Fk_ANM|R_firstFinger03Fk_CTL": {
         "transform": {
             "name": "R_firstFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -36266,7 +36266,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkAttachedFk_GRP|R_firstMetacarpalIkAttachedFk_SDK|R_firstMetacarpalIkAttachedFk_ANM|R_firstMetacarpalIkAttachedFk_CTL|R_firstFinger01IkAttachedFk_GRP|R_firstFinger01IkAttachedFk_SDK|R_firstFinger01IkAttachedFk_ANM|R_firstFinger01IkAttachedFk_CTL|R_firstFinger02IkAttachedFk_GRP|R_firstFinger02IkAttachedFk_SDK|R_firstFinger02IkAttachedFk_ANM|R_firstFinger02IkAttachedFk_CTL|R_firstFinger03IkAttachedFk_GRP|R_firstFinger03IkAttachedFk_SDK|R_firstFinger03IkAttachedFk_ANM|R_firstFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkAttachedFk_GRP|R_firstFinger00IkAttachedFk_SDK|R_firstFinger00IkAttachedFk_ANM|R_firstFinger00IkAttachedFk_CTL|R_firstFinger01IkAttachedFk_GRP|R_firstFinger01IkAttachedFk_SDK|R_firstFinger01IkAttachedFk_ANM|R_firstFinger01IkAttachedFk_CTL|R_firstFinger02IkAttachedFk_GRP|R_firstFinger02IkAttachedFk_SDK|R_firstFinger02IkAttachedFk_ANM|R_firstFinger02IkAttachedFk_CTL|R_firstFinger03IkAttachedFk_GRP|R_firstFinger03IkAttachedFk_SDK|R_firstFinger03IkAttachedFk_ANM|R_firstFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "R_firstFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -36404,7 +36404,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkControllers_GRP|R_firstFinger03Ik_GRP|R_firstFinger03Ik_ANM|R_firstFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkControllers_GRP|R_firstFinger03Ik_GRP|R_firstFinger03Ik_ANM|R_firstFinger03Ik_CTL": {
         "transform": {
             "name": "R_firstFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -36860,15 +36860,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalFk_GRP|R_firstMetacarpalFk_SDK|R_firstMetacarpalFk_ANM|R_firstMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00Fk_GRP|R_firstFinger00Fk_SDK|R_firstFinger00Fk_ANM|R_firstFinger00Fk_CTL": {
         "transform": {
-            "name": "R_firstMetacarpalFk_CTL",
+            "name": "R_firstFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_firstMetacarpalFk_CTLShape01",
+                "name": "R_firstFinger00Fk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -36998,15 +36998,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkAttachedFk_GRP|R_firstMetacarpalIkAttachedFk_SDK|R_firstMetacarpalIkAttachedFk_ANM|R_firstMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkAttachedFk_GRP|R_firstFinger00IkAttachedFk_SDK|R_firstFinger00IkAttachedFk_ANM|R_firstFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "R_firstMetacarpalIkAttachedFk_CTL",
+            "name": "R_firstFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_firstMetacarpalIkAttachedFk_CTLShape01",
+                "name": "R_firstFinger00IkAttachedFk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37136,15 +37136,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstMetacarpalIkControllers_GRP|R_firstMetacarpalRootIk_GRP|R_firstMetacarpalRootIk_ANM|R_firstMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger00IkControllers_GRP|R_firstFinger00RootIk_GRP|R_firstFinger00RootIk_ANM|R_firstFinger00RootIk_CTL": {
         "transform": {
-            "name": "R_firstMetacarpalRootIk_CTL",
+            "name": "R_firstFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_firstMetacarpalRootIk_CTLShape01",
+                "name": "R_firstFinger00RootIk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37276,15 +37276,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger01BendyControllers_GRP|R_firstMetacarpalUpperBendy_GRP|R_firstMetacarpalUpperBendy_ANM|R_firstMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_firstFinger01BendyControllers_GRP|R_firstFinger00UpperBendy_GRP|R_firstFinger00UpperBendy_ANM|R_firstFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "R_firstMetacarpalUpperBendy_CTL",
+            "name": "R_firstFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_firstMetacarpalUpperBendy_CTLShape01",
+                "name": "R_firstFinger00UpperBendy_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37368,7 +37368,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalFk_GRP|R_fourthMetacarpalFk_SDK|R_fourthMetacarpalFk_ANM|R_fourthMetacarpalFk_CTL|R_fourthFinger01Fk_GRP|R_fourthFinger01Fk_SDK|R_fourthFinger01Fk_ANM|R_fourthFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00Fk_GRP|R_fourthFinger00Fk_SDK|R_fourthFinger00Fk_ANM|R_fourthFinger00Fk_CTL|R_fourthFinger01Fk_GRP|R_fourthFinger01Fk_SDK|R_fourthFinger01Fk_ANM|R_fourthFinger01Fk_CTL": {
         "transform": {
             "name": "R_fourthFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -37506,7 +37506,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkAttachedFk_GRP|R_fourthMetacarpalIkAttachedFk_SDK|R_fourthMetacarpalIkAttachedFk_ANM|R_fourthMetacarpalIkAttachedFk_CTL|R_fourthFinger01IkAttachedFk_GRP|R_fourthFinger01IkAttachedFk_SDK|R_fourthFinger01IkAttachedFk_ANM|R_fourthFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkAttachedFk_GRP|R_fourthFinger00IkAttachedFk_SDK|R_fourthFinger00IkAttachedFk_ANM|R_fourthFinger00IkAttachedFk_CTL|R_fourthFinger01IkAttachedFk_GRP|R_fourthFinger01IkAttachedFk_SDK|R_fourthFinger01IkAttachedFk_ANM|R_fourthFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "R_fourthFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -37736,7 +37736,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkControllers_GRP|R_fourthFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkControllers_GRP|R_fourthFinger01PVLocator_CTL": {
         "transform": {
             "name": "R_fourthFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -37772,7 +37772,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkControllers_GRP|R_fourthFinger01PV_GRP|R_fourthFinger01PV_ANM|R_fourthFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkControllers_GRP|R_fourthFinger01PV_GRP|R_fourthFinger01PV_ANM|R_fourthFinger01PV_CTL": {
         "transform": {
             "name": "R_fourthFinger01PV_CTL",
             "overrideEnabled": true,
@@ -37892,7 +37892,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalFk_GRP|R_fourthMetacarpalFk_SDK|R_fourthMetacarpalFk_ANM|R_fourthMetacarpalFk_CTL|R_fourthFinger01Fk_GRP|R_fourthFinger01Fk_SDK|R_fourthFinger01Fk_ANM|R_fourthFinger01Fk_CTL|R_fourthFinger02Fk_GRP|R_fourthFinger02Fk_SDK|R_fourthFinger02Fk_ANM|R_fourthFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00Fk_GRP|R_fourthFinger00Fk_SDK|R_fourthFinger00Fk_ANM|R_fourthFinger00Fk_CTL|R_fourthFinger01Fk_GRP|R_fourthFinger01Fk_SDK|R_fourthFinger01Fk_ANM|R_fourthFinger01Fk_CTL|R_fourthFinger02Fk_GRP|R_fourthFinger02Fk_SDK|R_fourthFinger02Fk_ANM|R_fourthFinger02Fk_CTL": {
         "transform": {
             "name": "R_fourthFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -38030,7 +38030,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkAttachedFk_GRP|R_fourthMetacarpalIkAttachedFk_SDK|R_fourthMetacarpalIkAttachedFk_ANM|R_fourthMetacarpalIkAttachedFk_CTL|R_fourthFinger01IkAttachedFk_GRP|R_fourthFinger01IkAttachedFk_SDK|R_fourthFinger01IkAttachedFk_ANM|R_fourthFinger01IkAttachedFk_CTL|R_fourthFinger02IkAttachedFk_GRP|R_fourthFinger02IkAttachedFk_SDK|R_fourthFinger02IkAttachedFk_ANM|R_fourthFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkAttachedFk_GRP|R_fourthFinger00IkAttachedFk_SDK|R_fourthFinger00IkAttachedFk_ANM|R_fourthFinger00IkAttachedFk_CTL|R_fourthFinger01IkAttachedFk_GRP|R_fourthFinger01IkAttachedFk_SDK|R_fourthFinger01IkAttachedFk_ANM|R_fourthFinger01IkAttachedFk_CTL|R_fourthFinger02IkAttachedFk_GRP|R_fourthFinger02IkAttachedFk_SDK|R_fourthFinger02IkAttachedFk_ANM|R_fourthFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "R_fourthFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -38260,7 +38260,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalFk_GRP|R_fourthMetacarpalFk_SDK|R_fourthMetacarpalFk_ANM|R_fourthMetacarpalFk_CTL|R_fourthFinger01Fk_GRP|R_fourthFinger01Fk_SDK|R_fourthFinger01Fk_ANM|R_fourthFinger01Fk_CTL|R_fourthFinger02Fk_GRP|R_fourthFinger02Fk_SDK|R_fourthFinger02Fk_ANM|R_fourthFinger02Fk_CTL|R_fourthFinger03Fk_GRP|R_fourthFinger03Fk_SDK|R_fourthFinger03Fk_ANM|R_fourthFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00Fk_GRP|R_fourthFinger00Fk_SDK|R_fourthFinger00Fk_ANM|R_fourthFinger00Fk_CTL|R_fourthFinger01Fk_GRP|R_fourthFinger01Fk_SDK|R_fourthFinger01Fk_ANM|R_fourthFinger01Fk_CTL|R_fourthFinger02Fk_GRP|R_fourthFinger02Fk_SDK|R_fourthFinger02Fk_ANM|R_fourthFinger02Fk_CTL|R_fourthFinger03Fk_GRP|R_fourthFinger03Fk_SDK|R_fourthFinger03Fk_ANM|R_fourthFinger03Fk_CTL": {
         "transform": {
             "name": "R_fourthFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -38398,7 +38398,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkAttachedFk_GRP|R_fourthMetacarpalIkAttachedFk_SDK|R_fourthMetacarpalIkAttachedFk_ANM|R_fourthMetacarpalIkAttachedFk_CTL|R_fourthFinger01IkAttachedFk_GRP|R_fourthFinger01IkAttachedFk_SDK|R_fourthFinger01IkAttachedFk_ANM|R_fourthFinger01IkAttachedFk_CTL|R_fourthFinger02IkAttachedFk_GRP|R_fourthFinger02IkAttachedFk_SDK|R_fourthFinger02IkAttachedFk_ANM|R_fourthFinger02IkAttachedFk_CTL|R_fourthFinger03IkAttachedFk_GRP|R_fourthFinger03IkAttachedFk_SDK|R_fourthFinger03IkAttachedFk_ANM|R_fourthFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkAttachedFk_GRP|R_fourthFinger00IkAttachedFk_SDK|R_fourthFinger00IkAttachedFk_ANM|R_fourthFinger00IkAttachedFk_CTL|R_fourthFinger01IkAttachedFk_GRP|R_fourthFinger01IkAttachedFk_SDK|R_fourthFinger01IkAttachedFk_ANM|R_fourthFinger01IkAttachedFk_CTL|R_fourthFinger02IkAttachedFk_GRP|R_fourthFinger02IkAttachedFk_SDK|R_fourthFinger02IkAttachedFk_ANM|R_fourthFinger02IkAttachedFk_CTL|R_fourthFinger03IkAttachedFk_GRP|R_fourthFinger03IkAttachedFk_SDK|R_fourthFinger03IkAttachedFk_ANM|R_fourthFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "R_fourthFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -38536,7 +38536,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkControllers_GRP|R_fourthFinger03Ik_GRP|R_fourthFinger03Ik_ANM|R_fourthFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkControllers_GRP|R_fourthFinger03Ik_GRP|R_fourthFinger03Ik_ANM|R_fourthFinger03Ik_CTL": {
         "transform": {
             "name": "R_fourthFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -38662,15 +38662,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalFk_GRP|R_fourthMetacarpalFk_SDK|R_fourthMetacarpalFk_ANM|R_fourthMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00Fk_GRP|R_fourthFinger00Fk_SDK|R_fourthFinger00Fk_ANM|R_fourthFinger00Fk_CTL": {
         "transform": {
-            "name": "R_fourthMetacarpalFk_CTL",
+            "name": "R_fourthFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_fourthMetacarpalFk_CTLShape01",
+                "name": "R_fourthFinger00Fk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38800,15 +38800,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkAttachedFk_GRP|R_fourthMetacarpalIkAttachedFk_SDK|R_fourthMetacarpalIkAttachedFk_ANM|R_fourthMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkAttachedFk_GRP|R_fourthFinger00IkAttachedFk_SDK|R_fourthFinger00IkAttachedFk_ANM|R_fourthFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "R_fourthMetacarpalIkAttachedFk_CTL",
+            "name": "R_fourthFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_fourthMetacarpalIkAttachedFk_CTLShape01",
+                "name": "R_fourthFinger00IkAttachedFk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38938,15 +38938,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthMetacarpalIkControllers_GRP|R_fourthMetacarpalRootIk_GRP|R_fourthMetacarpalRootIk_ANM|R_fourthMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger00IkControllers_GRP|R_fourthFinger00RootIk_GRP|R_fourthFinger00RootIk_ANM|R_fourthFinger00RootIk_CTL": {
         "transform": {
-            "name": "R_fourthMetacarpalRootIk_CTL",
+            "name": "R_fourthFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_fourthMetacarpalRootIk_CTLShape01",
+                "name": "R_fourthFinger00RootIk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39078,15 +39078,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger01BendyControllers_GRP|R_fourthMetacarpalUpperBendy_GRP|R_fourthMetacarpalUpperBendy_ANM|R_fourthMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_fourthFinger01BendyControllers_GRP|R_fourthFinger00UpperBendy_GRP|R_fourthFinger00UpperBendy_ANM|R_fourthFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "R_fourthMetacarpalUpperBendy_CTL",
+            "name": "R_fourthFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_fourthMetacarpalUpperBendy_CTLShape01",
+                "name": "R_fourthFinger00UpperBendy_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44287,7 +44287,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalFk_GRP|R_secondMetacarpalFk_SDK|R_secondMetacarpalFk_ANM|R_secondMetacarpalFk_CTL|R_secondFinger01Fk_GRP|R_secondFinger01Fk_SDK|R_secondFinger01Fk_ANM|R_secondFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00Fk_GRP|R_secondFinger00Fk_SDK|R_secondFinger00Fk_ANM|R_secondFinger00Fk_CTL|R_secondFinger01Fk_GRP|R_secondFinger01Fk_SDK|R_secondFinger01Fk_ANM|R_secondFinger01Fk_CTL": {
         "transform": {
             "name": "R_secondFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -44425,7 +44425,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkAttachedFk_GRP|R_secondMetacarpalIkAttachedFk_SDK|R_secondMetacarpalIkAttachedFk_ANM|R_secondMetacarpalIkAttachedFk_CTL|R_secondFinger01IkAttachedFk_GRP|R_secondFinger01IkAttachedFk_SDK|R_secondFinger01IkAttachedFk_ANM|R_secondFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkAttachedFk_GRP|R_secondFinger00IkAttachedFk_SDK|R_secondFinger00IkAttachedFk_ANM|R_secondFinger00IkAttachedFk_CTL|R_secondFinger01IkAttachedFk_GRP|R_secondFinger01IkAttachedFk_SDK|R_secondFinger01IkAttachedFk_ANM|R_secondFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "R_secondFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -44655,7 +44655,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkControllers_GRP|R_secondFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkControllers_GRP|R_secondFinger01PVLocator_CTL": {
         "transform": {
             "name": "R_secondFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -44691,7 +44691,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkControllers_GRP|R_secondFinger01PV_GRP|R_secondFinger01PV_ANM|R_secondFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkControllers_GRP|R_secondFinger01PV_GRP|R_secondFinger01PV_ANM|R_secondFinger01PV_CTL": {
         "transform": {
             "name": "R_secondFinger01PV_CTL",
             "overrideEnabled": true,
@@ -44811,7 +44811,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalFk_GRP|R_secondMetacarpalFk_SDK|R_secondMetacarpalFk_ANM|R_secondMetacarpalFk_CTL|R_secondFinger01Fk_GRP|R_secondFinger01Fk_SDK|R_secondFinger01Fk_ANM|R_secondFinger01Fk_CTL|R_secondFinger02Fk_GRP|R_secondFinger02Fk_SDK|R_secondFinger02Fk_ANM|R_secondFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00Fk_GRP|R_secondFinger00Fk_SDK|R_secondFinger00Fk_ANM|R_secondFinger00Fk_CTL|R_secondFinger01Fk_GRP|R_secondFinger01Fk_SDK|R_secondFinger01Fk_ANM|R_secondFinger01Fk_CTL|R_secondFinger02Fk_GRP|R_secondFinger02Fk_SDK|R_secondFinger02Fk_ANM|R_secondFinger02Fk_CTL": {
         "transform": {
             "name": "R_secondFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -44949,7 +44949,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkAttachedFk_GRP|R_secondMetacarpalIkAttachedFk_SDK|R_secondMetacarpalIkAttachedFk_ANM|R_secondMetacarpalIkAttachedFk_CTL|R_secondFinger01IkAttachedFk_GRP|R_secondFinger01IkAttachedFk_SDK|R_secondFinger01IkAttachedFk_ANM|R_secondFinger01IkAttachedFk_CTL|R_secondFinger02IkAttachedFk_GRP|R_secondFinger02IkAttachedFk_SDK|R_secondFinger02IkAttachedFk_ANM|R_secondFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkAttachedFk_GRP|R_secondFinger00IkAttachedFk_SDK|R_secondFinger00IkAttachedFk_ANM|R_secondFinger00IkAttachedFk_CTL|R_secondFinger01IkAttachedFk_GRP|R_secondFinger01IkAttachedFk_SDK|R_secondFinger01IkAttachedFk_ANM|R_secondFinger01IkAttachedFk_CTL|R_secondFinger02IkAttachedFk_GRP|R_secondFinger02IkAttachedFk_SDK|R_secondFinger02IkAttachedFk_ANM|R_secondFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "R_secondFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -45179,7 +45179,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalFk_GRP|R_secondMetacarpalFk_SDK|R_secondMetacarpalFk_ANM|R_secondMetacarpalFk_CTL|R_secondFinger01Fk_GRP|R_secondFinger01Fk_SDK|R_secondFinger01Fk_ANM|R_secondFinger01Fk_CTL|R_secondFinger02Fk_GRP|R_secondFinger02Fk_SDK|R_secondFinger02Fk_ANM|R_secondFinger02Fk_CTL|R_secondFinger03Fk_GRP|R_secondFinger03Fk_SDK|R_secondFinger03Fk_ANM|R_secondFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00Fk_GRP|R_secondFinger00Fk_SDK|R_secondFinger00Fk_ANM|R_secondFinger00Fk_CTL|R_secondFinger01Fk_GRP|R_secondFinger01Fk_SDK|R_secondFinger01Fk_ANM|R_secondFinger01Fk_CTL|R_secondFinger02Fk_GRP|R_secondFinger02Fk_SDK|R_secondFinger02Fk_ANM|R_secondFinger02Fk_CTL|R_secondFinger03Fk_GRP|R_secondFinger03Fk_SDK|R_secondFinger03Fk_ANM|R_secondFinger03Fk_CTL": {
         "transform": {
             "name": "R_secondFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -45317,7 +45317,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkAttachedFk_GRP|R_secondMetacarpalIkAttachedFk_SDK|R_secondMetacarpalIkAttachedFk_ANM|R_secondMetacarpalIkAttachedFk_CTL|R_secondFinger01IkAttachedFk_GRP|R_secondFinger01IkAttachedFk_SDK|R_secondFinger01IkAttachedFk_ANM|R_secondFinger01IkAttachedFk_CTL|R_secondFinger02IkAttachedFk_GRP|R_secondFinger02IkAttachedFk_SDK|R_secondFinger02IkAttachedFk_ANM|R_secondFinger02IkAttachedFk_CTL|R_secondFinger03IkAttachedFk_GRP|R_secondFinger03IkAttachedFk_SDK|R_secondFinger03IkAttachedFk_ANM|R_secondFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkAttachedFk_GRP|R_secondFinger00IkAttachedFk_SDK|R_secondFinger00IkAttachedFk_ANM|R_secondFinger00IkAttachedFk_CTL|R_secondFinger01IkAttachedFk_GRP|R_secondFinger01IkAttachedFk_SDK|R_secondFinger01IkAttachedFk_ANM|R_secondFinger01IkAttachedFk_CTL|R_secondFinger02IkAttachedFk_GRP|R_secondFinger02IkAttachedFk_SDK|R_secondFinger02IkAttachedFk_ANM|R_secondFinger02IkAttachedFk_CTL|R_secondFinger03IkAttachedFk_GRP|R_secondFinger03IkAttachedFk_SDK|R_secondFinger03IkAttachedFk_ANM|R_secondFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "R_secondFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -45455,7 +45455,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkControllers_GRP|R_secondFinger03Ik_GRP|R_secondFinger03Ik_ANM|R_secondFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkControllers_GRP|R_secondFinger03Ik_GRP|R_secondFinger03Ik_ANM|R_secondFinger03Ik_CTL": {
         "transform": {
             "name": "R_secondFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -45911,15 +45911,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalFk_GRP|R_secondMetacarpalFk_SDK|R_secondMetacarpalFk_ANM|R_secondMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00Fk_GRP|R_secondFinger00Fk_SDK|R_secondFinger00Fk_ANM|R_secondFinger00Fk_CTL": {
         "transform": {
-            "name": "R_secondMetacarpalFk_CTL",
+            "name": "R_secondFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_secondMetacarpalFk_CTLShape01",
+                "name": "R_secondFinger00Fk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46049,15 +46049,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkAttachedFk_GRP|R_secondMetacarpalIkAttachedFk_SDK|R_secondMetacarpalIkAttachedFk_ANM|R_secondMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkAttachedFk_GRP|R_secondFinger00IkAttachedFk_SDK|R_secondFinger00IkAttachedFk_ANM|R_secondFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "R_secondMetacarpalIkAttachedFk_CTL",
+            "name": "R_secondFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_secondMetacarpalIkAttachedFk_CTLShape01",
+                "name": "R_secondFinger00IkAttachedFk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46187,15 +46187,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondMetacarpalIkControllers_GRP|R_secondMetacarpalRootIk_GRP|R_secondMetacarpalRootIk_ANM|R_secondMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger00IkControllers_GRP|R_secondFinger00RootIk_GRP|R_secondFinger00RootIk_ANM|R_secondFinger00RootIk_CTL": {
         "transform": {
-            "name": "R_secondMetacarpalRootIk_CTL",
+            "name": "R_secondFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_secondMetacarpalRootIk_CTLShape01",
+                "name": "R_secondFinger00RootIk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46327,15 +46327,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger01BendyControllers_GRP|R_secondMetacarpalUpperBendy_GRP|R_secondMetacarpalUpperBendy_ANM|R_secondMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_secondFinger01BendyControllers_GRP|R_secondFinger00UpperBendy_GRP|R_secondFinger00UpperBendy_ANM|R_secondFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "R_secondMetacarpalUpperBendy_CTL",
+            "name": "R_secondFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_secondMetacarpalUpperBendy_CTLShape01",
+                "name": "R_secondFinger00UpperBendy_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46631,7 +46631,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalFk_GRP|R_thirdMetacarpalFk_SDK|R_thirdMetacarpalFk_ANM|R_thirdMetacarpalFk_CTL|R_thirdFinger01Fk_GRP|R_thirdFinger01Fk_SDK|R_thirdFinger01Fk_ANM|R_thirdFinger01Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00Fk_GRP|R_thirdFinger00Fk_SDK|R_thirdFinger00Fk_ANM|R_thirdFinger00Fk_CTL|R_thirdFinger01Fk_GRP|R_thirdFinger01Fk_SDK|R_thirdFinger01Fk_ANM|R_thirdFinger01Fk_CTL": {
         "transform": {
             "name": "R_thirdFinger01Fk_CTL",
             "overrideEnabled": true,
@@ -46769,7 +46769,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkAttachedFk_GRP|R_thirdMetacarpalIkAttachedFk_SDK|R_thirdMetacarpalIkAttachedFk_ANM|R_thirdMetacarpalIkAttachedFk_CTL|R_thirdFinger01IkAttachedFk_GRP|R_thirdFinger01IkAttachedFk_SDK|R_thirdFinger01IkAttachedFk_ANM|R_thirdFinger01IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkAttachedFk_GRP|R_thirdFinger00IkAttachedFk_SDK|R_thirdFinger00IkAttachedFk_ANM|R_thirdFinger00IkAttachedFk_CTL|R_thirdFinger01IkAttachedFk_GRP|R_thirdFinger01IkAttachedFk_SDK|R_thirdFinger01IkAttachedFk_ANM|R_thirdFinger01IkAttachedFk_CTL": {
         "transform": {
             "name": "R_thirdFinger01IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -46999,7 +46999,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkControllers_GRP|R_thirdFinger01PVLocator_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkControllers_GRP|R_thirdFinger01PVLocator_CTL": {
         "transform": {
             "name": "R_thirdFinger01PVLocator_CTL",
             "overrideEnabled": true,
@@ -47035,7 +47035,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkControllers_GRP|R_thirdFinger01PV_GRP|R_thirdFinger01PV_ANM|R_thirdFinger01PV_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkControllers_GRP|R_thirdFinger01PV_GRP|R_thirdFinger01PV_ANM|R_thirdFinger01PV_CTL": {
         "transform": {
             "name": "R_thirdFinger01PV_CTL",
             "overrideEnabled": true,
@@ -47155,7 +47155,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalFk_GRP|R_thirdMetacarpalFk_SDK|R_thirdMetacarpalFk_ANM|R_thirdMetacarpalFk_CTL|R_thirdFinger01Fk_GRP|R_thirdFinger01Fk_SDK|R_thirdFinger01Fk_ANM|R_thirdFinger01Fk_CTL|R_thirdFinger02Fk_GRP|R_thirdFinger02Fk_SDK|R_thirdFinger02Fk_ANM|R_thirdFinger02Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00Fk_GRP|R_thirdFinger00Fk_SDK|R_thirdFinger00Fk_ANM|R_thirdFinger00Fk_CTL|R_thirdFinger01Fk_GRP|R_thirdFinger01Fk_SDK|R_thirdFinger01Fk_ANM|R_thirdFinger01Fk_CTL|R_thirdFinger02Fk_GRP|R_thirdFinger02Fk_SDK|R_thirdFinger02Fk_ANM|R_thirdFinger02Fk_CTL": {
         "transform": {
             "name": "R_thirdFinger02Fk_CTL",
             "overrideEnabled": true,
@@ -47293,7 +47293,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkAttachedFk_GRP|R_thirdMetacarpalIkAttachedFk_SDK|R_thirdMetacarpalIkAttachedFk_ANM|R_thirdMetacarpalIkAttachedFk_CTL|R_thirdFinger01IkAttachedFk_GRP|R_thirdFinger01IkAttachedFk_SDK|R_thirdFinger01IkAttachedFk_ANM|R_thirdFinger01IkAttachedFk_CTL|R_thirdFinger02IkAttachedFk_GRP|R_thirdFinger02IkAttachedFk_SDK|R_thirdFinger02IkAttachedFk_ANM|R_thirdFinger02IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkAttachedFk_GRP|R_thirdFinger00IkAttachedFk_SDK|R_thirdFinger00IkAttachedFk_ANM|R_thirdFinger00IkAttachedFk_CTL|R_thirdFinger01IkAttachedFk_GRP|R_thirdFinger01IkAttachedFk_SDK|R_thirdFinger01IkAttachedFk_ANM|R_thirdFinger01IkAttachedFk_CTL|R_thirdFinger02IkAttachedFk_GRP|R_thirdFinger02IkAttachedFk_SDK|R_thirdFinger02IkAttachedFk_ANM|R_thirdFinger02IkAttachedFk_CTL": {
         "transform": {
             "name": "R_thirdFinger02IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -47523,7 +47523,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalFk_GRP|R_thirdMetacarpalFk_SDK|R_thirdMetacarpalFk_ANM|R_thirdMetacarpalFk_CTL|R_thirdFinger01Fk_GRP|R_thirdFinger01Fk_SDK|R_thirdFinger01Fk_ANM|R_thirdFinger01Fk_CTL|R_thirdFinger02Fk_GRP|R_thirdFinger02Fk_SDK|R_thirdFinger02Fk_ANM|R_thirdFinger02Fk_CTL|R_thirdFinger03Fk_GRP|R_thirdFinger03Fk_SDK|R_thirdFinger03Fk_ANM|R_thirdFinger03Fk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00Fk_GRP|R_thirdFinger00Fk_SDK|R_thirdFinger00Fk_ANM|R_thirdFinger00Fk_CTL|R_thirdFinger01Fk_GRP|R_thirdFinger01Fk_SDK|R_thirdFinger01Fk_ANM|R_thirdFinger01Fk_CTL|R_thirdFinger02Fk_GRP|R_thirdFinger02Fk_SDK|R_thirdFinger02Fk_ANM|R_thirdFinger02Fk_CTL|R_thirdFinger03Fk_GRP|R_thirdFinger03Fk_SDK|R_thirdFinger03Fk_ANM|R_thirdFinger03Fk_CTL": {
         "transform": {
             "name": "R_thirdFinger03Fk_CTL",
             "overrideEnabled": true,
@@ -47661,7 +47661,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkAttachedFk_GRP|R_thirdMetacarpalIkAttachedFk_SDK|R_thirdMetacarpalIkAttachedFk_ANM|R_thirdMetacarpalIkAttachedFk_CTL|R_thirdFinger01IkAttachedFk_GRP|R_thirdFinger01IkAttachedFk_SDK|R_thirdFinger01IkAttachedFk_ANM|R_thirdFinger01IkAttachedFk_CTL|R_thirdFinger02IkAttachedFk_GRP|R_thirdFinger02IkAttachedFk_SDK|R_thirdFinger02IkAttachedFk_ANM|R_thirdFinger02IkAttachedFk_CTL|R_thirdFinger03IkAttachedFk_GRP|R_thirdFinger03IkAttachedFk_SDK|R_thirdFinger03IkAttachedFk_ANM|R_thirdFinger03IkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkAttachedFk_GRP|R_thirdFinger00IkAttachedFk_SDK|R_thirdFinger00IkAttachedFk_ANM|R_thirdFinger00IkAttachedFk_CTL|R_thirdFinger01IkAttachedFk_GRP|R_thirdFinger01IkAttachedFk_SDK|R_thirdFinger01IkAttachedFk_ANM|R_thirdFinger01IkAttachedFk_CTL|R_thirdFinger02IkAttachedFk_GRP|R_thirdFinger02IkAttachedFk_SDK|R_thirdFinger02IkAttachedFk_ANM|R_thirdFinger02IkAttachedFk_CTL|R_thirdFinger03IkAttachedFk_GRP|R_thirdFinger03IkAttachedFk_SDK|R_thirdFinger03IkAttachedFk_ANM|R_thirdFinger03IkAttachedFk_CTL": {
         "transform": {
             "name": "R_thirdFinger03IkAttachedFk_CTL",
             "overrideEnabled": false,
@@ -47799,7 +47799,7 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkControllers_GRP|R_thirdFinger03Ik_GRP|R_thirdFinger03Ik_ANM|R_thirdFinger03Ik_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkControllers_GRP|R_thirdFinger03Ik_GRP|R_thirdFinger03Ik_ANM|R_thirdFinger03Ik_CTL": {
         "transform": {
             "name": "R_thirdFinger03Ik_CTL",
             "overrideEnabled": true,
@@ -48255,15 +48255,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalFk_GRP|R_thirdMetacarpalFk_SDK|R_thirdMetacarpalFk_ANM|R_thirdMetacarpalFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00Fk_GRP|R_thirdFinger00Fk_SDK|R_thirdFinger00Fk_ANM|R_thirdFinger00Fk_CTL": {
         "transform": {
-            "name": "R_thirdMetacarpalFk_CTL",
+            "name": "R_thirdFinger00Fk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_thirdMetacarpalFk_CTLShape01",
+                "name": "R_thirdFinger00Fk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -48393,15 +48393,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkAttachedFk_GRP|R_thirdMetacarpalIkAttachedFk_SDK|R_thirdMetacarpalIkAttachedFk_ANM|R_thirdMetacarpalIkAttachedFk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkAttachedFk_GRP|R_thirdFinger00IkAttachedFk_SDK|R_thirdFinger00IkAttachedFk_ANM|R_thirdFinger00IkAttachedFk_CTL": {
         "transform": {
-            "name": "R_thirdMetacarpalIkAttachedFk_CTL",
+            "name": "R_thirdFinger00IkAttachedFk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_thirdMetacarpalIkAttachedFk_CTLShape01",
+                "name": "R_thirdFinger00IkAttachedFk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -48531,15 +48531,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdMetacarpalIkControllers_GRP|R_thirdMetacarpalRootIk_GRP|R_thirdMetacarpalRootIk_ANM|R_thirdMetacarpalRootIk_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger00IkControllers_GRP|R_thirdFinger00RootIk_GRP|R_thirdFinger00RootIk_ANM|R_thirdFinger00RootIk_CTL": {
         "transform": {
-            "name": "R_thirdMetacarpalRootIk_CTL",
+            "name": "R_thirdFinger00RootIk_CTL",
             "overrideEnabled": true,
             "overrideColor": 13
         },
         "shapes": [
             {
-                "name": "R_thirdMetacarpalRootIk_CTLShape01",
+                "name": "R_thirdFinger00RootIk_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -48671,15 +48671,15 @@
             }
         ]
     },
-    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger01BendyControllers_GRP|R_thirdMetacarpalUpperBendy_GRP|R_thirdMetacarpalUpperBendy_ANM|R_thirdMetacarpalUpperBendy_CTL": {
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|R_handControllers_GRP|R_thirdFinger01BendyControllers_GRP|R_thirdFinger00UpperBendy_GRP|R_thirdFinger00UpperBendy_ANM|R_thirdFinger00UpperBendy_CTL": {
         "transform": {
-            "name": "R_thirdMetacarpalUpperBendy_CTL",
+            "name": "R_thirdFinger00UpperBendy_CTL",
             "overrideEnabled": true,
             "overrideColor": 4
         },
         "shapes": [
             {
-                "name": "R_thirdMetacarpalUpperBendy_CTLShape01",
+                "name": "R_thirdFinger00UpperBendy_CTLShape01",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
