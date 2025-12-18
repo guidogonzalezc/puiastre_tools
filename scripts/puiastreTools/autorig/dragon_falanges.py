@@ -96,12 +96,12 @@ class FalangeModule(object):
         skinning_joints_list = []
         for template_name, guides in guides_data.items():
             if not isinstance(guides, dict):
-                continue
+                continue    
 
             for guide_name, guide_info in guides.items():
                 if guide_info.get("parent") == self.hand_guide:
                     guides_pass = guide_import(guide_name, all_descendents=True, path=None)
-                    self.names = [name.split("_")[1] for name in guides_pass]
+                    self.names = [name.split("_")[1] for name in guides_pass[1:]]
 
                     skinning_joints = self.make(guide_name=guides_pass)
                     skinning_joints_list.append(skinning_joints)
@@ -114,6 +114,7 @@ class FalangeModule(object):
                                          "root_ctl": self.root_ik_ctl,
                                          "end_ik": self.hand_ik_ctl,
                                          "settings_ctl": self.switch_ctl,
+                                         "metacarpal_ctl": self.metacarpal_ctl,
                                         }
                                         )
                     
@@ -129,7 +130,11 @@ class FalangeModule(object):
 
     def make(self, guide_name):
 
-        self.guides = guide_name
+        self.metatarsal = guide_name[0]
+        self.guides = guide_name[1:]
+
+
+        # cmds.connectAttr(f"{self.metatarsal}.outputMatrix", f"{self.guides[0]}.offsetParentMatrix")
 
         """
         Create a limb rig with controllers and constraints.
@@ -170,6 +175,29 @@ class FalangeModule(object):
         cmds.setAttr(f"{blend_matrix}.target[0].scaleWeight", 0)
         cmds.setAttr(f"{blend_matrix}.target[0].rotateWeight", 0)
         cmds.setAttr(f"{blend_matrix}.target[0].shearWeight", 0)
+
+        meta_name = ''.join(ch for ch in self.names[0] if not ch.isdigit())
+
+
+        metatarsal_blend_matrix = cmds.createNode("blendMatrix", name=f"{self.side}_{meta_name}MetacarpalGuide_BLM", ss=True)
+        cmds.connectAttr(f"{aim_matrix_guides[0]}.outputMatrix", f"{metatarsal_blend_matrix}.inputMatrix", force=True)
+        cmds.connectAttr(f"{self.metatarsal}.worldMatrix[0]", f"{metatarsal_blend_matrix}.target[0].targetMatrix", force=True)
+        cmds.setAttr(f"{metatarsal_blend_matrix}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{metatarsal_blend_matrix}.target[0].rotateWeight", 0)
+        cmds.setAttr(f"{metatarsal_blend_matrix}.target[0].shearWeight", 0)
+
+        self.metacarpal_ctl, self.metacarpal_grp = controller_creator(
+            name=f"{self.side}_{meta_name}Metacarpal",
+            suffixes=["GRP", "ANM"],
+            lock=["sx","sz","sy","visibility"],
+            ro=True,
+            parent=self.individual_controllers_grp
+        )
+
+        cmds.connectAttr(f"{metatarsal_blend_matrix}.outputMatrix", f"{self.metacarpal_grp[0]}.offsetParentMatrix")
+
+        joint = cmds.createNode("joint", name=f"{self.side}_{meta_name}Metacarpal_JNT", ss=True, parent=self.skinnging_grp)
+        cmds.connectAttr(f"{self.metacarpal_ctl}.worldMatrix[0]", f"{joint}.offsetParentMatrix")
 
         self.guides_matrix = [aim_matrix_guides[0], aim_matrix_guides[1], aim_matrix_guides[2], blend_matrix]
 
