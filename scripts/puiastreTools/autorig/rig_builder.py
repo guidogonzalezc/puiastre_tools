@@ -25,6 +25,8 @@ from puiastreTools.autorig import eyebrow_module as ebm
 from puiastreTools.autorig import eyelid_module as elm
 from puiastreTools.autorig import nose_module as nm
 from puiastreTools.autorig import cheek_module as cm
+from puiastreTools.autorig import spikes_module_matrix as spm
+
 
 import puiastreTools.utils.skinning_transfer as skt
 
@@ -57,6 +59,7 @@ reload(ebm)
 reload(elm)
 reload(nm)
 reload(cm)
+reload(spm)
 
 reload(skt)
 reload(project_manager)
@@ -224,43 +227,46 @@ def make(asset_name = "", latest = False):
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
 
-                if guide_info.get("moduleName") == "membran":
-                    mm.MembraneModule().make(guide_name)
+                if guide_info.get("moduleName") == "spikes":
+                    spm.SpikesModule().make(guide_name)
+
+    #             if guide_info.get("moduleName") == "membran":
+    #                 mm.MembraneModule().make(guide_name)
 
 
-                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
-                    fm.FingersModule().make(guide_name)
+    #             if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
+    #                 fm.FingersModule().make(guide_name)
 
                      
-                if guide_info.get("moduleName") == "mouth":
+    #             if guide_info.get("moduleName") == "mouth":
 
-                    jmm.JawModule().make(guide_name)
+    #                 jmm.JawModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "eyebrow":
+    #             if guide_info.get("moduleName") == "eyebrow":
 
-                    ebm.EyebrowModule().make(guide_name)
+    #                 ebm.EyebrowModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "eye":
+    #             if guide_info.get("moduleName") == "eye":
 
-                    elm.EyelidModule().make(guide_name)
+    #                 elm.EyelidModule().make(guide_name)
 
-                if guide_info.get("moduleName") == "nose":
+    #             if guide_info.get("moduleName") == "nose":
 
-                    nm.NoseModule().make(guide_name)
+    #                 nm.NoseModule().make(guide_name)
                 
-                if guide_info.get("moduleName") == "cheek":
-                    cm.CheekModule().make(guide_name)
+    #             if guide_info.get("moduleName") == "cheek":
+    #                 cm.CheekModule().make(guide_name)
     
-    # Additional modules who depends on others modules
-    for template_name, guides in guides_data.items():
-        if not isinstance(guides, dict):
-            continue
+    # # Additional modules who depends on others modules
+    # for template_name, guides in guides_data.items():
+    #     if not isinstance(guides, dict):
+    #         continue
 
-        for guide_name, guide_info in guides.items():
-            if guide_info.get("moduleName") != "Child":
+    #     for guide_name, guide_info in guides.items():
+    #         if guide_info.get("moduleName") != "Child":
 
-                if guide_info.get("moduleName") == "fkFinger":
-                    fkf.FingersModule().make(guide_name)
+    #             if guide_info.get("moduleName") == "fkFinger":
+    #                 fkf.FingersModule().make(guide_name)
 
     # Create the skeleton hierarchy and spaces
     skeleton_hierarchy = skh.build_complete_hierarchy() 

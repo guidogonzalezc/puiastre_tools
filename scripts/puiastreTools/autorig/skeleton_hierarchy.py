@@ -199,7 +199,7 @@ def build_complete_hierarchy():
                 joints = parented_chain(skinning_joints=skinning_joint_list[2:], parent=spine_joints[-2], hand_value=False)
                 leg_joints.append(joints[-1])
                 continue     
-            elif "Facial" in skel_grps[i]:    
+            elif "Facial" in skel_grps[i] or "spikes" in skel_grps[i].lower():    
                 parented_chain(skinning_joints=skinning_joint_list, parent=None, hand_value=False)
                 
 
@@ -384,7 +384,6 @@ def build_complete_hierarchy():
             parents.insert(0, ik)
             space_switch.fk_switch(target = pv, sources= parents, sources_names=["WristIK", "Scapula", "LocalChest", "SpineEnd"], pv=True)
 
-        print("SKEL GRP:", skel_grps[i])
 
         if "Finger00" in skel_grps[i]:
 
@@ -394,7 +393,6 @@ def build_complete_hierarchy():
             ik = data_exporter.get_data(modules_name[i], "end_ik")
             metacarpal = data_exporter.get_data(modules_name[i], "metacarpal_ctl")
 
-            print("FINGER CONTROLS:", fk, pv, root, ik, metacarpal)
 
             side = skel_grps[i].split("_")[0]
             index = l_arm_index if side == "L" else r_arm_index
@@ -405,7 +403,6 @@ def build_complete_hierarchy():
                 space_switch.fk_switch(target = hand_settings, sources=[parent_joint])
                 hand_settings_value = modules_name[i].split("_")[0]
             parents = [parent_joint]
-            print(parents)
 
             space_switch.fk_switch(target = metacarpal, sources= parents, sources_names=["Hand"])
 
