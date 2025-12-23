@@ -211,6 +211,7 @@ class JawModule():
                 self.jaw_surface,
                 self.jaw_local_joint,
                 self.upper_jaw_local_joint,
+                n=f"{self.jaw_surface}_SKC",
                 toSelectedBones=True,
                 bindMethod=0,
                 normalizeWeights=1,
@@ -263,7 +264,6 @@ class JawModule():
         cmds.connectAttr(f"{reverse}.outputX", f"{self.average_curve_node}.weight1")
         cmds.connectAttr(f"{self.jaw_ctl}.mouthHeight", f"{reverse}.inputX")
         cmds.connectAttr(f"{self.jaw_ctl}.mouthHeight", f"{self.average_curve_node}.weight2")
-        print(self.average_curve_node)
 
         offset_calculation = []
 
@@ -305,7 +305,7 @@ class JawModule():
                 cmds.setAttr(f"{r_lip_corner_4b4}.in31", pos[1])
                 cmds.setAttr(f"{r_lip_corner_4b4}.in32", pos[2])
                 front_corner_4b4 = cmds.createNode("fourByFourMatrix", name="R_lipCornerFront_4B4", ss=True)
-                pos_front = cmds.pointPosition(f"{curve}.cv[1]", w=True)
+                pos_front = cmds.pointPosition(f"{curve}.cv[5]", w=True)
                 cmds.setAttr(f"{front_corner_4b4}.in30", pos_front[0])
                 cmds.setAttr(f"{front_corner_4b4}.in31", pos[1])
                 cmds.setAttr(f"{front_corner_4b4}.in32", pos_front[2])
@@ -348,7 +348,7 @@ class JawModule():
                 cmds.setAttr(f"{l_lip_corner_4b4}.in31", pos[1])
                 cmds.setAttr(f"{l_lip_corner_4b4}.in32", pos[2])
                 front_corner_4b4 = cmds.createNode("fourByFourMatrix", name="L_lipCornerFront_4B4", ss=True)
-                pos_front = cmds.pointPosition(f"{curve}.cv[{last_cv-1}]", w=True)
+                pos_front = cmds.pointPosition(f"{curve}.cv[{last_cv-5}]", w=True)
                 cmds.setAttr(f"{front_corner_4b4}.in30", pos_front[0])
                 cmds.setAttr(f"{front_corner_4b4}.in31", pos[1])
                 cmds.setAttr(f"{front_corner_4b4}.in32", pos_front[2])
@@ -383,6 +383,11 @@ class JawModule():
                     cmds.connectAttr(f"{row_projection}.outputZ", f"{closes_point_on_surface}.inPositionZ")
                     joint = cmds.createNode("joint", name=f"{local_side}_lipCorner_JNT", ss=True, parent=self.module_trn)
                     cmds.connectAttr(f"{closes_point_on_surface}.position", f"{joint}.translate")
+
+                    decompose_matrix = cmds.createNode("decomposeMatrix", name=f"{local_side}_lipCorner_DM", ss=True)
+                    cmds.connectAttr(local, f"{decompose_matrix}.inputMatrix")
+                    cmds.connectAttr(f"{decompose_matrix}.outputRotate", f"{joint}.rotate")
+
                     self.corner_projected_joints.append(joint)
 
 
@@ -416,6 +421,7 @@ class JawModule():
             rebuilded_skinned_curve = cmds.skinCluster(
                 joint_list,
                 rebuilded_curve,
+                n=f"{rebuilded_curve}_SKC",
                 toSelectedBones=True,
                 bindMethod=0,
                 normalizeWeights=1,
