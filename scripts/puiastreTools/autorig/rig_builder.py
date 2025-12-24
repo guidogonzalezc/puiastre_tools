@@ -305,7 +305,7 @@ def make(asset_name = "", latest = False):
     # Create the skeleton hierarchy and spaces
     cmds.progressWindow(edit=True, progress=90, status=(f"Creating the skeleton hierarchy and spaces") )
 
-    # skeleton_hierarchy = skh.build_complete_hierarchy() 
+    skeleton_hierarchy = skh.build_complete_hierarchy() 
 
     # # skt.load_skincluster()
 
