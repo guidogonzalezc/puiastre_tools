@@ -68,6 +68,12 @@ class JawModule():
         self.side = self.guide_name.split("_")[0]
 
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_jawModule_GRP", ss=True, parent=self.modules_grp)
+
+        cmds.addAttr(self.module_trn, shortName="HorizontalFollow01", niceName="Horizontal Follow 01", maxValue=1, minValue=0,defaultValue=0.71, keyable=True)
+        cmds.addAttr(self.module_trn, shortName="HorizontalFollow02", niceName="Horizontal Follow 02", maxValue=1, minValue=0,defaultValue=0.25, keyable=True)
+        cmds.addAttr(self.module_trn, shortName="VerticalFollow01", niceName="Vertical Follow 01", maxValue=1, minValue=0,defaultValue=0, keyable=True)
+        cmds.addAttr(self.module_trn, shortName="VerticalFollow02", niceName="Vertical Follow 02", maxValue=1, minValue=0,defaultValue=0.58, keyable=True)
+
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_jawControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_jawFacialSkinning_GRP", ss=True, p=self.skel_grp)
@@ -294,7 +300,7 @@ class JawModule():
                 self.r_side_jaw_ctl, self.r_side_jaw_ctl_grp = controller_creator(
                     name=f"R_lipCorner",
                     suffixes=["GRP", "OFF", "ANM"],
-                    lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                    lock=["rx","rz","ry","scaleX", "scaleY", "scaleZ", "visibility"],
                     ro=True,
                     parent=self.controllers_trn,
                 )
@@ -367,28 +373,7 @@ class JawModule():
                 self.r_corner_local = self.local_setup(ctl = self.r_side_jaw_ctl, grp = self.r_side_jaw_ctl_grp[0])
                 self.l_corner_local = self.local_setup(ctl = self.l_side_jaw_ctl, grp = self.l_side_jaw_ctl_grp[0])
 
-                mouth_sliding_shape = cmds.listRelatives(self.jaw_surface, shapes=True, noIntermediate=True)[0]
-
-                self.corner_projected_joints = []
-
-                for local in [self.r_corner_local, self.l_corner_local]:
-                    local_side = local.split("_")[0]
-                    row_projection = cmds.createNode("rowFromMatrix", name=f"{local_side}_mouthSlidingProjection_ROW", ss=True)
-                    cmds.connectAttr(local, f"{row_projection}.matrix")
-                    cmds.setAttr(f"{row_projection}.input", 3)
-                    closes_point_on_surface = cmds.createNode("closestPointOnSurface", name=f"{local_side}_mouthSlidingProjection_CPOS", ss=True)
-                    cmds.connectAttr(f"{mouth_sliding_shape}.worldSpace[0]", f"{closes_point_on_surface}.inputSurface")
-                    cmds.connectAttr(f"{row_projection}.outputX", f"{closes_point_on_surface}.inPositionX")
-                    cmds.connectAttr(f"{row_projection}.outputY", f"{closes_point_on_surface}.inPositionY")
-                    cmds.connectAttr(f"{row_projection}.outputZ", f"{closes_point_on_surface}.inPositionZ")
-                    joint = cmds.createNode("joint", name=f"{local_side}_lipCorner_JNT", ss=True, parent=self.module_trn)
-                    cmds.connectAttr(f"{closes_point_on_surface}.position", f"{joint}.translate")
-
-                    decompose_matrix = cmds.createNode("decomposeMatrix", name=f"{local_side}_lipCorner_DM", ss=True)
-                    cmds.connectAttr(local, f"{decompose_matrix}.inputMatrix")
-                    cmds.connectAttr(f"{decompose_matrix}.outputRotate", f"{joint}.rotate")
-
-                    self.corner_projected_joints.append(joint)
+            mouth_sliding_shape = cmds.listRelatives(self.jaw_surface, shapes=True, noIntermediate=True)[0]
 
 
             main_mid_name = "upper" if "upper" in curve else "lower"
@@ -412,11 +397,101 @@ class JawModule():
 
 
             self.mid_local = self.local_setup(ctl = self.main_mid_ctl, grp = self.main_mid_ctl_grp[0])
-            
-            mid_local_joint = cmds.createNode("joint", name=f"C_{main_mid_name}Lip_JNT", ss=True, parent=self.module_trn)
-            cmds.connectAttr(self.mid_local, f"{mid_local_joint}.offsetParentMatrix")
 
-            joint_list = [self.corner_projected_joints[0], self.corner_projected_joints[1] , mid_local_joint]
+
+            uv_pin_projection = cmds.createNode("uvPin", name=f"C_mouthSliding{main_mid_name.capitalize()}_UVP", ss=True)
+            cmds.setAttr(f"{uv_pin_projection}.tangentAxis", 0) 
+            cmds.setAttr(f"{uv_pin_projection}.normalAxis", 2) 
+            cmds.connectAttr(f"{mouth_sliding_shape}.worldSpace[0]", f"{uv_pin_projection}.deformedGeometry")
+            print(uv_pin_projection)
+
+            row_projection = cmds.createNode("rowFromMatrix", name=f"C_mouthSliding{main_mid_name.capitalize()}Projection_ROW", ss=True)
+            cmds.connectAttr(self.mid_local, f"{row_projection}.matrix")
+            cmds.setAttr(f"{row_projection}.input", 3)
+
+            c_closes_point_on_surface = cmds.createNode("closestPointOnSurface", name=f"C_mouthSliding{main_mid_name.capitalize()}Projection_CPOS", ss=True)
+            cmds.connectAttr(f"{mouth_sliding_shape}.worldSpace[0]", f"{c_closes_point_on_surface}.inputSurface")
+            cmds.connectAttr(f"{row_projection}.outputX", f"{c_closes_point_on_surface}.inPositionX")
+            cmds.connectAttr(f"{row_projection}.outputY", f"{c_closes_point_on_surface}.inPositionY")
+            cmds.connectAttr(f"{row_projection}.outputZ", f"{c_closes_point_on_surface}.inPositionZ")
+            
+            cmds.connectAttr(f"{c_closes_point_on_surface}.parameterU", f"{uv_pin_projection}.coordinate[3].coordinateU")
+            cmds.connectAttr(f"{c_closes_point_on_surface}.parameterV", f"{uv_pin_projection}.coordinate[3].coordinateV")
+
+            c_joint = cmds.createNode("joint", name=f"C_lip{main_mid_name.capitalize()}_JNT", ss=True, parent=self.module_trn)
+            cmds.connectAttr(f"{uv_pin_projection}.outputMatrix[3]", f"{c_joint}.offsetParentMatrix")
+                
+            if index == 0:
+                self.corner_projected_joints = []
+                closests_points_on_surfaces = []
+                for i, local in enumerate([self.r_corner_local, self.l_corner_local]):
+                    count_index = i*4
+
+                    local_side = local.split("_")[0]
+                    row_projection = cmds.createNode("rowFromMatrix", name=f"{local_side}_mouthSlidingProjection_ROW", ss=True)
+                    cmds.connectAttr(local, f"{row_projection}.matrix")
+                    cmds.setAttr(f"{row_projection}.input", 3)
+
+                    closes_point_on_surface = cmds.createNode("closestPointOnSurface", name=f"{local_side}_mouthSlidingProjection_CPOS", ss=True)
+                    cmds.connectAttr(f"{mouth_sliding_shape}.worldSpace[0]", f"{closes_point_on_surface}.inputSurface")
+                    cmds.connectAttr(f"{row_projection}.outputX", f"{closes_point_on_surface}.inPositionX")
+                    cmds.connectAttr(f"{row_projection}.outputY", f"{closes_point_on_surface}.inPositionY")
+                    cmds.connectAttr(f"{row_projection}.outputZ", f"{closes_point_on_surface}.inPositionZ")
+                    
+                    cmds.connectAttr(f"{closes_point_on_surface}.parameterU", f"{uv_pin_projection}.coordinate[{count_index}].coordinateU")
+                    cmds.connectAttr(f"{closes_point_on_surface}.parameterV", f"{uv_pin_projection}.coordinate[{count_index}].coordinateV")
+
+                    joint = cmds.createNode("joint", name=f"{local_side}_lipCorner_JNT", ss=True, parent=self.module_trn)
+                    cmds.connectAttr(f"{uv_pin_projection}.outputMatrix[{count_index}]", f"{joint}.offsetParentMatrix")
+                    self.corner_projected_joints.append(joint)
+                    closests_points_on_surfaces.append(closes_point_on_surface)
+
+            joints = []
+
+            for i, local in enumerate(closests_points_on_surfaces):
+                count_index = 1+(i*4)
+                local_side = local.split("_")[0]
+                
+                uFollow01_bta = cmds.createNode("blendTwoAttr", name=f"{local_side}_lipUFollow{main_mid_name.capitalize()}01_BTA", ss=True)
+                uFollow02_bta = cmds.createNode("blendTwoAttr", name=f"{local_side}_lipUFollow{main_mid_name.capitalize()}02_BTA", ss=True)
+                vFollow01_bta = cmds.createNode("blendTwoAttr", name=f"{local_side}_lipVFollow{main_mid_name.capitalize()}01_BTA", ss=True)
+                vFollow02_bta = cmds.createNode("blendTwoAttr", name=f"{local_side}_lipVFollow{main_mid_name.capitalize()}02_BTA", ss=True)
+
+                cmds.connectAttr(f"{self.module_trn}.HorizontalFollow01", f"{uFollow01_bta}.attributesBlender")
+                cmds.connectAttr(f"{self.module_trn}.HorizontalFollow02", f"{uFollow02_bta}.attributesBlender")
+                cmds.connectAttr(f"{self.module_trn}.VerticalFollow01", f"{vFollow01_bta}.attributesBlender")
+                cmds.connectAttr(f"{self.module_trn}.VerticalFollow02", f"{vFollow02_bta}.attributesBlender")
+                
+                cmds.connectAttr(f"{c_closes_point_on_surface}.parameterU", f"{uFollow01_bta}.input[0]")
+                cmds.connectAttr(f"{local}.parameterU", f"{uFollow01_bta}.input[1]")
+
+                cmds.connectAttr(f"{uFollow01_bta}.output", f"{uFollow02_bta}.input[0]")
+                cmds.connectAttr(f"{local}.parameterU", f"{uFollow02_bta}.input[1]")
+
+                cmds.connectAttr(f"{c_closes_point_on_surface}.parameterV", f"{vFollow01_bta}.input[0]")
+                cmds.connectAttr(f"{local}.parameterV", f"{vFollow01_bta}.input[1]")
+
+                cmds.connectAttr(f"{vFollow01_bta}.output", f"{vFollow02_bta}.input[0]")
+                cmds.connectAttr(f"{local}.parameterV", f"{vFollow02_bta}.input[1]")
+
+                cmds.connectAttr(f"{uFollow01_bta}.output", f"{uv_pin_projection}.coordinate[{count_index}].coordinateU")
+                cmds.connectAttr(f"{vFollow01_bta}.output", f"{uv_pin_projection}.coordinate[{count_index}].coordinateV")
+
+                cmds.connectAttr(f"{uFollow02_bta}.output", f"{uv_pin_projection}.coordinate[{count_index+1}].coordinateU")
+                cmds.connectAttr(f"{vFollow02_bta}.output", f"{uv_pin_projection}.coordinate[{count_index+1}].coordinateV")
+
+                joint01 = cmds.createNode("joint", name=f"{local_side}_lip{main_mid_name.capitalize()}Corner01_JNT", ss=True, parent=self.module_trn)
+                cmds.connectAttr(f"{uv_pin_projection}.outputMatrix[{count_index}]", f"{joint01}.offsetParentMatrix")
+
+                joint02 = cmds.createNode("joint", name=f"{local_side}_lip{main_mid_name.capitalize()}Corner02_JNT", ss=True, parent=self.module_trn)
+                cmds.connectAttr(f"{uv_pin_projection}.outputMatrix[{count_index+1}]", f"{joint02}.offsetParentMatrix")
+
+                joints.append(joint01)
+                joints.append(joint02)
+
+            
+            joint_list = [self.corner_projected_joints[0], joints[1], joints[0], c_joint, joints[2], joints[3], self.corner_projected_joints[1]]
+            print(joint_list)
 
             rebuilded_skinned_curve = cmds.skinCluster(
                 joint_list,
@@ -426,25 +501,27 @@ class JawModule():
                 bindMethod=0,
                 normalizeWeights=1,
                 weightDistribution=0,
-                maximumInfluences=2,
+                maximumInfluences=1,
                 dropoffRate=4,
                 removeUnusedInfluence=False
             )[0]
 
             cv_names = cmds.ls(f"{rebuilded_curve}.cv[*]", flatten=True)
 
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[0], transformValue=[(self.corner_projected_joints[0], 1)])
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[-1], transformValue=[(self.corner_projected_joints[1], 1)])
+            for i, cv in enumerate(cv_names):
+                cmds.skinPercent(rebuilded_skinned_curve, cv, transformValue=[(joint_list[i], 1)])
 
-            mid_index = int(len(cv_names) // 2)
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[mid_index], transformValue=[(mid_local_joint, 1)])
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[0], transformValue=[(self.corner_projected_joints[0], 1)])
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[-1], transformValue=[(self.corner_projected_joints[1], 1)])
 
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[1], transformValue=[(self.corner_projected_joints[0], 0.5), (mid_local_joint, 0.5)])
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[-2], transformValue=[(self.corner_projected_joints[1], 0.5), (mid_local_joint, 0.5)])
+            # mid_index = int(len(cv_names) // 2)
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[mid_index], transformValue=[(mid_local_joint, 1)])
 
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[2], transformValue=[(self.corner_projected_joints[0], 0.2), (mid_local_joint, 0.8)])
-            cmds.skinPercent(rebuilded_skinned_curve, cv_names[-3], transformValue=[(self.corner_projected_joints[1], 0.2), (mid_local_joint, 0.8)])
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[1], transformValue=[(self.corner_projected_joints[0], 0.5), (mid_local_joint, 0.5)])
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[-2], transformValue=[(self.corner_projected_joints[1], 0.5), (mid_local_joint, 0.5)])
 
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[2], transformValue=[(self.corner_projected_joints[0], 0.2), (mid_local_joint, 0.8)])
+            # cmds.skinPercent(rebuilded_skinned_curve, cv_names[-3], transformValue=[(self.corner_projected_joints[1], 0.2), (mid_local_joint, 0.8)])
             bezierCurve = cmds.duplicate(rebuilded_curve, name=rebuilded_curve.replace("Rebuild", "Bezier"), renameChildren=True)[0]
             cmds.select(bezierCurve, r=True)
             cmds.nurbsCurveToBezier()
