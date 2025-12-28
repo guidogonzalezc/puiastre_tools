@@ -1,9 +1,3 @@
-"""
-SkinCluster IO - SPARSE OPTIMIZED (Small File Size)
-Author: Senior Rigging TD
-Compatible: Maya 2024, 2025, 2026
-"""
-
 import json
 import os
 import maya.cmds as cmds
@@ -36,7 +30,7 @@ class SkinIO:
         return list(reversed(skins))
 
     def export_skins(self, file_path):
-        om.MGlobal.displayInfo(f"--- Iniciando Export OPTIMIZADO a: {file_path} ---")
+        om.MGlobal.displayInfo(f"--- Iniciando Export a: {file_path} ---")
         
         sel = om.MGlobal.getActiveSelectionList()
         meshes_to_process = []
@@ -100,17 +94,13 @@ class SkinIO:
                 vertex_comp = single_comp.create(om.MFn.kMeshVertComponent)
                 single_comp.setCompleteData(vtx_count)
                 
-                # Obtenemos la lista gigante plana (Dense)
+                # Obtenemos la lista gigante plana
                 weights_marray, _ = mf_skin.getWeights(mesh_path, vertex_comp)
                 flat_weights = list(weights_marray)
                 
-                # Convertimos a Sparse: Diccionario por Joint { "joint": {"id": [], "w": []} }
                 sparse_weights = {}
                 stride = len(inf_names)
                 
-                # Iteramos para comprimir. 
-                # Nota: Esto es un poco mas lento en Python puro que el dump directo, 
-                # pero ahorra GBs de disco.
                 
                 for inf_idx, inf_name in enumerate(inf_names):
                     # Listas temporales para esta joint
@@ -118,7 +108,6 @@ class SkinIO:
                     j_weights = []
                     
                     # Recorremos todos los vértices para esta influencia específica
-                    # Math: El peso del vertice V para la influencia I está en: V * stride + I
                     for v_idx in range(vtx_count):
                         val = flat_weights[v_idx * stride + inf_idx]
                         
@@ -135,12 +124,10 @@ class SkinIO:
                         }
 
                 # --- Blend Weights (Dual Quaternion) ---
-                # Tambien lo comprimimos porque suele ser 0 o 1
                 blend_weights_marray = mf_skin.getBlendWeights(mesh_path, vertex_comp)
                 flat_blend = list(blend_weights_marray)
                 sparse_blend = {}
                 
-                # Blend weights es 1 valor por vertice, más fácil
                 b_indices = []
                 b_values = []
                 for v_idx, val in enumerate(flat_blend):
@@ -155,7 +142,7 @@ class SkinIO:
                     "name": skin_name,
                     "vertex_count": vtx_count,
                     "attributes": attrs,
-                    "influences": inf_names, # Mantenemos la lista completa para referencia
+                    "influences": inf_names, 
                     "sparse_weights": sparse_weights,
                     "sparse_blend": sparse_blend
                 }
@@ -164,13 +151,12 @@ class SkinIO:
             full_data[mesh_name] = mesh_data
 
         with open(file_path, 'w') as f:
-            # separators elimina espacios en blanco innecesarios en el JSON (minifica)
             json.dump(full_data, f, separators=(',', ':'))
             
         om.MGlobal.displayInfo(f"Export completado. Archivo optimizado.")
 
     def import_skins(self, file_path):
-        om.MGlobal.displayInfo(f"--- Iniciando Import OPTIMIZADO desde: {file_path} ---")
+        om.MGlobal.displayInfo(f"--- Iniciando Import desde: {file_path} ---")
         
         if not os.path.exists(file_path):
             om.MGlobal.displayError("El archivo JSON no existe.")
@@ -223,26 +209,20 @@ class SkinIO:
                     try:
                         cmds.setAttr(f"{skin_name}.{attr}", val)
                     except: pass
-
-                # --- RECONSTRUCCION DE PESOS (De Sparse a Denso) ---
                 
-                # 1. Mapa de indices Escena vs JSON
                 scene_inf_paths = mf_skin.influenceObjects()
                 scene_inf_names = [p.partialPathName() for p in scene_inf_paths]
                 scene_inf_map = {name: i for i, name in enumerate(scene_inf_names)}
                 
-                # Necesitamos construir un array plano GIGANTE lleno de ceros
-                # Tamaño = NumVertices * NumInfluenciasEnEscena
+
                 num_verts = target_vtx_count
                 num_scene_infs = len(scene_inf_names)
                 
-                # Array inicializado en 0.0 (float)
-                # Esta es la parte critica de memoria, pero es necesaria para setWeights
+
                 full_weight_list = [0.0] * (num_verts * num_scene_infs)
                 
                 sparse_data = skin_data.get("sparse_weights", {})
                 
-                # Rellenamos solo donde hay datos
                 for j_name, data_block in sparse_data.items():
                     if j_name not in scene_inf_map:
                         continue # La joint no existe en la escena, ignoramos sus pesos
@@ -251,13 +231,10 @@ class SkinIO:
                     indices = data_block["ix"]
                     values = data_block["vw"]
                     
-                    # Rellenar el array plano
-                    # Formula: index_plano = vtx_idx * stride + inf_idx
                     for v_idx, weight_val in zip(indices, values):
                         flat_index = (v_idx * num_scene_infs) + scene_inf_idx
                         full_weight_list[flat_index] = weight_val
                 
-                # Aplicar a Maya
                 m_influence_indices = om.MIntArray(list(range(num_scene_infs)))
                 final_weights = om.MDoubleArray(full_weight_list)
                 
@@ -267,7 +244,6 @@ class SkinIO:
                 
                 mf_skin.setWeights(mesh_path, vertex_comp, m_influence_indices, final_weights, False)
 
-                # --- Blend Weights ---
                 sparse_blend = skin_data.get("sparse_blend", {})
                 if sparse_blend:
                     full_blend = [0.0] * num_verts
@@ -280,7 +256,7 @@ class SkinIO:
 
                 processed_skins.append(skin_name)
 
-            # Reordenar (mismo codigo)
+            # Reordenar
             if processed_skins:
                 current_hist = cmds.listHistory(mesh_path.fullPathName(), pruneDagObjects=True, interestLevel=1)
                 current_skins = [x for x in current_hist if cmds.nodeType(x) == "skinCluster"]
