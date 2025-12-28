@@ -297,5 +297,6 @@ class SkinIO:
 import os
 # Ejemplo de uso:
 # exporter = SkinIO()
-# SkinIO().export_skins(file_path = r"C:\Users\guido\Downloads\skincluster_test.json")
-SkinIO().import_skins(file_path = r"C:\Users\guido\Downloads\skincluster_test.json")
+path = r"D:\git\maya\puiastre_tools\assets\varyndor\skinning\CHAR_varyndor_001.skn"
+# SkinIO().export_skins(file_path = path)
+SkinIO().import_skins(file_path = path)
