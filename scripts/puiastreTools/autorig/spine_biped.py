@@ -280,16 +280,24 @@ class SpineModule():
 
         movable_ctl = controller_creator(f"C_movablePivot", 
                                                           suffixes=[], 
-                                                          lock=["scaleX", "scaleY", "scaleZ", "visibility"], 
+                                                          lock=["scaleX", "scaleY", "scaleZ"], 
                                                           ro=True, 
                                                           parent=self.body_ctl)
         
         for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
             cmds.setAttr(f"{movable_ctl}.{attr}", 0)
+
+        cmds.addAttr(self.body_ctl, shortName="pivot", niceName="Body Pivot ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(self.body_ctl+".pivot", channelBox=True, lock=True)
+        cmds.addAttr(self.body_ctl, shortName="movablePivotVis", niceName="Movable Pivot Visibility", attributeType="bool", keyable=True)
+        cmds.setAttr(f"{self.body_ctl}.movablePivotVis", channelBox=True, keyable=False)
         
 
         cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.rotatePivot") 
         cmds.connectAttr(f"{movable_ctl}.translate", f"{self.body_ctl}.scalePivot") 
+        cmds.connectAttr(f"{self.body_ctl}.movablePivotVis", f"{movable_ctl}.visibility", f=True)
+        cmds.setAttr(f"{movable_ctl}.visibility", lock=True, k=False)
+
 
         dummy_body = cmds.createNode("transform", n="C_dummyBody_TRN", p=self.body_ctl) 
 
@@ -347,6 +355,8 @@ class SpineModule():
         cmds.addAttr(self.body_ctl, shortName="attachedFk", niceName="Fk ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.body_ctl+".attachedFk", channelBox=True, lock=True)
         cmds.addAttr(self.body_ctl, shortName="attachedFKVis", niceName="Attached FK Visibility", attributeType="bool", keyable=True)
+        cmds.setAttr(f"{self.body_ctl}.attachedFKVis", channelBox=True, keyable=False) # make unkeyable
+
 
 
         nodes_to_create = {

@@ -274,20 +274,21 @@ def make(asset_name = "", latest = False):
                     update_ui("jaw")
                     jmm.JawModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eyebrow":
+                if guide_info.get("moduleName") == "eyebrow":
+                    update_ui("eyebrow")
+                    ebm.EyebrowModule().make(guide_name)
 
-                #     ebm.EyebrowModule().make(guide_name)
+                if guide_info.get("moduleName") == "eye":
+                    update_ui("eye")
+                    elm.EyelidModule().make(guide_name)
 
-                # if guide_info.get("moduleName") == "eye":
-
-                #     elm.EyelidModule().make(guide_name)
-
-                # if guide_info.get("moduleName") == "nose":
-
-                #     nm.NoseModule().make(guide_name)
+                if guide_info.get("moduleName") == "nose":
+                    update_ui("nose")
+                    nm.NoseModule().make(guide_name)
                 
-                # if guide_info.get("moduleName") == "cheek":
-                #     cm.CheekModule().make(guide_name)
+                if guide_info.get("moduleName") == "cheek":
+                    update_ui("cheek")
+                    cm.CheekModule().make(guide_name)
     
     # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
@@ -305,7 +306,7 @@ def make(asset_name = "", latest = False):
     # Create the skeleton hierarchy and spaces
     cmds.progressWindow(edit=True, progress=90, status=(f"Creating the skeleton hierarchy and spaces") )
 
-    skeleton_hierarchy = skh.build_complete_hierarchy() 
+    # skeleton_hierarchy = skh.build_complete_hierarchy() 
 
     # # skt.load_skincluster()
 
