@@ -26,9 +26,7 @@ from puiastreTools.autorig import eyelid_module as elm
 from puiastreTools.autorig import nose_module as nm
 from puiastreTools.autorig import cheek_module as cm
 from puiastreTools.autorig import spikes_module_matrix as spm
-
-
-import puiastreTools.utils.skinning_transfer as skt
+import puiastreTools.tools.skincluster_manager as skt
 
 
 # Python libraries import
@@ -60,7 +58,6 @@ reload(elm)
 reload(nm)
 reload(cm)
 reload(spm)
-
 reload(skt)
 reload(project_manager)
 
@@ -109,7 +106,7 @@ def joint_label():
         cmds.setAttr(jnt + ".type", 18)
         cmds.setAttr(jnt + ".otherType", jnt.split("_")[1], type= "string")
 
-def make(asset_name = "", latest = False):
+def make():
     """
     Build a complete dragon rig in Maya by creating basic structure, modules, and setting up space switching for controllers.
     This function initializes various modules, creates the basic structure, and sets up controllers and constraints for the rig.
@@ -119,19 +116,29 @@ def make(asset_name = "", latest = False):
         guides_path (str): The file path to the guides data. (full path)
         ctls_path (str): The file path to the controllers data. (full path)
     """
-    if latest:
-        core.load_data()
-    else:
-        try:
-            project_manager.load_asset_configuration(asset_name)
-        except Exception as e:
-            om.MGlobal.displayError(f"Error loading asset configuration: {e}")
-            return
-    # DEV COMMANDS
-    # cmds.file(new=True, force=True)
-    # cmds.scriptEditorInfo(ch=True)
+    core.load_data()
+
+    asset_name = core.DataManager.get_asset_name()
+    progress_window = cmds.progressWindow(title='Rig builder',
+                                            progress=0,
+                                            status=f"Loading data for {asset_name.capitalize()}",
+                                            isInterruptable=True )
 
     # Create a new data export instance and generate build data
+    model_path = core.DataManager.get_model_path()
+    if model_path and os.path.exists(model_path):
+        cmds.file(model_path, o=True, f=True)
+        om.MGlobal.displayInfo(f"Imported model from {model_path}")
+        file_objects = cmds.ls(assemblies=True)
+        objects = []
+        for item in file_objects:
+            relative = cmds.listRelatives(item, shapes=True) or []
+            if not relative and not cmds.objectType(item, isAType="camera"):
+                objects.append(item)
+    else:
+        cmds.file(new=True, force=True)
+        om.MGlobal.displayWarning(f"Model path is invalid or does not exist: {model_path}")
+
     data_exporter = data_export.DataExport()
     data_exporter.new_build()
 
@@ -145,18 +152,20 @@ def make(asset_name = "", latest = False):
     except Exception as e:
         om.MGlobal.displayError(f"Error loading guides data: {e}")
 
+    adonis = guides_data.get("adonis")
+    if adonis is None:
+        adonis = 0
+    core.DataManager.set_adonis_data(adonis)
+
     # Set asset name and mesh data in DataManager
     core.DataManager.set_asset_name(list(guides_data.keys())[0])
-    core.DataManager.set_mesh_data(guides_data["meshes"])
-
-
 
     if core.DataManager.get_asset_name() != "oto":
-        basic_structure.create_basic_structure(asset_name=core.DataManager.get_asset_name())
+        basic_structure.create_basic_structure(asset_name=core.DataManager.get_asset_name(), adonis_setup=adonis)
 
     else:
         data_exporter.append_data("basic_structure", {"modules_GRP": "setup",
-                                    "skel_GRP": "jnt_org",
+                                    "skel_GRP": "setup_jnt_org",
                                     "masterWalk_CTL": "masterWalk",
                                     "guides_GRP": "guide",
                                     "skeletonHierarchy_GRP": "out_skel_facial",
@@ -167,6 +176,15 @@ def make(asset_name = "", latest = False):
                                     "neck_ctl": "C_neck01_CTL",
                                     "head_ctl": "C_head_CTL"
                             })
+        
+        skel_out = cmds.createNode("transform", name="out_skel_facial", ss=True, parent = "jnt_org")
+        setup_jnt_org = cmds.createNode("transform", name="setup_jnt_org", ss=True, parent = "setup")
+        
+    if objects:
+        model_grp = data_exporter.get_data("basic_structure", "model_GRP")
+        if model_grp and cmds.objExists(model_grp):
+            cmds.parent(objects, model_grp)
+
     guide_amount = 0
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
@@ -176,14 +194,9 @@ def make(asset_name = "", latest = False):
             if guide_info.get("moduleName") != "Child":
                 guide_amount += 1
 
-    progress_window = cmds.progressWindow(title='Rig builder',
-                                            progress=0,
-                                            status=f"Building {core.DataManager.get_asset_name()} rig!",
-                                            isInterruptable=True )
 
-
-    step = 80/guide_amount
-    current_val = 0
+    step = 70/guide_amount
+    current_val = 10
 
     def update_ui(module_name):
         nonlocal current_val # Allows us to modify the variable from the outer scope
@@ -192,7 +205,7 @@ def make(asset_name = "", latest = False):
         cmds.progressWindow(
             progress_window, 
             edit=True, 
-            progress=current_val, 
+            progress=int(current_val),
             status=f"Building {module_name} module"
         )
         cmds.refresh()
@@ -308,10 +321,15 @@ def make(asset_name = "", latest = False):
 
     skeleton_hierarchy = skh.build_complete_hierarchy() 
 
-    # # skt.load_skincluster()
+    skinning_path = core.DataManager.get_skinning_data()
+    if os.path.exists(skinning_path):
+        cmds.progressWindow(edit=True, progress=90, status=(f"Importing skinning data") )
+        skt.SkinIO().import_skins(file_path=skinning_path)
+    else:
+        om.MGlobal.displayWarning(f"Skinning file not found at {skinning_path}. Skipping skin import.")
 
     # End commands to clean the scene
-    cmds.progressWindow(edit=True, progress=95, status=(f"Finalizing") )
+    cmds.progressWindow(edit=True, progress=99, status=(f"Finalizing") )
     rename_ctl_shapes()
     joint_label()
     setIsHistoricallyInteresting(0)
