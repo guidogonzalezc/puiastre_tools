@@ -30,7 +30,7 @@ class SkinIO:
         return list(reversed(skins))
 
     def export_skins(self, file_path):
-        om.MGlobal.displayInfo(f"--- Iniciando Export a: {file_path} ---")
+        om.MGlobal.displayInfo(f"--- Starting Export to: {file_path} ---")
         
         sel = om.MGlobal.getActiveSelectionList()
         meshes_to_process = []
@@ -54,7 +54,7 @@ class SkinIO:
                 it_dag.next()
 
         if not meshes_to_process:
-            om.MGlobal.displayWarning("No se encontraron meshes válidas.")
+            om.MGlobal.displayWarning("No valid meshes found.")
             return
 
         full_data = {}
@@ -68,7 +68,7 @@ class SkinIO:
             if not skins:
                 continue
 
-            om.MGlobal.displayInfo(f"Procesando: {mesh_name} | Skins: {len(skins)}")
+            om.MGlobal.displayInfo(f"Processing: {mesh_name} | Skins: {len(skins)}")
             
             mesh_data = []
             
@@ -153,13 +153,12 @@ class SkinIO:
         with open(file_path, 'w') as f:
             json.dump(full_data, f, separators=(',', ':'))
             
-        om.MGlobal.displayInfo(f"Export completado. Archivo optimizado.")
+        om.MGlobal.displayInfo(f"Export completed. Optimized file saved.")
 
     def import_skins(self, file_path):
-        om.MGlobal.displayInfo(f"--- Iniciando Import desde: {file_path} ---")
         
         if not os.path.exists(file_path):
-            om.MGlobal.displayError("El archivo JSON no existe.")
+            om.MGlobal.displayError("JSON file does not exist.")
             return
 
         with open(file_path, 'r') as f:
@@ -180,7 +179,7 @@ class SkinIO:
                 target_vtx_count = skin_data["vertex_count"]
                 
                 if mf_mesh.numVertices != target_vtx_count:
-                    om.MGlobal.displayError(f"Topología no coincide en {skin_name}. Skip.")
+                    om.MGlobal.displayError(f"{skin_name} does not match topology. Skip.")
                     continue 
 
                 # Gestionar Creación/Busqueda de SkinCluster (Codigo anterior reutilizado)
@@ -267,9 +266,8 @@ class SkinIO:
                     try: cmds.reorderDeformers(skin, mesh_path.fullPathName(), back=True)
                     except: pass
 
-        om.MGlobal.displayInfo("--- Importación Finalizada ---")
 
 
-path = r"D:\git\maya\puiastre_tools\assets\varyndor\skinning\CHAR_varyndor_001.skn"
+# path = r"D:\git\maya\puiastre_tools\assets\marcelo\skinning\CHAR_marcelo_001.skn"
 # SkinIO().export_skins(file_path = path)
-SkinIO().import_skins(file_path = path)
+# SkinIO().import_skins(file_path = path)
