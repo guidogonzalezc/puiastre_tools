@@ -181,8 +181,8 @@ def build_complete_hierarchy():
     leg_joints = []
 
     complete_arm_chain = []
-
-    spine_joints = parented_chain(skinning_joints=skinning_joints[spine_index], parent=None, hand_value=False)
+    if spine_index:
+        spine_joints = parented_chain(skinning_joints=skinning_joints[spine_index], parent=None, hand_value=False)
 
     facial_joints_list = []
     head_joint= None
@@ -206,12 +206,13 @@ def build_complete_hierarchy():
 
                 #facial_joints_list.append(skinning_joint_list)
             else:
-                joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
-                if "clavicle" in skinning_joint_list[0]:
-                    arm_joints.append(joints[-1])
-                    complete_arm_chain.extend(skinning_joint_list)
-                if "neck" in skinning_joint_list[0]:
-                    head_joint = joints[-1]
+                if len(skinning_joint_list) >= 2:
+                    joints = parented_chain(skinning_joints=skinning_joint_list, parent=spine_joints[-2], hand_value=False)
+                    if "clavicle" in skinning_joint_list[0]:
+                        arm_joints.append(joints[-1])
+                        complete_arm_chain.extend(skinning_joint_list)
+                    if "neck" in skinning_joint_list[0]:
+                        head_joint = joints[-1]
 
     """
 
@@ -361,7 +362,7 @@ def build_complete_hierarchy():
             parents = [data_exporter.get_data("C_spineModule", "localHip"), data_exporter.get_data("C_spineModule", "body_ctl")]
             space_switch.fk_switch(target = main_ctl, sources= parents, sources_names=["LocalHip", "Body"])
 
-        if "neck" in skel_grps[i]:
+        if "neck" in skel_grps[i] and len(skinning_joints[i]) >= 2:
             main_ctl= data_exporter.get_data(modules_name[i], "neck_ctl")
             parents = [data_exporter.get_data("C_spineModule", "localChest"), data_exporter.get_data("C_spineModule", "end_main_ctl")]
             space_switch.fk_switch(target = main_ctl, sources= parents, sources_names=["LocalChest", "SpineEnd"])
