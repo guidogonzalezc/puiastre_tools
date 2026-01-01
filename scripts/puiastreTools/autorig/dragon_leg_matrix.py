@@ -1331,17 +1331,18 @@ class BackLegModule(LimbModule):
         super().make()
         self.reverse_foot()
         self.skinning_joints = self.bendys()
-        self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
+        if core.DataManager.get_adonis_data():
+            self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
 
-        pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
-        cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+            pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
+            cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
 
-        inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
-        cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{self.skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
-        distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
-        cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
+            inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
+            cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
+            cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{self.skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+            distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
+            cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
 
 
@@ -1404,17 +1405,19 @@ class FrontLegModule(LimbModule):
         self.reverse_foot()
         self.skinning_joints = self.bendys()
         self.scapula()
-        self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
+        if core.DataManager.get_adonis_data():
 
-        pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
-        cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+            self.distance = guide_import(f"{self.side}_{self.module_name}FrontDistance_GUIDE", all_descendents=False)[0]
 
-        inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
-        cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{self.skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
-        distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
-        cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
+            pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}FrontDistance_MMX", ss=True)
+            cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+
+            inverse = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}FrontDistanceInverse_MTX", ss=True)
+            cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{inverse}.inputMatrix")
+            cmds.connectAttr(f"{inverse}.outputMatrix", f"{pos_multMatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{self.skinning_joints[0][0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+            distance_joints = cmds.createNode("joint", name=f"{self.side}_{self.module_name}FrontDistance_JNT", ss=True, parent=self.muscle_locators)
+            cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
 
 
