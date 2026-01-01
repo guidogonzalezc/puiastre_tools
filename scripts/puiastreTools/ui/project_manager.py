@@ -2,14 +2,27 @@
 import os
 import json
 from importlib import reload
+from functools import partial
+
+try:
+    from PySide6 import QtWidgets, QtCore, QtGui
+    from shiboken6 import wrapInstance
+except ImportError:
+    try:
+        from PySide2 import QtWidgets, QtCore, QtGui
+        from shiboken2 import wrapInstance
+    except ImportError:
+        cmds.error("Could not import PySide2 or PySide6. Check your Maya installation.")
 
 # Maya commands import
 from maya.api import OpenMaya as om
+import maya.OpenMayaUI as omui
 import maya.cmds as cmds
 
 # PuiastreTools imports
 from puiastreTools.utils import core
 import re
+
 
 reload(core)
 
@@ -141,7 +154,6 @@ def load_asset_configuration(asset_name):
 
     # If multiple .config files are found, use the first one
     if config_files:
-        om.MGlobal.displayInfo("Configuration files found:\n" + "\n".join(config_files))
         config_file_path = config_files[0]  # use the first .config found
     else:
         om.MGlobal.displayInfo(f"No .config files found in: {asset_path}")
@@ -161,6 +173,7 @@ def load_asset_configuration(asset_name):
             highest_version_file = _highest_version_file_in_directory(folder_path, ".guides")
             if highest_version_file:
                 core.DataManager.set_guide_data(highest_version_file)
+                om.MGlobal.displayInfo(f"Guides file loaded from: {highest_version_file}")
             else:
                 om.MGlobal.displayInfo(f"No matching .guides files found in: {folder_path}")
                 return
@@ -169,6 +182,7 @@ def load_asset_configuration(asset_name):
             highest_version_file = _highest_version_file_in_directory(folder_path, ".json")
             if highest_version_file:
                 core.DataManager.set_ctls_data(highest_version_file)
+                om.MGlobal.displayInfo(f"Controllers file loaded from: {highest_version_file}")
             else:
                 om.MGlobal.displayInfo(f"No matching .curves files found in: {folder_path}")
                 return
@@ -187,7 +201,7 @@ def load_asset_configuration(asset_name):
                 highest_version_file = _highest_version_file_in_directory(folder_path, ".ma")
 
                 if highest_version_file:
-                    cmds.file(highest_version_file, o=True, f=True)
+                    core.DataManager.set_model_path(highest_version_file)
                     om.MGlobal.displayInfo(f"Model loaded from: {highest_version_file}")
                 else:
                     om.MGlobal.displayInfo(f"No matching .ma files found in: {folder_path}")
@@ -196,7 +210,7 @@ def load_asset_configuration(asset_name):
                 highest_version_file = _highest_version_file_in_directory(folder_path, ".ma")
 
                 if highest_version_file:
-                    cmds.file(highest_version_file, o=True, f=True)
+                    core.DataManager.set_model_path(highest_version_file)
                     om.MGlobal.displayInfo(f"Model loaded from: {highest_version_file}")
                 else:
                     om.MGlobal.displayInfo(f"No matching .ma files found in: {folder_path}")
@@ -215,6 +229,140 @@ def load_asset_configuration(asset_name):
 
     core.DataManager.set_asset_name(asset_name)
     core.DataManager.set_project_path(asset_path)
-    om.MGlobal.displayInfo(f"Asset configuration loaded for: {asset_name}")
+    om.MGlobal.displayInfo(f"Asset configuration loaded for {asset_name} Completed.")
 
 # asset_structure_creation("rigoberta", asset_type="CHAR")
+
+class AssetManagerWindow(QtWidgets.QDialog):
+    
+    WINDOW_NAME = "AssetManagerToolUI"
+    WINDOW_TITLE = "Asset Manager"
+    
+    def __init__(self, parent=None):
+        super(AssetManagerWindow, self).__init__(wrapInstance(int(omui.MQtUtil.mainWindow()), QtWidgets.QMainWindow))
+        
+        self.setObjectName(self.WINDOW_NAME)
+        self.setWindowTitle(self.WINDOW_TITLE)
+        self.resize(400, 300)
+        self.setSizeGripEnabled(True) 
+        
+        self.create_widgets()
+        self.create_layouts()
+        self.create_connections()
+        
+    def create_widgets(self):
+        self.tabs = QtWidgets.QTabWidget()
+        
+        # --- Tab 1 ---
+        names = self.load_assets_names()
+
+        self.tab_load = QtWidgets.QWidget()
+        self.combo_items = QtWidgets.QComboBox()
+        self.combo_items.addItems(names)
+        
+        self.btn_ok_t1 = QtWidgets.QPushButton("OK")
+        
+        # --- Tab 2 ---
+        self.tab_create = QtWidgets.QWidget()
+        self.asset_type = QtWidgets.QComboBox()
+        self.asset_type.addItems(["CHAR", "PROP", "ENV"])
+
+
+        self.input_name = QtWidgets.QLineEdit()
+        self.input_name.setPlaceholderText("Enter Asset Name...")
+        
+        self.btn_ok_t2 = QtWidgets.QPushButton("OK")
+
+    def create_layouts(self):
+        main_layout = QtWidgets.QVBoxLayout(self)
+        main_layout.addWidget(self.tabs)
+        
+        # --- Tab 1 Layout ---
+        layout_t1 = QtWidgets.QVBoxLayout(self.tab_load)
+        layout_t1.addStretch()
+        layout_t1.addWidget(QtWidgets.QLabel("Load Existing Asset:"))
+        layout_t1.addWidget(self.combo_items)
+        layout_t1.addStretch()
+        
+        buttons_layout_t1 = QtWidgets.QHBoxLayout()
+        buttons_layout_t1.addStretch()
+        buttons_layout_t1.addWidget(self.btn_ok_t1)
+        layout_t1.addLayout(buttons_layout_t1)
+        
+        # --- Tab 2 Layout ---
+        h_layout_big = QtWidgets.QHBoxLayout()
+
+        v_layout_type = QtWidgets.QVBoxLayout()
+        v_layout_type.addWidget(QtWidgets.QLabel("Asset Type:"))
+        v_layout_type.addWidget(self.asset_type)
+        h_layout_big.addLayout(v_layout_type)
+
+        v_layout_name = QtWidgets.QVBoxLayout()
+        v_layout_name.addWidget(QtWidgets.QLabel("Asset Name:"))
+        v_layout_name.addWidget(self.input_name)
+        h_layout_big.addLayout(v_layout_name)
+
+        layout_t2 = QtWidgets.QVBoxLayout(self.tab_create)
+        layout_t2.addStretch()
+        layout_t2.addLayout(h_layout_big)
+        layout_t2.addStretch()
+        
+        buttons_layout_t2 = QtWidgets.QHBoxLayout()
+        buttons_layout_t2.addStretch()
+        buttons_layout_t2.addWidget(self.btn_ok_t2)
+        layout_t2.addLayout(buttons_layout_t2)
+        
+        self.tabs.addTab(self.tab_load, "Load Asset")
+        self.tabs.addTab(self.tab_create, "Create Asset")
+
+    def create_connections(self):
+        self.btn_ok_t1.clicked.connect(self.load_selected_asset)
+        self.btn_ok_t2.clicked.connect(self.create_asset)
+
+    def load_assets_names(self):
+
+        asset_path = os.path.join(SCRIPT_PATH, "assets")
+
+        assets_names = []
+        if os.path.exists(asset_path):
+            for name in os.listdir(asset_path):
+                full_path = os.path.join(asset_path, name)
+                if os.path.isdir(full_path):
+                    assets_names.append(name)
+
+        return assets_names
+    
+    def load_selected_asset(self):
+        asset_name = self.combo_items.currentText()
+        try:
+            load_asset_configuration(asset_name)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading asset configuration: {e}")
+            return
+    def create_asset(self):
+        asset_name = self.input_name.text().strip()
+        asset_type = self.asset_type.currentText()
+        if not asset_name:
+            om.MGlobal.displayError("Please enter a valid asset name.")
+            return
+        try:
+            asset_structure_creation(asset_name, asset_type=asset_type)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error creating asset structure: {e}")
+            return
+        
+        names = self.load_assets_names()
+        self.combo_items.clear()
+        self.combo_items.addItems(names)
+        
+
+def show():
+    if cmds.window(AssetManagerWindow.WINDOW_NAME, exists=True):
+        cmds.deleteUI(AssetManagerWindow.WINDOW_NAME)
+        
+    # 3. Create and show
+    ui = AssetManagerWindow()
+    ui.show()
+    return ui
+
+    
