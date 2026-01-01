@@ -403,7 +403,6 @@ class JawModule():
             cmds.setAttr(f"{uv_pin_projection}.tangentAxis", 0) 
             cmds.setAttr(f"{uv_pin_projection}.normalAxis", 2) 
             cmds.connectAttr(f"{mouth_sliding_shape}.worldSpace[0]", f"{uv_pin_projection}.deformedGeometry")
-            print(uv_pin_projection)
 
             row_projection = cmds.createNode("rowFromMatrix", name=f"C_mouthSliding{main_mid_name.capitalize()}Projection_ROW", ss=True)
             cmds.connectAttr(self.mid_local, f"{row_projection}.matrix")
@@ -491,7 +490,6 @@ class JawModule():
 
             
             joint_list = [self.corner_projected_joints[0], joints[1], joints[0], c_joint, joints[2], joints[3], self.corner_projected_joints[1]]
-            print(joint_list)
 
             rebuilded_skinned_curve = cmds.skinCluster(
                 joint_list,
