@@ -2,149 +2,182 @@ import maya.cmds as cmds
 from puiastreTools.utils.curve_tool import controller_creator
 from puiastreTools.utils import data_export
 
-def condition(main_ctl, vis_trn, value):
+def get_structure_config(adonis_setup=0):
     """
-    Create a condition node to control the visibility of a transform based on a controller's attribute.
-
-    Args:
-        main_ctl (str): The name of the controller whose attribute will be used to control visibility.
-        vis_trn (str): The name of the transform whose visibility will be controlled.
-        value (int): The value to compare against the controller's attribute.
+    Returns the hierarchy dictionary based on the setup type.
+    Key = Parent Group
+    Value = List of children (Transforms or Controllers)
     """
-    con = cmds.createNode("condition", name = f"{vis_trn}_Visibility_CON", ss=True)
-    cmds.setAttr(con + ".secondTerm", value)
-    cmds.connectAttr(main_ctl, con + ".firstTerm")
-    cmds.setAttr(con + ".colorIfTrueR", 1)
-    cmds.setAttr(con + ".colorIfFalseR", 0)
-    cmds.connectAttr(con + ".outColorR", vis_trn + ".visibility")
-
-def create_basic_structure(asset_name = "assetName"):
-    """
-    Create a basic structure for a Maya asset, including controllers, rig transforms, and model layers.
-    Args:
-        asset_name (str): The name of the asset to create the structure for. Default is "assetName".
-    """
-
-    folder_structure = {
-        asset_name: {
-            "controls_GRP": {
-                "C_characterNode",
-                "C_masterWalk",
-                "C_preferences"
-
-            },
-            "rig_GRP": {
-                "modules_GRP",
-                "skel_GRP",
-                "geoLayering_GRP",
-                "skeletonHierarchy_GRP",
-                "guides_GRP",
-            },
-            "model_GRP": {
-                "SKELETON",
-                "PROXY",
-                "MODEL",
-            },
-            "groom_GRP": {},
-            "clothSim_GRP": {},
-            "muscleLocators_GRP": {},
-            "muscleSystems_GRP": {},
-            "adonis_GRP": {},
-        }
+    hierarchy = {
+        "controls_GRP": [
+            "C_characterNode",
+            "C_masterWalk",
+            "C_preferences"
+        ],
+        "rig_GRP": [
+            "modules_GRP",
+            "skel_GRP",
+            "geoLayering_GRP",
+            "skeletonHierarchy_GRP",
+            "guides_GRP",
+        ],
+        "model_GRP": [
+        ],
+        "groom_GRP": [],
+        "clothSim_GRP": [],
     }
 
+    if adonis_setup:
+        hierarchy["muscleLocators_GRP"] = []
+        hierarchy["muscleSystems_GRP"] = []
+        hierarchy["adonis_GRP"] = []
+        
+        hierarchy["model_GRP"] = ["SKELETON", "PROXY", "MODEL"]
+    
+    return hierarchy
+
+def create_basic_structure(asset_name="assetName", adonis_setup=0):
+    """
+    Create basic asset structure using a robust dictionary lookup system.
+    """
+    structure_map = get_structure_config(adonis_setup)
+    
+    nodes = {} 
+    
+    ordered_ctls = []
+
     main_transform = cmds.createNode("transform", name=asset_name, ss=True)
+    nodes[asset_name] = main_transform
 
-    ctls = []
-    secondary_transforms = []
-    rig_transforms = []
-
-
-
-    for folder, subfolders in folder_structure[asset_name].items():
-        secondary_transform = cmds.createNode("transform", name=folder, parent=main_transform, ss=True)
-        secondary_transforms.append(secondary_transform)
-        subfolders = sorted(list(subfolders))
-        for subfolder in subfolders:
-
-            if subfolder.startswith("C_"):
-
+    for parent_grp, children in structure_map.items():
+        
+        parent_node = cmds.createNode("transform", name=parent_grp, parent=main_transform, ss=True)
+        nodes[parent_grp] = parent_node
+        
+        children = sorted(list(children))
+        
+        for child in children:
+            
+            if child.startswith("C_"):
                 lock_attrs = ["sx", "sy", "sz", "v"]
-                ro=True
-                if "preferences" in subfolder:
+                ro = True
+                
+                if "preferences" in child:
                     lock_attrs += ["tx", "ty", "tz", "rx", "ry", "rz"]
-                    ro= False
+                    ro = False 
 
-                ctl, grp = controller_creator(subfolder, ["GRP", "ANM"], lock=lock_attrs, ro=ro)
-
+                ctl, grp = controller_creator(child, ["GRP", "ANM"], lock=lock_attrs, ro=ro)
+                
                 cmds.setAttr(f"{ctl}.overrideEnabled", 1)
-                if ctls:
-                    cmds.parent(grp[0], ctls[-1])
+                
+                if ordered_ctls:
+                    cmds.parent(grp[0], ordered_ctls[-1])
                 else:
-                    cmds.parent(grp[0], secondary_transform)  
-                ctls.append(ctl)
+                    cmds.parent(grp[0], parent_node)
+                
+                ordered_ctls.append(ctl)
+                nodes[child] = ctl
+                
             else:
-                trn = cmds.createNode("transform", name=subfolder, parent=secondary_transform, ss=True)
-                rig_transforms.append(trn)
+                child_node = cmds.createNode("transform", name=child, parent=parent_node, ss=True)
+                nodes[child] = child_node
+
+
+    pref_ctl = nodes.get("C_preferences") 
+    walk_ctl = nodes.get("C_masterWalk")
+
+    export_data = {
+        "modules_GRP": nodes.get("modules_GRP"),
+        "skel_GRP": nodes.get("skel_GRP"),
+        "masterWalk_CTL": walk_ctl,
+        "guides_GRP": nodes.get("guides_GRP"),
+        "skeletonHierarchy_GRP": nodes.get("skeletonHierarchy_GRP"),
+        "model_GRP": nodes.get("model_GRP") if nodes.get("model_GRP") else nodes.get("MODEL"),
+    }
+    
+    if adonis_setup:
+        export_data["muscleLocators_GRP"] = nodes.get("muscleLocators_GRP")
+        export_data["adonis_GRP"] = nodes.get("adonis_GRP")
 
     data_exporter = data_export.DataExport()
-    data_exporter.append_data("basic_structure", {"modules_GRP": rig_transforms[2],
-                                                  "skel_GRP": rig_transforms[3],
-                                                  "masterWalk_CTL": ctls[1],
-                                                  "guides_GRP": rig_transforms[1],
-                                                  "skeletonHierarchy_GRP": rig_transforms[4],
-                                                  "muscleLocators_GRP": secondary_transforms[-2],
-                                                  "adonis_GRP" : secondary_transforms[-1],
-                                                  })
+    data_exporter.append_data("basic_structure", export_data)
 
-    cmds.setAttr(secondary_transforms[-2]+".visibility", 0)
-
-    cmds.addAttr(ctls[2], shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=False)
-    cmds.setAttr(ctls[2]+".extraAttr", channelBox=True)
-    cmds.addAttr(ctls[2], shortName="reference", niceName="Reference",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.setAttr(ctls[2]+".reference", channelBox=True)
-    cmds.addAttr(ctls[2], shortName="meshLods", niceName="LODS", enumName="SKELETON:PROXY:MODEL",attributeType="enum", keyable=False)
-    cmds.addAttr(ctls[2], shortName="hideControllersOnPlayblast", niceName="Hide Controllers On Playblast",attributeType="bool", keyable=False, defaultValue=False)
-
-    cmds.addAttr(ctls[2], shortName="extraVisibility", niceName="Extra Visibility  ———", enumName="———",attributeType="enum", keyable=False)
-    cmds.setAttr(ctls[2]+".extraVisibility", channelBox=True)
-    cmds.addAttr(ctls[2], shortName="showModules", niceName="Show Modules",attributeType="bool", keyable=False, defaultValue=False)
-    cmds.addAttr(ctls[2], shortName="showSkeleton", niceName="Show Skeleton",attributeType="bool", keyable=False, defaultValue=True)
-    cmds.addAttr(ctls[2], shortName="showJoints", niceName="Show Joints",attributeType="bool", keyable=False, defaultValue=False)
-    cmds.setAttr(ctls[2]+".showModules", channelBox=True)
-    cmds.setAttr(ctls[2]+".showSkeleton", channelBox=True)
-    cmds.setAttr(ctls[2]+".showJoints", channelBox=True)
-    cmds.setAttr(ctls[2]+".meshLods", channelBox=True)
-    cmds.setAttr(ctls[2]+".hideControllersOnPlayblast", channelBox=True)
-
-    # Connect hideControllersOnPlayblast to controls_GRP.drawOverride.hideOnPlayback
-    cmds.connectAttr(f"{ctls[2]}.hideControllersOnPlayblast", f"{secondary_transforms[0]}.hideOnPlayback")
-
-    cmds.setAttr(secondary_transforms[2]+".overrideDisplayType", 2)
-    cmds.connectAttr(ctls[2]+".reference", secondary_transforms[2]+".overrideEnabled")
+    if pref_ctl:
+        cmds.addAttr(pref_ctl, shortName="extraAttr", niceName="Extra Attributes  ———", enumName="———", attributeType="enum", keyable=False)
+        cmds.setAttr(f"{pref_ctl}.extraAttr", channelBox=True)
         
-    cmds.addAttr(ctls[1], shortName="extraAttributesSep", niceName="Extra Attributes  ———", enumName="———",attributeType="enum", keyable=True)
-    cmds.addAttr(ctls[1], shortName="globalScale", niceName="Global Scale", minValue=0.001,defaultValue=1, keyable=True)
-    cmds.setAttr(ctls[1]+".extraAttributesSep", channelBox=True, lock=True)
+        cmds.addAttr(pref_ctl, shortName="reference", niceName="Reference", attributeType="bool", keyable=False, defaultValue=True)
+        cmds.setAttr(f"{pref_ctl}.reference", channelBox=True)
+        
+        if nodes.get("model_GRP"):
+            cmds.setAttr(f"{nodes['model_GRP']}.overrideDisplayType", 2)
+            cmds.connectAttr(f"{pref_ctl}.reference", f"{nodes['model_GRP']}.overrideEnabled")
 
-    for attr in ["sx", "sy", "sz"]:
-        cmds.setAttr(f"{ctls[1]}.{attr}", keyable=False, channelBox=False, lock=False)
-        cmds.connectAttr(ctls[1]+".globalScale", ctls[1] + f".{attr}", force=True)
+        # Hide on Playback
+        cmds.addAttr(pref_ctl, shortName="hideControllersOnPlayblast", niceName="Hide Controllers On Playblast", attributeType="bool", keyable=False, defaultValue=False)
+        cmds.setAttr(f"{pref_ctl}.hideControllersOnPlayblast", channelBox=True)
+        if nodes.get("controls_GRP"):
+            cmds.connectAttr(f"{pref_ctl}.hideControllersOnPlayblast", f"{nodes['controls_GRP']}.hideOnPlayback")
 
-        cmds.setAttr(f"{ctls[1]}.{attr}", keyable=False, channelBox=False, lock=True)
+        # Visibilities
+        cmds.addAttr(pref_ctl, shortName="extraVisibility", niceName="Extra Visibility  ———", enumName="———", attributeType="enum", keyable=False)
+        cmds.setAttr(f"{pref_ctl}.extraVisibility", channelBox=True)
 
-    # Optimize meshLods visibility conditions using a loop
-    mesh_lods_indices = [7, 6, 5]
-    for value, idx in enumerate(mesh_lods_indices):
-        condition(f"{ctls[2]}.meshLods", rig_transforms[idx], value)
 
-    cmds.connectAttr(f"{ctls[2]}.showModules", rig_transforms[2]+ ".visibility")
-    cmds.connectAttr(f"{ctls[2]}.showJoints", rig_transforms[3] + ".visibility")
-    cmds.connectAttr(f"{ctls[2]}.showSkeleton", rig_transforms[4] + ".visibility")
-    cmds.setAttr(f"{rig_transforms[0]}.visibility", 0)
-    cmds.setAttr(f"{rig_transforms[1]}.visibility", 0)
+        
+        toggles = [
+            ("showModules", "modules_GRP"),
+            ("showSkeleton", "skeletonHierarchy_GRP"),
+            ("showOutJoints", "skel_GRP")
+        ]
+        
+        for attr, grp in toggles:
+            cmds.addAttr(pref_ctl, shortName=attr, niceName=attr, attributeType="bool", keyable=False, defaultValue=(attr=="showSkeleton"))
+            cmds.setAttr(f"{pref_ctl}.{attr}", channelBox=True)
+            if nodes.get(grp):
+                cmds.connectAttr(f"{pref_ctl}.{attr}", f"{nodes[grp]}.visibility")
+
+        
+    if adonis_setup:
+        if "SKELETON" in nodes and nodes["SKELETON"]:
+            cmds.select(nodes["SKELETON"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_SKELETON", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 13)
+            cmds.setAttr(display_layer + ".visibility", 0)
+        if "PROXY" in nodes and nodes["PROXY"]:
+            cmds.select(nodes["PROXY"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_PROXY", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 14)
+            cmds.setAttr(display_layer + ".visibility", 0)
+        if "MODEL" in nodes and nodes["MODEL"]:
+            cmds.select(nodes["MODEL"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MODEL", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 17)
+
+    elif "model_GRP" in nodes and nodes["model_GRP"]:
+        cmds.select(nodes["model_GRP"]) 
+        display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MODEL", empty=False, num=1)
+        cmds.setAttr(display_layer + ".color", 17)
+        cmds.setAttr(display_layer + ".displayType", 2)
+
+    if walk_ctl:
+        cmds.addAttr(walk_ctl, shortName="extraAttributesSep", niceName="Extra Attributes  ———", enumName="———", attributeType="enum", keyable=True)
+        cmds.setAttr(f"{walk_ctl}.extraAttributesSep", channelBox=True, lock=True)
+        
+        cmds.addAttr(walk_ctl, shortName="globalScale", niceName="Global Scale", minValue=0.001, defaultValue=1, keyable=True)
+
+        for attr in ["sx", "sy", "sz"]:
+            cmds.setAttr(f"{walk_ctl}.{attr}", keyable=False, channelBox=False, lock=False)
+            cmds.connectAttr(f"{walk_ctl}.globalScale", f"{walk_ctl}.{attr}", force=True)
+            cmds.setAttr(f"{walk_ctl}.{attr}", keyable=False, channelBox=False, lock=True)
+
+
+    if nodes.get("guides_GRP"): cmds.setAttr(f"{nodes['guides_GRP']}.visibility", 0)
 
     cmds.select(clear=True)
+    
+
+# create_basic_structure("varyndor", 0)
 
 """"
 
