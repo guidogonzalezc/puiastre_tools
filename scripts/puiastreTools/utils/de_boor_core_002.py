@@ -279,6 +279,8 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
     jnts = []
     up_offsets =[]
+    aim_matrices = []
+    positions_plugs = []
     for i, param in enumerate(params):
 
         jnt = cmds.createNode("joint", n=f'{name}0{i}_JNT', ss=True, parent=jnts_grp)
@@ -309,6 +311,7 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
             position = create_wt_add_matrix(trans_off_plugs, wts, f'{name}Position0{i}_WAM', tol=tol)
             position_plug = f'{position}.matrixSum'
+        
 
             if not use_tangent and not use_up:  # no aimMatrix necessary, connect wtAddMatrix to joint
 
@@ -374,6 +377,7 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
             fourbyfour = cmds.createNode('fourByFourMatrix', n=f'{name}UpFourByFour0{i}_FBF', ss=True)
 
+
             if up_axis == 'x' or up_axis == '-x':
                 cmds.setAttr(f'{fourbyfour}.in30', 10)
             elif up_axis == 'y' or up_axis == '-y':
@@ -406,26 +410,39 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
             trans_wt_mat = get_weighted_translation_matrix(matrices, wts)
             cmds.setAttr(f'{aim}.inputMatrix', trans_wt_mat, type='matrix')
 
-        if tangent_plug:
-            cmds.connectAttr(f'{tangent}.matrixSum', f'{aim}.primaryTargetMatrix')
-        else:
-            matrices = [om.MMatrix(cmds.getAttr(top)) for top in trans_off_plugs]
-            trans_wt_mat = get_weighted_translation_matrix(matrices, tangent_wts)
+        # if tangent_plug:
+        #     cmds.connectAttr(f'{tangent}.matrixSum', f'{aim}.primaryTargetMatrix')
+        # else:
+        #     matrices = [om.MMatrix(cmds.getAttr(top)) for top in trans_off_plugs]
+        #     trans_wt_mat = get_weighted_translation_matrix(matrices, tangent_wts)
 
-            if position_plug:
+        #     if position_plug:
 
-                position_m = om.MMatrix(cmds.getAttr(position_plug))
-                tangent_offset_val = trans_wt_mat * position_m.inverse()
+        #         position_m = om.MMatrix(cmds.getAttr(position_plug))
+        #         tangent_offset_val = trans_wt_mat * position_m.inverse()
 
-                tangent_off = cmds.createNode('multMatrix', n=f'{name}TangentOffset0{i}_MM', ss=True)
-                cmds.setAttr(f'{tangent_off}.matrixIn[0]', tangent_offset_val, type='matrix')
-                cmds.connectAttr(position_plug, f'{tangent_off}.matrixIn[1]')
+        #         tangent_off = cmds.createNode('multMatrix', n=f'{name}TangentOffset0{i}_MM', ss=True)
+        #         cmds.setAttr(f'{tangent_off}.matrixIn[0]', tangent_offset_val, type='matrix')
+        #         cmds.connectAttr(position_plug, f'{tangent_off}.matrixIn[1]')
 
-                cmds.connectAttr(f'{tangent_off}.matrixSum', f'{aim}.primaryTargetMatrix')
+        #         cmds.connectAttr(f'{tangent_off}.matrixSum', f'{aim}.primaryTargetMatrix')
 
-            else:
+        #     else:
 
-                cmds.setAttr(f'{aim}.primaryTargetMatrix', trans_wt_mat, type='matrix')
+        #         cmds.setAttr(f'{aim}.primaryTargetMatrix', trans_wt_mat, type='matrix')
+
+        if aim_matrices:
+            cmds.connectAttr(position_plug, f'{aim_matrices[-1]}.primaryTargetMatrix')
+            if i == len(params) - 1:
+
+                next_aim = positions_plugs[-1]
+                cmds.connectAttr(next_aim, f'{aim}.primaryTargetMatrix')
+                cmds.setAttr(f'{aim}.primaryInputAxis', *[-a for a in AXIS_VECTOR[aim_axis]], type='double3') #*AXIS_VECTOR[aim_axis]*-1
+            
+
+        aim_matrices.append(aim)
+        positions_plugs.append(position_plug)
+
 
         cmds.connectAttr(up_plug, f'{aim}.secondaryTargetMatrix')
 
