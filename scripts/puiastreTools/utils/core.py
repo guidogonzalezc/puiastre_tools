@@ -21,6 +21,8 @@ class DataManager:
     _skinning_data = None
     _finger_data = None
     _extra_data = None
+    _model_path = None
+    _adonis_data = None
 
     @classmethod
     def set_project_path(cls, path):
@@ -48,16 +50,7 @@ class DataManager:
     @classmethod
     def get_guide_data(cls):
         return cls._guide_data
-    
-    @classmethod
-    def set_mesh_data(cls, data):
-        cls._mesh_data = data
-        store_data()
-
-    @classmethod
-    def get_mesh_data(cls):
-        return cls._mesh_data
-    
+        
     @classmethod
     def set_asset_name(cls, data):
         cls._asset_name = data
@@ -68,6 +61,15 @@ class DataManager:
         return cls._asset_name
     
     @classmethod
+    def set_model_path(cls, data):
+        cls._model_path = data
+        store_data()
+
+    @classmethod
+    def get_model_path(cls):
+        return cls._model_path
+    
+    @classmethod
     def set_skinning_data(cls, data):
         cls._skinning_data = data
         store_data()
@@ -75,6 +77,15 @@ class DataManager:
     @classmethod
     def get_skinning_data(cls):
         return cls._skinning_data
+    
+    @classmethod
+    def set_adonis_data(cls, data):
+        cls._adonis_data = data
+        store_data()
+    
+    @classmethod
+    def get_adonis_data(cls):
+        return cls._adonis_data
     
     @classmethod
     def set_extra_data_path(cls, path):
@@ -115,9 +126,9 @@ def store_data():
         "project_path": DataManager.get_project_path(),
         "ctls_data": DataManager.get_ctls_data(),
         "guide_data": DataManager.get_guide_data(),
-        "mesh_data": DataManager.get_mesh_data(),
         "asset_name": DataManager.get_asset_name(),
-        "skinning_data": DataManager.get_skinning_data()
+        "skinning_data": DataManager.get_skinning_data(),
+        "model_path": DataManager.get_model_path(),
     }
     file_path = os.path.join(SCRIPT_PATH, "build", "old_data.json")
     with open(file_path, 'w') as json_file:
@@ -134,9 +145,9 @@ def load_data():
             DataManager.set_project_path(data.get("project_path"))
             DataManager.set_ctls_data(data.get("ctls_data"))
             DataManager.set_guide_data(data.get("guide_data"))
-            DataManager.set_mesh_data(data.get("mesh_data"))
             DataManager.set_asset_name(data.get("asset_name"))
-            DataManager.set_skinning_data(data.get("skinning_data"))
+            DataManager.set_skinning_data(data.get("skinning_data")),
+            DataManager.set_model_path(data.get("model_path"))
     else:
         om.MGlobal.displayWarning(f"No data file found at: {file_path}")
 
