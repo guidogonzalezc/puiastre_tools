@@ -1030,7 +1030,7 @@ def dragon_rebuild_guides():
     # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
 
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
-    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
+    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True)
     cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
 
 
@@ -1061,7 +1061,7 @@ def dino_rebuild_guides():
 
     core.DataManager.set_guide_data(r"D:\git\maya\puiastre_tools\assets\cheetah\guides\CHAR_cheetah_001.guides")
     guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
-    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
+    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True)
     cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
@@ -1086,10 +1086,15 @@ def dino_rebuild_guides():
 # dino_rebuild_guides()
 
 def load_guides(path = ""):
-    if not path or path == "_":
-        path = "body_template_"
+
+    core.load_data()
 
     final_path = core.DataManager.get_guide_data()
+
+    model_path = core.DataManager.get_model_path()
+    if model_path and os.path.exists(model_path):
+        cmds.file(model_path, o=True, f=True)
+        om.MGlobal.displayInfo(f"Imported model from {model_path}")
 
     try:
         with open(final_path, "r") as infile:
@@ -1104,8 +1109,12 @@ def load_guides(path = ""):
         guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
     else:
         guides_trn = "guides_GRP"
+
+    if not cmds.attributeQuery("adonisSetup", node=guides_trn, exists=True):
+            cmds.addAttr(guides_trn, longName="adonisSetup", attributeType="bool", defaultValue=False, keyable=False)
+
     if not cmds.objExists("buffers_GRP"):
-        buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True, parent=guides_trn)
+        buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True)
     else:
         buffers_trn = "buffers_GRP"
         if cmds.listRelatives(buffers_trn, parent=True) != [guides_trn]:
@@ -1115,6 +1124,8 @@ def load_guides(path = ""):
 
     for template_name, guides in guides_data.items():
         if not isinstance(guides, dict):
+            if template_name == "adonis":
+                cmds.setAttr(f"{guides_trn}.adonisSetup", guides)
             continue  
         for guide_name, guide_info in guides.items():
             if guide_info.get("moduleName") != "Child":
@@ -1398,12 +1409,14 @@ def guides_export(mirror=False):
                 return
         
         guides_name = core.DataManager.get_asset_name() if core.DataManager.get_asset_name() else os.path.splitext(os.path.basename(TEMPLATE_FILE))[0]
-        ctl_path = core.DataManager.get_ctls_data() if core.DataManager.get_ctls_data() else None
-        mesh_path = core.DataManager.get_mesh_data() if core.DataManager.get_mesh_data() else None
+        try:
+            adonis = int(cmds.getAttr(f"{guides_folder[0]}.adonisSetup"))
+            print(adonis)
+        except:
+            adonis = 0
+
         guides_data = {guides_name: {},
-                    "controls": ctl_path,
-                    "meshes": mesh_path,
-                    }
+                    "adonis": adonis}
 
         for i, guide in enumerate(guides_descendents):
                 if guides_type_object[i] == "NurbsSurface":
