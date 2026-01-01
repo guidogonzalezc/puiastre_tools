@@ -12,12 +12,14 @@ from puiastreTools.utils import curve_tool
 from puiastreTools.utils import basic_structure
 from puiastreTools.utils import core
 from puiastreTools.ui import project_manager
+from puiastreTools.tools import skincluster_manager
 
 reload(option_menu)
 reload(guide_creation)
 reload(rig_builder)
 reload(curve_tool)
 reload(project_manager)
+reload(skincluster_manager)
 
 FILE_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
@@ -45,7 +47,7 @@ def reload_ui(*args):
 
 
 
-def build_rig(*args, asset_name = None):
+def build_rig(*args):
 
     """
     Function to build a complete rig using the rig builder module.
@@ -55,12 +57,19 @@ def build_rig(*args, asset_name = None):
     """
     try:
         reload(rig_builder)
-        if asset_name:
-            rig_builder.make(asset_name)
-        else:
-            rig_builder.make(latest=True)
+        rig_builder.make()
     except Exception:
         traceback.print_exc()
+
+def asset_manager(*args):
+    """
+    Function to open the Asset Manager UI.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+    reload(project_manager)
+    project_manager.show()
 
 
 def export_curves(*args): 
@@ -92,7 +101,7 @@ def replace_shapes(*args):
 
     curve_tool.replace_shape_colored()
 
-def import_guides(*args, asset_name=None): 
+def import_guides(*args): 
     """
     Function to import guides into the scene. If value is True, imports all guides; if None, opens an option box.
 
@@ -101,7 +110,6 @@ def import_guides(*args, asset_name=None):
         value (bool, optional): If True, imports all guides. If None, opens an option box. Defaults to None.
     """
     reload(guide_creation)
-    project_manager.load_asset_configuration(asset_name)
     guide_creation.load_guides()
 
 def export_guides(*args, mirror = False): 
@@ -111,9 +119,23 @@ def export_guides(*args, mirror = False):
     Args:
         *args: Variable length argument list, not used in this function.
     """ 
+    reload(guide_creation)
     core.load_data()
     om2.MGlobal.displayInfo(f"Exporting guides with mirror set to {mirror}")
     guide_creation.guides_export(mirror=mirror)
+
+
+def export_skincluster(*args): 
+    """
+    Function to export skin cluster data from the scene.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """ 
+    core.load_data()
+    path = core.DataManager.get_skinning_data()
+    skincluster_manager.SkinIO().export_skins(file_path = path)
+
 
 def puiastre_ui():
     """
@@ -134,22 +156,15 @@ def puiastre_ui():
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
+    cmds.menuItem(label="   Asset Manager", boldFont=True, image="rig.png", command=asset_manager)
+    cmds.setParent("PuiastreMenu", menu=True)
+    cmds.menuItem(dividerLabel="\n ", divider=True)     
 
     cmds.menuItem(label="   Guides", subMenu=True, tearOff=True, boldFont=True, image="puiastreJoint.png")
     cmds.menuItem(label="Export Guides", command=export_guides)
     cmds.menuItem(optionBox=True, command=partial(export_guides, mirror=True), label="Export Mirrored Guides")
 
-    cmds.menuItem(label="   Import Guides", subMenu=True, tearOff=True)
-    cmds.menuItem(label="   Aychedral Guides", command=partial(import_guides, asset_name="aychedral"))
-    cmds.menuItem(label="   Varyndor Guides", command=partial(import_guides, asset_name="varyndor"))
-    cmds.menuItem(label="   Azhurean Guides", command=partial(import_guides, asset_name="azhurean"))
-    cmds.menuItem(label="   Maiasaura Guides", command=partial(import_guides, asset_name="maiasaura"))
-    cmds.menuItem(label="   Cheetah Guides", command=partial(import_guides, asset_name="cheetah"))
-    cmds.menuItem(label="   Moana Guides", command=partial(import_guides, asset_name="moana"))
-    cmds.menuItem(label="   Marcelo Guides", command=partial(import_guides, asset_name="marcelo"))
-    cmds.menuItem(label="   Rigoberta Guides", command=partial(import_guides, asset_name="rigoberta"))
-    cmds.menuItem(label="   Mandy Guides", command=partial(import_guides, asset_name="mandy"))
-    cmds.menuItem(label="   Oto Guides", command=partial(import_guides, asset_name="oto"))
+    cmds.menuItem(label="   Import Guides", command=partial(import_guides))
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
@@ -160,17 +175,7 @@ def puiastre_ui():
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
-    cmds.menuItem(label="   Rig", subMenu=True, tearOff=True, boldFont=True, image="rig.png")
-    cmds.menuItem(label="   Aychedral Rig", command=partial(build_rig, asset_name="aychedral"))
-    cmds.menuItem(label="   Varyndor Rig", command=partial(build_rig, asset_name="varyndor"))
-    cmds.menuItem(label="   Azhurean Rig", command=partial(build_rig, asset_name="azhurean"))
-    cmds.menuItem(label="   Maiasaura Rig", command=partial(build_rig, asset_name="maiasaura"))
-    cmds.menuItem(label="   Cheetah Rig", command=partial(build_rig, asset_name="cheetah"))
-    cmds.menuItem(label="   Moana Rig", command=partial(build_rig, asset_name="moana"))
-    cmds.menuItem(label="   Marcelo Rig", command=partial(build_rig, asset_name="marcelo"))
-    cmds.menuItem(label="   Rigoberta Rig", command=partial(build_rig, asset_name="rigoberta"))
-    cmds.menuItem(label="   Mandy Rig", command=partial(build_rig, asset_name="mandy"))
-    cmds.menuItem(label="   Oto Rig", command=partial(build_rig, asset_name="oto"))
+    cmds.menuItem(label="   Build Rig", boldFont=True, image="rig.png", command=build_rig)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
@@ -179,9 +184,7 @@ def puiastre_ui():
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
-    cmds.menuItem(label="   Skin Cluster", subMenu=True, tearOff=True, boldFont=True)
-    cmds.menuItem(label="   Export Skin Data")
-    cmds.menuItem(label="   Import Skin Data")
+    cmds.menuItem(label="   Export Skin Cluster", boldFont=True, command=export_skincluster)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
