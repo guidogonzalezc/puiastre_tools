@@ -3483,6 +3483,5 @@
             "guide_type_object": "Guide"
         }
     },
-    "controls": "C:\\HERE BE DRAGONS\\00_Pipeline\\modules\\puiastre_tools\\assets\\aychedral\\curves\\CHAR_aychedral_002.json",
-    "meshes": null
+    "adonis": 1
 }
