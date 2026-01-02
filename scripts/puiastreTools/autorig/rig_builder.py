@@ -332,7 +332,7 @@ def make():
     cmds.progressWindow(edit=True, progress=99, status=(f"Finalizing") )
     rename_ctl_shapes()
     joint_label()
-    setIsHistoricallyInteresting(0)
+    # setIsHistoricallyInteresting(0)
 
     # End message
     cmds.inViewMessage(
