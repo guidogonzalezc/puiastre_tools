@@ -92,7 +92,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         "masterWalk_CTL": walk_ctl,
         "guides_GRP": nodes.get("guides_GRP"),
         "skeletonHierarchy_GRP": nodes.get("skeletonHierarchy_GRP"),
-        "model_GRP": nodes.get("model_GRP") if nodes.get("model_GRP") else nodes.get("MODEL"),
+        "model_GRP": nodes.get("MODEL") if nodes.get("MODEL") else nodes.get("mopdel_GRP"),
     }
     
     if adonis_setup:
@@ -144,15 +144,20 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_SKELETON", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 13)
             cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
         if "PROXY" in nodes and nodes["PROXY"]:
             cmds.select(nodes["PROXY"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_PROXY", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 14)
             cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
         if "MODEL" in nodes and nodes["MODEL"]:
             cmds.select(nodes["MODEL"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MODEL", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 17)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
 
     elif "model_GRP" in nodes and nodes["model_GRP"]:
         cmds.select(nodes["model_GRP"]) 
