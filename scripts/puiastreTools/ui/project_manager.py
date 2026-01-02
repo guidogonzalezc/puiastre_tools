@@ -336,9 +336,13 @@ class AssetManagerWindow(QtWidgets.QDialog):
         asset_name = self.combo_items.currentText()
         try:
             load_asset_configuration(asset_name)
+            if cmds.window(AssetManagerWindow.WINDOW_NAME, exists=True):
+                cmds.deleteUI(AssetManagerWindow.WINDOW_NAME)
         except Exception as e:
             om.MGlobal.displayError(f"Error loading asset configuration: {e}")
             return
+        
+        
     def create_asset(self):
         asset_name = self.input_name.text().strip()
         asset_type = self.asset_type.currentText()
@@ -347,6 +351,8 @@ class AssetManagerWindow(QtWidgets.QDialog):
             return
         try:
             asset_structure_creation(asset_name, asset_type=asset_type)
+            if cmds.window(AssetManagerWindow.WINDOW_NAME, exists=True):
+                cmds.deleteUI(AssetManagerWindow.WINDOW_NAME)
         except Exception as e:
             om.MGlobal.displayError(f"Error creating asset structure: {e}")
             return
