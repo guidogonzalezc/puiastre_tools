@@ -174,126 +174,87 @@ class LimbModule(object):
         self.ik_rig()
 
     def create_matrix_pole_vector(self, m1_attr, m2_attr, m3_attr, pole_distance=1.0, name="poleVector_LOC"):
-        """
-        Given three matrix attributes (e.g. joint.worldMatrix[0]), compute a proper pole vector
-        position using Maya matrix and math nodes (no Python vector math).
-        """
-        def matrix_to_translation(matrix_attr, prefix):
-            dm = cmds.createNode('rowFromMatrix', name=f"{self.side}_{self.module_name}Pv{prefix.capitalize()}Offset_RFM", ss=True)
-            cmds.connectAttr(matrix_attr, f'{dm}.matrix')
-            cmds.setAttr(f'{dm}.input', 3)
-            return f'{dm}.output'
+            """
+            Calculates a pole vector position using the 'Isosceles Triangle' method 
+            
+            """
 
-        def create_vector_subtract(name, inputA, inputB):
-            node = cmds.createNode('plusMinusAverage', name=f"{self.side}_{self.module_name}Pv{name.capitalize()}_PMA", ss=True)
-            cmds.setAttr(f'{node}.operation', 2)
-            for i, input in enumerate([inputA, inputB]):
-                try:
-                    cmds.connectAttr(input, f'{node}.input3D[{i}]')
-                except:
-                    for attr in ["X", "Y", "Z"]:
-                        cmds.connectAttr(f'{input}.output{attr}', f'{node}.input3D[{i}].input3D{attr.lower()}')
-            return node, f'{node}.output3D'
+            # --- 1. Helper: Get MVector from Matrix Attribute ---
+            def get_pos_vector(matrix_attr):
+                mat_list = cmds.getAttr(matrix_attr)
+                mat = om.MMatrix(mat_list)
+                return om.MVector(mat[12], mat[13], mat[14])
 
-        def normalize_vector(input_vec, name):
-            vp = cmds.createNode('normalize', name=f"{self.side}_{self.module_name}Pv{name.capitalize()}_NRM", ss=True)
-            cmds.connectAttr(input_vec, f'{vp}.input')
-            return f'{vp}.output'
+            vec1 = get_pos_vector(m1_attr)
+            vec2 = get_pos_vector(m2_attr) 
+            vec3 = get_pos_vector(m3_attr) 
 
-        def scale_vector(input_vec, scalar_attr, name):
-            md = cmds.createNode('multiplyDivide', name=f"{self.side}_{self.module_name}Pv{name.capitalize()}_MDV", ss=True)
-            cmds.setAttr(f'{md}.operation', 1)
-            cmds.connectAttr(input_vec, f'{md}.input1')
-            for axis in 'XYZ':
-                cmds.connectAttr(scalar_attr, f'{md}.input2{axis}')
-            return md, f'{md}.output'
+            leg_length = (vec2 - vec1).length()
+            knee_length = (vec3 - vec2).length()
+            
+            distance = (leg_length + knee_length) * 0.5 * pole_distance
+            
+            vec1_norm = ((vec1 - vec2).normal() * distance) + vec2
+            
+            vec3_norm = ((vec3 - vec2).normal() * distance) + vec2
+            
+            baseline_vector = vec3_norm - vec1_norm
+            
+            vec_to_project = vec2 - vec1_norm
 
-        def add_vectors(vecA, vecB, name):
-            node = cmds.createNode('plusMinusAverage', name=f"{self.side}_{self.module_name}Pv{name.capitalize()}_PMA", ss=True)
-            for i, vector in enumerate([vecA, vecB]):
-                try:
-                    cmds.connectAttr(vector, f'{node}.input3D[{i}]')
-                except:
-                    for attr in ["X", "Y", "Z"]:
-                        cmds.connectAttr(f'{vector}.output{attr}', f'{node}.input3D[{i}].input3D{attr.lower()}')
-            return node, f'{node}.output3D'
+            denom = baseline_vector * baseline_vector 
+            
+            if denom <= 0.0001:
+                mid = vec1_norm 
+                mid_pointer = om.MVector(0, 0, 1)
+            else:
+                scalar = (vec_to_project * baseline_vector) / denom
+                projection = baseline_vector * scalar
+                mid = vec1_norm + projection
+                mid_pointer = vec2 - mid
+            
+            if mid_pointer.length() <= 0.0001:
+                final_vec = vec2 + (om.MVector(0,0,1) * distance)
+            else:
+                final_vec = vec2 + (mid_pointer.normal() * distance)
 
-        vec1_attr = matrix_to_translation(m1_attr, 'vec1')
-        vec2_attr = matrix_to_translation(m2_attr, 'vec2')
-        vec3_attr = matrix_to_translation(m3_attr, 'vec3')
+            fbf = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.module_name}Pv_FBF", ss=True)
 
-        dist1 = cmds.createNode('distanceBetween', name=f"{self.side}_{self.module_name}PvVec1Vec2_DBT", ss=True)
-        for attr in ["X", "Y", "Z"]:
-            cmds.connectAttr(f'{vec1_attr}{attr}', f'{dist1}.point1{attr}')
-            cmds.connectAttr(f'{vec2_attr}{attr}', f'{dist1}.point2{attr}')
+            cmds.setAttr(f"{fbf}.in00", 1.0)
+            cmds.setAttr(f"{fbf}.in11", 1.0)
+            cmds.setAttr(f"{fbf}.in22", 1.0)
+            
+            cmds.setAttr(f"{fbf}.in30", final_vec.x)
+            cmds.setAttr(f"{fbf}.in31", final_vec.y)
+            cmds.setAttr(f"{fbf}.in32", final_vec.z)
+            cmds.setAttr(f"{fbf}.in33", 1.0)
 
-        dist2 = cmds.createNode('distanceBetween', name=f"{self.side}_{self.module_name}PvVec2Vec3_DBT", ss=True)
-        for attr in ["X", "Y", "Z"]:
-            cmds.connectAttr(f'{vec2_attr}{attr}', f'{dist2}.point1{attr}')
-            cmds.connectAttr(f'{vec3_attr}{attr}', f'{dist2}.point2{attr}')
+            aim_matrix = cmds.createNode('aimMatrix', name=f"{self.side}_{self.module_name}PvAim_AMX", ss=True)
 
-        avg = cmds.createNode('sum', name=f"{self.side}_{self.module_name}PvAvgDist_SUM", ss=True)
-        cmds.connectAttr(f'{dist1}.distance', f'{avg}.input[0]')
-        cmds.connectAttr(f'{dist2}.distance', f'{avg}.input[1]')
+            cmds.setAttr(f'{aim_matrix}.primaryInputAxis', 0, 0, 1, type='double3')
 
-        half = cmds.createNode('divide', name=f"{self.side}_{self.module_name}PvHalfDist_DIV", ss=True)
-        cmds.setAttr(f'{half}.input2', 2.0 / pole_distance)
-        cmds.connectAttr(f'{avg}.output', f'{half}.input1')
+            cmds.setAttr(f'{aim_matrix}.secondaryInputAxis', 1, 0, 0, type='double3')
 
-        vec1_sub_node, vec1_sub = create_vector_subtract('vec1MinusVec2', vec1_attr, vec2_attr)
-        vec1_norm = normalize_vector(vec1_sub, 'vec1Norm')
+            cmds.setAttr(f'{aim_matrix}.secondaryTargetVector', 1, 0, 0, type='double3')
 
-        vec3_sub_node, vec3_sub = create_vector_subtract('vec3MinusVec2', vec3_attr, vec2_attr)
-        vec3_norm = normalize_vector(vec3_sub, 'vec3Norm')
+            cmds.setAttr(f'{aim_matrix}.primaryMode', 1)
 
-        vec1_scaled_node, vec1_scaled = scale_vector(vec1_norm, f'{half}.output', 'vec1Scaled')
-        vec3_scaled_node, vec3_scaled = scale_vector(vec3_norm, f'{half}.output', 'vec3Scaled')
+            cmds.setAttr(f'{aim_matrix}.secondaryMode', 2)
 
-        vec1_final_node, vec1_final = add_vectors(vec2_attr, vec1_scaled, 'vec1Final')
-        vec3_final_node, vec3_final = add_vectors(vec2_attr, vec3_scaled, 'vec3Final')
+            cmds.connectAttr(f'{fbf}.output', f'{aim_matrix}.inputMatrix')
 
-        proj_dir_node, proj_dir = create_vector_subtract('projDir', vec3_final, vec1_final)
+            cmds.connectAttr(f'{m2_attr}', f"{aim_matrix}.primaryTargetMatrix")
 
-        proj_dir_norm = normalize_vector(proj_dir, 'projDirNorm')
+            cmds.connectAttr(f'{m2_attr}', f'{aim_matrix}.secondaryTargetMatrix')
 
-        vec_to_project_node, vec_to_project = create_vector_subtract('vecToProject', vec2_attr, vec1_final)
+            blend_matrix = cmds.createNode('blendMatrix', name=f"{self.side}_{self.module_name}PvBlend_BLM", ss=True)
 
-        dot_node = cmds.createNode('vectorProduct', name=f"{self.side}_{self.module_name}PvDot_VCP", ss=True)
-        cmds.setAttr(f'{dot_node}.operation', 1)
-        cmds.connectAttr(vec_to_project, f'{dot_node}.input1')
-        cmds.connectAttr(proj_dir_norm, f'{dot_node}.input2')
+            cmds.connectAttr(f'{fbf}.output', f'{blend_matrix}.inputMatrix')
 
-        proj_vec_node, proj_vec = scale_vector(proj_dir_norm, f'{dot_node}.outputX', 'projVector')
+            cmds.connectAttr(f'{aim_matrix}.outputMatrix', f'{blend_matrix}.target[0].targetMatrix')
 
-        mid_node, mid = add_vectors(vec1_final, proj_vec, 'midPoint')
+            return blend_matrix
 
-        pointer_node, pointer_vec = create_vector_subtract('pointerVec', vec2_attr, mid)
-
-        pointer_norm = normalize_vector(pointer_vec, 'pointerNorm')
-        pointer_scaled_node, pointer_scaled = scale_vector(pointer_norm, f'{half}.output', 'pointerScaled')
-
-        pole_pos_node, pole_pos = add_vectors(vec2_attr, pointer_scaled, 'poleVectorPos')
-
-        fourByFour = cmds.createNode('fourByFourMatrix', name=f"{self.side}_{self.module_name}PvFourByFour_FBM", ss=True)
-        cmds.connectAttr(f"{pole_pos}.output3Dx", f'{fourByFour}.in30')
-        cmds.connectAttr(f"{pole_pos}.output3Dy", f'{fourByFour}.in31')
-        cmds.connectAttr(f"{pole_pos}.output3Dz", f'{fourByFour}.in32')
-
-        aim_matrix = cmds.createNode('aimMatrix', name=f"{self.side}_{self.module_name}PvAim_AMX", ss=True)
-        cmds.setAttr(f'{aim_matrix}.primaryInputAxis', 0, 0, 1, type='double3')
-        cmds.setAttr(f'{aim_matrix}.secondaryInputAxis', 1, 0, 0, type='double3')
-        cmds.setAttr(f'{aim_matrix}.secondaryTargetVector', 1, 0, 0, type='double3')
-        cmds.setAttr(f'{aim_matrix}.primaryMode', 1)
-        cmds.setAttr(f'{aim_matrix}.secondaryMode', 2)
-        cmds.connectAttr(f'{fourByFour}.output', f'{aim_matrix}.inputMatrix')
-        cmds.connectAttr(f'{m2_attr}', f"{aim_matrix}.primaryTargetMatrix")
-        cmds.connectAttr(f'{m2_attr}', f'{aim_matrix}.secondaryTargetMatrix')
-
-        blend_matrix = cmds.createNode('blendMatrix', name=f"{self.side}_{self.module_name}PvBlend_BLM", ss=True)
-        cmds.connectAttr(f'{fourByFour}.output', f'{blend_matrix}.inputMatrix')
-        cmds.connectAttr(f'{aim_matrix}.outputMatrix', f'{blend_matrix}.target[0].targetMatrix')
-
-        return blend_matrix
 
     def ik_rig(self):
         """
@@ -399,172 +360,28 @@ class LimbModule(object):
             else:
                 self.distance_between_output.append(f"{distance}.distance")
             
-        sum_distance = cmds.createNode("sum", name=f"{self.side}_{self.module_name}InitialLenght_SUM")
-        cmds.connectAttr(self.distance_between_output[0], f"{sum_distance}.input[0]")
-        cmds.connectAttr(self.distance_between_output[1], f"{sum_distance}.input[1]")
-
-        divide = cmds.createNode("divide", name=f"{self.side}_{self.module_name}LengthRatio_DIV", ss=True)
-        cmds.connectAttr(f"{sum_distance}.output", f"{divide}.input2")
-        cmds.connectAttr(f"{self.distance_between_output[2]}", f"{divide}.input1")
-
-        max = cmds.createNode("max", name=f"{self.side}_{self.module_name}Scalar_MAX", ss=True)
-        cmds.connectAttr(f"{divide}.output", f"{max}.input[0]")
-
-        self.float_value_one = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}One_FC", ss=True)
-        cmds.setAttr(f"{self.float_value_one}.inFloat", 1)
-        cmds.connectAttr(f"{self.float_value_one}.outFloat", f"{max}.input[1]")
-
-        scalar_remap = cmds.createNode("remapValue", name=f"{self.side}_{self.module_name}LengthRatio_REMAP", ss=True)
-        cmds.connectAttr(f"{self.hand_ik_ctl}.stretch", f"{scalar_remap}.inputValue")
-        cmds.connectAttr(f"{max}.output", f"{scalar_remap}.outputMax")
-        cmds.setAttr(f"{scalar_remap}.outputMin", 1)
-
-        stretch_multiply_nodes = []
-        for i, name in enumerate(["upperLength", "lowerLength"]):
-            multiply = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}StretchLenght0{i}_MULT", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[i]}", f"{multiply}.input[0]")
-            cmds.connectAttr(f"{scalar_remap}.outValue", f"{multiply}.input[1]")
-            cmds.connectAttr(f"{self.hand_ik_ctl}.{name}Mult", f"{multiply}.input[2]")
-            stretch_multiply_nodes.append(multiply)
-
         # --- STRETCH --- #
 
         arm_length = cmds.createNode("sum", name=f"{self.side}_{self.module_name}Length_SUM", ss=True)
-        cmds.connectAttr(f"{stretch_multiply_nodes[0]}.output", f"{arm_length}.input[0]")
-        cmds.connectAttr(f"{stretch_multiply_nodes[1]}.output", f"{arm_length}.input[1]")
+        cmds.connectAttr(f"{self.distance_between_output[0]}", f"{arm_length}.input[0]")
+        cmds.connectAttr(f"{self.distance_between_output[1]}", f"{arm_length}.input[1]")
 
         arm_length_min = cmds.createNode("min", name=f"{self.side}_{self.module_name}ClampedLength_MIN", ss=True)
         cmds.connectAttr(f"{arm_length}.output", f"{arm_length_min}.input[0]")
         cmds.connectAttr(f"{self.distance_between_output[2]}", f"{arm_length_min}.input[1]")
 
-
-        # Soft Values pre-build
-        soft_upper_length_scaled = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftUpperLengthScaled_MUL", ss=True)
-        soft_lower_length_scaled = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftLowerLengthScaled_MUL", ss=True)
-
-        cmds.connectAttr(f"{stretch_multiply_nodes[0]}.output", f"{soft_upper_length_scaled}.input[0]")
-        cmds.connectAttr(f"{stretch_multiply_nodes[1]}.output", f"{soft_lower_length_scaled}.input[0]")
+        self.float_value_zero = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}Zero_FLC", ss=True)
+        cmds.setAttr(f"{self.float_value_zero}.inFloat", 0)
 
         # --- CUSTOM SOLVER --- #
 
-        upper_divide, upper_arm_acos, power_mults = core.law_of_cosine(sides = [f"{soft_upper_length_scaled}.output", f"{soft_lower_length_scaled}.output", f"{arm_length_min}.output"], name = f"{self.side}_{self.module_name}Upper", acos=True)
-        lower_divide, lower_power_mults, negate_cos_value = core.law_of_cosine(sides = [f"{soft_upper_length_scaled}.output", f"{arm_length_min}.output", f"{soft_lower_length_scaled}.output"],
+        upper_divide, upper_arm_acos, power_mults = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{self.distance_between_output[1]}", f"{arm_length_min}.output"], name = f"{self.side}_{self.module_name}Upper", acos=True)
+        lower_divide, lower_power_mults, negate_cos_value = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{arm_length_min}.output", f"{self.distance_between_output[1]}"],
                                                                              power = [power_mults[0], power_mults[2], power_mults[1]],
                                                                              name = f"{self.side}_{self.module_name}Lower", 
                                                                              negate=True)
 
-        soft_cosValue, soft_power_mults = core.law_of_cosine(sides = [f"{stretch_multiply_nodes[0]}.output", f"{stretch_multiply_nodes[1]}.output", f"{arm_length_min}.output"], name = f"{self.side}_{self.module_name}SoftArm")
-
-        # --- SOFT ARM --- #
-
-        soft_cosValueSquared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftCosValueSquared_MUL", ss=True)
-        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_cosValueSquared}.input[0]")
-        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_cosValueSquared}.input[1]")
-
-        soft_height_squared = cmds.createNode("subtract", name=f"{self.side}_{self.module_name}SoftHeightSquared_SUB", ss=True)
-        cmds.setAttr( f"{soft_height_squared}.input1", 1)
-        cmds.connectAttr(f"{soft_cosValueSquared}.output", f"{soft_height_squared}.input2")
-
-        soft_height_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.module_name}SoftHeightSquaredClamped_MAX", ss=True)
-
-        self.float_value_zero = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}Zero_FC", ss=True)
-        cmds.setAttr(f"{self.float_value_zero}.inFloat", 0)
-        cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{soft_height_squared_clamped}.input[0]")
-
-
-        # cmds.setAttr(f"{soft_height_squared_clamped}.input[0]", 0)
-        cmds.connectAttr(f"{soft_height_squared}.output", f"{soft_height_squared_clamped}.input[1]")
-
-        soft_height = cmds.createNode("power", name=f"{self.side}_{self.module_name}SoftHeight_POW", ss=True)
-        cmds.setAttr(f"{soft_height}.exponent", 0.5)
-        cmds.connectAttr(f"{soft_height_squared_clamped}.output", f"{soft_height}.input")
-
-        soft_linear_target_height = cmds.createNode("subtract", name=f"{self.side}_{self.module_name}SoftLinearTargetHeight_SUB", ss=True)
-        cmds.setAttr(f"{soft_linear_target_height}.input1", 1)
-        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_linear_target_height}.input2")
-
-        soft_quadratic_target_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftQuadraticTargetHeight_MUL", ss=True)
-        cmds.connectAttr(f"{soft_linear_target_height}.output", f"{soft_quadratic_target_height}.input[0]")
-        cmds.connectAttr(f"{soft_linear_target_height}.output", f"{soft_quadratic_target_height}.input[1]")
-
-        soft_remapStart = cmds.createNode("remapValue", name=f"{self.side}_{self.module_name}SoftRemapStart_RMV", ss=True)
-        cmds.connectAttr(f"{self.hand_ik_ctl}.softStart", f"{soft_remapStart}.inputMin")
-        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_remapStart}.inputValue")
-        cmds.setAttr(f"{soft_remapStart}.outputMin", 0)
-        cmds.setAttr(f"{soft_remapStart}.outputMax", 1)
-        cmds.setAttr(f"{soft_remapStart}.inputMax", 1)
-
-        setup_blend_value = cmds.createNode("smoothStep", name=f"{self.side}_{self.module_name}SetupBlendValue_SMOOTH", ss=True)
-        cmds.connectAttr(f"{soft_remapStart}.outValue", f"{setup_blend_value}.input")
-        cmds.setAttr(f"{setup_blend_value}.leftEdge", 0)
-        cmds.setAttr(f"{setup_blend_value}.rightEdge", 1)
-
-        cubic_target_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}CubicTargetHeight_MUL", ss=True)
-        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{cubic_target_height}.input[0]")
-        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{cubic_target_height}.input[1]")
-        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{cubic_target_height}.input[2]")
-
-        blend_choice = cmds.createNode("blendTwoAttr", name=f"{self.side}_{self.module_name}SoftBlendChoice_CH", ss=True)
-        cmds.connectAttr(f"{self.hand_ik_ctl}.soft", f"{blend_choice}.attributesBlender")
-        cmds.connectAttr(f"{setup_blend_value}.output", f"{blend_choice}.input[1]")
-        cmds.connectAttr(f"{cubic_target_height}.output", f"{blend_choice}.input[0]")
-
-        blend_twoAttrs = cmds.createNode("blendTwoAttr", name=f"{self.side}_{self.module_name}SoftHeight_BLT", ss=True)
-        cmds.connectAttr(f"{blend_choice}.output", f"{blend_twoAttrs}.attributesBlender")
-        cmds.connectAttr(f"{soft_height}.output", f"{blend_twoAttrs}.input[0]")
-        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{blend_twoAttrs}.input[1]")
-
-        soft_blended_height_squared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftBlendedHeightSquared_MUL", ss=True)
-        cmds.connectAttr(f"{blend_twoAttrs}.output", f"{soft_blended_height_squared}.input[0]")
-        cmds.connectAttr(f"{blend_twoAttrs}.output", f"{soft_blended_height_squared}.input[1]")
-
-        soft_scaler_squared = cmds.createNode("sum", name=f"{self.side}_{self.module_name}SoftScalerSquared_SUM", ss=True)
-        cmds.connectAttr(f"{soft_blended_height_squared}.output", f"{soft_scaler_squared}.input[0]")
-        cmds.connectAttr(f"{soft_cosValueSquared}.output", f"{soft_scaler_squared}.input[1]")
-
-        # Upper arm output
-        upper_soft_scaler = cmds.createNode("power", name=f"{self.side}_{self.module_name}UpperSoftScaler_POW", ss=True)
-        cmds.setAttr(f"{upper_soft_scaler}.exponent", 0.5)
-        cmds.connectAttr(f"{soft_scaler_squared}.output", f"{upper_soft_scaler}.input")
-
-        cmds.connectAttr(f"{upper_soft_scaler}.output", f"{soft_upper_length_scaled}.input[1]")
-
-        #Lower arm
-        segmentLengthRatio = cmds.createNode("divide", name=f"{self.side}_{self.module_name}SoftSegmentLengthRatio_DIV", ss=True)
-        cmds.connectAttr(f"{stretch_multiply_nodes[0]}.output", f"{segmentLengthRatio}.input1")
-        cmds.connectAttr(f"{stretch_multiply_nodes[1]}.output", f"{segmentLengthRatio}.input2")
-
-        lower_soft_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftHeight_MUL", ss=True)
-        cmds.connectAttr(f"{segmentLengthRatio}.output", f"{lower_soft_height}.input[1]")
-        cmds.connectAttr(f"{soft_height}.output", f"{lower_soft_height}.input[0]")
-
-        lower_soft_blended_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftBlendedHeight_MUL", ss=True)
-        cmds.connectAttr(f"{segmentLengthRatio}.output", f"{lower_soft_blended_height}.input[1]")
-        cmds.connectAttr(f"{blend_twoAttrs}.output", f"{lower_soft_blended_height}.input[0]")
-
-        lower_height_squared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftHeightSquared_MUL", ss=True)
-        cmds.connectAttr(f"{lower_soft_height}.output", f"{lower_height_squared}.input[0]")
-        cmds.connectAttr(f"{lower_soft_height}.output", f"{lower_height_squared}.input[1]")
-
-        lower_cos_value_squared = cmds.createNode("subtract", name=f"{self.side}_{self.module_name}LowerSoftCosValueSquared_SUB", ss=True)
-        cmds.connectAttr(f"{lower_height_squared}.output", f"{lower_cos_value_squared}.input2")
-        cmds.setAttr(f"{lower_cos_value_squared}.input1", 1)
-
-        lower_blended_height_squared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftBlendedHeightSquared_MUL", ss=True)
-        cmds.connectAttr(f"{lower_soft_blended_height}.output", f"{lower_blended_height_squared}.input[0]")
-        cmds.connectAttr(f"{lower_soft_blended_height}.output", f"{lower_blended_height_squared}.input[1]")
-
-        soft_lower_scaler_squared = cmds.createNode("sum", name=f"{self.side}_{self.module_name}SoftLowerScalerSquared_SUM", ss=True)
-        cmds.connectAttr(f"{lower_blended_height_squared}.output", f"{soft_lower_scaler_squared}.input[1]")
-        cmds.connectAttr(f"{lower_cos_value_squared}.output", f"{soft_lower_scaler_squared}.input[0]")
-
-        # Upper arm output
-        lower_soft_scaler = cmds.createNode("power", name=f"{self.side}_{self.module_name}LowerSoftScaler_POW", ss=True)
-        cmds.setAttr(f"{lower_soft_scaler}.exponent", 0.5)
-        cmds.connectAttr(f"{soft_lower_scaler_squared}.output", f"{lower_soft_scaler}.input")
-
-        cmds.connectAttr(f"{lower_soft_scaler}.output", f"{soft_lower_length_scaled}.input[1]")
-
+ 
         # --- Aligns --- #
  
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}UpperIk_AIM", ss=True)
@@ -622,12 +439,12 @@ class LimbModule(object):
 
         if self.side == "R":
             translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.module_name}UpperTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{soft_upper_length_scaled}.output", f"{translate_negate}.input")
+            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{translate_negate}.input")
             cmds.connectAttr(f"{translate_negate}.output", f"{fourByfour}.in30")
             cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, -1, 0, type="double3") ########################## CAMBIO QUIZAS
 
         else:
-            cmds.connectAttr(f"{soft_upper_length_scaled}.output", f"{fourByfour}.in30")
+            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{fourByfour}.in30")
             cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, 1, 0, type="double3") ########################## CAMBIO QUIZAS
 
 
@@ -668,10 +485,10 @@ class LimbModule(object):
 
         if self.side == "R":
             translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.module_name}LowerTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{soft_lower_length_scaled}.output", f"{translate_negate}.input")
+            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{translate_negate}.input")
             cmds.connectAttr(f"{translate_negate}.output", f"{hand_local_matrix}.in30")
         else:
-            cmds.connectAttr(f"{soft_lower_length_scaled}.output", f"{hand_local_matrix}.in30")
+            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{hand_local_matrix}.in30")
 
         self.ik_wm = [f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixSum"]
 
@@ -714,28 +531,6 @@ class LimbModule(object):
 
         name = self.blend_wm[0].replace("_BLM.outputMatrix", "")
         
-        """ NON-ROLL OLD
-        nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
-        nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
-        nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
-
-        cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollAlign}.inputMatrix")
-        cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollAlign}.target[0].targetMatrix")
-        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollAlign}.target[0].weight")
-
-        cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollPick}.inputMatrix")
-        cmds.connectAttr(f"{nonRollPick}.outputMatrix", f"{nonRollAim}.inputMatrix")
-        cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
-        cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
-
-        cmds.setAttr(f"{nonRollPick}.useRotate", 0)
-
-        """
-
         nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
         nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
         nonRollMasterWalk_mmx = cmds.createNode("multMatrix", name=f"{name}NonRollMasterWalk_MMX", ss=True)

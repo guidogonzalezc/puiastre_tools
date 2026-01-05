@@ -32,7 +32,7 @@ def get_structure_config(adonis_setup=0):
         hierarchy["muscleSystems_GRP"] = []
         hierarchy["adonis_GRP"] = []
         
-        hierarchy["model_GRP"] = ["SKELETON", "PROXY", "MODEL"]
+        hierarchy["model_GRP"] = ["SKELETON", "PROXY", "SKINNED_MODEL","MODEL"]
     
     return hierarchy
 
@@ -92,7 +92,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         "masterWalk_CTL": walk_ctl,
         "guides_GRP": nodes.get("guides_GRP"),
         "skeletonHierarchy_GRP": nodes.get("skeletonHierarchy_GRP"),
-        "model_GRP": nodes.get("MODEL") if nodes.get("MODEL") else nodes.get("mopdel_GRP"),
+        "model_GRP": nodes.get("SKINNED_MODEL") if nodes.get("SKINNED_MODEL") else nodes.get("model_GRP"),
     }
     
     if adonis_setup:
@@ -149,6 +149,13 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
             cmds.select(nodes["PROXY"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_PROXY", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 14)
+            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
+        if "SKINNED_MODEL" in nodes and nodes["SKINNED_MODEL"]:
+            cmds.select(nodes["SKINNED_MODEL"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_SKINNED_MODEL", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 15)
             cmds.setAttr(display_layer + ".visibility", 0)
             cmds.setAttr(display_layer + ".displayType", 2)
 
