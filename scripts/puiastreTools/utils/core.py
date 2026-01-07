@@ -226,35 +226,38 @@ def law_of_cosine(sides = [], power=[], name = "L_armModule", negate=False, acos
     cmds.connectAttr(f"{subtract}.output", f"{divide}.input1")
     cmds.connectAttr(f"{multiply}.output", f"{divide}.input2")
 
-    clamp = cmds.createNode("clamp", name=f"{name}CosineValue_CLAMP", ss=True)
-    cmds.setAttr(f"{clamp}.minR", 0)
-    cmds.setAttr(f"{clamp}.maxR", 1)
-    cmds.connectAttr(f"{divide}.output", f"{clamp}.inputR")
+    # if "upper" in name.lower():
 
-    divide_output = cmds.createNode("sum", name=f"{name}CosValueEnd_DIV", ss=True)
-    cmds.connectAttr(f"{clamp}.outputR", f"{divide_output}.input[0]")
+    # clamp = cmds.createNode("clamp", name=f"{name}CosineValue_CLAMP", ss=True)
+    # cmds.setAttr(f"{clamp}.minR", -1)
+    # cmds.setAttr(f"{clamp}.maxR", 1)
+    # cmds.connectAttr(f"{divide}.output", f"{clamp}.inputR")
+
+    # divide = cmds.createNode("sum", name=f"{name}CosValueEnd_DIV", ss=True)
+    # cmds.connectAttr(f"{clamp}.outputR", f"{divide}.input[0]")
+    cmds.setAttr
 
     if acos and negate:
         acos = cmds.createNode("acos", name=f"{name}CustomSolver_ACOS")
-        cmds.connectAttr(f"{divide_output}.output", f"{acos}.input")
+        cmds.connectAttr(f"{divide}.output", f"{acos}.input")
         negate_cos_value = cmds.createNode("negate", name=f"{name}CosineValue_NEGATE")
-        cmds.connectAttr(f"{divide_output}.output", f"{negate_cos_value}.input")
+        cmds.connectAttr(f"{divide}.output", f"{negate_cos_value}.input")
     
-        return divide_output, acos, power_mults, negate_cos_value
+        return divide, acos, power_mults, negate_cos_value
 
     if acos:
         acos = cmds.createNode("acos", name=f"{name}CustomSolver_ACOS")
-        cmds.connectAttr(f"{divide_output}.output", f"{acos}.input")
+        cmds.connectAttr(f"{divide}.output", f"{acos}.input")
 
-        return divide_output, acos, power_mults
+        return divide, acos, power_mults
 
     if negate:
         negate_cos_value = cmds.createNode("negate", name=f"{name}CosineValue_NEGATE")
-        cmds.connectAttr(f"{divide_output}.output", f"{negate_cos_value}.input")
+        cmds.connectAttr(f"{divide}.output", f"{negate_cos_value}.input")
 
-        return divide_output, power_mults, negate_cos_value
+        return divide, power_mults, negate_cos_value
 
-    return divide_output, power_mults
+    return divide, power_mults
 
 def get_offset_matrix(child, parent):
     """
