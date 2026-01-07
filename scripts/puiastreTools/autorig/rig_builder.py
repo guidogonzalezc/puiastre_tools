@@ -222,117 +222,117 @@ def make():
                     update_ui("arm")
                     lbm.ArmModule(guide_name).make()
                 
-                # elif guide_info.get("moduleName") == "leg":
-                #     update_ui("leg")
-                #     lbm.LegModule(guide_name).make()
+                elif guide_info.get("moduleName") == "leg":
+                    update_ui("leg")
+                    lbm.LegModule(guide_name).make()
 
                 elif guide_info.get("moduleName") == "backLeg":
                     update_ui("backLeg")
                     dlm.BackLegModule(guide_name).make()
 
-    #             elif guide_info.get("moduleName") == "frontLeg":
-    #                 update_ui("frontLeg")
-    #                 dlm.FrontLegModule(guide_name).make()
+                elif guide_info.get("moduleName") == "frontLeg":
+                    update_ui("frontLeg")
+                    dlm.FrontLegModule(guide_name).make()
 
-    #             elif guide_info.get("moduleName") == "handQuad":
-    #                 update_ui("handQuad")
-    #                 dfl.FalangeModule().hand_distribution(guide_name=guide_name)
+                elif guide_info.get("moduleName") == "handQuad":
+                    update_ui("handQuad")
+                    dfl.FalangeModule().hand_distribution(guide_name=guide_name)
 
-    #             elif guide_info.get("moduleName") == "spineQuad":
-    #                 update_ui("spineQuad")
-    #                 spq.SpineModule().make(guide_name)
+                elif guide_info.get("moduleName") == "spineQuad":
+                    update_ui("spineQuad")
+                    spq.SpineModule().make(guide_name)
 
-    #             elif guide_info.get("moduleName") == "spine":
-    #                 update_ui("spine")
-    #                 spb.SpineModule().make(guide_name)
+                elif guide_info.get("moduleName") == "spine":
+                    update_ui("spine")
+                    spb.SpineModule().make(guide_name)
 
-    #             elif guide_info.get("moduleName") == "neckQuad":
-    #                 update_ui("neckQuad")
-    #                 nkq.NeckModule().make(guide_name)
+                elif guide_info.get("moduleName") == "neckQuad":
+                    update_ui("neckQuad")
+                    nkq.NeckModule().make(guide_name)
                 
-    #             elif guide_info.get("moduleName") == "neck":
-    #                 update_ui("neck")
-    #                 nkb.NeckModule().make(guide_name, num_joints=guide_info.get("jointTwist", 5))
+                elif guide_info.get("moduleName") == "neck":
+                    update_ui("neck")
+                    nkb.NeckModule().make(guide_name, num_joints=guide_info.get("jointTwist", 5))
 
-    #             elif guide_info.get("moduleName") == "tail":
-    #                 update_ui("tail")
-    #                 tmm.TailModule().make(guide_name)
+                elif guide_info.get("moduleName") == "tail":
+                    update_ui("tail")
+                    tmm.TailModule().make(guide_name)
                 
 
 
                 
-    # # Additional modules who depends on others modules
-    # for template_name, guides in guides_data.items():
-    #     if not isinstance(guides, dict):
-    #         continue
+    # Additional modules who depends on others modules
+    for template_name, guides in guides_data.items():
+        if not isinstance(guides, dict):
+            continue
 
-    #     for guide_name, guide_info in guides.items():
-    #         if guide_info.get("moduleName") != "Child":
+        for guide_name, guide_info in guides.items():
+            if guide_info.get("moduleName") != "Child":
 
-    #             if guide_info.get("moduleName") == "spikes":
-    #                 update_ui("spikes")
-    #                 spm.SpikesModule().make(guide_name)
+                if guide_info.get("moduleName") == "spikes":
+                    update_ui("spikes")
+                    spm.SpikesModule().make(guide_name)
 
-    #             if guide_info.get("moduleName") == "membran":
-    #                 update_ui("membran")
-    #                 mm.MembraneModule().make(guide_name)
+                if guide_info.get("moduleName") == "membran":
+                    update_ui("membran")
+                    mm.MembraneModule().make(guide_name)
 
 
-    #             if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
-    #                 update_ui("foot")
-    #                 fm.FingersModule().make(guide_name)
+                if guide_info.get("moduleName") == "backLegFoot" or guide_info.get("moduleName") == "footFront" or guide_info.get("moduleName") == "footBack" :
+                    update_ui("foot")
+                    fm.FingersModule().make(guide_name)
 
                      
-    #             if guide_info.get("moduleName") == "mouth":
-    #                 update_ui("jaw")
-    #                 jmm.JawModule().make(guide_name)
+                if guide_info.get("moduleName") == "mouth":
+                    update_ui("jaw")
+                    jmm.JawModule().make(guide_name)
 
-    #             if guide_info.get("moduleName") == "eyebrow":
-    #                 update_ui("eyebrow")
-    #                 ebm.EyebrowModule().make(guide_name)
+                if guide_info.get("moduleName") == "eyebrow":
+                    update_ui("eyebrow")
+                    ebm.EyebrowModule().make(guide_name)
 
-    #             if guide_info.get("moduleName") == "eye":
-    #                 update_ui("eye")
-    #                 elm.EyelidModule().make(guide_name)
+                if guide_info.get("moduleName") == "eye":
+                    update_ui("eye")
+                    elm.EyelidModule().make(guide_name)
 
-    #             if guide_info.get("moduleName") == "nose":
-    #                 update_ui("nose")
-    #                 nm.NoseModule().make(guide_name)
+                if guide_info.get("moduleName") == "nose":
+                    update_ui("nose")
+                    nm.NoseModule().make(guide_name)
                 
-    #             if guide_info.get("moduleName") == "cheek":
-    #                 update_ui("cheek")
-    #                 cm.CheekModule().make(guide_name)
+                if guide_info.get("moduleName") == "cheek":
+                    update_ui("cheek")
+                    cm.CheekModule().make(guide_name)
     
-    # # Additional modules who depends on others modules
-    # for template_name, guides in guides_data.items():
-    #     if not isinstance(guides, dict):
-    #         continue
+    # Additional modules who depends on others modules
+    for template_name, guides in guides_data.items():
+        if not isinstance(guides, dict):
+            continue
 
-    #     for guide_name, guide_info in guides.items():
-    #         if guide_info.get("moduleName") != "Child":
+        for guide_name, guide_info in guides.items():
+            if guide_info.get("moduleName") != "Child":
 
-    #             if guide_info.get("moduleName") == "fkFinger":
-    #                 update_ui("fkFinger")
+                if guide_info.get("moduleName") == "fkFinger":
+                    update_ui("fkFinger")
 
-    #                 fkf.FingersModule().make(guide_name)
+                    fkf.FingersModule().make(guide_name)
 
     # Create the skeleton hierarchy and spaces
     cmds.progressWindow(edit=True, progress=90, status=(f"Creating the skeleton hierarchy and spaces") )
 
-    # skeleton_hierarchy = skh.build_complete_hierarchy() 
+    skeleton_hierarchy = skh.build_complete_hierarchy() 
 
-    # skinning_path = core.DataManager.get_skinning_data()
-    # if os.path.exists(skinning_path):
-    #     cmds.progressWindow(edit=True, progress=90, status=(f"Importing skinning data") )
-    #     skt.SkinIO().import_skins(file_path=skinning_path)
-    # else:
-    #     om.MGlobal.displayWarning(f"Skinning file not found at {skinning_path}. Skipping skin import.")
+    skinning_path = core.DataManager.get_skinning_data()
+    if os.path.exists(skinning_path):
+        cmds.progressWindow(edit=True, progress=90, status=(f"Importing skinning data") )
+        skt.SkinIO().import_skins(file_path=skinning_path)
+    else:
+        om.MGlobal.displayWarning(f"Skinning file not found at {skinning_path}. Skipping skin import.")
 
     # End commands to clean the scene
     cmds.progressWindow(edit=True, progress=99, status=(f"Finalizing") )
     rename_ctl_shapes()
     joint_label()
-    # setIsHistoricallyInteresting(0)
+    setIsHistoricallyInteresting(0)
 
     # End message
     cmds.inViewMessage(
