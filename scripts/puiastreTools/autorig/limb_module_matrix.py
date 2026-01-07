@@ -349,6 +349,7 @@ class LimbModule(object):
             self.ikHandleManager = f"{manager}.matrixSum"
         else:
             self.ikHandleManager = f"{self.hand_ik_ctl}.worldMatrix[0]"
+
         self.distance_between_output = []
         for i, (first, second) in enumerate(zip([f"{self.guides[0]}.worldMatrix[0]", f"{self.guides[1]}.worldMatrix[0]", f"{self.root_ik_ctl}.worldMatrix[0]"], [f"{self.guides[1]}.worldMatrix[0]", f"{self.guides[2]}.worldMatrix[0]", f"{self.ikHandleManager}"])):
             distance = cmds.createNode("distanceBetween", name=f"{name[i]}_DB", ss=True)
@@ -363,28 +364,167 @@ class LimbModule(object):
             else:
                 self.distance_between_output.append(f"{distance}.distance")
             
+        sum_distance = cmds.createNode("sum", name=f"{self.side}_{self.module_name}InitialLenght_SUM")
+        cmds.connectAttr(self.distance_between_output[0], f"{sum_distance}.input[0]")
+        cmds.connectAttr(self.distance_between_output[1], f"{sum_distance}.input[1]")
+
+        divide = cmds.createNode("divide", name=f"{self.side}_{self.module_name}LengthRatio_DIV", ss=True)
+        cmds.connectAttr(f"{sum_distance}.output", f"{divide}.input2")
+        cmds.connectAttr(f"{self.distance_between_output[2]}", f"{divide}.input1")
+
+        max = cmds.createNode("max", name=f"{self.side}_{self.module_name}Scalar_MAX", ss=True)
+        cmds.connectAttr(f"{divide}.output", f"{max}.input[0]")
+        self.float_value_one = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}One_FC", ss=True)
+        cmds.setAttr(f"{self.float_value_one}.inFloat", 1)
+        cmds.connectAttr(f"{self.float_value_one}.outFloat", f"{max}.input[1]")
+
+        scalar_remap = cmds.createNode("remapValue", name=f"{self.side}_{self.module_name}LengthRatio_REMAP", ss=True)
+        cmds.connectAttr(f"{self.hand_ik_ctl}.stretch", f"{scalar_remap}.inputValue")
+        cmds.connectAttr(f"{max}.output", f"{scalar_remap}.outputMax")
+        cmds.setAttr(f"{scalar_remap}.outputMin", 1)
+
+        stretch_multiply_nodes = []
+        for i, name in enumerate(["upperLength", "lowerLength"]):
+            multiply = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}StretchLenght0{i}_MULT", ss=True)
+            cmds.connectAttr(f"{self.distance_between_output[i]}", f"{multiply}.input[0]")
+            cmds.connectAttr(f"{scalar_remap}.outValue", f"{multiply}.input[1]")
+            cmds.connectAttr(f"{self.hand_ik_ctl}.{name}Mult", f"{multiply}.input[2]")
+            stretch_multiply_nodes.append(multiply)
+
         # --- STRETCH --- #
 
         arm_length = cmds.createNode("sum", name=f"{self.side}_{self.module_name}Length_SUM", ss=True)
-        cmds.connectAttr(f"{self.distance_between_output[0]}", f"{arm_length}.input[0]")
-        cmds.connectAttr(f"{self.distance_between_output[1]}", f"{arm_length}.input[1]")
+        cmds.connectAttr(f"{stretch_multiply_nodes[0]}.output", f"{arm_length}.input[0]")
+        cmds.connectAttr(f"{stretch_multiply_nodes[1]}.output", f"{arm_length}.input[1]")
 
         arm_length_min = cmds.createNode("min", name=f"{self.side}_{self.module_name}ClampedLength_MIN", ss=True)
         cmds.connectAttr(f"{arm_length}.output", f"{arm_length_min}.input[0]")
         cmds.connectAttr(f"{self.distance_between_output[2]}", f"{arm_length_min}.input[1]")
 
-        self.float_value_zero = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}Zero_FLC", ss=True)
-        cmds.setAttr(f"{self.float_value_zero}.inFloat", 0)
+
+        # Soft Values pre-build
+        soft_upper_length_scaled = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftUpperLengthScaled_MUL", ss=True)
+        soft_lower_length_scaled = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftLowerLengthScaled_MUL", ss=True)
+
+        cmds.connectAttr(f"{stretch_multiply_nodes[0]}.output", f"{soft_upper_length_scaled}.input[0]")
+        cmds.connectAttr(f"{stretch_multiply_nodes[1]}.output", f"{soft_lower_length_scaled}.input[0]")
 
         # --- CUSTOM SOLVER --- #
 
-        upper_divide, upper_arm_acos, power_mults = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{self.distance_between_output[1]}", f"{arm_length_min}.output"], name = f"{self.side}_{self.module_name}Upper", acos=True)
-        lower_divide, lower_power_mults, negate_cos_value = core.law_of_cosine(sides = [f"{self.distance_between_output[0]}", f"{arm_length_min}.output", f"{self.distance_between_output[1]}"],
+        upper_divide, upper_arm_acos, power_mults = core.law_of_cosine(sides = [f"{soft_upper_length_scaled}.output", f"{soft_lower_length_scaled}.output", f"{arm_length_min}.output"], name = f"{self.side}_{self.module_name}Upper", acos=True)
+        lower_divide, lower_power_mults, negate_cos_value = core.law_of_cosine(sides = [f"{soft_upper_length_scaled}.output", f"{arm_length_min}.output", f"{soft_lower_length_scaled}.output"],
                                                                              power = [power_mults[0], power_mults[2], power_mults[1]],
                                                                              name = f"{self.side}_{self.module_name}Lower", 
                                                                              negate=True)
 
- 
+        soft_cosValue, soft_power_mults = core.law_of_cosine(sides = [f"{stretch_multiply_nodes[0]}.output", f"{stretch_multiply_nodes[1]}.output", f"{arm_length_min}.output"], name = f"{self.side}_{self.module_name}SoftArm")
+
+        # --- SOFT ARM --- #
+
+        soft_cosValueSquared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftCosValueSquared_MUL", ss=True)
+        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_cosValueSquared}.input[0]")
+        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_cosValueSquared}.input[1]")
+
+        soft_height_squared = cmds.createNode("subtract", name=f"{self.side}_{self.module_name}SoftHeightSquared_SUB", ss=True)
+        cmds.setAttr( f"{soft_height_squared}.input1", 1)
+        cmds.connectAttr(f"{soft_cosValueSquared}.output", f"{soft_height_squared}.input2")
+
+        soft_height_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.module_name}SoftHeightSquaredClamped_MAX", ss=True)
+        self.float_value_zero = cmds.createNode("floatConstant", name=f"{self.side}_{self.module_name}Zero_FC", ss=True)
+        cmds.setAttr(f"{self.float_value_zero}.inFloat", 0)
+        cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{soft_height_squared_clamped}.input[0]")
+        cmds.connectAttr(f"{soft_height_squared}.output", f"{soft_height_squared_clamped}.input[1]")
+
+        soft_height = cmds.createNode("power", name=f"{self.side}_{self.module_name}SoftHeight_POW", ss=True)
+        cmds.setAttr(f"{soft_height}.exponent", 0.5)
+        cmds.connectAttr(f"{soft_height_squared_clamped}.output", f"{soft_height}.input")
+
+        soft_linear_target_height = cmds.createNode("subtract", name=f"{self.side}_{self.module_name}SoftLinearTargetHeight_SUB", ss=True)
+        cmds.setAttr(f"{soft_linear_target_height}.input1", 1)
+        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_linear_target_height}.input2")
+
+        soft_quadratic_target_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftQuadraticTargetHeight_MUL", ss=True)
+        cmds.connectAttr(f"{soft_linear_target_height}.output", f"{soft_quadratic_target_height}.input[0]")
+        cmds.connectAttr(f"{soft_linear_target_height}.output", f"{soft_quadratic_target_height}.input[1]")
+
+        soft_remapStart = cmds.createNode("remapValue", name=f"{self.side}_{self.module_name}SoftRemapStart_RMV", ss=True)
+        cmds.connectAttr(f"{self.hand_ik_ctl}.softStart", f"{soft_remapStart}.inputMin")
+        cmds.connectAttr(f"{soft_cosValue}.output", f"{soft_remapStart}.inputValue")
+        cmds.setAttr(f"{soft_remapStart}.outputMin", 0)
+        cmds.setAttr(f"{soft_remapStart}.outputMax", 1)
+        cmds.setAttr(f"{soft_remapStart}.inputMax", 1)
+
+        setup_blend_value = cmds.createNode("smoothStep", name=f"{self.side}_{self.module_name}SetupBlendValue_SMOOTH", ss=True)
+        cmds.connectAttr(f"{soft_remapStart}.outValue", f"{setup_blend_value}.input")
+        cmds.setAttr(f"{setup_blend_value}.leftEdge", 0)
+        cmds.setAttr(f"{setup_blend_value}.rightEdge", 1)
+
+        cubic_target_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}CubicTargetHeight_MUL", ss=True)
+        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{cubic_target_height}.input[0]")
+        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{cubic_target_height}.input[1]")
+        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{cubic_target_height}.input[2]")
+
+        blend_choice = cmds.createNode("blendTwoAttr", name=f"{self.side}_{self.module_name}SoftBlendChoice_CH", ss=True)
+        cmds.connectAttr(f"{self.hand_ik_ctl}.soft", f"{blend_choice}.attributesBlender")
+        cmds.connectAttr(f"{setup_blend_value}.output", f"{blend_choice}.input[1]")
+        cmds.connectAttr(f"{cubic_target_height}.output", f"{blend_choice}.input[0]")
+
+        blend_twoAttrs = cmds.createNode("blendTwoAttr", name=f"{self.side}_{self.module_name}SoftHeight_BLT", ss=True)
+        cmds.connectAttr(f"{blend_choice}.output", f"{blend_twoAttrs}.attributesBlender")
+        cmds.connectAttr(f"{soft_height}.output", f"{blend_twoAttrs}.input[0]")
+        cmds.connectAttr(f"{soft_quadratic_target_height}.output", f"{blend_twoAttrs}.input[1]")
+
+        soft_blended_height_squared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}SoftBlendedHeightSquared_MUL", ss=True)
+        cmds.connectAttr(f"{blend_twoAttrs}.output", f"{soft_blended_height_squared}.input[0]")
+        cmds.connectAttr(f"{blend_twoAttrs}.output", f"{soft_blended_height_squared}.input[1]")
+
+        soft_scaler_squared = cmds.createNode("sum", name=f"{self.side}_{self.module_name}SoftScalerSquared_SUM", ss=True)
+        cmds.connectAttr(f"{soft_blended_height_squared}.output", f"{soft_scaler_squared}.input[0]")
+        cmds.connectAttr(f"{soft_cosValueSquared}.output", f"{soft_scaler_squared}.input[1]")
+
+        # Upper arm output
+        upper_soft_scaler = cmds.createNode("power", name=f"{self.side}_{self.module_name}UpperSoftScaler_POW", ss=True)
+        cmds.setAttr(f"{upper_soft_scaler}.exponent", 0.5)
+        cmds.connectAttr(f"{soft_scaler_squared}.output", f"{upper_soft_scaler}.input")
+
+        cmds.connectAttr(f"{upper_soft_scaler}.output", f"{soft_upper_length_scaled}.input[1]")
+
+        #Lower arm
+        segmentLengthRatio = cmds.createNode("divide", name=f"{self.side}_{self.module_name}SoftSegmentLengthRatio_DIV", ss=True)
+        cmds.connectAttr(f"{stretch_multiply_nodes[0]}.output", f"{segmentLengthRatio}.input1")
+        cmds.connectAttr(f"{stretch_multiply_nodes[1]}.output", f"{segmentLengthRatio}.input2")
+
+        lower_soft_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftHeight_MUL", ss=True)
+        cmds.connectAttr(f"{segmentLengthRatio}.output", f"{lower_soft_height}.input[1]")
+        cmds.connectAttr(f"{soft_height}.output", f"{lower_soft_height}.input[0]")
+
+        lower_soft_blended_height = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftBlendedHeight_MUL", ss=True)
+        cmds.connectAttr(f"{segmentLengthRatio}.output", f"{lower_soft_blended_height}.input[1]")
+        cmds.connectAttr(f"{blend_twoAttrs}.output", f"{lower_soft_blended_height}.input[0]")
+
+        lower_height_squared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftHeightSquared_MUL", ss=True)
+        cmds.connectAttr(f"{lower_soft_height}.output", f"{lower_height_squared}.input[0]")
+        cmds.connectAttr(f"{lower_soft_height}.output", f"{lower_height_squared}.input[1]")
+
+        lower_cos_value_squared = cmds.createNode("subtract", name=f"{self.side}_{self.module_name}LowerSoftCosValueSquared_SUB", ss=True)
+        cmds.connectAttr(f"{lower_height_squared}.output", f"{lower_cos_value_squared}.input2")
+        cmds.setAttr(f"{lower_cos_value_squared}.input1", 1)
+
+        lower_blended_height_squared = cmds.createNode("multiply", name=f"{self.side}_{self.module_name}LowerSoftBlendedHeightSquared_MUL", ss=True)
+        cmds.connectAttr(f"{lower_soft_blended_height}.output", f"{lower_blended_height_squared}.input[0]")
+        cmds.connectAttr(f"{lower_soft_blended_height}.output", f"{lower_blended_height_squared}.input[1]")
+
+        soft_lower_scaler_squared = cmds.createNode("sum", name=f"{self.side}_{self.module_name}SoftLowerScalerSquared_SUM", ss=True)
+        cmds.connectAttr(f"{lower_blended_height_squared}.output", f"{soft_lower_scaler_squared}.input[1]")
+        cmds.connectAttr(f"{lower_cos_value_squared}.output", f"{soft_lower_scaler_squared}.input[0]")
+
+        # Upper arm output
+        lower_soft_scaler = cmds.createNode("power", name=f"{self.side}_{self.module_name}LowerSoftScaler_POW", ss=True)
+        cmds.setAttr(f"{lower_soft_scaler}.exponent", 0.5)
+        cmds.connectAttr(f"{soft_lower_scaler_squared}.output", f"{lower_soft_scaler}.input")
+
+        cmds.connectAttr(f"{lower_soft_scaler}.output", f"{soft_lower_length_scaled}.input[1]")
+
         # --- Aligns --- #
  
         upper_arm_ik_aim_matrix = cmds.createNode("aimMatrix", name=f"{self.side}_{self.module_name}UpperIk_AIM", ss=True)
@@ -423,7 +563,6 @@ class LimbModule(object):
 
         lower_sin_value_squared_clamped = cmds.createNode("max", name=f"{self.side}_{self.module_name}LowerSinValueSquared_MAX", ss=True)
         cmds.connectAttr(f"{lower_sin_value_squared}.output", f"{lower_sin_value_squared_clamped}.input[1]")
-
         cmds.connectAttr(f"{self.float_value_zero}.outFloat", f"{lower_sin_value_squared_clamped}.input[0]")
 
         lower_sin = cmds.createNode("power", name=f"{self.side}_{self.module_name}LowerSin_POW", ss=True)
@@ -442,12 +581,12 @@ class LimbModule(object):
 
         if self.side == "R":
             translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.module_name}UpperTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{translate_negate}.input")
+            cmds.connectAttr(f"{soft_upper_length_scaled}.output", f"{translate_negate}.input")
             cmds.connectAttr(f"{translate_negate}.output", f"{fourByfour}.in30")
             cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, -1, 0, type="double3") ########################## CAMBIO QUIZAS
 
         else:
-            cmds.connectAttr(f"{self.distance_between_output[0]}", f"{fourByfour}.in30")
+            cmds.connectAttr(f"{soft_upper_length_scaled}.output", f"{fourByfour}.in30")
             cmds.setAttr(upper_arm_ik_aim_matrix + ".secondaryInputAxis", 0, 1, 0, type="double3") ########################## CAMBIO QUIZAS
 
 
@@ -469,8 +608,8 @@ class LimbModule(object):
         hand_wm_multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}EndWM_MMX", ss=True)
         if self.side == "R" and self.module_name == "arm":
             cmds.setAttr(f"{hand_wm_multmatrix}.matrixIn[0]",  -1, 0, 0, 0,
-                                                    -0, 1, 0, 0,
-                                                    0, 0, 1, 0,
+                                                    -0, -1, 0, 0,
+                                                    0, 0, -1, 0,
                                                     0, 0, 0, 1, type="matrix")
             cmds.connectAttr(f"{hand_local_matrix}.output", f"{hand_wm_multmatrix}.matrixIn[1]")
             cmds.connectAttr(f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixIn[2]")
@@ -488,10 +627,10 @@ class LimbModule(object):
 
         if self.side == "R":
             translate_negate = cmds.createNode("negate", name=f"{self.side}_{self.module_name}LowerTranslate_NEGATE", ss=True)
-            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{translate_negate}.input")
+            cmds.connectAttr(f"{soft_lower_length_scaled}.output", f"{translate_negate}.input")
             cmds.connectAttr(f"{translate_negate}.output", f"{hand_local_matrix}.in30")
         else:
-            cmds.connectAttr(f"{self.distance_between_output[1]}", f"{hand_local_matrix}.in30")
+            cmds.connectAttr(f"{soft_lower_length_scaled}.output", f"{hand_local_matrix}.in30")
 
         self.ik_wm = [f"{self.upperArmIkWM}.matrixSum", f"{lower_wm_multmatrix}.matrixSum", f"{hand_wm_multmatrix}.matrixSum"]
 
