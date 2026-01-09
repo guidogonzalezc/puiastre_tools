@@ -80,12 +80,15 @@ def setIsHistoricallyInteresting(value=2):
 
     failed = []
     for node in allNodes:
-        plug = '{}.ihi'.format(node)
-        if cmds.objExists(plug):
-            try:
-                cmds.setAttr(plug, value)
-            except:
-                failed.append(node)
+        if cmds.nodeType(node) == "skinCluster":
+            continue
+        else:
+            plug = '{}.ihi'.format(node)
+            if cmds.objExists(plug):
+                try:
+                    cmds.setAttr(plug, value)
+                except:
+                    failed.append(node)
     if failed:
         print("Skipped the following nodes {}".format(failed))
 

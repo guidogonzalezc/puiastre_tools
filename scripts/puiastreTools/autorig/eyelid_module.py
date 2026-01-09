@@ -665,7 +665,7 @@ class EyelidModule():
 
             cmds.matchTransform(eye_main_guide, self.eye)
             cmds.setAttr(f"{eye_main_guide}.tx", 0)
-            cmds.move(0, 0, 20, eye_main_guide,  r=True, ws=False)
+            cmds.move(0, 0, 200, eye_main_guide,  r=True, ws=False)
 
             cmds.connectAttr(f"{eye_main_guide}.worldMatrix[0]", f"{self.eye_main_ctl_grp[0]}.offsetParentMatrix", force=True)
 
@@ -683,11 +683,12 @@ class EyelidModule():
         cmds.connectAttr(f"{self.eye}.worldMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
         cmds.connectAttr(f"{multmatrix}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix", force=True)
 
-        if not core.DataManager.get_asset_name() == "moana":
+        if core.DataManager.get_asset_name() == "varyndor" or core.DataManager.get_asset_name() == "aychedral":
+            value = 40 if self.side == "L" else -40
             cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
                                             0, 1, 0, 0,
                                             0, 0, 1, 0,
-                                            0, 0, 20, 1, type="matrix")
+                                            value, 0, 0, 1, type="matrix")
         else:
             cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
                                             0, 1, 0, 0,
