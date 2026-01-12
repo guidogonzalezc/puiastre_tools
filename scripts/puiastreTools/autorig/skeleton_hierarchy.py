@@ -72,6 +72,10 @@ def parented_chain(skinning_joints, parent, hand_value=False):
             elif parent is None:
                 cmds.parent(joint_env, skelHierarchy_grp)
 
+            inverse_scale_attr = a = cmds.listConnections( f'{joint_env}.inverseScale', d=False, s=True, p=True )
+            if inverse_scale_attr:
+                cmds.disconnectAttr( inverse_scale_attr[0], f'{joint_env}.inverseScale' )
+
             
             
             joints.append(joint_env)
