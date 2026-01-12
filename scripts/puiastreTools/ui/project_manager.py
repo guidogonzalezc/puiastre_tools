@@ -243,45 +243,66 @@ class AssetManagerWindow(QtWidgets.QDialog):
         
         self.setObjectName(self.WINDOW_NAME)
         self.setWindowTitle(self.WINDOW_TITLE)
-        self.resize(400, 300)
+        self.resize(400, 500)
         self.setSizeGripEnabled(True) 
         
+        core.load_data()
+
         self.create_widgets()
         self.create_layouts()
         self.create_connections()
+        self.update_preview_image()
         
     def create_widgets(self):
         self.tabs = QtWidgets.QTabWidget()
         
-        # --- Tab 1 ---
         names = self.load_assets_names()
 
         self.tab_load = QtWidgets.QWidget()
+        
+        self.lbl_preview = QtWidgets.QLabel()
+        self.lbl_preview.setMinimumSize(300, 200)
+        self.lbl_preview.setMaximumSize(300, 200)
+        self.lbl_preview.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl_preview.setStyleSheet("border: 1px solid #444; background-color: #222; color: #888;")
+        self.lbl_preview.setText("No Preview Available")
+
+        first_name = core.DataManager.get_asset_name()
+
+        if first_name in names:
+            names.remove(first_name)
+            names.insert(0, first_name)
+        
         self.combo_items = QtWidgets.QComboBox()
         self.combo_items.addItems(names)
         
-        self.btn_ok_t1 = QtWidgets.QPushButton("OK")
+        self.btn_capture = QtWidgets.QPushButton("Capture Persp Thumbnail")
+        self.btn_capture.setToolTip("Switches to Perspective view, frames selection, and saves a thumbnail.")
         
-        # --- Tab 2 ---
+        self.btn_ok_t1 = QtWidgets.QPushButton("Load Asset")
+        
+        # --- Tab 2: Create Widgets ---
         self.tab_create = QtWidgets.QWidget()
         self.asset_type = QtWidgets.QComboBox()
         self.asset_type.addItems(["CHAR", "PROP", "ENV"])
 
-
         self.input_name = QtWidgets.QLineEdit()
         self.input_name.setPlaceholderText("Enter Asset Name...")
         
-        self.btn_ok_t2 = QtWidgets.QPushButton("OK")
+        self.btn_ok_t2 = QtWidgets.QPushButton("Create Asset")
 
     def create_layouts(self):
         main_layout = QtWidgets.QVBoxLayout(self)
         main_layout.addWidget(self.tabs)
         
-        # --- Tab 1 Layout ---
         layout_t1 = QtWidgets.QVBoxLayout(self.tab_load)
-        layout_t1.addStretch()
-        layout_t1.addWidget(QtWidgets.QLabel("Load Existing Asset:"))
+        
+        layout_t1.addWidget(self.lbl_preview, alignment=QtCore.Qt.AlignCenter)
+        layout_t1.addSpacing(10)
+        
+        layout_t1.addWidget(QtWidgets.QLabel("Select Asset:"))
         layout_t1.addWidget(self.combo_items)
+        layout_t1.addWidget(self.btn_capture)
         layout_t1.addStretch()
         
         buttons_layout_t1 = QtWidgets.QHBoxLayout()
@@ -289,7 +310,6 @@ class AssetManagerWindow(QtWidgets.QDialog):
         buttons_layout_t1.addWidget(self.btn_ok_t1)
         layout_t1.addLayout(buttons_layout_t1)
         
-        # --- Tab 2 Layout ---
         h_layout_big = QtWidgets.QHBoxLayout()
 
         v_layout_type = QtWidgets.QVBoxLayout()
@@ -318,19 +338,98 @@ class AssetManagerWindow(QtWidgets.QDialog):
     def create_connections(self):
         self.btn_ok_t1.clicked.connect(self.load_selected_asset)
         self.btn_ok_t2.clicked.connect(self.create_asset)
+        self.combo_items.currentIndexChanged.connect(self.update_preview_image)
+        self.btn_capture.clicked.connect(self.capture_thumbnail)
 
     def load_assets_names(self):
-
         asset_path = os.path.join(SCRIPT_PATH, "assets")
-
         assets_names = []
         if os.path.exists(asset_path):
             for name in os.listdir(asset_path):
                 full_path = os.path.join(asset_path, name)
                 if os.path.isdir(full_path):
                     assets_names.append(name)
-
         return assets_names
+    
+    def update_preview_image(self):
+        """Updates the label with the image found in the asset directory."""
+        asset_name = self.combo_items.currentText()
+        if not asset_name:
+            return
+
+        image_path = os.path.join(SCRIPT_PATH, "assets", asset_name, "asset_image.png")
+        
+        if os.path.exists(image_path):
+            pixmap = QtGui.QPixmap(image_path)
+            scaled_pixmap = pixmap.scaled(
+                self.lbl_preview.size(), 
+                QtCore.Qt.KeepAspectRatio, 
+                QtCore.Qt.SmoothTransformation
+            )
+            self.lbl_preview.setPixmap(scaled_pixmap)
+            self.lbl_preview.setText("") # Clear text
+        else:
+            self.lbl_preview.clear()
+            self.lbl_preview.setText("No Preview Available")
+
+    def capture_thumbnail(self):
+        """Captures a front view playblast of the viewport."""
+        asset_name = self.combo_items.currentText()
+        if not asset_name:
+            om.MGlobal.displayWarning("No asset selected to capture.")
+            return
+
+        asset_path = os.path.join(SCRIPT_PATH, "assets", asset_name)
+        if not os.path.exists(asset_path):
+            om.MGlobal.displayError(f"Asset path does not exist: {asset_path}")
+            return
+            
+        image_path = os.path.join(asset_path, "asset_image.png")
+
+        current_panel = cmds.getPanel(withFocus=True)
+        if "modelPanel" not in current_panel:
+            visible_panels = cmds.getPanel(visiblePanels=True)
+            model_panels = [p for p in visible_panels if "modelPanel" in p]
+            if model_panels:
+                current_panel = model_panels[0]
+            else:
+                om.MGlobal.displayError("No model panel found to capture from.")
+                return
+
+        original_cam = cmds.modelPanel(current_panel, query=True, camera=True)
+
+        try:
+            cmds.lookThru(current_panel, original_cam)
+            # cmds.setFocus(current_panel)
+            
+            # cmds.viewFit(animate=False)
+            
+            cmds.playblast(
+                completeFilename=image_path,
+                forceOverwrite=True,
+                format='image',
+                compression='png',
+                showOrnaments=False,
+                startTime=cmds.currentTime(query=True),
+                endTime=cmds.currentTime(query=True),
+                viewer=False,
+                percent=100,
+                quality=100,
+                width=600, 
+                height=400,
+                offScreen=True 
+            )
+            
+            om.MGlobal.displayInfo(f"Thumbnail captured: {image_path}")
+            
+        except Exception as e:
+            om.MGlobal.displayError(f"Failed to capture thumbnail: {e}")
+            
+        finally:
+            cmds.lookThru(current_panel, original_cam)
+            pass
+
+        self.update_preview_image()
     
     def load_selected_asset(self):
         asset_name = self.combo_items.currentText()
@@ -341,7 +440,6 @@ class AssetManagerWindow(QtWidgets.QDialog):
         except Exception as e:
             om.MGlobal.displayError(f"Error loading asset configuration: {e}")
             return
-        
         
     def create_asset(self):
         asset_name = self.input_name.text().strip()
