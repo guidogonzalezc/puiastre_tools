@@ -103,8 +103,6 @@ class JawModule():
 
         return f"{local_mult_matrix}.matrixSum"
     
-    
-
     def getClosestParamToPosition(self, curve, position):
         """
         Returns the closest parameter (u) on the given NURBS curve to a world-space position.
@@ -134,7 +132,6 @@ class JawModule():
         closest_point, paramU = curve_fn.closestPoint(point, space=om.MSpace.kWorld)
 
         return paramU
-
 
     def jaw_module(self):
         """
@@ -242,9 +239,9 @@ class JawModule():
                         (self.upper_jaw_local_joint, upper_w)
                     ])
 
+        if len(self.guides) > 2:
 
-
-        self.lips_setup()
+            self.lips_setup()
 
     def lips_setup(self):
 
