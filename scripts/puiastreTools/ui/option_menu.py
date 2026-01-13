@@ -91,6 +91,17 @@ def mirror_ctl(*args):
     """
     curve_tool.mirror_shapes()
 
+def usdAnimTool(*args):
+    """
+    Function to launch the USD Animation Tool UI.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+    from puiastreTools.tools import usdAnimation
+    reload(usdAnimation)
+    usdAnimation.showUSDAnimationUI()
+
 def replace_shapes(*args):
 
     """
@@ -180,6 +191,7 @@ def puiastre_ui():
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Animation", subMenu=True, tearOff=True, boldFont=True)
+    cmds.menuItem(label="   USD Exporter", command=usdAnimTool)
     cmds.menuItem(label="   Vectorify", command=vectorify_ui_call)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
