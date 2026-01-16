@@ -98,6 +98,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
     if adonis_setup:
         export_data["muscleLocators_GRP"] = nodes.get("muscleLocators_GRP")
         export_data["adonis_GRP"] = nodes.get("adonis_GRP")
+        cmds.setAttr(f"{export_data['muscleLocators_GRP']}.visibility", 0)
 
     data_exporter = data_export.DataExport()
     data_exporter.append_data("basic_structure", export_data)
@@ -132,7 +133,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         ]
         
         for attr, grp in toggles:
-            cmds.addAttr(pref_ctl, shortName=attr, niceName=attr, attributeType="bool", keyable=False, defaultValue=(attr=="showSkeleton"))
+            cmds.addAttr(pref_ctl, shortName=attr, niceName=attr, attributeType="bool", keyable=False, defaultValue=False)
             cmds.setAttr(f"{pref_ctl}.{attr}", channelBox=True)
             if nodes.get(grp):
                 cmds.connectAttr(f"{pref_ctl}.{attr}", f"{nodes[grp]}.visibility")
@@ -156,13 +157,14 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
             cmds.select(nodes["SKINNED_MODEL"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_SKINNED_MODEL", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 15)
-            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".visibility", 1)
             cmds.setAttr(display_layer + ".displayType", 2)
 
         if "MODEL" in nodes and nodes["MODEL"]:
             cmds.select(nodes["MODEL"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MODEL", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 17)
+            cmds.setAttr(display_layer + ".visibility", 0)
             cmds.setAttr(display_layer + ".displayType", 2)
 
 
