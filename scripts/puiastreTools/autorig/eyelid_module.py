@@ -10,9 +10,7 @@ from puiastreTools.utils.guide_creation import guide_import
 from puiastreTools.utils import data_export
 from puiastreTools.utils import core
 from puiastreTools.utils.core import get_offset_matrix
-from puiastreTools.utils import basic_structure
-from puiastreTools.utils import de_boor_core_002
-from puiastreTools.utils.space_switch import fk_switch
+
 
 reload(data_export)
 
@@ -422,9 +420,19 @@ class EyelidModule():
                 cmds.connectAttr(f"{multmatrix_end_pox}.matrixSum", f"{parent_matrix}.target[0].targetMatrix", force=True)
                 cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", get_offset_matrix(f"{linear_guide_4b4}.output", f"{multmatrix_end_pox}.matrixSum"), type="matrix")
 
-                joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
-                cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True) # CAMBIAR PARENT MATRIX O MULTMATRIX DEPENDIENDO SI QUIERES OFFSET O NO
+                blink_blend_matrix = cmds.createNode("blendMatrix", name=f"{name}Blink_BMX", ss=True)
 
+                cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{blink_blend_matrix}.inputMatrix", force=True)
+                cmds.connectAttr(f"{multmatrix_end_pox}.matrixSum", f"{blink_blend_matrix}.target[0].targetMatrix", force=True)
+
+                blink_attr = "lowerBlink" if "lower" in name.lower() else "upperBlink"
+                cmds.connectAttr(f"{self.main_ctl}.{blink_attr}", f"{blink_blend_matrix}.target[0].weight", force=True)
+
+
+
+
+                joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
+                cmds.connectAttr(f"{blink_blend_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True) # CAMBIAR PARENT MATRIX O MULTMATRIX DEPENDIENDO SI QUIERES OFFSET O NO
 
             main_4b4 = []
             tan_4b4 = []
