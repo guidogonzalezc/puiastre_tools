@@ -652,6 +652,8 @@ class JawModule():
             total_cvs = len(cv_list)
             mid_index_calc = int(total_cvs // 2)
 
+            number = 1
+
             for i, cv in enumerate(cv_list):
                 mid_index = int(len(cmds.ls(f"{curve}.cv[*]", flatten=True)) // 2)
                 if i < mid_index:
@@ -660,6 +662,19 @@ class JawModule():
                     cv_side = "C"
                 else:
                     cv_side = "L"
+
+                if core.DataManager().get_asset_name() == "varyndor" or core.DataManager().get_asset_name() == "aychedral" or core.DataManager().get_asset_name() == "oto":
+                    number = 1
+
+                else:
+                    if cv_side == "R":
+                        number = number + 1
+
+                    elif cv_side == "C":
+                        number = number + 1
+                    
+                    else:
+                        number = number - 1
 
                 name = f"{cv_side}_{main_mid_name}Lips0{number}End"
 
