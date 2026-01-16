@@ -423,7 +423,7 @@ class EyelidModule():
                 cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", get_offset_matrix(f"{linear_guide_4b4}.output", f"{multmatrix_end_pox}.matrixSum"), type="matrix")
 
                 joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
-                cmds.connectAttr(f"{multmatrix_end_pox}.matrixSum", f"{joint}.offsetParentMatrix", force=True)
+                cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True) # CAMBIAR PARENT MATRIX O MULTMATRIX DEPENDIENDO SI QUIERES OFFSET O NO
 
 
             main_4b4 = []
@@ -665,7 +665,7 @@ class EyelidModule():
 
             cmds.matchTransform(eye_main_guide, self.eye)
             cmds.setAttr(f"{eye_main_guide}.tx", 0)
-            cmds.move(0, 0, 200, eye_main_guide,  r=True, ws=False)
+            cmds.move(0, 0, 40, eye_main_guide,  r=True, ws=False)
 
             cmds.connectAttr(f"{eye_main_guide}.worldMatrix[0]", f"{self.eye_main_ctl_grp[0]}.offsetParentMatrix", force=True)
 
@@ -693,7 +693,7 @@ class EyelidModule():
             cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
                                             0, 1, 0, 0,
                                             0, 0, 1, 0,
-                                            0, 0, 20, 1, type="matrix")
+                                            0, 0, 40, 1, type="matrix")
 
         cmds.parent(controller_grp[0], self.eye_main_ctl if self.eye_main_ctl else self.masterWalk_ctl)
 
