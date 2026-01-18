@@ -646,17 +646,20 @@ class LimbModule(object):
         )
 
         self.switch_pos = guide_import(f"{self.side}_{self.module_name}Settings_GUIDE", all_descendents=False)[0]
-        self.switch_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}SwitchPos_MMX", ss=True)
-        cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_pos_multMatrix}.matrixIn[0]")
-        inverse_guide = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}SwitchPosInverse_MTX", ss=True)
-        pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}SwitchPos_PIM", ss=True)
-        cmds.setAttr(f"{pick_matrix}.useRotate", 0)
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{pick_matrix}.inputMatrix")
-        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{inverse_guide}.inputMatrix")
-        cmds.connectAttr(f"{inverse_guide}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[1]")
-        cmds.connectAttr(f"{self.switch_pos_multMatrix}.matrixSum", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
-        cmds.setAttr(f"{self.switch_ctl_grp[0]}.inheritsTransform", 0)
+        cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
+        # self.switch_pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.module_name}SwitchPos_MMX", ss=True)
+        # cmds.connectAttr(f"{self.switch_pos}.worldMatrix[0]", f"{self.switch_pos_multMatrix}.matrixIn[0]")
+        # inverse_guide = cmds.createNode("inverseMatrix", name=f"{self.side}_{self.module_name}SwitchPosInverse_MTX", ss=True)
+        # pick_matrix = cmds.createNode("pickMatrix", name=f"{self.side}_{self.module_name}SwitchPos_PIM", ss=True)
+        # cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+        # cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{pick_matrix}.inputMatrix")
+        # cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{inverse_guide}.inputMatrix")
+        # cmds.connectAttr(f"{inverse_guide}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[1]")
+        # cmds.connectAttr(f"{self.switch_pos_multMatrix}.matrixSum", f"{self.switch_ctl_grp[0]}.offsetParentMatrix")
+        # cmds.setAttr(f"{self.switch_ctl_grp[0]}.inheritsTransform", 0)
+        # ss.fk_switch(target = self.switch_ctl, sources= [self.switch_pos], sources_names=["SwitchPos"])
 
+            
         cmds.addAttr(self.switch_ctl, shortName="switchIkFk", niceName="Switch IK --> FK", maxValue=1, minValue=0,defaultValue=self.default_ik, keyable=True)
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{self.fk_grps[0][0]}.visibility", force=True)
         rev = cmds.createNode("reverse", name=f"{self.side}_{self.module_name}FkVisibility_REV", ss=True)
@@ -676,29 +679,6 @@ class LimbModule(object):
 
         name = self.blend_wm[0].replace("_BLM.outputMatrix", "")
         
-        """        Non-roll setup OLD
-        nonRollAlign = cmds.createNode("blendMatrix", name=f"{name}NonRollAlign_BLM", ss=True)
-        nonRollPick = cmds.createNode("pickMatrix", name=f"{name}NonRollPick_PIM", ss=True)
-        nonRollAim = cmds.createNode("aimMatrix", name=f"{name}NonRollAim_AMX", ss=True)
-
-        cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollAlign}.inputMatrix")
-        cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollAlign}.target[0].targetMatrix")
-        cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollAlign}.target[0].weight")
-
-        cmds.connectAttr(f"{self.blend_wm[0]}", f"{nonRollPick}.inputMatrix")
-        cmds.connectAttr(f"{nonRollPick}.outputMatrix", f"{nonRollAim}.inputMatrix")
-        cmds.connectAttr(f"{nonRollAlign}.outputMatrix", f"{nonRollAim}.secondaryTargetMatrix")
-        cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
-        cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
-        cmds.setAttr(f"{nonRollAim}.secondaryMode", 2)
-
-
-        cmds.setAttr(f"{nonRollPick}.useRotate", 0)
-
-        """
-
         nonRollSpace = cmds.createNode("blendMatrix", name=f"{name}NonRollSpace_BLM", ss=True)
 
         cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollSpace}.inputMatrix")
@@ -723,10 +703,16 @@ class LimbModule(object):
         cmds.connectAttr(f"{self.blend_wm[1]}", f"{nonRollAim}.primaryTargetMatrix")
         cmds.setAttr(f"{nonRollAim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
 
-        pick_matrix = cmds.createNode("pickMatrix", name=f"{name}PickSwitchNoRot_PIM", ss=True)
-        cmds.setAttr(f"{pick_matrix}.useRotate", 0)
-        cmds.connectAttr(f"{self.blend_wm[0]}", f"{pick_matrix}.inputMatrix")
-        cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[2]")
+        ss.fk_switch(target = self.switch_ctl, sources= [self.blend_wm[0]], sources_names=["arm"])
+        cmds.setAttr(f"{self.switch_ctl}.TranslateValue", k=False, channelBox=False)
+        cmds.setAttr(f"{self.switch_ctl}.RotateValue", k=False, channelBox=False)
+        cmds.setAttr(f"{self.switch_ctl}.SpaceSwitchSep", k=False, channelBox=False)
+
+
+        # pick_matrix = cmds.createNode("pickMatrix", name=f"{name}PickSwitchNoRot_PIM", ss=True)
+        # cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+        # cmds.connectAttr(f"{self.blend_wm[0]}", f"{pick_matrix}.inputMatrix")
+        # cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{self.switch_pos_multMatrix}.matrixIn[2]")
 
         self.shoulder_rotate_matrix = self.blend_wm[0]
         self.blend_wm[0] = f"{nonRollAim}.outputMatrix"
