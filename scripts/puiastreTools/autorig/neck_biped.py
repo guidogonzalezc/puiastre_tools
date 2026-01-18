@@ -161,7 +161,7 @@ class NeckModule():
         neck01_world_matrix_aim = cmds.createNode("aimMatrix", name=f"{self.side}_neckWM_AIM", ss=True)
         cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix_aim}.inputMatrix")
         cmds.connectAttr(f"{self.main_controllers[1]}.worldMatrix[0]", f"{neck01_world_matrix_aim}.primaryTargetMatrix")
-        cmds.connectAttr(f"{self.masterWalk_ctl}.worldMatrix[0]", f"{neck01_world_matrix_aim}.secondaryTargetMatrix")
+        cmds.connectAttr(f"{self.main_controllers[0]}.worldMatrix[0]", f"{neck01_world_matrix_aim}.secondaryTargetMatrix")
         cmds.setAttr(f"{neck01_world_matrix_aim}.primaryInputAxis", *self.primary_aim_vector, type="double3")
         cmds.setAttr(f"{neck01_world_matrix_aim }.secondaryInputAxis", *self.secondary_aim_vector, type="double3")
         cmds.setAttr(f"{neck01_world_matrix_aim}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
