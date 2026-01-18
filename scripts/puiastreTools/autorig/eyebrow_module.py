@@ -402,8 +402,12 @@ class EyebrowModule():
                 cmds.connectAttr(f"{self.main_ctl}.sliding", f"{reverse}.inputX", force=True)
                 cmds.connectAttr(f"{reverse}.outputX", f"{parentMatrix}.target[1].weight", force=True)
 
+                pick_matrix = cmds.createNode("pickMatrix", name=f"{name}Sliding_PMK", ss=True)
+                cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{pick_matrix}.inputMatrix", force=True)
+                cmds.setAttr(f"{pick_matrix}.useRotate", 0)
+
                 joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, p=self.skinning_trn)
-                cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
+                cmds.connectAttr(f"{pick_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", force=True)
 
             self.data_exporter.append_data(f"{self.side}_eyebrowModule", 
                             {"skinning_transform": self.skinning_trn,
