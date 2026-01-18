@@ -153,6 +153,7 @@ class JawModule():
         cmds.connectAttr(f"{jaw_guide}.worldMatrix[0]", f"{self.jaw_ctl_grp[0]}.offsetParentMatrix")
 
         local_jaw = self.local_setup(self.jaw_ctl_grp[0], self.jaw_ctl)
+        self.local_jaw = local_jaw
 
         cmds.addAttr(self.jaw_ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.jaw_ctl+".extraSep", channelBox=True, lock=True)
@@ -172,6 +173,7 @@ class JawModule():
         
         cmds.connectAttr(f"{jaw_guide}.worldMatrix[0]", f"{self.upper_jaw_ctl_grp[0]}.offsetParentMatrix")
         local_upper_jaw = self.local_setup(self.upper_jaw_ctl_grp[0], self.upper_jaw_ctl)
+        self.local_upper_jaw = local_upper_jaw
 
         jaws_rotation_sum = cmds.createNode("sum", name=f"{self.side}_jawsRotation_SUM", ss=True)
         cmds.connectAttr(f"{self.jaw_ctl}.rotateX", f"{jaws_rotation_sum}.input[0]")
@@ -654,6 +656,8 @@ class JawModule():
 
             number = 1
 
+            parent_node = []
+
             for i, cv in enumerate(cv_list):
                 mid_index = int(len(cmds.ls(f"{curve}.cv[*]", flatten=True)) // 2)
                 if i < mid_index:
@@ -708,9 +712,14 @@ class JawModule():
                 fourOrigPos = cmds.createNode("fourByFourMatrix", name=f"{name}0{i}Orig_4B4", ss=True)
                 parent_matrix = cmds.createNode("parentMatrix", name=f"{name}0{i}_PMX", ss=True)
                 
-                cmds.connectAttr(f"{curve}Shape.editPoints[{i}].xValueEp", f"{fourOrigPos}.in30", f=True)
-                cmds.connectAttr(f"{curve}Shape.editPoints[{i}].yValueEp", f"{fourOrigPos}.in31", f=True)
-                cmds.connectAttr(f"{curve}Shape.editPoints[{i}].zValueEp", f"{fourOrigPos}.in32", f=True)
+                cv_pos = cmds.pointPosition(f"{curve}.cv[{i}]", w=True)
+                cmds.setAttr(f"{fourOrigPos}.in30", cv_pos[0])
+                cmds.setAttr(f"{fourOrigPos}.in31", cv_pos[1])
+                cmds.setAttr(f"{fourOrigPos}.in32", cv_pos[2])
+
+                # cmds.connectAttr(f"{curve}Shape.editPoints[{i}].xValueEp", f"{fourOrigPos}.in30", f=True)
+                # cmds.connectAttr(f"{curve}Shape.editPoints[{i}].yValueEp", f"{fourOrigPos}.in31", f=True)
+                # cmds.connectAttr(f"{curve}Shape.editPoints[{i}].zValueEp", f"{fourOrigPos}.in32", f=True)
 
                 cmds.connectAttr(f"{fourOrigPos}.output", f"{parent_matrix}.inputMatrix", f=True)
                 cmds.connectAttr(f"{fourByFourMatrix}.output", f"{parent_matrix}.target[0].targetMatrix", f=True)
@@ -761,12 +770,31 @@ class JawModule():
                 cmds.connectAttr(f"{weight_clamp}.outputR", f"{reverse_node}.inputX", force=True)
                 cmds.connectAttr(f"{reverse_node}.outputX", f"{parent_matrix}.target[0].weight", force=True)
 
-                joint = cmds.createNode("joint", n=f"{name}0{i}_JNT", ss=True, parent=self.skinning_trn)
-                cmds.connectAttr(f"{fourByFourMatrix}.output", f"{joint}.offsetParentMatrix", f=True)
+                # cmds.connectAttr(f"{fourByFourMatrix}.output", f"{joint}.offsetParentMatrix", f=True)
 
                 offset_calculation.append([parent_matrix, fourOrigPos, fourByFourMatrix, fourByFourMatrix_closed])
-
+                joint = cmds.createNode("joint", n=f"{name}0{i}_JNT", ss=True, parent=self.skinning_trn)
                 cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", f=True)
+
+                parent_node.append(parent_matrix)
+
+            # for i, node in enumerate(parent_node):
+            #     joint = cmds.createNode("joint", n=node.replace("_PMX", "_JNT"), ss=True, parent=self.skinning_trn)
+            #     aim_matrix = cmds.createNode("aimMatrix", name=f"{node}Aim_AMX", ss=True)
+            #     cmds.connectAttr(f"{node}.outputMatrix", f"{aim_matrix}.inputMatrix", f=True)
+            #     # cmds.setAttr(f"{aim_matrix}.secondaryMode", 1)
+            #     controller = self.local_jaw  if "lower" in node.lower() else self.local_upper_jaw
+            #     cmds.connectAttr(f"{controller}", f"{aim_matrix}.primaryTargetMatrix", f=True)
+            #     cmds.setAttr(f"{aim_matrix}.primaryInputAxis", 1,0,0)
+            #     # cmds.setAttr(f"{aim_matrix}.secondaryInputAxis", 0,0,-1)
+            #     cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{joint}.offsetParentMatrix", f=True)
+
+                # if i != len(parent_node) -1:
+                #     cmds.connectAttr(f"{parent_node[i+1]}.outputMatrix", f"{aim_matrix}.primaryTargetMatrix", f=True)
+                # else:
+                #     cmds.connectAttr(f"{parent_node[i-1]}.outputMatrix", f"{aim_matrix}.primaryTargetMatrix", f=True)
+                #     cmds.setAttr(f"{aim_matrix}.primaryInputAxis", -1,0,0)
+
 
         for offset in offset_calculation:
             parent = offset[0]
