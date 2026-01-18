@@ -111,7 +111,10 @@ def fk_switch(target, sources = [], default_rotate = 1, default_translate = 1, s
     cmds.setAttr(f"{parent_matrix_masterwalk}.target[0].offsetMatrix", offset_masterwalk, type="matrix")
     for z, driver in enumerate(sources):
         off_matrix = get_offset_matrix(target_grp, driver)
-        cmds.connectAttr(f"{driver}.worldMatrix[0]", f"{parent_matrix_parents}.target[{z}].targetMatrix") 
+        if "." in driver:
+            cmds.connectAttr(f"{driver}", f"{parent_matrix_parents}.target[{z}].targetMatrix") 
+        else:
+            cmds.connectAttr(f"{driver}.worldMatrix[0]", f"{parent_matrix_parents}.target[{z}].targetMatrix") 
 
         if pv:
             multmatrix = cmds.createNode("multMatrix", name=target.replace("_CTL", f"{spaces[z]}LiveOffset_MMX"), ss=True)
