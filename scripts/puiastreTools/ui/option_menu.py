@@ -13,6 +13,7 @@ from puiastreTools.utils import basic_structure
 from puiastreTools.utils import core
 from puiastreTools.ui import project_manager
 from puiastreTools.tools import skincluster_manager
+from puiastreTools.tools import copy_skinweights
 
 reload(option_menu)
 reload(guide_creation)
@@ -23,6 +24,15 @@ reload(skincluster_manager)
 
 FILE_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
 
+def copy_skinweights_ui_call(*args):
+    """
+    Function to launch the Copy Skin Weights UI.
+
+    This function imports the copy_skinweights module, reloads it to ensure the latest version is used,
+    and then calls the copy_skinweights_ui function to display the UI.
+    """
+    reload(copy_skinweights)
+    copy_skinweights.transfer_multi_skin_clusters()
 
 def vectorify_ui_call(*args):
     """
@@ -189,6 +199,12 @@ def puiastre_ui():
     cmds.menuItem(label="   Build Rig", boldFont=True, image="rig.png", command=build_rig)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
+    
+    cmds.menuItem(label="   Skinning Tools", subMenu=True, tearOff=True, boldFont=True)
+    cmds.menuItem(label="   Export Skin Cluster", command=export_skincluster)
+    cmds.menuItem(label="   Copy Skin Cluster", command=copy_skinweights_ui_call)
+    cmds.setParent("PuiastreMenu", menu=True)
+    cmds.menuItem(dividerLabel="\n ", divider=True)
 
     cmds.menuItem(label="   Animation", subMenu=True, tearOff=True, boldFont=True)
     cmds.menuItem(label="   USD Exporter", command=usdAnimTool)
@@ -196,8 +212,6 @@ def puiastre_ui():
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
-    cmds.menuItem(label="   Export Skin Cluster", boldFont=True, command=export_skincluster)
-    cmds.setParent("PuiastreMenu", menu=True)
-    cmds.menuItem(dividerLabel="\n ", divider=True)
+
 
     cmds.setParent("..", menu=True)
