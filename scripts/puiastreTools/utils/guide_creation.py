@@ -345,7 +345,7 @@ class GuideCreation(object):
             meta = []
 
             for i in range(len(self.guides) - 1):
-                if "Settings" in self.guides[i+1] or "localHip" in self.guides[i+1] or self.limb_name == "mouth":
+                if "Settings" in self.guides[i+1] or "localHip" in self.guides[i+1] or self.limb_name == "mouth" or self.limb_name == "eye" or self.limb_name == "eyebrow" or self.limb_name == "cheek":
                     continue
                 if "metacarpal" in self.guides[i] or "Metacarpal" in self.guides[i]:
                     try:
@@ -588,9 +588,10 @@ class NeckQuadGuideCreation(GuideCreation):
         self.position_data = {
             "neck": get_data(f"{self.sides}_neck"),
             "head": get_data(f"{self.sides}_head"),
-            "centerHeadDistance": get_data(f"C_centerHeadDistance"),
+            "centerUpHeadDistance": get_data(f"C_centerUpHeadDistance"),
             "leftHeadDistance": get_data(f"C_leftHeadDistance"),
             "rightHeadDistance": get_data(f"C_rightHeadDistance"),
+            "centerDownHeadDistance": get_data(f"C_centerDownHeadDistance"),
         }
 
 class NeckBipedGuideCreation(GuideCreation):
@@ -625,6 +626,10 @@ class TailGuideCreation(GuideCreation):
         self.position_data = {
             "tail01": get_data(f"{self.sides}_tail01"),
             "tail02": get_data(f"{self.sides}_tail02"),
+            "centerUpTailDistance": get_data(f"C_centerUpTailDistance"),
+            "leftTailDistance": get_data(f"C_leftTailDistance"),
+            "rightTailDistance": get_data(f"C_rightTailDistance"),
+            "centerDownTailDistance": get_data(f"C_centerDownTailDistance"),
         }
 
 class MembraneCreation(GuideCreation):
