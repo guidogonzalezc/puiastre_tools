@@ -25,8 +25,12 @@ DEFAULT_LOCATORS = [
         "inputs": ["L_backLegMiddleBendy00_ENV", "L_backLegLowerBendy00_ENV", "L_backLegLowerBendy05_ENV"]
     },
     {
-        "name": "L_armUpper_adnLocatorRotation_Shoulder",
-        "inputs": ["L_clavicle_ENV", "L_armUpperBendy00_ENV", "L_armUpperBendy04_ENV"]
+        "name": "L_shoulderFront_adnLocatorRotation_Shoulder",
+        "inputs": ["L_clavicle_ENV", "L_armUpperBendy00_ENV", "L_shoulderFrontDistance_JNT"]
+    },
+    {
+        "name": "L_shoulderUp_adnLocatorRotation_Shoulder",
+        "inputs": ["L_clavicle_ENV", "L_armUpperBendy00_ENV", "L_shoulderUpDistance_JNT"]
     },
     {
         "name": "L_armMiddle_adnLocatorRotation_Elbow",
@@ -44,6 +48,10 @@ DEFAULT_LOCATORS = [
         "name": "L_tail_leftDistance_adnLocatorDistance",
         "inputs": ["C_leftTailDistance_JNT", "C_tail020_ENV"]
     },
+    # {
+    #     "name": "L_neck_frontDistance_adnLocatorDistance",
+    #     "inputs": ["C_neck00_ENV", "C_leftHeadDistance_JNT"]
+    # },
 
     # RIGHT SIDE
     {
@@ -59,8 +67,12 @@ DEFAULT_LOCATORS = [
         "inputs": ["R_backLegMiddleBendy00_ENV", "R_backLegLowerBendy00_ENV", "R_backLegLowerBendy05_ENV"]
     },
     {
-        "name": "R_armUpper_adnLocatorRotation_Shoulder",
-        "inputs": ["R_clavicle_ENV", "R_armUpperBendy00_ENV", "R_armUpperBendy04_ENV"]
+        "name": "R_shoulderUp_adnLocatorRotation_Shoulder",
+        "inputs": ["R_clavicle_ENV", "R_armUpperBendy00_ENV", "R_shoulderUpDistance_JNT"]
+    },
+    {
+        "name": "R_armMiddle_adnLocatorRotation_Elbow",
+        "inputs": ["R_armUpperBendy00_ENV", "R_armLowerBendy00_ENV", "R_armLowerBendy05_ENV"]
     },
     {
         "name": "R_armMiddle_adnLocatorRotation_Elbow",
@@ -78,6 +90,14 @@ DEFAULT_LOCATORS = [
         "name": "R_tail_rightDistance_adnLocatorDistance",
         "inputs": ["C_rightTailDistance_JNT", "C_tail020_ENV"]
     },
+    {
+        "name": "R_shoulderFront_adnLocatorRotation_Shoulder",
+        "inputs": ["R_clavicle_ENV", "R_armUpperBendy00_ENV", "R_shoulderFrontDistance_JNT"]
+    },
+    # {
+    #     "name": "R_neck_frontDistance_adnLocatorDistance",
+    #     "inputs": ["C_neck00_ENV", "C_rightHeadDistance_JNT"]
+    # },
 
     # CENTER
     {
@@ -86,15 +106,15 @@ DEFAULT_LOCATORS = [
     },
     {
         "name": "C_neck_upperDistance_adnLocatorDistance",
-        "inputs": ["C_centerUpHeadDistance_JNT", "C_neck00_ENV"]
+        "inputs": ["C_neck00_ENV", "C_centerUpHeadDistance_JNT"]
     },
     {
-        "name": "C_neck_frontDistance_adnLocatorDistance",
-        "inputs": ["C_neck00_ENV", "C_leftHeadDistance_JNT"]
+        "name": "C_neck_downDistance_adnLocatorDistance",
+        "inputs": ["C_neck00_ENV", "C_centerDownHeadDistance_JNT"]
     },
     {
         "name": "C_tail_downDistance_adnLocatorDistance",
-        "inputs": ["C_centerUpTailDistance_JNT", "C_tail020_ENV"]
+        "inputs": ["C_centerDownTailDistance_JNT", "C_tail020_ENV"]
     },
     {
         "name": "C_tail_upDistance_adnLocatorDistance",
