@@ -185,8 +185,19 @@ def make():
         
     if objects:
         model_grp = data_exporter.get_data("basic_structure", "model_GRP")
-        if model_grp and cmds.objExists(model_grp):
-            cmds.parent(objects, model_grp)
+        skelmodel_grp = data_exporter.get_data("basic_structure", "skelModel_GRP")
+        if adonis:
+            for item in objects:
+                if skelmodel_grp and cmds.objExists(skelmodel_grp) and "adonis" in item.lower():                
+                    cmds.parent(item, skelmodel_grp)
+                else:
+                    cmds.parent(item, model_grp)
+       
+        elif model_grp and cmds.objExists(model_grp):                
+            cmds.parent(item, model_grp)
+        
+            
+
 
     guide_amount = 0
     for template_name, guides in guides_data.items():
