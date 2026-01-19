@@ -384,7 +384,7 @@ class NeckModule():
         
         if core.DataManager.get_adonis_data():
 
-            for name in ["center", "left", "right"]:
+            for name in ["centerUp", "centerDown", "left", "right"]:
                 self.distance = guide_import(f"{self.side}_{name}HeadDistance_GUIDE", all_descendents=False)[0]
 
                 pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}HeadFrontDistance_MMX", ss=True)
