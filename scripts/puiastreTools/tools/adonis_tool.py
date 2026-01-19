@@ -228,6 +228,12 @@ class LocatorsTab(QtWidgets.QWidget):
         
         try:
             sensor.build()
+            parent_grp = "muscleSystems_GRP"
+            if cmds.objExists(parent_grp):
+                try:
+                    cmds.parent(name, parent_grp)
+                except Exception as e:
+                    om.MGlobal.displayWarning(f"Could not parent {name} to {parent_grp}: {e}")
             om.MGlobal.displayInfo(f"[SUCCESS] Built {name} -> {sensor_name}")
         except Exception as e:
             om.MGlobal.displayError(f"[FAIL] {name}: {e}")
@@ -258,6 +264,12 @@ class LocatorsTab(QtWidgets.QWidget):
         
         try:
             sensor.build()
+            parent_grp = "muscleSystems_GRP"
+            if cmds.objExists(parent_grp):
+                try:
+                    cmds.parent(name, parent_grp)
+                except Exception as e:
+                    om.MGlobal.displayWarning(f"Could not parent {name} to {parent_grp}: {e}")
             om.MGlobal.displayInfo(f"[SUCCESS] Built {name} -> {sensor_name}")
         except Exception as e:
             om.MGlobal.displayError(f"[FAIL] {name}: {e}")
@@ -436,11 +448,13 @@ class AdonisBuilderUI(QtWidgets.QDialog):
         self.main_layout.addWidget(self.tabs)
 
 def show_adonis_ui():
+    global adonis_tool_window
     try:
-        ui.close()
-        ui.deleteLater()
+        adonis_tool_window.close()
+        adonis_tool_window.deleteLater()
     except:
         pass
         
-    ui = AdonisBuilderUI()
-    ui.show()
+    adonis_tool_window = AdonisBuilderUI()
+    adonis_tool_window.show()
+    return adonis_tool_window
