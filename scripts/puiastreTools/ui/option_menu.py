@@ -157,6 +157,17 @@ def export_skincluster(*args):
     path = core.DataManager.get_skinning_data()
     skincluster_manager.SkinIO().export_skins(file_path = path)
 
+def adonis_ui_call(*args):
+    """
+    Function to launch the Adonis Tool UI.
+
+    Args:
+        *args: Variable length argument list, not used in this function.
+    """
+    from puiastreTools.tools import adonis_tool
+    reload(adonis_tool)
+    adonis_tool.show_adonis_ui()
+
 
 def puiastre_ui():
     """
@@ -209,6 +220,10 @@ def puiastre_ui():
     cmds.menuItem(label="   Animation", subMenu=True, tearOff=True, boldFont=True)
     cmds.menuItem(label="   USD Exporter", command=usdAnimTool)
     cmds.menuItem(label="   Vectorify", command=vectorify_ui_call)
+    cmds.setParent("PuiastreMenu", menu=True)
+    cmds.menuItem(dividerLabel="\n ", divider=True)
+
+    cmds.menuItem(label="   Adonis Tool", boldFont=True, image="rig.png", command=adonis_ui_call)
     cmds.setParent("PuiastreMenu", menu=True)
     cmds.menuItem(dividerLabel="\n ", divider=True)
 
