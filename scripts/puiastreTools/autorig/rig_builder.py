@@ -186,9 +186,12 @@ def make():
     if objects:
         model_grp = data_exporter.get_data("basic_structure", "model_GRP")
         skelmodel_grp = data_exporter.get_data("basic_structure", "skelModel_GRP")
+        musclemodel_grp = data_exporter.get_data("basic_structure", "muscleModel_GRP")
         if adonis:
             for item in objects:
-                if skelmodel_grp and cmds.objExists(skelmodel_grp) and "adonis" in item.lower():                
+                if "muscle" in item.lower() and "adonis" in item.lower() and musclemodel_grp and cmds.objExists(musclemodel_grp):                
+                    cmds.parent(item, musclemodel_grp)
+                elif "skel" in item.lower() and "adonis" in item.lower() and skelmodel_grp and cmds.objExists(skelmodel_grp):                
                     cmds.parent(item, skelmodel_grp)
                 else:
                     cmds.parent(item, model_grp)
