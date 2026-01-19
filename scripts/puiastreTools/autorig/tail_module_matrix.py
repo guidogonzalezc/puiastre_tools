@@ -58,6 +58,8 @@ class TailModule():
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_tailModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_tailControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_tailSkinning_GRP", ss=True, p=self.skel_grp)
+        self.muscle_locators = self.data_exporter.get_data("basic_structure", "muscleLocators_GRP")
+
 
         self.create_chain()
         self.create_controllers()
@@ -125,22 +127,25 @@ class TailModule():
                 cmds.parent(ctl_grp[0], self.controllers_trn)
                 cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{ctl_grp[0]}.offsetParentMatrix") # Connect the first controller to the guide
 
-            # blend_matrix_bendy = cmds.createNode("blendMatrix", name=self.guides[0].replace("_GUIDE", "_BMX_Bendy"), ss=True)
-            # cmds.setAttr(f"{blend_matrix_bendy}.target[0].scaleWeight", 0)
-            # cmds.setAttr(f"{blend_matrix_bendy}.target[0].rotateWeight", 0)
-            # cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{blend_matrix_bendy}.inputMatrix")
-            # cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{blend_matrix_bendy}.target[0].targetMatrix")
-            # translate_weight_bendy = (i + 0.5) / (7 - 1)  # Bendy controllers are placed halfway between the main controllers
-            # cmds.setAttr(f"{blend_matrix_bendy}.target[0].translateWeight", translate_weight_bendy) # Set weight based on controller index to place it along the guides
-            # cmds.connectAttr(f"{blend_matrix_bendy}.outputMatrix", f"{bendy_grp[0]}.offsetParentMatrix") # Connect the bendy controller to the blended matrix
-            # cmds.parent(bendy_grp[0], self.controllers_trn)
+    
 
             self.ctls.append(ctl)
             self.nodes.append(ctl_grp)
-            # self.bendy_ctls.append(bendy_ctl)
-            # self.bendy_nodes.append(bendy_grp)
 
         self.num_joints = len(self.ctls) * 3
         self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=self.ctls, num_joints=self.num_joints, name=f"{self.side}_tail", parent=self.skinning_trn, negate_secundary=True)
 
+        if core.DataManager.get_adonis_data():
+
+            for name in ["centerUp", "centerDown", "left", "right"]:
+                self.distance = guide_import(f"{self.side}_{name}TailDistance_GUIDE", all_descendents=False)[0]
+
+                pos_multMatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}TailFrontDistance_MMX", ss=True)
+                cmds.connectAttr(f"{self.distance}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[0]")
+
+               
+                cmds.connectAttr(f"{self.guides[0]}.worldInverseMatrix[0]", f"{pos_multMatrix}.matrixIn[1]")
+                cmds.connectAttr(f"{self.old_joints[0]}.worldMatrix[0]", f"{pos_multMatrix}.matrixIn[2]")
+                distance_joints = cmds.createNode("joint", name=f"{self.side}_{name}TailDistance_JNT", ss=True, parent = self.muscle_locators)
+                cmds.connectAttr(f"{pos_multMatrix}.matrixSum", f"{distance_joints}.offsetParentMatrix")
 
