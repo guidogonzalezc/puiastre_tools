@@ -396,7 +396,8 @@ class MusclesTab(QtWidgets.QWidget):
             "shapeStiffnessOverride": -1.0,
             "hardAttachments": False,
             "slidingConstraintsMode": 1, 
-            "maxSlidingDistance": 1.0
+            "maxSlidingDistance": 1.0,
+            "globalMassMultiplier": 0.001
         }
 
         rig = adnx.AdnRig(host=adnx.AdnHost.kMaya)
