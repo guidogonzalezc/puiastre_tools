@@ -4,13 +4,14 @@ import maya.api.OpenMaya as om
 from PySide6 import QtWidgets, QtCore, QtGui
 from shiboken6 import wrapInstance
 
+# Import the provided adnx library
 try:
     import adn.api.adnx as adnx
 except ImportError:
     om.MGlobal.displayWarning("Could not import 'adnx'. Please ensure the library is in your scripts path.")
 
-
 DEFAULT_LOCATORS = [
+    # LEFT SIDE
     {
         "name": "L_LegUpper_adnLocatorRotation_Thigh",
         "inputs": ["L_clavicle_ENV", "L_backLegUpperBendy00_ENV", "L_backLegMiddleBendy00_ENV"]
@@ -39,6 +40,38 @@ DEFAULT_LOCATORS = [
         "name": "L_clavicle_backDistance_adnLocatorDistance",
         "inputs": ["L_clavicle_ENV", "C_spine00_ENV"]
     },
+
+    # RIGHT SIDE
+    {
+        "name": "R_LegUpper_adnLocatorRotation_Thigh",
+        "inputs": ["R_clavicle_ENV", "R_backLegUpperBendy00_ENV", "R_backLegMiddleBendy00_ENV"]
+    },
+    {
+        "name": "R_LegMiddle_adnLocatorRotation_Knee",
+        "inputs": ["R_backLegUpperBendy00_ENV", "R_backLegMiddleBendy00_ENV", "R_backLegLowerBendy00_ENV"]
+    },
+    {
+        "name": "R_LegLower_adnLocatorRotation_Ankle",
+        "inputs": ["R_backLegMiddleBendy00_ENV", "R_backLegLowerBendy00_ENV", "R_backLegLowerBendy05_ENV"]
+    },
+    {
+        "name": "R_armUpper_adnLocatorRotation_Shoulder",
+        "inputs": ["R_clavicle_ENV", "R_armUpperBendy00_ENV", "R_armUpperBendy04_ENV"]
+    },
+    {
+        "name": "R_armMiddle_adnLocatorRotation_Elbow",
+        "inputs": ["R_armUpperBendy00_ENV", "R_armLowerBendy00_ENV", "R_armLowerBendy05_ENV"]
+    },
+    {
+        "name": "R_clavicle_frontDistance_adnLocatorDistance",
+        "inputs": ["C_rightHeadDistance_JNT", "R_clavicle_ENV"]
+    },
+    {
+        "name": "R_clavicle_backDistance_adnLocatorDistance",
+        "inputs": ["R_clavicle_ENV", "C_spine00_ENV"]
+    },
+
+    # CENTER
     {
         "name": "C_neck_backDistance_adnLocatorDistance",
         "inputs": ["C_neck00_ENV", "C_localChest_ENV"]
@@ -54,11 +87,10 @@ DEFAULT_LOCATORS = [
 ]
 
 def get_maya_window():
-    """
-    Get the main Maya window as a QWidget to properly parent the UI.
-    """
+    """ Get the main Maya window as a QWidget. """
     ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(int(ptr), QtWidgets.QWidget)
+
 
 class LocatorsTab(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -69,52 +101,79 @@ class LocatorsTab(QtWidgets.QWidget):
         self.create_connections()
 
     def create_widgets(self):
-        self.lbl_info = QtWidgets.QLabel("Modify joint mappings below. Separate joints with commas.")
+        self.lbl_info = QtWidgets.QLabel("Modify mappings. Name MUST contain 'adnLocatorRotation' or 'adnLocatorDistance'.")
         self.lbl_info.setWordWrap(True)
         
         self.table = QtWidgets.QTableWidget()
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["Locator Name", "Joint Inputs (Start, [Mid], End)"])
+        self.table.setHorizontalHeaderLabels(["Locator Name", "Joint Inputs (Comma Separated)"])
         self.table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.table.setAlternatingRowColors(True)
 
-        self.btn_create = QtWidgets.QPushButton("Create All Locators")
-        self.btn_create.setStyleSheet("background-color: #5D5; color: black; font-weight: bold; padding: 10px;")
+        self.btn_add_row = QtWidgets.QPushButton("+ Add New Row")
+        
+        self.btn_create = QtWidgets.QPushButton("Create All Locators && Sensors")
+        self.btn_create.setStyleSheet("background-color: #44A; color: white; font-weight: bold; padding: 8px;")
 
     def create_layout(self):
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.lbl_info)
         layout.addWidget(self.table)
+        
+        layout.addWidget(self.btn_add_row)
+        layout.addSpacing(5)
+        
         layout.addWidget(self.btn_create)
 
     def create_connections(self):
         self.btn_create.clicked.connect(self.build_locators)
+        self.btn_add_row.clicked.connect(self.add_new_row)
 
     def populate_table(self):
         self.table.setRowCount(len(DEFAULT_LOCATORS))
-        
         for i, item in enumerate(DEFAULT_LOCATORS):
             name_item = QtWidgets.QTableWidgetItem(item["name"])
-            name_item.setFlags(name_item.flags() ^ QtCore.Qt.ItemIsEditable)
+            name_item.setFlags(name_item.flags() ^ QtCore.Qt.ItemIsEditable) 
             self.table.setItem(i, 0, name_item)
             
             inputs_str = ", ".join(item["inputs"])
             input_item = QtWidgets.QTableWidgetItem(inputs_str)
             self.table.setItem(i, 1, input_item)
 
+    def add_new_row(self):
+        """ Adds an editable row to the table """
+        row_idx = self.table.rowCount()
+        self.table.insertRow(row_idx)
+        
+
+        name_item = QtWidgets.QTableWidgetItem("Custom_Name_adnLocatorRotation_Side")
+        self.table.setItem(row_idx, 0, name_item)
+        
+        input_item = QtWidgets.QTableWidgetItem("")
+        self.table.setItem(row_idx, 1, input_item)
+        
+        self.table.scrollToBottom()
+
     def build_locators(self):
         rig = adnx.AdnRig(host=adnx.AdnHost.kMaya)
-        
         row_count = self.table.rowCount()
         built_count = 0
 
         for i in range(row_count):
-            name = self.table.item(i, 0).text()
-            inputs_text = self.table.item(i, 1).text()
+            name_item = self.table.item(i, 0)
+            input_item = self.table.item(i, 1)
             
+            if not name_item or not input_item:
+                continue
+
+            name = name_item.text().strip()
+            inputs_text = input_item.text().strip()
             inputs = [x.strip() for x in inputs_text.split(",") if x.strip()]
             
+            if not name:
+                continue
+
             if "adnLocatorRotation" in name:
                 self.build_rotation_locator(rig, name, inputs)
                 built_count += 1
@@ -122,20 +181,19 @@ class LocatorsTab(QtWidgets.QWidget):
                 self.build_distance_locator(rig, name, inputs)
                 built_count += 1
             else:
-                om.MGlobal.displayWarning(f"Unknown locator type for '{name}'. Must contain 'adnLocatorRotation' or 'adnLocatorDistance'.")
+                om.MGlobal.displayWarning(f"Skipping '{name}': Unknown Type. Name must include 'adnLocatorRotation' or 'adnLocatorDistance'.")
 
-        om.MGlobal.displayInfo(f"--- AdonisFX: Built {built_count} Locators ---")
+        om.MGlobal.displayInfo(f"--- AdonisFX: Processed {built_count} Locators ---")
 
     def build_rotation_locator(self, rig, name, inputs):
         if len(inputs) != 3:
-            om.MGlobal.displayWarning(f"Skipping {name}: Rotation locators require exactly 3 inputs (Start, Mid, End). Found {len(inputs)}.")
+            om.MGlobal.displayWarning(f"Skipping {name}: Needs 3 inputs. Found {len(inputs)}.")
             return
 
         start, mid, end = inputs
-        
         for jnt in inputs:
             if not cmds.objExists(jnt):
-                om.MGlobal.displayWarning(f"Skipping {name}: Joint '{jnt}' does not exist in scene.")
+                om.MGlobal.displayWarning(f"Skipping {name}: Joint '{jnt}' missing.")
                 return
 
         sensor = adnx.AdnSensorRotation(rig)
@@ -154,27 +212,26 @@ class LocatorsTab(QtWidgets.QWidget):
         
         try:
             sensor.build()
-            om.MGlobal.displayInfo(f"Built Rotation Locator: {name} | Sensor: {sensor_name}")
+            om.MGlobal.displayInfo(f"[SUCCESS] Built {name} -> {sensor_name}")
         except Exception as e:
-            om.MGlobal.displayError(f"Failed to build {name}: {e}")
+            om.MGlobal.displayError(f"[FAIL] {name}: {e}")
 
     def build_distance_locator(self, rig, name, inputs):
         if len(inputs) != 2:
-            om.MGlobal.displayWarning(f"Skipping {name}: Distance locators require exactly 2 inputs (Start, End). Found {len(inputs)}.")
+            om.MGlobal.displayWarning(f"Skipping {name}: Needs 2 inputs. Found {len(inputs)}.")
             return
 
         start, end = inputs
-
         for jnt in inputs:
             if not cmds.objExists(jnt):
-                om.MGlobal.displayWarning(f"Skipping {name}: Joint '{jnt}' does not exist in scene.")
+                om.MGlobal.displayWarning(f"Skipping {name}: Joint '{jnt}' missing.")
                 return
 
         sensor = adnx.AdnSensorDistance(rig)
         
         shape_name = name + "Shape"
         sensor.setName(shape_name)
-
+        
         sensor_name = name.replace("adnLocatorDistance", "adnSensorDistance")
         sensor.setParameter("sensorName", sensor_name)
 
@@ -185,9 +242,9 @@ class LocatorsTab(QtWidgets.QWidget):
         
         try:
             sensor.build()
-            om.MGlobal.displayInfo(f"Built Distance Locator: {name} | Sensor: {sensor_name}")
+            om.MGlobal.displayInfo(f"[SUCCESS] Built {name} -> {sensor_name}")
         except Exception as e:
-            om.MGlobal.displayError(f"Failed to build {name}: {e}")
+            om.MGlobal.displayError(f"[FAIL] {name}: {e}")
 
 
 class MusclesTab(QtWidgets.QWidget):
@@ -252,9 +309,47 @@ class MusclesTab(QtWidgets.QWidget):
         self.muscles = []
 
     def build_setup(self):
+        """
+        Builds the muscles using complete settings extracted from AdnMuscle1.mel
+        AND connects the global Time node.
+        """
         if not self.muscles:
             om.MGlobal.displayWarning("No muscles selected.")
             return
+
+
+        DEFAULT_SETTINGS = {
+            "frozen": 0,
+            "blockGPU": 0,
+            "envelope": 1.0,
+            "enable": True,
+            "iterations": 10,
+            "triangulateMesh": True,
+            "material": 1,
+            "stiffnessMultiplier": 1.0,
+            "pointMassMode": 0,
+            "density": 1060.0,
+            "activation": 0.0,
+            "restActivation": 0.0,
+            "anisotropy": 0,
+            "anisotropyRatio": 9.0,
+            "timeScale": 1.0,
+            "spaceScale": 1.0,
+            "spaceScaleMode": 2,          
+            "gravity": 9.8,
+            "gravityDirectionX": 0.0,
+            "gravityDirectionY": -1.0,
+            "gravityDirectionZ": 0.0,
+            "useCustomStiffness": True,
+            "stiffness": 15000.0,
+            "attachmentToGeometryStiffnessOverride": -1.0,
+            "attachmentToTransformStiffnessOverride": -1.0,
+            "fiberStiffnessOverride": -1.0,
+            "shapeStiffnessOverride": -1.0,
+            "hardAttachments": False,
+            "slidingConstraintsMode": 1, 
+            "maxSlidingDistance": 1.0
+        }
 
         rig = adnx.AdnRig(host=adnx.AdnHost.kMaya)
 
@@ -266,18 +361,12 @@ class MusclesTab(QtWidgets.QWidget):
             muscle_name = f"{muscle_geo}_adnMuscle"
             muscle.setName(muscle_name)
             muscle.setParameter("geometry", muscle_geo)
-            muscle.setParameter("enable", True)
-
-            muscle.setParameter("iterations", 3)
-            muscle.setParameter("spaceScaleMode", 0) 
             
-            muscle.setParameter("gravity", 9.8) 
-            muscle.setParameter("pointMassMode", 0) 
-            muscle.setParameter("globalMassMultiplier", 0.1)
-            muscle.setParameter("triangulateMesh", True)
-            muscle.setParameter("hardAttachments", False)
-            muscle.setParameter("slidingConstraintsMode", 1) 
-            muscle.setParameter("maxSlidingDistance", 1.0)
+            for param, value in DEFAULT_SETTINGS.items():
+                try:
+                    muscle.setParameter(param, value)
+                except Exception:
+                    pass
 
             if self.targets:
                 for target in self.targets:
@@ -295,12 +384,18 @@ class MusclesTab(QtWidgets.QWidget):
 
             try:
                 muscle.build()
-                om.MGlobal.displayInfo(f"Built muscle: {muscle_name}")
+                
+                if not cmds.isConnected("time1.outTime", muscle_name + ".currentTime"):
+                    cmds.connectAttr("time1.outTime", muscle_name + ".currentTime", force=True)
+                    om.MGlobal.displayInfo(f"Connected time1 to {muscle_name}")
+
+                om.MGlobal.displayInfo(f"[SUCCESS] Built Muscle: {muscle_name}")
+
             except Exception as e:
-                om.MGlobal.displayError(f"Failed to build muscle {muscle_name}: {e}")
+                om.MGlobal.displayError(f"[FAIL] Failed to build {muscle_name}: {e}")
         
         cmds.select(clear=True)
-        om.MGlobal.displayInfo("AdonisFX Muscle Setup Complete.")
+        om.MGlobal.displayInfo("--- AdonisFX Muscle Setup Complete ---")
 
 
 class AdonisBuilderUI(QtWidgets.QDialog):
@@ -319,7 +414,7 @@ class AdonisBuilderUI(QtWidgets.QDialog):
         self.tab_locators = LocatorsTab()
         self.tab_muscles = MusclesTab()
         
-        self.tabs.addTab(self.tab_locators, "Locators Creation")
+        self.tabs.addTab(self.tab_locators, "Locators & Sensors")
         self.tabs.addTab(self.tab_muscles, "Muscle Configuration")
         
         self.main_layout.addWidget(self.tabs)
