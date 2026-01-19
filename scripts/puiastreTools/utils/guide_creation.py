@@ -469,6 +469,7 @@ class ArmGuideCreation(GuideCreation):
             "wrist": get_data(f"{self.sides}_wrist"),
             "armSettings": get_data(f"{self.sides}_armSettings"),
             "shoulderFrontDistance": get_data(f"{self.sides}_shoulderFrontDistance"),
+            "shoulderUpDistance": get_data(f"{self.sides}_shoulderUpDistance"),
         }
 
 class LegGuideCreation(GuideCreation):
