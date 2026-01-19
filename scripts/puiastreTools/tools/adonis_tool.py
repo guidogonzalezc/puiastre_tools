@@ -40,6 +40,10 @@ DEFAULT_LOCATORS = [
         "name": "L_clavicle_backDistance_adnLocatorDistance",
         "inputs": ["L_clavicle_ENV", "C_spine00_ENV"]
     },
+    {
+        "name": "L_tail_leftDistance_adnLocatorDistance",
+        "inputs": ["C_leftTailDistance_JNT", "C_tail020_ENV"]
+    },
 
     # RIGHT SIDE
     {
@@ -70,6 +74,10 @@ DEFAULT_LOCATORS = [
         "name": "R_clavicle_backDistance_adnLocatorDistance",
         "inputs": ["R_clavicle_ENV", "C_spine00_ENV"]
     },
+    {
+        "name": "R_tail_rightDistance_adnLocatorDistance",
+        "inputs": ["C_rightTailDistance_JNT", "C_tail020_ENV"]
+    },
 
     # CENTER
     {
@@ -83,6 +91,14 @@ DEFAULT_LOCATORS = [
     {
         "name": "C_neck_frontDistance_adnLocatorDistance",
         "inputs": ["C_neck00_ENV", "C_leftHeadDistance_JNT"]
+    },
+    {
+        "name": "C_tail_downDistance_adnLocatorDistance",
+        "inputs": ["C_centerUpTailDistance_JNT", "C_tail020_ENV"]
+    },
+    {
+        "name": "C_tail_upDistance_adnLocatorDistance",
+        "inputs": ["C_centerUpTailDistance_JNT", "C_tail020_ENV"]
     }
 ]
 
@@ -419,7 +435,7 @@ class AdonisBuilderUI(QtWidgets.QDialog):
         
         self.main_layout.addWidget(self.tabs)
 
-if __name__ == "__main__":
+def show_adonis_ui():
     try:
         ui.close()
         ui.deleteLater()
