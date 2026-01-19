@@ -7,6 +7,7 @@
         "skeletonHierarchy_GRP": "skeletonHierarchy_GRP",
         "model_GRP": "SKINNED_MODEL",
         "skelModel_GRP": "SKELETON",
+        "muscleModel_GRP": "MUSCLES",
         "muscleLocators_GRP": "muscleLocators_GRP",
         "adonis_GRP": "adonis_GRP"
     },
