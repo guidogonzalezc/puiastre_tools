@@ -32,7 +32,7 @@ def get_structure_config(adonis_setup=0):
         hierarchy["muscleSystems_GRP"] = []
         hierarchy["adonis_GRP"] = []
         
-        hierarchy["model_GRP"] = ["SKELETON", "PROXY", "SKINNED_MODEL","MODEL"]
+        hierarchy["model_GRP"] = ["SKELETON", "MUSCLES", "PROXY", "SKINNED_MODEL","MODEL"]
     
     return hierarchy
 
@@ -94,6 +94,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         "skeletonHierarchy_GRP": nodes.get("skeletonHierarchy_GRP"),
         "model_GRP": nodes.get("SKINNED_MODEL") if nodes.get("SKINNED_MODEL") else nodes.get("model_GRP"),
         "skelModel_GRP": nodes.get("SKELETON") if adonis_setup and nodes.get("SKELETON") else None,
+        "muscleModel_GRP": nodes.get("MUSCLES") if adonis_setup and nodes.get("MUSCLES") else None,
     }
     
     if adonis_setup:
@@ -139,7 +140,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
             if nodes.get(grp):
                 cmds.connectAttr(f"{pref_ctl}.{attr}", f"{nodes[grp]}.visibility")
 
-        
+    
     if adonis_setup:
         if "SKELETON" in nodes and nodes["SKELETON"]:
             cmds.select(nodes["SKELETON"]) 
@@ -147,6 +148,14 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
             cmds.setAttr(display_layer + ".color", 13)
             cmds.setAttr(display_layer + ".visibility", 0)
             cmds.setAttr(display_layer + ".displayType", 2)
+
+        if "MUSCLES" in nodes and nodes["MUSCLES"]:
+            cmds.select(nodes["MUSCLES"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MUSCLES", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 16)
+            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
         if "PROXY" in nodes and nodes["PROXY"]:
             cmds.select(nodes["PROXY"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_PROXY", empty=False, num=1)
@@ -164,7 +173,14 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         if "MODEL" in nodes and nodes["MODEL"]:
             cmds.select(nodes["MODEL"]) 
             display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MODEL", empty=False, num=1)
-            cmds.setAttr(display_layer + ".color", 17)
+            cmds.setAttr(display_layer + ".color", 18)
+            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
+        if "muscleLocators_GRP" in nodes and nodes["muscleLocators_GRP"]:
+            cmds.select(nodes["muscleLocators_GRP"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_LOCATORS", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 12)
             cmds.setAttr(display_layer + ".visibility", 0)
             cmds.setAttr(display_layer + ".displayType", 2)
 
