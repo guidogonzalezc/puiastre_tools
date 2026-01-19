@@ -93,6 +93,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         "guides_GRP": nodes.get("guides_GRP"),
         "skeletonHierarchy_GRP": nodes.get("skeletonHierarchy_GRP"),
         "model_GRP": nodes.get("SKINNED_MODEL") if nodes.get("SKINNED_MODEL") else nodes.get("model_GRP"),
+        "skelModel_GRP": nodes.get("SKELETON") if adonis_setup and nodes.get("SKELETON") else None,
     }
     
     if adonis_setup:
