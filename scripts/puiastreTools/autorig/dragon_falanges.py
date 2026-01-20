@@ -77,11 +77,17 @@ class FalangeModule(object):
 
         if self.side == "L":
             self.primary_aim = "x"
-            self.secondary_aim = "y"
+            if core.DataManager.get_asset_name() == "azhurean":
+                self.secondary_aim = "-y"
+            else:
+                self.secondary_aim = "y"
 
         elif self.side == "R":
             self.primary_aim = "-x"
-            self.secondary_aim = "-y"
+            if core.DataManager.get_asset_name() == "azhurean":
+                self.secondary_aim = "y"
+            else:
+                self.secondary_aim = "-y"
 
         final_path = core.DataManager.get_guide_data()
 
