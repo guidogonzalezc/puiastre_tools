@@ -1,17 +1,8 @@
 {
-<<<<<<< HEAD
-    "project_path": "C:\\HERE BE DRAGONS\\00_Pipeline\\modules\\puiastre_tools\\assets\\aychedral",
-    "ctls_data": "C:\\HERE BE DRAGONS\\00_Pipeline\\modules\\puiastre_tools\\assets\\aychedral\\curves\\CHAR_aychedral_002.json",
-    "guide_data": "C:\\HERE BE DRAGONS\\00_Pipeline\\modules\\puiastre_tools\\assets\\aychedral\\guides\\CHAR_aychedral_002.guides",
-    "asset_name": "aychedral",
-    "skinning_data": "C:\\HERE BE DRAGONS\\00_Pipeline\\modules\\puiastre_tools\\assets\\aychedral\\skinning\\CHAR_aychedral_001.skn",
-    "model_path": "C:\\HERE BE DRAGONS\\00_Pipeline\\modules\\puiastre_tools\\assets\\aychedral\\models\\CHAR_aychedral_0001.ma"
-=======
-    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor",
-    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_003.json",
-    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\guides\\CHAR_varyndor_003.guides",
+    "project_path": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor",
+    "ctls_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_003.json",
+    "guide_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\guides\\CHAR_varyndor_003.guides",
     "asset_name": "varyndor",
-    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\skinning\\CHAR_varyndor_001.skn",
-    "model_path": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\models\\CHAR_varyndor_0001.ma"
->>>>>>> 107202e242b613b9a67e44436ac73eb3ce27c81e
+    "skinning_data": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\skinning\\CHAR_varyndor_001.skn",
+    "model_path": "P:\\VFX_Project_20\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\varyndor\\models\\CHAR_varyndor_0001.ma"
 }
