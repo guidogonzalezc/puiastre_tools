@@ -1,8 +1,8 @@
 {
-    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor",
-    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\curves\\CHAR_varyndor_003.json",
-    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\guides\\CHAR_varyndor_003.guides",
-    "asset_name": "varyndor",
-    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\skinning\\CHAR_varyndor_001.skn",
-    "model_path": "D:\\git\\maya\\puiastre_tools\\assets\\varyndor\\models\\CHAR_varyndor_0001.ma"
+    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\baby",
+    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\baby\\curves\\CHAR_baby_001.json",
+    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\baby\\guides\\CHAR_baby_001.guides",
+    "asset_name": "baby",
+    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\baby\\skinning\\CHAR_baby_001.skn",
+    "model_path": "D:\\git\\maya\\puiastre_tools\\assets\\baby\\models\\CHAR_baby_0001.ma"
 }

@@ -257,29 +257,29 @@ class FingersModule(object):
                         
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    elif j == 2:
-                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    # elif j == 2:
+                    #     self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 1:
                     if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 0, 0, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    elif j == 2:
-                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    # elif j == 2:
+                        # self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 2: 
                     if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 25, -15, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    elif j == 2:
-                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    # elif j == 2:
+                    #     self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
                 if i == 3:
                     if j == 0:
                         self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, 30, -15, 20, -20, -50, 50], thumb_values=[0,0,0,0,0,0, 0,0])
                     elif j == 1:
                         self.fingers_attributes_callback(grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                    elif j == 2:
-                        self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                    # elif j == 2:
+                    #     self.fingers_attributes_callback(grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
 
                 if controllers:
                     offset_matrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}_MLT", ss=True)
@@ -610,29 +610,29 @@ class FingersModule(object):
                     
                 elif i == 1:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                elif i == 2:
-                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                # elif i == 2:
+                #     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
             if "index" in name.lower():
                 if i == 0:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 0, 0, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])   
                 elif i == 1:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                elif i == 2:
-                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                # elif i == 2:
+                #     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
             if "middle" in name.lower(): 
                 if i == 0:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 25, -15, 20, -20, -2, 2], thumb_values=[0,0,0,0,0,0, 0,0])
                 elif i == 1:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                elif i == 2:
-                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                # elif i == 2:
+                #     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
             if "ring" in name.lower():
                 if i == 0:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-90, 20, 30, -15, 20, -20, -50, 50], thumb_values=[0,0,0,0,0,0, 0,0])
                 elif i == 1:
                     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 18, 0, 0, 10, -10, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
-                elif i == 2:
-                    self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
+                # elif i == 2:
+                #     self.fingers_attributes_callback(controller_grp[1], finger_values=[-80, 15, 0, 0, 5, -5, 0, 0], thumb_values=[0,0,0,0,0,0, 0,0])
 
             if i == 0:  
                 cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)

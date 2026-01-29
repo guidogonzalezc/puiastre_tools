@@ -345,7 +345,7 @@ class GuideCreation(object):
             meta = []
 
             for i in range(len(self.guides) - 1):
-                if "Settings" in self.guides[i+1] or "localHip" in self.guides[i+1] or self.limb_name == "mouth" or self.limb_name == "eye" or self.limb_name == "eyebrow" or self.limb_name == "cheek":
+                if "Settings" in self.guides[i+1] or "localHip" in self.guides[i+1] or self.limb_name == "mouth" or self.limb_name == "eye" or self.limb_name == "eyebrow" or self.limb_name == "cheek" or self.limb_name == "cheekBone":
                     continue
                 if "metacarpal" in self.guides[i] or "Metacarpal" in self.guides[i]:
                     try:
@@ -892,6 +892,25 @@ class CheekGuideCreation(GuideCreation):
         self.position_data = {
         f"cheek": get_data(f"{self.sides}_cheek"),
     }
+        
+class CheekBoneGuideCreation(GuideCreation):
+    """
+    Guide creation for feet.
+    """
+    def __init__(self, side = "L", limb_name="cheekBone"):
+        self.sides = side
+        self.reverse_foot_name = limb_name
+        self.limb_name = "cheekBone"
+        self.aim_name = None
+        self.aim_offset = 0
+        self.controller_number = None
+        self.prefix = None
+
+        self.position_data = {
+        f"cheekBoneMain": get_data(f"{self.sides}_cheekBoneMain"),
+        f"cheekBone01": get_data(f"{self.sides}_cheekBone01"),
+        f"cheekBone02": get_data(f"{self.sides}_cheekBone02"),
+    }
 
 class MouthGuideCreation(GuideCreation):
     """
@@ -1197,6 +1216,9 @@ def load_guides(path = ""):
 
                 if guide_info.get("moduleName") == "cheek":
                     CheekGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
+                
+                if guide_info.get("moduleName") == "cheekBone":
+                    CheekBoneGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
 
                 if guide_info.get("moduleName") == "spikes":
                     SpikesGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
@@ -1592,20 +1614,21 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "varyndor")
+    project_manager.load_asset_configuration(asset_name = "marcelo")
 
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
     # NoseGuideCreation(side="C",).create_guides(guides_trn, buffers_trn)
-    # CheekGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
-    # CheekGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
+    CheekBoneGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
+    CheekBoneGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
 
 
-    SpikesGuideCreation(side="L", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
-    SpikesGuideCreation(side="R", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
-    # FkFingersGuideCreation(side="R", limb_name="handThumb", prefix=False, controller_number=3).create_guides(guides_trn, buffers_trn)
+    # SpikesGuideCreation(side="L", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
+    # SpikesGuideCreation(side="R", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
+    # FkFingersGuideCreation(side="R", limb_name="footFinger", prefix=False, controller_number=2).create_guides(guides_trn, buffers_trn)
+    # FkFingersGuideCreation(side="L", limb_name="footFinger", prefix=False, controller_number=2).create_guides(guides_trn, buffers_trn)
 
 # add_module_to_guide()
 

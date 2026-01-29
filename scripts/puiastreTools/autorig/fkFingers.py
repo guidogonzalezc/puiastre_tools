@@ -52,14 +52,17 @@ class FingersModule(object):
 
         self.name = guide_name.split("_")[1].replace("Metacarpal", "")
         self.name = re.sub(r"\d+", "", self.name)
-
         dict = core.DataManager.get_finger_data(self.side) or {}
-
-
-        if dict:
-            if cmds.objExists(dict.get("controllers")):
+        self.controllers_grp = None
+        if dict:    
+            if core.DataManager.get_asset_name() == "varyndor":
+                if self.guides[0].lower() == "l_footfinger00_guide":
+                    self.controllers_grp = "L_fingersBackAttributes_CTL"
+                elif self.guides[0].lower() == "r_footfinger00_guide":
+                    self.controllers_grp = "R_fingersBackAttributes_CTL"
+            if cmds.objExists(dict.get("controllers")) and not self.controllers_grp:
                 self.controllers_grp = dict.get("controllers")
-            else:
+            elif not self.controllers_grp:
                 self.controllers_grp = cmds.createNode("transform", name=f"{self.side}_fkFingersControllers_GRP", parent=self.masterWalk_ctl)
                 cmds.setAttr(self.controllers_grp + ".inheritsTransform", 0)
                 arm_skinning = data_exporter.get_data(f"{self.side}_armModule", "skinning_transform")
@@ -74,9 +77,15 @@ class FingersModule(object):
 
                 cmds.connectAttr(parent_matrix + ".outputMatrix", self.controllers_grp + ".offsetParentMatrix")
 
-            if cmds.objExists(dict.get("module")):
+            self.individual_module_grp = None
+            if core.DataManager.get_asset_name() == "varyndor":
+                if self.guides[0].lower() == "l_footfinger00_guide":
+                    self.individual_module_grp = "L_fingersBackAttributes_CTL"
+                elif self.guides[0].lower() == "r_footfinger00_guide":
+                    self.individual_module_grp = "R_fingersBackAttributes_CTL"
+            if cmds.objExists(dict.get("module")) and not self.individual_module_grp:
                 self.individual_module_grp = dict.get("module")
-            else:
+            elif not self.individual_module_grp:
                 self.individual_module_grp = cmds.createNode("transform", name=f"{self.side}_fkFingersModule", parent=self.modules_grp, ss=True)
 
 
@@ -85,10 +94,18 @@ class FingersModule(object):
             else:
                 self.skinning_grp = cmds.createNode("transform", name=f"{self.side}_fkFingersSkinningJoints", parent=self.skel_grp, ss=True)
 
-            if cmds.objExists(dict.get("attributes_ctl")):
+
+            self.finger_attributes_ctl = None
+            if core.DataManager.get_asset_name() == "varyndor":
+                if self.guides[0].lower() == "l_footfinger00_guide":
+                    self.finger_attributes_ctl = "L_fingersBackAttributes_CTL"
+                elif self.guides[0].lower() == "r_footfinger00_guide":
+                    self.finger_attributes_ctl = "R_fingersBackAttributes_CTL"
+
+            if cmds.objExists(dict.get("attributes_ctl")) and not self.finger_attributes_ctl:
                 self.finger_attributes_ctl = dict.get("attributes_ctl")
                 self.finger_attributes_nodes = None
-            else:
+            elif not self.finger_attributes_ctl:
                 self.finger_attributes_ctl, self.finger_attributes_nodes = controller_creator(
                     name=f"{self.side}_fkFingersAttributes",
                     suffixes=["GRP"],
@@ -207,6 +224,7 @@ class FingersModule(object):
                 ro=False,
                 parent= controllers[-1] if controllers else self.finger_attributes_ctl
             )
+            print(ctl, self.finger_attributes_ctl)
 
             if controllers:
                 offset_matrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}_MLT", ss=True)
