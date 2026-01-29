@@ -25,6 +25,7 @@ from puiastreTools.autorig import eyebrow_module as ebm
 from puiastreTools.autorig import eyelid_module as elm
 from puiastreTools.autorig import nose_module as nm
 from puiastreTools.autorig import cheek_module as cm
+from puiastreTools.autorig import cheekbone as cb
 from puiastreTools.autorig import spikes_module_matrix as spm
 import puiastreTools.tools.skincluster_manager as skt
 
@@ -60,6 +61,7 @@ reload(cm)
 reload(spm)
 reload(skt)
 reload(project_manager)
+reload(cb)
 
 def rename_ctl_shapes():
     """
@@ -319,6 +321,10 @@ def make():
                 if guide_info.get("moduleName") == "cheek":
                     update_ui("cheek")
                     cm.CheekModule().make(guide_name)
+                    
+                if guide_info.get("moduleName") == "cheekBone":
+                    update_ui("cheekBone")
+                    cb.CheekBoneModule().make(guide_name)
     
     # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
