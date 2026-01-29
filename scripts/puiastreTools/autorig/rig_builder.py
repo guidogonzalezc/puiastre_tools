@@ -165,7 +165,7 @@ def make():
     # Set asset name and mesh data in DataManager
     core.DataManager.set_asset_name(list(guides_data.keys())[0])
 
-    if core.DataManager.get_asset_name() != "oto":
+    if core.DataManager.get_asset_name() != "oto" and core.DataManager.get_asset_name() != "baby":
         basic_structure.create_basic_structure(asset_name=core.DataManager.get_asset_name(), adonis_setup=adonis)
 
     else:
