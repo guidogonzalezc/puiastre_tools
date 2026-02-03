@@ -633,6 +633,23 @@ class TailGuideCreation(GuideCreation):
             "centerDownTailDistance": get_data(f"C_centerDownTailDistance"),
         }
 
+class TongueGuideCreation(GuideCreation):
+    """
+    Guide creation for tongue.
+    """
+    def __init__(self, side = "C", twist_joints=5, type=0):
+        self.sides = side
+        self.type = type
+        self.twist_joints = twist_joints
+        self.limb_name = "tongue"
+        self.aim_name = None
+        self.prefix = None
+        self.controller_number = None
+        self.position_data = {
+            "tongue01": get_data(f"{self.sides}_tongue01"),
+            "tongue02": get_data(f"{self.sides}_tongue02"),
+        }
+
 class MembraneCreation(GuideCreation):
     """
     Guide creation for neck.
@@ -1043,72 +1060,6 @@ class EyesGuideCreation(GuideCreation):
         except:
             pass
 
-def dragon_rebuild_guides():
-    """
-    Rebuilds the guides for a quadruped character in the Maya scene.
-    This function creates a new guides group and populates it with guides for front legs, back legs, spine, neck, hands, and feet.
-    """
-
-    cmds.file(new=True, force=True)
-
-    core.DataManager.set_guide_data("P:/VFX_Project_20/PUIASTRE_PRODUCTIONS/00_Pipeline/puiastre_tools/guides/AYCHEDRAL_002.guides")
-    # core.DataManager.set_ctls_data("H:/ggMayaAutorig/curves/body_template_01.ctls")
-
-    guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
-    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True)
-    cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
-
-
-
-    BackLegGuideCreation().create_guides(guides_trn, buffers_trn)   
-    BackLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
-    SpineQuadGuideCreation().create_guides(guides_trn, buffers_trn)
-    NeckQuadGuideCreation().create_guides(guides_trn, buffers_trn)
-    TailGuideCreation().create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="L", limb_name="foot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="R", limb_name="foot").create_guides(guides_trn, buffers_trn)
-    ArmGuideCreation().create_guides(guides_trn, buffers_trn)
-    ArmGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)
-    HandGuideCreation(controller_number=4).create_guides(guides_trn, buffers_trn)
-    HandGuideCreation(side = "R", controller_number=4).create_guides(guides_trn, buffers_trn)
-    EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
-    EyesGuideCreation(side="R").create_guides(guides_trn, buffers_trn)
-
-def dino_rebuild_guides():
-    """
-    Rebuilds the guides for a quadruped character in the Maya scene.
-    This function creates a new guides group and populates it with guides for front legs, back legs, spine, neck, hands, and feet.
-    """
-
-    # cmds.file(new=True, force=True)
-
-    # project_manager.load_asset_configuration(asset_name = "cheetah")
-
-    core.DataManager.set_guide_data(r"D:\git\maya\puiastre_tools\assets\cheetah\guides\CHAR_cheetah_001.guides")
-    guides_trn = cmds.createNode("transform", name="guides_GRP", ss=True)
-    buffers_trn = cmds.createNode("transform", name="buffers_GRP", ss=True)
-    cmds.setAttr(f"{buffers_trn}.inheritsTransform ", True)
-    guides_trn = "guides_GRP"
-    buffers_trn = "buffers_GRP"
-    # EyesGuideCreation(side="L").create_guides(guides_trn, buffers_trn)
-    FrontLegGuideCreation().create_guides(guides_trn, buffers_trn)   
-    FrontLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)   
-    BackLegGuideCreation().create_guides(guides_trn, buffers_trn)   
-    BackLegGuideCreation(side = "R").create_guides(guides_trn, buffers_trn)  
-    SpineQuadGuideCreation().create_guides(guides_trn, buffers_trn)
-    NeckQuadGuideCreation().create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="L", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="R", limb_name="frontFoot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="R", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    FootGuideCreation(side="L", limb_name="backFoot").create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footBack", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="R", limb_name="footBack", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
-
-    FootFingersGuideCreation(side="R", limb_name="footFront", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
-    FootFingersGuideCreation(side="L", limb_name="footFront", prefix=True, controller_number=4).create_guides(guides_trn, buffers_trn)
-    TailGuideCreation().create_guides(guides_trn, buffers_trn)
-
-# dino_rebuild_guides()
 
 def load_guides(path = ""):
 
@@ -1181,6 +1132,9 @@ def load_guides(path = ""):
                 if guide_info.get("moduleName") == "tail":
                     TailGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
                     
+                if guide_info.get("moduleName") == "tongue":
+                    TongueGuideCreation(side=guide_name.split("_")[0], twist_joints=guide_info.get("jointTwist"), type=guide_info.get("type")).create_guides(guides_trn, buffers_trn)
+
                 if guide_info.get("moduleName") == "foot":
                     limb_name = "foot" if guide_name.split("_")[1].split("BankOut")[0] == "bankOut" else guide_name.split("_")[1].split("BankOut")[0]
                     FootGuideCreation(side=guide_name.split("_")[0], limb_name=limb_name).create_guides(guides_trn, buffers_trn)
@@ -1614,15 +1568,16 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "marcelo")
+    project_manager.load_asset_configuration(asset_name = "aychedral")
 
     load_guides()
     guides_trn = "guides_GRP"
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
     # NoseGuideCreation(side="C",).create_guides(guides_trn, buffers_trn)
-    CheekBoneGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
-    CheekBoneGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
+    # CheekBoneGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
+    # CheekBoneGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
+    TongueGuideCreation(side="C", twist_joints=10, type="tongue").create_guides(guides_trn, buffers_trn)
 
 
     # SpikesGuideCreation(side="L", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)

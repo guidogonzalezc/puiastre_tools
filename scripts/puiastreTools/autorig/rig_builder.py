@@ -21,12 +21,14 @@ from puiastreTools.autorig import finger_module as fm
 from puiastreTools.autorig import eye_module as em
 from puiastreTools.autorig import fkFingers as fkf
 from puiastreTools.autorig import jaw_module_matrix as jmm
+from puiastreTools.autorig import jaw_module_matrix_old as jmm_old
 from puiastreTools.autorig import eyebrow_module as ebm
 from puiastreTools.autorig import eyelid_module as elm
 from puiastreTools.autorig import nose_module as nm
 from puiastreTools.autorig import cheek_module as cm
 from puiastreTools.autorig import cheekbone as cb
 from puiastreTools.autorig import spikes_module_matrix as spm
+from puiastreTools.autorig import tongue_module as tm
 import puiastreTools.tools.skincluster_manager as skt
 
 
@@ -62,6 +64,8 @@ reload(spm)
 reload(skt)
 reload(project_manager)
 reload(cb)
+reload(tm)
+reload(jmm_old)
 
 def rename_ctl_shapes():
     """
@@ -301,10 +305,15 @@ def make():
                     update_ui("foot")
                     fm.FingersModule().make(guide_name)
 
-                     
-                if guide_info.get("moduleName") == "mouth":
-                    update_ui("jaw")
-                    jmm.JawModule().make(guide_name)
+                if not core.DataManager.get_asset_name() in ["varyndor", "aychedral", "azhurean"]:
+                    if guide_info.get("moduleName") == "mouth":
+                        update_ui("jaw")
+                        jmm.JawModule().make(guide_name)
+                else:
+                    if guide_info.get("moduleName") == "mouth":
+                        update_ui("jaw")
+                        jmm_old.JawModule().make(guide_name)
+
 
                 if guide_info.get("moduleName") == "eyebrow":
                     update_ui("eyebrow")
@@ -325,6 +334,8 @@ def make():
                 if guide_info.get("moduleName") == "cheekBone":
                     update_ui("cheekBone")
                     cb.CheekBoneModule().make(guide_name)
+
+                
     
     # Additional modules who depends on others modules
     for template_name, guides in guides_data.items():
@@ -338,6 +349,10 @@ def make():
                     update_ui("fkFinger")
 
                     fkf.FingersModule().make(guide_name)
+
+                if guide_info.get("moduleName") == "tongue":
+                    update_ui("tongue")
+                    tm.TongueModule().make(guide_name)
 
     # Create the skeleton hierarchy and spaces
     cmds.progressWindow(edit=True, progress=90, status=(f"Creating the skeleton hierarchy and spaces") )
