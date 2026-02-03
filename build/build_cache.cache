@@ -240,7 +240,7 @@
     "L_eyebrowModule": {
         "skinning_transform": "L_eyebrowFacialSkinning_GRP"
     },
-    "L_noseModule": {
+    "R_noseModule": {
         "skinning_transform": "C_noseFacialSkinning_GRP"
     },
     "L_cheekModule": {
@@ -248,6 +248,23 @@
     },
     "R_cheekModule": {
         "skinning_transform": "R_cheekFacialSkinning_GRP"
+<<<<<<< HEAD
 >>>>>>> 887ee200128837c1eac1dd5c2660faff391a9617
+=======
+    },
+    "L_cheekBoneModule": {
+        "skinning_transform": "L_cheekBoneFacialSkinning_GRP"
+    },
+    "R_cheekBoneModule": {
+        "skinning_transform": "R_cheekBoneFacialSkinning_GRP"
+    },
+    "L_FkFingersModule": {
+        "skinning_transform": "L_fkFingersSkinningJoints",
+        "attributes_ctl": "L_fkFingersAttributes_CTL"
+    },
+    "R_FkFingersModule": {
+        "skinning_transform": "R_fkFingersSkinningJoints",
+        "attributes_ctl": "R_fkFingersAttributes_CTL"
+>>>>>>> 3038d49b293de6cd8ff871863db8df2316ff8655
     }
 }

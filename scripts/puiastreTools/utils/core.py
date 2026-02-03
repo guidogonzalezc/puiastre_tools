@@ -3,6 +3,8 @@ from sys import modules
 import maya.cmds as cmds
 from maya.api import OpenMaya as om
 import json
+import math
+
 
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)).split("\scripts")[0]
@@ -283,7 +285,7 @@ def get_offset_matrix(child, parent):
 
     # Convert to Python list (row-major order)
     offset_matrix_list = list(offset_matrix)
-
+    
     return offset_matrix_list
 
 def get_closest_transform(main_transform, transform_list):
@@ -349,6 +351,48 @@ def getClosestParamsToPositionSurface(surface, position):
     closest_point, u, v = surface_fn.closestPoint(point, space=om.MSpace.kWorld)
 
     return u, v
+
+def mirror_behaviour(type =0, name = "", input_matrix = ""):
+    """
+    Docstring for mirror_behaviour
+    
+    :param type: 0 == R mirror, 1 === R lower mirror, 2 == L lower mirror
+    """
+    multmatrix = cmds.createNode("multMatrix", name=f"{name}_MMX", ss=True)
+
+    if type == 0:
+        cmds.setAttr(f"{multmatrix}.matrixIn[0]", -1, 0, 0, 0,
+                                            0, 1, 0, 0,
+                                            0, 0, 1, 0,
+                                            0, 0, 0, 1, type="matrix")
+    elif type == 1:
+        cmds.setAttr(f"{multmatrix}.matrixIn[0]", -1, 0, -0, 0,
+                                            0, -1, 0, 0,
+                                            -0, 0, 1, 0,
+                                            0, 0, 0, 1, type="matrix")
+    
+    elif type == 2:
+        cmds.setAttr(f"{multmatrix}.matrixIn[0]", 1, 0, 0, 0,
+                                            0, -1, 0, 0,
+                                            0, 0, 1, 0,
+                                            0, 0, 0, 1, type="matrix")
+        
+    input_matrix_name = input_matrix if input_matrix.split(".") else f"{input_matrix}.worldMatrix[0]"
+    cmds.connectAttr(f"{input_matrix_name}", f"{multmatrix}.matrixIn[1]")
+
+    return f"{multmatrix}.matrixSum"
+
+def get_inverse_lerp(min_val, max_val, current_val):
+    """
+    Calculate the inverse linear interpolation (lerp) factor t for a given value
+    within a specified range [min_val, max_val].
+    """
+    range_span = max_val - min_val
+    if abs(range_span) < 1e-6:
+        return 0.0
+        
+    t = (current_val - min_val) / range_span
+    return t
 
 def number_to_ordinal_word(n):
     base_ordinal = {
@@ -574,3 +618,108 @@ def save_custom_driven_keys():
 
     with open(file_path, 'w') as json_file:
         json.dump({"modules": modules_data}, json_file, indent=4)
+
+
+
+def create_surface_from_curve(crv_node_name, width=0.2, lock_axis=(0, 1, 0), clean_name=None, parent=None):
+    """
+    Creates a stable ribbon that follows a curve without twisting.
+
+    Args:
+        crv_node_name (str): The name of the NURBS curve node to follow
+        width (float): The total width of the ribbon surface.
+        lock_axis (tuple): A 3D vector representing the preferred up direction to minimize twisting.
+
+    """
+    
+    # Convert curve_name into mayaAPI
+    sel = om.MSelectionList()
+    try:
+        sel.add(crv_node_name)
+        crv_path = sel.getDagPath(0)
+        crv_path.extendToShape()
+        fn_crv = om.MFnNurbsCurve(crv_path)
+    except:
+        om.MGlobal.displayError("Selection is not a valid NURBS Curve.")
+        return
+
+    # Raw Data
+    cvs_point_array = fn_crv.cvPositions(om.MSpace.kWorld)
+    knots_u = fn_crv.knots()
+    degree_u = fn_crv.degree
+    form_u = fn_crv.form
+    
+    num_cvs = len(cvs_point_array)
+    half_width = width * 0.5
+    
+    # Preferred Up Vector
+    global_up = om.MVector(lock_axis).normalize()
+    
+    surface_points = om.MPointArray()
+    
+    # Math for nurbsSurface Points
+    for i in range(num_cvs):
+        curr_p = cvs_point_array[i]
+        curr_vec = om.MVector(curr_p)
+        
+        if i == 0:
+            t_next = om.MVector(cvs_point_array[i+1]) - curr_vec
+            tangent = t_next
+        elif i == num_cvs - 1:
+            t_prev = curr_vec - om.MVector(cvs_point_array[i-1])
+            tangent = t_prev
+        else:
+            v_in = curr_vec - om.MVector(cvs_point_array[i-1])
+            v_out = om.MVector(cvs_point_array[i+1]) - curr_vec
+            tangent = v_in + v_out
+            
+        tangent.normalize()
+        
+        dot_prod = abs(tangent * global_up)
+        
+        current_up = global_up
+        
+        if dot_prod > 0.95: 
+            current_up = om.MVector(0, 0, 1)
+            if abs(tangent * current_up) > 0.95:
+                current_up = om.MVector(1, 0, 0)
+        
+        binormal = (tangent ^ current_up).normalize()
+        
+        w = curr_p.w
+        
+        p_l_vec = curr_vec + (binormal * half_width)
+        p_r_vec = curr_vec - (binormal * half_width)
+        
+        surface_points.append(om.MPoint(p_l_vec.x, p_l_vec.y, p_l_vec.z, w))
+        surface_points.append(curr_p)
+        surface_points.append(om.MPoint(p_r_vec.x, p_r_vec.y, p_r_vec.z, w))
+
+    # Create NURBS Surface
+    knots_v = om.MDoubleArray([0.0, 0.0, 1.0, 1.0])
+    
+    fn_surf = om.MFnNurbsSurface()
+    new_transform = fn_surf.create(
+        surface_points,
+        knots_u, knots_v,
+        degree_u, 2,
+        form_u, om.MFnNurbsSurface.kOpen,
+        True, om.MObject.kNullObj
+    )
+    
+    # Rename and assign shader
+    mfn_dag = om.MFnDagNode(new_transform)
+    full_path = mfn_dag.fullPathName()
+    
+    if not clean_name:
+        clean_name = f"{crv_node_name}_SRF"
+    
+    final_name = cmds.rename(full_path, clean_name)
+    
+    if parent:
+        cmds.parent(final_name, parent)
+
+    cmds.sets(final_name, edit=True, forceElement="initialShadingGroup")
+    
+    return final_name
+
