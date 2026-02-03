@@ -201,6 +201,7 @@
         "skinning_transform": "R_eyelidFacialSkinning_GRP",
         "eyeMain": "C_eyeMain_CTL"
     },
+<<<<<<< HEAD
     "L_membraneModule": {},
     "C_jawModule": {
         "skinning_transform": "C_jawFacialSkinning_GRP"
@@ -229,5 +230,24 @@
     "R_FkFingersModule": {
         "skinning_transform": "R_fkFingersSkinningJoints",
         "attributes_ctl": "R_hand_CTL"
+=======
+    "C_jawModule": {
+        "skinning_transform": "C_jawFacialSkinning_GRP"
+    },
+    "R_eyebrowModule": {
+        "skinning_transform": "R_eyebrowFacialSkinning_GRP"
+    },
+    "L_eyebrowModule": {
+        "skinning_transform": "L_eyebrowFacialSkinning_GRP"
+    },
+    "L_noseModule": {
+        "skinning_transform": "C_noseFacialSkinning_GRP"
+    },
+    "L_cheekModule": {
+        "skinning_transform": "L_cheekFacialSkinning_GRP"
+    },
+    "R_cheekModule": {
+        "skinning_transform": "R_cheekFacialSkinning_GRP"
+>>>>>>> 887ee200128837c1eac1dd5c2660faff391a9617
     }
 }
