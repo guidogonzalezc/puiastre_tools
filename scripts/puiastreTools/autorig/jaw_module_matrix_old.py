@@ -88,6 +88,8 @@ class JawModule():
 
         self.data_exporter.append_data(f"{self.side}_jawModule", 
                                     {"skinning_transform": self.skinning_trn,
+                                    "jaw_ctl": self.jaw_ctl,
+                                     
                                     # "neck_ctl": self.main_controllers[0],
 
                                     }
