@@ -70,7 +70,7 @@
                 }
             },
             {
-                "name": "C_body_CTLShape73",
+                "name": "C_body_CTLShape76",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -133,7 +133,7 @@
                 }
             },
             {
-                "name": "C_body_CTLShape74",
+                "name": "C_body_CTLShape77",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -196,7 +196,7 @@
                 }
             },
             {
-                "name": "C_body_CTLShape75",
+                "name": "C_body_CTLShape78",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1543,7 +1543,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape73",
+                "name": "C_localHip_CTLShape76",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1626,7 +1626,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape74",
+                "name": "C_localHip_CTLShape77",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1709,7 +1709,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape75",
+                "name": "C_localHip_CTLShape78",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -2160,7 +2160,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape49",
+                "name": "C_movablePivot_CTLShape51",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -2243,7 +2243,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape50",
+                "name": "C_movablePivot_CTLShape52",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -5682,6 +5682,466 @@
                         16.0,
                         17.0,
                         18.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|aychedral|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL": {
+        "transform": {
+            "name": "C_tongue00_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue00_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            9.508084680805254,
+                            7.9087588998592295,
+                            0.3002232218395109
+                        ],
+                        [
+                            8.227547938069528e-16,
+                            10.229358410902107,
+                            0.3002232218395109
+                        ],
+                        [
+                            -9.508084680805254,
+                            7.908758899859228,
+                            0.3002232218395109
+                        ],
+                        [
+                            -13.446462307786684,
+                            2.3063360874631837,
+                            0.3002232218395109
+                        ],
+                        [
+                            -9.508084680805254,
+                            -3.296086724932862,
+                            0.3002232218395109
+                        ],
+                        [
+                            -1.347544883275024e-15,
+                            -5.616686235975741,
+                            0.3002232218395109
+                        ],
+                        [
+                            9.508084680805254,
+                            -3.296086724932861,
+                            0.3002232218395109
+                        ],
+                        [
+                            13.446462307786684,
+                            2.3063360874631824,
+                            0.3002232218395109
+                        ],
+                        [
+                            9.508084680805254,
+                            7.9087588998592295,
+                            0.3002232218395109
+                        ],
+                        [
+                            8.227547938069528e-16,
+                            10.229358410902107,
+                            0.3002232218395109
+                        ],
+                        [
+                            -9.508084680805254,
+                            7.908758899859228,
+                            0.3002232218395109
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|aychedral|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL": {
+        "transform": {
+            "name": "C_tongue01_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            9.508084680805254,
+                            10.696643300452129,
+                            0.5658744537183816
+                        ],
+                        [
+                            8.233583512543223e-16,
+                            13.017242811494965,
+                            0.5658744537183816
+                        ],
+                        [
+                            -9.508084680805254,
+                            10.696643300452127,
+                            0.5658744537183816
+                        ],
+                        [
+                            -13.446462307786684,
+                            5.094220488056055,
+                            0.5658744537183816
+                        ],
+                        [
+                            -9.508084680805254,
+                            -0.5082023243399658,
+                            0.5658744537183816
+                        ],
+                        [
+                            -1.3469413258276517e-15,
+                            -2.828801835382842,
+                            0.5658744537183816
+                        ],
+                        [
+                            9.508084680805254,
+                            -0.5082023243399658,
+                            0.5658744537183816
+                        ],
+                        [
+                            13.446462307786684,
+                            5.094220488056053,
+                            0.5658744537183816
+                        ],
+                        [
+                            9.508084680805254,
+                            10.696643300452129,
+                            0.5658744537183816
+                        ],
+                        [
+                            8.233583512543223e-16,
+                            13.017242811494965,
+                            0.5658744537183816
+                        ],
+                        [
+                            -9.508084680805254,
+                            10.696643300452127,
+                            0.5658744537183816
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|aychedral|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL|C_tongue02_GRP|C_tongue02_ANM|C_tongue02_CTL": {
+        "transform": {
+            "name": "C_tongue02_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            9.508084680805254,
+                            10.696643300452129,
+                            0.5658744537173852
+                        ],
+                        [
+                            8.227547938069528e-16,
+                            13.017242811494965,
+                            0.5658744537173852
+                        ],
+                        [
+                            -9.508084680805254,
+                            10.696643300452127,
+                            0.5658744537173852
+                        ],
+                        [
+                            -13.446462307786684,
+                            5.094220488056055,
+                            0.5658744537173852
+                        ],
+                        [
+                            -9.508084680805254,
+                            -0.5082023243399657,
+                            0.5658744537173852
+                        ],
+                        [
+                            -1.347544883275024e-15,
+                            -2.828801835382842,
+                            0.5658744537173852
+                        ],
+                        [
+                            9.508084680805254,
+                            -0.5082023243399657,
+                            0.5658744537173852
+                        ],
+                        [
+                            13.446462307786684,
+                            5.094220488056053,
+                            0.5658744537173852
+                        ],
+                        [
+                            9.508084680805254,
+                            10.696643300452129,
+                            0.5658744537173852
+                        ],
+                        [
+                            8.227547938069528e-16,
+                            13.017242811494965,
+                            0.5658744537173852
+                        ],
+                        [
+                            -9.508084680805254,
+                            10.696643300452127,
+                            0.5658744537173852
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|aychedral|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL|C_tongue02_GRP|C_tongue02_ANM|C_tongue02_CTL|C_tongue03_GRP|C_tongue03_ANM|C_tongue03_CTL": {
+        "transform": {
+            "name": "C_tongue03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            6.663331220846567,
+                            6.919363442281293,
+                            0.34159551068917177
+                        ],
+                        [
+                            5.770152025395129e-16,
+                            8.545655560212207,
+                            0.34159551068917177
+                        ],
+                        [
+                            -6.663331220846567,
+                            6.919363442281291,
+                            0.34159551068917177
+                        ],
+                        [
+                            -9.423373383105309,
+                            2.9931469547920373,
+                            0.34159551068917177
+                        ],
+                        [
+                            -6.663331220846567,
+                            -0.9330695326972169,
+                            0.34159551068917177
+                        ],
+                        [
+                            -9.439457567258167e-16,
+                            -2.559361650628134,
+                            0.34159551068917177
+                        ],
+                        [
+                            6.663331220846567,
+                            -0.9330695326972158,
+                            0.34159551068917177
+                        ],
+                        [
+                            9.423373383105309,
+                            2.993146954792036,
+                            0.34159551068917177
+                        ],
+                        [
+                            6.663331220846567,
+                            6.919363442281293,
+                            0.34159551068917177
+                        ],
+                        [
+                            5.770152025395129e-16,
+                            8.545655560212207,
+                            0.34159551068917177
+                        ],
+                        [
+                            -6.663331220846567,
+                            6.919363442281291,
+                            0.34159551068917177
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|aychedral|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL|C_tongue02_GRP|C_tongue02_ANM|C_tongue02_CTL|C_tongue03_GRP|C_tongue03_ANM|C_tongue03_CTL|C_tongue04_GRP|C_tongue04_ANM|C_tongue04_CTL": {
+        "transform": {
+            "name": "C_tongue04_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue04_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            6.663331220846567,
+                            3.9897027581691575,
+                            0.062434735747465844
+                        ],
+                        [
+                            5.766084446152412e-16,
+                            5.615994876100072,
+                            0.062434735747465844
+                        ],
+                        [
+                            -6.663331220846567,
+                            3.9897027581691558,
+                            0.062434735747465844
+                        ],
+                        [
+                            -9.423373383105309,
+                            0.0634862706798997,
+                            0.062434735747465844
+                        ],
+                        [
+                            -6.663331220846567,
+                            -3.862730216809354,
+                            0.062434735747465844
+                        ],
+                        [
+                            -9.443525146500895e-16,
+                            -5.4890223347402705,
+                            0.062434735747465844
+                        ],
+                        [
+                            6.663331220846567,
+                            -3.8627302168093522,
+                            0.062434735747465844
+                        ],
+                        [
+                            9.423373383105309,
+                            0.06348627067989882,
+                            0.062434735747465844
+                        ],
+                        [
+                            6.663331220846567,
+                            3.9897027581691575,
+                            0.062434735747465844
+                        ],
+                        [
+                            5.766084446152412e-16,
+                            5.615994876100072,
+                            0.062434735747465844
+                        ],
+                        [
+                            -6.663331220846567,
+                            3.9897027581691558,
+                            0.062434735747465844
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
                     ],
                     "degree": 3
                 }
@@ -12728,14 +13188,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            96.8575598465466,
+                            96.85755984654654,
                             140.94920914449818,
-                            144.78621426503
+                            144.78621426503003
                         ],
                         [
-                            81.31484949995664,
-                            178.28562634981682,
-                            29.64012319932087
+                            81.31484949995661,
+                            178.28562634981677,
+                            29.640123199320954
                         ]
                     ],
                     "form": "open",
@@ -17014,14 +17474,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            748.1335205659125,
+                            748.1335205659126,
                             901.935622497524,
                             21.082644455156355
                         ],
                         [
-                            748.1318383151928,
-                            333.83085854637466,
-                            21.088823077935615
+                            748.131838315193,
+                            333.8308585463744,
+                            21.088823077935785
                         ]
                     ],
                     "form": "open",
@@ -19006,14 +19466,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            953.3727959503199,
-                            868.1973501369334,
-                            416.7929937655458
+                            953.3727959503195,
+                            868.1973501369332,
+                            416.79299376554576
                         ],
                         [
-                            953.3727923819397,
-                            335.1133666387353,
-                            416.79299279297766
+                            953.3727923819398,
+                            335.1133666387348,
+                            416.7929927929777
                         ]
                     ],
                     "form": "open",
@@ -20417,7 +20877,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape169",
+                "name": "L_hand_CTLShape176",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20678,7 +21138,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape170",
+                "name": "L_hand_CTLShape177",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20987,7 +21447,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape171",
+                "name": "L_hand_CTLShape178",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21344,7 +21804,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape172",
+                "name": "L_hand_CTLShape179",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22229,7 +22689,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape173",
+                "name": "L_hand_CTLShape180",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22490,7 +22950,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape174",
+                "name": "L_hand_CTLShape181",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22751,7 +23211,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape175",
+                "name": "L_hand_CTLShape182",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -23967,14 +24427,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            79.70805540748977,
-                            67.28941474002497,
-                            43.11576060817503
+                            79.70805540748975,
+                            67.28941474002492,
+                            43.1157606081751
                         ],
                         [
-                            79.68088638382616,
-                            18.603981401335652,
-                            31.725947507504845
+                            79.68088638382613,
+                            18.60398140133586,
+                            31.725947507504877
                         ]
                     ],
                     "form": "open",
@@ -25445,14 +25905,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            107.56724065015229,
-                            64.13014003954888,
-                            24.43412657881273
+                            107.56724065015264,
+                            64.13014003954878,
+                            24.434126578812645
                         ],
                         [
-                            104.99097351908149,
-                            14.593282210785427,
-                            18.15220297833519
+                            104.99097351908145,
+                            14.59328221078547,
+                            18.152202978335225
                         ]
                     ],
                     "form": "open",
@@ -28540,14 +29000,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            1032.7029028090303,
-                            999.327600252411,
+                            1032.70290280903,
+                            999.3276002524112,
                             325.7970344220548
                         ],
                         [
-                            1032.7028979909571,
-                            331.9770478533307,
-                            325.79703442623685
+                            1032.702897990957,
+                            331.9770478533313,
+                            325.79703442623696
                         ]
                     ],
                     "form": "open",
@@ -30594,14 +31054,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            49.40722887028248,
-                            65.08733693169317,
-                            44.728026478363695
+                            49.40722887028288,
+                            65.08733693169319,
+                            44.728026478363844
                         ],
                         [
-                            52.93102865266537,
-                            17.8505964660517,
-                            28.719491714828475
+                            52.931028652665304,
+                            17.850596466051943,
+                            28.719491714828575
                         ]
                     ],
                     "form": "open",
@@ -37664,14 +38124,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -96.85755984654658,
+                            -96.85755984654654,
                             140.94920914449818,
-                            144.78621426503
+                            144.78621426503003
                         ],
                         [
-                            -81.31484949995667,
-                            178.28562634981682,
-                            29.640123199320882
+                            -81.31484949995665,
+                            178.28562634981677,
+                            29.64012319932094
                         ]
                     ],
                     "form": "open",
@@ -41950,14 +42410,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -748.1335205659111,
+                            -748.1335205659113,
                             901.9356224975238,
-                            21.082644455156014
+                            21.08264445515607
                         ],
                         [
-                            -748.1318383151929,
-                            333.8308585463743,
-                            21.088823077935672
+                            -748.1318383151931,
+                            333.8308585463741,
+                            21.088823077935785
                         ]
                     ],
                     "form": "open",
@@ -43942,7 +44402,7 @@
                 "curve": {
                     "cvs": [
                         [
-                            -953.37279595032,
+                            -953.3727959503196,
                             868.197350136933,
                             416.7929937655455
                         ],
@@ -45353,7 +45813,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape09",
+                "name": "R_hand_CTLShape16",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45614,7 +46074,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape10",
+                "name": "R_hand_CTLShape17",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45923,7 +46383,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape11",
+                "name": "R_hand_CTLShape18",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46280,7 +46740,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape12",
+                "name": "R_hand_CTLShape19",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47165,7 +47625,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape13",
+                "name": "R_hand_CTLShape20",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47426,7 +47886,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape14",
+                "name": "R_hand_CTLShape21",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47687,7 +48147,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape15",
+                "name": "R_hand_CTLShape22",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -48903,14 +49363,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -79.70805540748954,
-                            67.28941474002497,
-                            43.115760608174995
+                            -79.70805540748935,
+                            67.28941474002498,
+                            43.11576060817513
                         ],
                         [
-                            -79.68088638382613,
-                            18.6039814013357,
-                            31.725947507504806
+                            -79.68088638382609,
+                            18.603981401335798,
+                            31.725947507504873
                         ]
                     ],
                     "form": "open",
@@ -50381,14 +50841,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -107.5672406501495,
-                            64.1301400395489,
-                            24.434126578813853
+                            -107.56724065015013,
+                            64.13014003954888,
+                            24.434126578813675
                         ],
                         [
-                            -104.99097351908145,
-                            14.593282210785492,
-                            18.15220297833521
+                            -104.99097354614204,
+                            14.593282210785535,
+                            18.15220296723746
                         ]
                     ],
                     "form": "open",
@@ -51278,7 +51738,7 @@
                         ],
                         [
                             -1013.2305804744867,
-                            334.6994346588295,
+                            334.6994346588293,
                             218.46154866401815
                         ]
                     ],
@@ -53476,14 +53936,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -1032.7029028090303,
-                            999.3276002524105,
-                            325.7970344220544
+                            -1032.7029028090305,
+                            999.3276002524108,
+                            325.7970344220545
                         ],
                         [
-                            -1032.7028979909574,
-                            331.9770478533318,
-                            325.79703442623685
+                            -1032.7028979909578,
+                            331.977047853331,
+                            325.79703442623696
                         ]
                     ],
                     "form": "open",
@@ -55530,14 +55990,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -49.40722887028309,
-                            65.08733693169317,
-                            44.72802647836379
+                            -49.40722887028342,
+                            65.08733693169319,
+                            44.72802647836401
                         ],
                         [
-                            -52.931028652665574,
-                            17.85059646605162,
-                            28.719491714828493
+                            -52.931028652665525,
+                            17.850596466051908,
+                            28.71949171482859
                         ]
                     ],
                     "form": "open",
