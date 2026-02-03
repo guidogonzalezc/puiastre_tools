@@ -61,8 +61,7 @@ class TongueModule():
         self.module_trn = cmds.createNode("transform", name=f"{self.side}_tongueModule_GRP", ss=True, parent=self.modules_grp)
         self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_tongueControllers_GRP", ss=True, parent=self.masterWalk_ctl)
         self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_tongueFacialSkinning_GRP", ss=True, p=self.skel_grp)
-
-        print(self.jaw_ctl)
+        cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0) # Avoid double transformations
 
         if self.jaw_ctl:
             parent = self.jaw_ctl
