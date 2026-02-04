@@ -924,9 +924,9 @@ class CheekBoneGuideCreation(GuideCreation):
         self.prefix = None
 
         self.position_data = {
-        f"cheekBoneMain": get_data(f"{self.sides}_cheekBoneMain"),
         f"cheekBone01": get_data(f"{self.sides}_cheekBone01"),
         f"cheekBone02": get_data(f"{self.sides}_cheekBone02"),
+        f"cheekBone03": get_data(f"{self.sides}_cheekBone03f"),
     }
 
 class MouthGuideCreation(GuideCreation):
@@ -1568,7 +1568,7 @@ def add_module_to_guide():
     """
 
 
-    project_manager.load_asset_configuration(asset_name = "aychedral")
+    project_manager.load_asset_configuration(asset_name = "marcelo")
 
     load_guides()
     guides_trn = "guides_GRP"
