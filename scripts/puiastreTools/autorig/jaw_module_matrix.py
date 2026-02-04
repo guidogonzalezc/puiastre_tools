@@ -173,8 +173,7 @@ class JawModule():
         
         cmds.connectAttr(f"{jaw_guide}.worldMatrix[0]", f"{self.jaw_ctl_grp[0]}.offsetParentMatrix")
 
-        local_jaw = self.local_setup(self.jaw_ctl_grp[0], self.jaw_ctl)
-        self.local_jaw = local_jaw
+        self.local_jaw = self.local_setup(self.jaw_ctl_grp[0], self.jaw_ctl)
 
         cmds.addAttr(self.jaw_ctl, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.jaw_ctl+".extraSep", channelBox=True, lock=True)
@@ -193,8 +192,7 @@ class JawModule():
             )
         
         cmds.connectAttr(f"{jaw_guide}.worldMatrix[0]", f"{self.upper_jaw_ctl_grp[0]}.offsetParentMatrix")
-        local_upper_jaw = self.local_setup(self.upper_jaw_ctl_grp[0], self.upper_jaw_ctl)
-        self.local_upper_jaw = local_upper_jaw
+        self.local_upper_jaw = self.local_setup(self.upper_jaw_ctl_grp[0], self.upper_jaw_ctl)
 
         jaws_rotation_sum = cmds.createNode("sum", name=f"{self.side}_jawsRotation_SUM", ss=True)
         cmds.connectAttr(f"{self.jaw_ctl}.rotateX", f"{jaws_rotation_sum}.input[0]")
@@ -216,10 +214,10 @@ class JawModule():
         cmds.connectAttr(f"{collision_compose}.outputMatrix", f"{self.upper_jaw_ctl}.offsetParentMatrix")
 
         self.jaw_local_joint = cmds.createNode("joint", name=f"{self.side}_jaw_JNT", ss=True, parent=self.skinning_trn)
-        cmds.connectAttr(local_jaw, f"{self.jaw_local_joint}.offsetParentMatrix")
+        cmds.connectAttr(self.local_jaw, f"{self.jaw_local_joint}.offsetParentMatrix")
 
         self.upper_jaw_local_joint = cmds.createNode("joint", name=f"{self.side}_upperJaw_JNT", ss=True, parent=self.skinning_trn)
-        cmds.connectAttr(local_upper_jaw, f"{self.upper_jaw_local_joint}.offsetParentMatrix")
+        cmds.connectAttr(self.local_upper_jaw, f"{self.upper_jaw_local_joint}.offsetParentMatrix")
 
         self.jaw_surface = None
         for guides in self.guides:
@@ -237,40 +235,40 @@ class JawModule():
 
 
             # cmds.parentConstraint(self.jaw_local_joint, self.upper_jaw_local_joint, self.jaw_surface, mo=True)
-            self.jaw_skin_cluster = cmds.skinCluster(
-                self.jaw_surface,
-                self.jaw_local_joint,
-                self.upper_jaw_local_joint,
-                n=f"{self.jaw_surface}_SKC",
-                toSelectedBones=True,
-                bindMethod=0,
-                normalizeWeights=1,
-                weightDistribution=0,
-                maximumInfluences=2,
-                dropoffRate=4,
-                removeUnusedInfluence=False
-            )[0]
+            # self.jaw_skin_cluster = cmds.skinCluster(
+            #     self.jaw_surface,
+            #     self.jaw_local_joint,
+            #     self.upper_jaw_local_joint,
+            #     n=f"{self.jaw_surface}_SKC",
+            #     toSelectedBones=True,
+            #     bindMethod=0,
+            #     normalizeWeights=1,
+            #     weightDistribution=0,
+            #     maximumInfluences=2,
+            #     dropoffRate=4,
+            #     removeUnusedInfluence=False
+            # )[0]
 
-            u_spans = cmds.getAttr(f"{self.jaw_surface}.spansU")
-            v_spans = cmds.getAttr(f"{self.jaw_surface}.spansV")
-            degU = cmds.getAttr(f"{self.jaw_surface}.degreeU")
-            degV = cmds.getAttr(f"{self.jaw_surface}.degreeV")
+            # u_spans = cmds.getAttr(f"{self.jaw_surface}.spansU")
+            # v_spans = cmds.getAttr(f"{self.jaw_surface}.spansV")
+            # degU = cmds.getAttr(f"{self.jaw_surface}.degreeU")
+            # degV = cmds.getAttr(f"{self.jaw_surface}.degreeV")
 
-            u_count = u_spans + degU
-            v_count = v_spans + degV
+            # u_count = u_spans + degU
+            # v_count = v_spans + degV
 
-            for u in range(u_count):
-                for v in range(v_count):
-                    t = float(v) / (v_count - 1)
-                    jaw_w = 1.0 - t
-                    upper_w = t
+            # for u in range(u_count):
+            #     for v in range(v_count):
+            #         t = float(v) / (v_count - 1)
+            #         jaw_w = 1.0 - t
+            #         upper_w = t
                     
-                    cv = f"{self.jaw_surface}.cv[{u}][{v}]"
+            #         cv = f"{self.jaw_surface}.cv[{u}][{v}]"
                     
-                    cmds.skinPercent(self.jaw_skin_cluster, cv, transformValue=[
-                        (self.jaw_local_joint, jaw_w),
-                        (self.upper_jaw_local_joint, upper_w)
-                    ])
+            #         cmds.skinPercent(self.jaw_skin_cluster, cv, transformValue=[
+            #             (self.jaw_local_joint, jaw_w),
+            #             (self.upper_jaw_local_joint, upper_w)
+            #         ])
 
 
             bbox = cmds.xform(self.jaw_surface, q=True, bb=True, ws=True)
@@ -313,6 +311,14 @@ class JawModule():
         cmds.addAttr(self.transform_settings, longName="verticalFollow02", niceName="verticalFollow02", defaultValue=0.58, minValue=0,maxValue = 1, keyable=True)
         cmds.addAttr(self.transform_settings, longName="horizontalFollow03", niceName="horizontalFollow03", defaultValue=0.5, minValue=0,maxValue = 1, keyable=True)
         cmds.addAttr(self.transform_settings, longName="verticalFollow03", niceName="verticalFollow03", defaultValue=0.25, minValue=0,maxValue = 1, keyable=True)
+
+        cmds.addAttr(self.transform_settings, longName="jawSep", niceName="JAW WEIGHTS ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(f"{self.transform_settings}.jawSep", channelBox=True, lock=True)
+        cmds.addAttr(self.transform_settings, longName="jawUpperWeight02", niceName="jawUpperWeight02", defaultValue=0.3, minValue=0,maxValue = 1, keyable=True)
+        cmds.addAttr(self.transform_settings, longName="jawUpperWeight03", niceName="jawUpperWeight03", defaultValue=0.1, minValue=0,maxValue = 1, keyable=True)
+        cmds.addAttr(self.transform_settings, longName="jawLowerWeight02", niceName="jawLowerWeight02", defaultValue=0.6, minValue=0,maxValue = 1, keyable=True)
+        cmds.addAttr(self.transform_settings, longName="jawLowerWeight03", niceName="jawLowerWeight03", defaultValue=0.77, minValue=0,maxValue = 1, keyable=True)
+
 
         self.average_curve_node = cmds.createNode("avgCurves", name=f"{self.side}_lipsAverage_ACV", ss=True)
         cmds.setAttr(f"{self.average_curve_node}.automaticWeight", 0)
@@ -358,12 +364,35 @@ class JawModule():
             if side == "R":
                 multmatrix_corner = core.mirror_behaviour(type=0, name=f"{side}_lipCornerMirror", input_matrix=f"{aimMatrix_corner}.outputMatrix")
 
-                cmds.connectAttr(f"{multmatrix_corner}", f"{corner_jaw_ctl_grp[0]}.offsetParentMatrix")
-
             else:
-                cmds.connectAttr(f"{aimMatrix_corner}.outputMatrix", f"{corner_jaw_ctl_grp[0]}.offsetParentMatrix")
+                multmatrix_corner = f"{aimMatrix_corner}.outputMatrix"
 
-            parent_mouth_pos = core.local_space_parent(corner_jaw_ctl, parents=[f"{self.jaw_ctl}", f"{self.upper_jaw_ctl}"], default_weights=0.5)
+
+            cmds.addAttr(corner_jaw_ctl, longName="jawSep", niceName = "Jaw Separator  ———", attributeType="enum", enumName="———", keyable=True)
+            cmds.setAttr(f"{corner_jaw_ctl}.jawSep", channelBox=True, lock=True)   
+
+            cmds.addAttr(corner_jaw_ctl, longName="upperJawLowerJaw", niceName= "Upper Jaw --> Lower Jaw", attributeType="float", min=0, max=1, defaultValue=0.5, keyable=True)
+            parent_matrix = cmds.createNode("parentMatrix", name=f"{side}_lipCornerJaw_PMX", ss=True)
+    
+            cmds.connectAttr(f"{multmatrix_corner}", f"{parent_matrix}.inputMatrix", force=True)
+            cmds.connectAttr(f"{self.local_jaw}", f"{parent_matrix}.target[0].targetMatrix", force=True)
+            offset = core.get_offset_matrix(multmatrix_corner, self.local_jaw)
+            cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", offset, type="matrix")
+
+            cmds.connectAttr(f"{self.local_upper_jaw}", f"{parent_matrix}.target[1].targetMatrix", force=True)
+            offset = core.get_offset_matrix(multmatrix_corner, self.local_upper_jaw)
+            cmds.setAttr(f"{parent_matrix}.target[1].offsetMatrix", offset, type="matrix")
+
+            self.jaw_reverse = cmds.createNode("reverse", name=f"{side}_lipCornerUpperLower_REV", ss=True)
+            cmds.connectAttr(f"{corner_jaw_ctl}.upperJawLowerJaw", f"{self.jaw_reverse}.inputX")
+            cmds.connectAttr(f"{self.jaw_reverse}.outputX", f"{parent_matrix}.target[1].weight", force=True)
+            cmds.connectAttr(f"{corner_jaw_ctl}.upperJawLowerJaw", f"{parent_matrix}.target[0].weight", force=True)
+
+            cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{corner_jaw_ctl_grp[0]}.offsetParentMatrix", force=True)
+
+
+
+            # parent_mouth_pos = core.local_space_parent(corner_jaw_ctl, parents=[f"{self.jaw_ctl}", f"{self.upper_jaw_ctl}"], default_weights=0.5)
             corner_local = self.local_setup(ctl = corner_jaw_ctl, grp = corner_jaw_ctl_grp[0])
             corner_locals.append(corner_local)
 
@@ -386,10 +415,34 @@ class JawModule():
 
             if side == "R":
                 multmatrix_corner = core.mirror_behaviour(type=0, name=f"{side}_lipCorner01Mirror", input_matrix=f"{uv_pin_corners}.outputMatrix[{i}]")
-
-                cmds.connectAttr(f"{multmatrix_corner}", f"{projected_locator}.offsetParentMatrix")
+                connected_attr = multmatrix_corner
+                # cmds.connectAttr(f"{multmatrix_corner}", f"{projected_locator}.offsetParentMatrix")
             else:
-                cmds.connectAttr(f"{uv_pin_corners}.outputMatrix[{i}]", f"{projected_locator}.offsetParentMatrix", force=True)
+                connected_attr = f"{uv_pin_corners}.outputMatrix[{i}]"
+                # cmds.connectAttr(f"{uv_pin_corners}.outputMatrix[{i}]", f"{projected_locator}.offsetParentMatrix", force=True)
+
+            multmatrix = cmds.createNode("multMatrix", name=f"C_lipCorner01Jaw_MMX", ss=True)
+            cmds.connectAttr(connected_attr, f"{multmatrix}.matrixIn[0]")
+
+            matrix = cmds.getAttr(self.local_jaw)
+            matrix_inverse = om.MMatrix(matrix).inverse()
+            cmds.setAttr(f"{multmatrix}.matrixIn[1]", matrix_inverse, type="matrix")
+            
+            wtadd = cmds.createNode("wtAddMatrix", name=f"{side}_lipCorner01Jaw_WTM", ss=True)
+            cmds.connectAttr(self.local_jaw, f"{wtadd}.wtMatrix[0].matrixIn")
+            cmds.connectAttr(self.local_upper_jaw, f"{wtadd}.wtMatrix[1].matrixIn")
+            cmds.connectAttr(f"{corner_jaw_ctl}.upperJawLowerJaw", f"{wtadd}.wtMatrix[0].weightIn")
+            cmds.connectAttr(f"{self.jaw_reverse}.outputX", f"{wtadd}.wtMatrix[1].weightIn")
+
+            cmds.connectAttr(f"{wtadd}.matrixSum", f"{multmatrix}.matrixIn[2]")
+
+            # if main_mid_name == "lower":
+            #     cmds.connectAttr(f"{self.local_jaw}", f"{multmatrix}.matrixIn[2]")
+            # else:
+            #     cmds.connectAttr(f"{self.local_upper_jaw}", f"{multmatrix}.matrixIn[2]")
+
+            cmds.connectAttr(f"{multmatrix}.matrixSum", f"{projected_locator}.offsetParentMatrix", force=True)
+
 
             cmds.parent(projected_locator, self.projected_locators_trn)
 
@@ -473,12 +526,9 @@ class JawModule():
                                                     0, 0, 0, 1, type="matrix")
                 cmds.connectAttr(f"{mid_pos_4b4}.output", f"{multmatrix_corner}.matrixIn[1]")
 
-
                 cmds.connectAttr(f"{multmatrix_corner}.matrixSum", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
             else:
                 cmds.connectAttr(f"{mid_pos_4b4}.output", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
-
-            parent_mouth_pos = core.local_space_parent(self.main_mid_ctl, parents=[f"{jaw_controller}"])
 
             self.mid_local = self.local_setup(ctl = self.main_mid_ctl, grp = self.main_mid_ctl_grp[0])
             
@@ -511,10 +561,28 @@ class JawModule():
             if main_mid_name == "lower":
                 multmatrix_corner = core.mirror_behaviour(type=2, name=f"C_{main_mid_name}Lip01Mirror", input_matrix=f"{uv_pin}.outputMatrix[0]")
 
-                cmds.connectAttr(f"{multmatrix_corner}", f"{projected_locator_mid}.offsetParentMatrix")
+                # cmds.connectAttr(f"{multmatrix_corner}", f"{projected_locator_mid}.offsetParentMatrix")
+                connected_attr = multmatrix_corner
             else:
 
-                cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{projected_locator_mid}.offsetParentMatrix", force=True)
+                # cmds.connectAttr(f"{uv_pin}.outputMatrix[0]", f"{projected_locator_mid}.offsetParentMatrix", force=True)
+                connected_attr = f"{uv_pin}.outputMatrix[0]"
+
+            multmatrix = cmds.createNode("multMatrix", name=f"C_{main_mid_name}MidLipJaw_MMX", ss=True)
+            cmds.connectAttr(connected_attr, f"{multmatrix}.matrixIn[0]")
+
+            matrix = cmds.getAttr(self.local_jaw)
+            matrix_inverse = om.MMatrix(matrix).inverse()
+            cmds.setAttr(f"{multmatrix}.matrixIn[1]", matrix_inverse, type="matrix")
+            
+            if main_mid_name == "lower":
+                cmds.connectAttr(f"{self.local_jaw}", f"{multmatrix}.matrixIn[2]")
+            else:
+                cmds.connectAttr(f"{self.local_upper_jaw}", f"{multmatrix}.matrixIn[2]")
+
+            cmds.connectAttr(f"{multmatrix}.matrixSum", f"{projected_locator_mid}.offsetParentMatrix", force=True)
+
+
             cmds.parent(projected_locator_mid, self.projected_locators_trn)
 
             for i, local in enumerate(corner_locals):
@@ -571,9 +639,39 @@ class JawModule():
                         else:
                             multmatrix = core.mirror_behaviour(type=2, name=f"{side}_{main_mid_name}Lip0{num_zero+2}Mirror", input_matrix=f"{aimMatrix}.outputMatrix")
 
-                        cmds.connectAttr(f"{multmatrix}", f"{projected_locator}.offsetParentMatrix")
+                        connected_attr = multmatrix
+                        # cmds.connectAttr(f"{multmatrix}", f"{projected_locator}.offsetParentMatrix")
                     else:
-                        cmds.connectAttr(f"{aimMatrix}.outputMatrix", f"{projected_locator}.offsetParentMatrix", force=True)
+                        connected_attr = f"{aimMatrix}.outputMatrix"
+                        # cmds.connectAttr(f"{aimMatrix}.outputMatrix", f"{projected_locator}.offsetParentMatrix", force=True)
+
+                    multmatrix = cmds.createNode("multMatrix", name=f"{side}_{main_mid_name}Lip0{num_zero+2}Jaw_MMX", ss=True)
+                    cmds.connectAttr(connected_attr, f"{multmatrix}.matrixIn[0]")
+
+                    matrix = cmds.getAttr(self.local_jaw)
+                    matrix_inverse = om.MMatrix(matrix).inverse()
+                    cmds.setAttr(f"{multmatrix}.matrixIn[1]", matrix_inverse, type="matrix")
+                    
+                    wtadd = cmds.createNode("wtAddMatrix", name=f"{side}_{main_mid_name}Lip0{num_zero+2}Jaw_WTM", ss=True)
+                    cmds.connectAttr(self.local_jaw, f"{wtadd}.wtMatrix[0].matrixIn")
+                    cmds.connectAttr(self.local_upper_jaw, f"{wtadd}.wtMatrix[1].matrixIn")
+
+                    reverse = cmds.createNode("reverse", name=f"{side}_{main_mid_name}Lip0{num_zero+2}Jaw_REV", ss=True)
+
+                    # if "upper" in main_mid_name:
+                        # jawLowerWeight03
+                    cmds.connectAttr(f"{self.transform_settings}.jaw{main_mid_name.capitalize()}Weight0{num_zero+2}", f"{wtadd}.wtMatrix[0].weightIn")
+                    cmds.connectAttr(f"{self.transform_settings}.jaw{main_mid_name.capitalize()}Weight0{num_zero+2}", f"{reverse}.inputX")
+                    cmds.connectAttr(f"{reverse}.outputX", f"{wtadd}.wtMatrix[1].weightIn")
+
+                    # else:
+                    #     cmds.connectAttr(f"{self.transform_settings}.jawLowerWeight0{num_zero+2}", f"{wtadd}.wtMatrix[1].weightIn")
+                    #     cmds.connectAttr(f"{self.transform_settings}.jawLowerWeight0{num_zero+2}", f"{reverse}.inputX")
+                    #     cmds.connectAttr(f"{reverse}.outputX", f"{wtadd}.wtMatrix[0].weightIn")
+
+                    cmds.connectAttr(f"{wtadd}.matrixSum", f"{multmatrix}.matrixIn[2]")
+
+                    cmds.connectAttr(f"{multmatrix}.matrixSum", f"{projected_locator}.offsetParentMatrix", force=True)
 
             # cv_deboors = [local_lips_corner_projected[1], cvs_deboors[2], cvs_deboors[3], projected_locator_mid, cvs_deboors[1], cvs_deboors[0], local_lips_corner_projected[0]]
             cv_deboors = [corner_projected_ctls[1], cvs_deboors[2], cvs_deboors[3], projected_locator_mid, cvs_deboors[1], cvs_deboors[0], corner_projected_ctls[0]]
