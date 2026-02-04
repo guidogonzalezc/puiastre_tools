@@ -914,7 +914,7 @@ class CheekBoneGuideCreation(GuideCreation):
     """
     Guide creation for feet.
     """
-    def __init__(self, side = "L", limb_name="cheekBone"):
+    def __init__(self, side = "L", limb_name="cheekBone", input_name="cheekBone"):
         self.sides = side
         self.reverse_foot_name = limb_name
         self.limb_name = "cheekBone"
@@ -923,11 +923,36 @@ class CheekBoneGuideCreation(GuideCreation):
         self.controller_number = None
         self.prefix = None
 
-        self.position_data = {
-        f"cheekBone01": get_data(f"{self.sides}_cheekBone01"),
-        f"cheekBone02": get_data(f"{self.sides}_cheekBone02"),
-        f"cheekBone03": get_data(f"{self.sides}_cheekBone03f"),
-    }
+        final_path = core.DataManager.get_guide_data()
+        try:
+            with open(final_path, "r") as infile:
+                guides_data = json.load(infile)
+        except Exception as e:
+            om.MGlobal.displayError(f"Error loading guides data: {e}")
+
+        guide_set_name = next(iter(guides_data))
+        parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
+
+        def collect_descendants(parent, parent_map):
+            descendants = []
+            children = [joint for joint, p in parent_map.items() if p == parent]
+            for child in children:
+                descendants.append(child)
+                descendants.extend(collect_descendants(child, parent_map))
+            return descendants
+
+        all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+        self.position_data = {}
+
+        try:
+            for guide in all_child_guides:
+                self.position_data.update({
+                    guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+                })
+        except:
+            pass
+
+        print(self.position_data)
 
 class MouthGuideCreation(GuideCreation):
     """
