@@ -4,6 +4,7 @@ from maya import cmds
 from importlib import reload
 import maya.api.OpenMaya as om
 import math
+import re
 
 # Local imports
 from puiastreTools.utils.curve_tool import controller_creator
@@ -86,40 +87,77 @@ class CheekBoneModule():
 
         controllers = []
         controllers_grp = []
-        for guide in self.guides:
-            name = guide.replace("_GUIDE", "")
 
+        def_name = re.sub(r'\d+', '', self.guides[0].replace('_GUIDE', ''))
 
-            ctl, controller_grp = controller_creator(
-                name= name,
+        ctl_main, controller_grp = controller_creator(
+            name= f"{def_name}Main",
                 suffixes=["GRP", "OFF", "ANM"],
                 lock=["visibility"],
                 ro=True,
+                parent=self.controllers_trn
             )
+        
+        if self.side == "L":
+                cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{controller_grp[0]}.offsetParentMatrix", force=True)
+
+
+        else:
+            multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.guides[0].replace('_GUIDE', '')}_MMX", ss=True)
+            cmds.setAttr(f"{multmatrix}.matrixIn[0]", -1, 0, 0, 0,
+                                            0, 1, 0, 0,
+                                            0, 0, 1, 0,
+                                            0, 0, 0, 1, type="matrix")
+            cmds.connectAttr(f"{self.guides[0]}.worldMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
+            cmds.connectAttr( f"{multmatrix}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix", force=True)
+
+        main_local = core.local_mmx(ctl_main, controller_grp[0])
+
+        for i, guide in enumerate(self.guides):
+            name = re.sub(r'\d+', '', guide.replace("_GUIDE", ""))
+
+
+            ctl, controller_grp = controller_creator(
+                name= f"{name}0{i+1}",
+                suffixes=["GRP", "OFF", "ANM"],
+                lock=["visibility"],
+                ro=True,
+                parent=self.controllers_trn
+            )
+
+            cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
+
+            parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_{name}0{i+1}_PM", ss=True)
 
 
             if self.side == "L":
                 cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{controller_grp[0]}.offsetParentMatrix", force=True)
-
+                cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{parent_matrix}.inputMatrix", force=True)
 
             else:
-                multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}_MMX", ss=True)
+                multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}0{i+1}_MMX", ss=True)
                 cmds.setAttr(f"{multmatrix}.matrixIn[0]", -1, 0, 0, 0,
                                                 0, 1, 0, 0,
                                                 0, 0, 1, 0,
                                                 0, 0, 0, 1, type="matrix")
                 cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{multmatrix}.matrixIn[1]", force=True)
                 cmds.connectAttr( f"{multmatrix}.matrixSum", f"{controller_grp[0]}.offsetParentMatrix", force=True)
+                cmds.connectAttr(f"{multmatrix}.matrixSum", f"{parent_matrix}.inputMatrix", force=True)
+
+            cmds.connectAttr(f"{main_local}", f"{parent_matrix}.target[0].targetMatrix", force=True)
+            offset = core.get_offset_matrix(f"{controller_grp[0]}.worldMatrix[0]", f"{ctl_main}.worldMatrix[0]")
+            cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", offset, type="matrix")
+
+            multmatrix_offset = cmds.createNode("multMatrix", name=f"{self.side}_{name}0{i+1}Offset_MMX", ss=True)
+            cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{multmatrix_offset}.matrixIn[0]", force=True)
+            cmds.connectAttr(f"{controller_grp[0]}.worldInverseMatrix[0]", f"{multmatrix_offset}.matrixIn[1]", force=True)
+            cmds.connectAttr(f"{multmatrix_offset}.matrixSum", f"{controller_grp[1]}.offsetParentMatrix", force=True)
 
             mmx = core.local_mmx(ctl, controller_grp[0])
 
-            joint = cmds.createNode("joint", name=f"{name}_JNT", parent=self.skinning_trn)
+            joint = cmds.createNode("joint", name=f"{name}0{i+1}_JNT", parent=self.skinning_trn)
             cmds.connectAttr(mmx, f"{joint}.offsetParentMatrix", force=True)
 
-            for attr in ["tx", "ty", "tz", "rx", "ry", "rz"]:
-                cmds.setAttr(f"{controller_grp[0]}.{attr}", 0)
-
-            cmds.parent(controller_grp[0], self.controllers_trn if not controllers_grp else controllers[0])
 
             controllers.append(ctl)
             controllers_grp.append(controller_grp)
