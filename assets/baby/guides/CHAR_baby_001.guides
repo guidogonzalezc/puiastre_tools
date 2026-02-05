@@ -1319,44 +1319,6 @@
             "controllerNumber": "Child",
             "guide_type_object": "Guide"
         },
-        "L_innerNose_GUIDE": {
-            "worldPosition": [
-                0.621037483215332,
-                102.02425384521484,
-                10.380764961242676
-            ],
-            "worldRotation": [
-                70.48288355401728,
-                -5.091392156649238,
-                39.44417601720197
-            ],
-            "parent": "C_noseMain_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
-        "R_innerNose_GUIDE": {
-            "worldPosition": [
-                -0.621037483215332,
-                102.02425384521484,
-                10.380764961242676
-            ],
-            "worldRotation": [
-                70.48288355401728,
-                5.091392156649238,
-                -39.44417601720197
-            ],
-            "parent": "C_noseMain_GUIDE",
-            "jointTwist": "Child",
-            "type": 0,
-            "moduleName": "Child",
-            "prefix": "Child",
-            "controllerNumber": "Child",
-            "guide_type_object": "Guide"
-        },
         "L_noseFlare_GUIDE": {
             "worldPosition": [
                 1.8480261564254763,
@@ -1381,6 +1343,44 @@
                 -1.8480261564254763,
                 103.03369903564453,
                 10.522326469421387
+            ],
+            "worldRotation": [
+                70.48288355401728,
+                5.091392156649238,
+                -39.44417601720197
+            ],
+            "parent": "C_noseMain_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_innerNose_GUIDE": {
+            "worldPosition": [
+                0.621037483215332,
+                102.02425384521484,
+                10.380764961242676
+            ],
+            "worldRotation": [
+                70.48288355401728,
+                -5.091392156649238,
+                39.44417601720197
+            ],
+            "parent": "C_noseMain_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_innerNose_GUIDE": {
+            "worldPosition": [
+                -0.621037483215332,
+                102.02425384521484,
+                10.380764961242676
             ],
             "worldRotation": [
                 70.48288355401728,
@@ -1440,9 +1440,9 @@
                 5.160348892211914
             ],
             "worldRotation": [
-                14.41944333599902,
-                -25.912289522079796,
-                -20.45020600506519
+                14.41944333599903,
+                -25.9122895220798,
+                -20.450206005065205
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
@@ -1459,14 +1459,394 @@
                 5.160348892211914
             ],
             "worldRotation": [
-                14.41944333599902,
-                25.912289522079796,
-                20.45020600506519
+                14.41944333599903,
+                25.9122895220798,
+                20.450206005065205
             ],
             "parent": "guides_GRP",
             "jointTwist": "Child",
             "type": 0,
             "moduleName": "cheek",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_lowerEyeSocket02_GUIDE": {
+            "worldPosition": [
+                2.5087122917175293,
+                105.47442626953125,
+                7.623157501220703
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lowerEyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_lowerEyeSocket03_GUIDE": {
+            "worldPosition": [
+                7.856875896453857,
+                105.4318618774414,
+                5.906008720397949
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_lowerEyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_lowerEyeSocket01_GUIDE": {
+            "worldPosition": [
+                5.263731956481934,
+                104.71110534667969,
+                7.457790374755859
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "cheekBone",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_lowerEyeSocket02_GUIDE": {
+            "worldPosition": [
+                -2.5087122917175293,
+                105.47442626953125,
+                7.623157501220703
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "R_lowerEyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_lowerEyeSocket03_GUIDE": {
+            "worldPosition": [
+                -7.856875896453857,
+                105.4318618774414,
+                5.906008720397949
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "R_lowerEyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_lowerEyeSocket01_GUIDE": {
+            "worldPosition": [
+                -5.263731956481934,
+                104.71110534667969,
+                7.457790374755859
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "cheekBone",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_eyeSocket02_GUIDE": {
+            "worldPosition": [
+                2.545698404312134,
+                107.91598510742188,
+                7.723799705505371
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_eyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_eyeSocket03_GUIDE": {
+            "worldPosition": [
+                7.6106953620910645,
+                108.18919372558594,
+                5.968426704406738
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_eyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_eyeSocket01_GUIDE": {
+            "worldPosition": [
+                5.031198024749756,
+                109.46794128417969,
+                7.225963592529297
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "cheekBone",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_eyeSocket02_GUIDE": {
+            "worldPosition": [
+                -2.545698404312134,
+                107.91598510742188,
+                7.723799705505371
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "R_eyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_eyeSocket03_GUIDE": {
+            "worldPosition": [
+                -7.6106953620910645,
+                108.18919372558594,
+                5.968426704406738
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "R_eyeSocket01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_eyeSocket01_GUIDE": {
+            "worldPosition": [
+                -5.031198024749756,
+                109.46794128417969,
+                7.225963592529297
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "cheekBone",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_cheekBone02_GUIDE": {
+            "worldPosition": [
+                2.8424830436706543,
+                104.1180648803711,
+                8.66612434387207
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_cheekBone01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_cheekBone03_GUIDE": {
+            "worldPosition": [
+                8.885159492492676,
+                103.82852172851562,
+                5.595451831817627
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "L_cheekBone01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "L_cheekBone01_GUIDE": {
+            "worldPosition": [
+                5.525944232940674,
+                103.00019073486328,
+                8.224529266357422
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "cheekBone",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_cheekBone02_GUIDE": {
+            "worldPosition": [
+                -2.8424830436706543,
+                104.1180648803711,
+                8.66612434387207
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "R_cheekBone01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_cheekBone03_GUIDE": {
+            "worldPosition": [
+                -8.885159492492676,
+                103.82852172851562,
+                5.595451831817627
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "R_cheekBone01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "R_cheekBone01_GUIDE": {
+            "worldPosition": [
+                -5.525944232940674,
+                103.00019073486328,
+                8.224529266357422
+            ],
+            "worldRotation": [
+                0.0,
+                -0.0,
+                -0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "cheekBone",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "C_tongue02_GUIDE": {
+            "worldPosition": [
+                -0.029108762741088867,
+                98.80458059040723,
+                7.366044521331787
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "C_tongue01_GUIDE",
+            "jointTwist": "Child",
+            "type": 0,
+            "moduleName": "Child",
+            "prefix": "Child",
+            "controllerNumber": "Child",
+            "guide_type_object": "Guide"
+        },
+        "C_tongue01_GUIDE": {
+            "worldPosition": [
+                -0.029108762741088867,
+                98.80458059040723,
+                0.2745143175125122
+            ],
+            "worldRotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "parent": "guides_GRP",
+            "jointTwist": 10.0,
+            "type": 0,
+            "moduleName": "tongue",
             "prefix": "Child",
             "controllerNumber": "Child",
             "guide_type_object": "Guide"

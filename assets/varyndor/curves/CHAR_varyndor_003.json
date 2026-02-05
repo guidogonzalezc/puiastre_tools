@@ -70,7 +70,7 @@
                 }
             },
             {
-                "name": "C_body_CTLShape76",
+                "name": "C_body_CTLShape79",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -133,7 +133,7 @@
                 }
             },
             {
-                "name": "C_body_CTLShape77",
+                "name": "C_body_CTLShape80",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -196,7 +196,7 @@
                 }
             },
             {
-                "name": "C_body_CTLShape78",
+                "name": "C_body_CTLShape81",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1243,7 +1243,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape76",
+                "name": "C_localHip_CTLShape79",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1326,7 +1326,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape77",
+                "name": "C_localHip_CTLShape80",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1409,7 +1409,7 @@
                 }
             },
             {
-                "name": "C_localHip_CTLShape78",
+                "name": "C_localHip_CTLShape81",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -1860,7 +1860,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape51",
+                "name": "C_movablePivot_CTLShape53",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -1943,7 +1943,7 @@
                 }
             },
             {
-                "name": "C_movablePivot_CTLShape52",
+                "name": "C_movablePivot_CTLShape54",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": true,
@@ -4929,6 +4929,466 @@
             }
         ]
     },
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL": {
+        "transform": {
+            "name": "C_tongue00_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue00_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            29.39633006896185,
+                            8.867989508503193,
+                            -0.7168852966520484
+                        ],
+                        [
+                            -1.4210854715202004e-14,
+                            12.541231033907925,
+                            -1.0138289091911519
+                        ],
+                        [
+                            -29.39633006896185,
+                            8.867989508503193,
+                            -0.7168852966520484
+                        ],
+                        [
+                            -29.396477404737183,
+                            -8.660571598937059e-13,
+                            -8.662157912350896e-14
+                        ],
+                        [
+                            -29.39633006896185,
+                            -8.86798950850497,
+                            0.7168852966518569
+                        ],
+                        [
+                            -1.7763568394002505e-14,
+                            -12.541231033909654,
+                            1.0138289091909678
+                        ],
+                        [
+                            29.39633006896185,
+                            -8.86798950850497,
+                            0.7168852966518569
+                        ],
+                        [
+                            29.396477404737183,
+                            -8.68418110597653e-13,
+                            -8.643822995550414e-14
+                        ],
+                        [
+                            29.39633006896185,
+                            8.867989508503193,
+                            -0.7168852966520484
+                        ],
+                        [
+                            -1.4210854715202004e-14,
+                            12.541231033907925,
+                            -1.0138289091911519
+                        ],
+                        [
+                            -29.39633006896185,
+                            8.867989508503193,
+                            -0.7168852966520484
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL": {
+        "transform": {
+            "name": "C_tongue01_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue01_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            30.627940856525317,
+                            17.545631355173583,
+                            -0.7723919240782569
+                        ],
+                        [
+                            1.4210854715202004e-14,
+                            20.752935836509337,
+                            -1.0923271344975458
+                        ],
+                        [
+                            -30.627940856525317,
+                            17.545631355173583,
+                            -0.7723919240782569
+                        ],
+                        [
+                            -30.62810889826024,
+                            9.802513377673272,
+                            -3.3049396552797816e-12
+                        ],
+                        [
+                            -30.627940856525317,
+                            2.05939540017298,
+                            0.7723919240716446
+                        ],
+                        [
+                            1.4210854715202004e-14,
+                            -1.1479090811623998,
+                            1.0923271344909409
+                        ],
+                        [
+                            30.627940856525317,
+                            2.05939540017298,
+                            0.7723919240716446
+                        ],
+                        [
+                            30.62810889826024,
+                            9.802513377673272,
+                            -3.3049396552797816e-12
+                        ],
+                        [
+                            30.627940856525317,
+                            17.545631355173583,
+                            -0.7723919240782569
+                        ],
+                        [
+                            1.4210854715202004e-14,
+                            20.752935836509337,
+                            -1.0923271344975458
+                        ],
+                        [
+                            -30.627940856525317,
+                            17.545631355173583,
+                            -0.7723919240782569
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL|C_tongue02_GRP|C_tongue02_ANM|C_tongue02_CTL": {
+        "transform": {
+            "name": "C_tongue02_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue02_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            18.79777372262547,
+                            7.264215740661498,
+                            -0.49632802026123213
+                        ],
+                        [
+                            1.546302635934272e-15,
+                            9.441194241938017,
+                            -0.7019138176843435
+                        ],
+                        [
+                            -18.79777372262547,
+                            7.264215740661497,
+                            -0.4963280202612319
+                        ],
+                        [
+                            -18.79786117304711,
+                            2.008524717883301,
+                            1.0732881269967619e-10
+                        ],
+                        [
+                            -18.79777372262547,
+                            -3.247166304894897,
+                            0.4963280204758911
+                        ],
+                        [
+                            -2.70890199495872e-15,
+                            -5.42414480617288,
+                            0.7019138178976899
+                        ],
+                        [
+                            18.79777372262547,
+                            -3.247166304894897,
+                            0.4963280204758911
+                        ],
+                        [
+                            18.79786117304711,
+                            2.008524717883299,
+                            1.0732894123806498e-10
+                        ],
+                        [
+                            18.79777372262547,
+                            7.264215740661498,
+                            -0.49632802026123213
+                        ],
+                        [
+                            1.546302635934272e-15,
+                            9.441194241938017,
+                            -0.7019138176843435
+                        ],
+                        [
+                            -18.79777372262547,
+                            7.264215740661497,
+                            -0.4963280202612319
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL|C_tongue02_GRP|C_tongue02_ANM|C_tongue02_CTL|C_tongue03_GRP|C_tongue03_ANM|C_tongue03_CTL": {
+        "transform": {
+            "name": "C_tongue03_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue03_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            14.214990148557963,
+                            3.644414249670025,
+                            -0.3175025255804808
+                        ],
+                        [
+                            -1.538447944039464e-14,
+                            5.153980058789586,
+                            -0.449016377763655
+                        ],
+                        [
+                            -14.214990148557963,
+                            3.644414249670025,
+                            -0.3175025255804808
+                        ],
+                        [
+                            -14.21505073991899,
+                            -5.755238116041542e-13,
+                            1.3413115046120862e-14
+                        ],
+                        [
+                            -14.214990148557963,
+                            -3.644414249671177,
+                            0.3175025255805077
+                        ],
+                        [
+                            -1.836730987676073e-14,
+                            -5.153980058790285,
+                            0.44901637776363257
+                        ],
+                        [
+                            14.214990148557963,
+                            -3.644414249671177,
+                            0.3175025255805077
+                        ],
+                        [
+                            14.21505073991899,
+                            -5.764940039091794e-13,
+                            1.349519376936465e-14
+                        ],
+                        [
+                            14.214990148557963,
+                            3.644414249670025,
+                            -0.3175025255804808
+                        ],
+                        [
+                            -1.538447944039464e-14,
+                            5.153980058789586,
+                            -0.449016377763655
+                        ],
+                        [
+                            -14.214990148557963,
+                            3.644414249670025,
+                            -0.3175025255804808
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
+    "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_tongueControllers_GRP|C_tongue00_GRP|C_tongue00_ANM|C_tongue00_CTL|C_tongue01_GRP|C_tongue01_ANM|C_tongue01_CTL|C_tongue02_GRP|C_tongue02_ANM|C_tongue02_CTL|C_tongue03_GRP|C_tongue03_ANM|C_tongue03_CTL|C_tongue04_GRP|C_tongue04_ANM|C_tongue04_CTL": {
+        "transform": {
+            "name": "C_tongue04_CTL",
+            "overrideEnabled": false,
+            "overrideColor": null
+        },
+        "shapes": [
+            {
+                "name": "C_tongue04_CTLShape",
+                "overrideEnabled": false,
+                "overrideColor": null,
+                "alwaysDrawOnTop": false,
+                "lineWidth": -1.0,
+                "curve": {
+                    "cvs": [
+                        [
+                            12.304940875515573,
+                            6.6202714287269675,
+                            -0.44810285462090593
+                        ],
+                        [
+                            -1.296947953215144e-14,
+                            8.494086984850899,
+                            -0.6200424997665108
+                        ],
+                        [
+                            -12.304940875515573,
+                            6.6202714287269675,
+                            -0.44810285462090593
+                        ],
+                        [
+                            -12.30498906103091,
+                            2.09648049974686,
+                            -0.033003831400769304
+                        ],
+                        [
+                            -12.304940875515573,
+                            -2.4273104292332435,
+                            0.3820951918193673
+                        ],
+                        [
+                            -1.5495414729816335e-14,
+                            -4.301125985357173,
+                            0.5540348369649718
+                        ],
+                        [
+                            12.304940875515573,
+                            -2.4273104292332435,
+                            0.3820951918193673
+                        ],
+                        [
+                            12.30498906103091,
+                            2.096480499746859,
+                            -0.03300383140076918
+                        ],
+                        [
+                            12.304940875515573,
+                            6.6202714287269675,
+                            -0.44810285462090593
+                        ],
+                        [
+                            -1.296947953215144e-14,
+                            8.494086984850899,
+                            -0.6200424997665108
+                        ],
+                        [
+                            -12.304940875515573,
+                            6.6202714287269675,
+                            -0.44810285462090593
+                        ]
+                    ],
+                    "form": "periodic",
+                    "knots": [
+                        -2.0,
+                        -1.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        3.0,
+                        4.0,
+                        5.0,
+                        6.0,
+                        7.0,
+                        8.0,
+                        9.0,
+                        10.0
+                    ],
+                    "degree": 3
+                }
+            }
+        ]
+    },
     "|varyndor|controls_GRP|C_characterNode_GRP|C_characterNode_ANM|C_characterNode_CTL|C_masterWalk_GRP|C_masterWalk_ANM|C_masterWalk_CTL|C_jawControllers_GRP|C_upperJaw_GRP|C_upperJaw_ANM|C_upperJaw_CTL": {
         "transform": {
             "name": "C_upperJaw_CTL",
@@ -6827,14 +7287,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            1047.1172262462253,
+                            1047.1172262462246,
                             995.7590994789971,
-                            -443.4967236196202
+                            -443.4967236196204
                         ],
                         [
-                            996.2156824491581,
-                            1011.5561657680938,
-                            470.78756404785116
+                            996.215682449158,
+                            1011.5561657680943,
+                            470.78756404785156
                         ]
                     ],
                     "form": "open",
@@ -13564,7 +14024,7 @@
                 }
             },
             {
-                "name": "L_endLowerTailSpikesAttributes_CTLShape7",
+                "name": "L_endLowerTailSpikesAttributes_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -13647,7 +14107,7 @@
                 }
             },
             {
-                "name": "L_endLowerTailSpikesAttributes_CTLShape8",
+                "name": "L_endLowerTailSpikesAttributes_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -13822,7 +14282,7 @@
                 }
             },
             {
-                "name": "L_endUpperTailSpikesAttributes_CTLShape7",
+                "name": "L_endUpperTailSpikesAttributes_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -13905,7 +14365,7 @@
                 }
             },
             {
-                "name": "L_endUpperTailSpikesAttributes_CTLShape8",
+                "name": "L_endUpperTailSpikesAttributes_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -16280,14 +16740,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            2107.18339175409,
-                            2228.010634297523,
+                            2107.183391754088,
+                            2228.010634297524,
                             278.3450263560387
                         ],
                         [
-                            2107.183391435305,
-                            995.8136472460023,
-                            278.34502858055646
+                            2107.1833914353047,
+                            995.8136472460025,
+                            278.34502858055555
                         ]
                     ],
                     "form": "open",
@@ -18688,14 +19148,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            2836.217048299126,
-                            2606.6786780417588,
-                            1250.270570263604
+                            2836.217048298833,
+                            2606.678678041754,
+                            1250.2705702646708
                         ],
                         [
-                            2860.117388743598,
-                            1007.3721283040528,
-                            1250.3789760461295
+                            2860.1173887435975,
+                            1007.372128304056,
+                            1250.37897604613
                         ]
                     ],
                     "form": "open",
@@ -20191,7 +20651,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape176",
+                "name": "L_hand_CTLShape183",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20452,7 +20912,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape177",
+                "name": "L_hand_CTLShape184",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -20761,7 +21221,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape178",
+                "name": "L_hand_CTLShape185",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -21118,7 +21578,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape179",
+                "name": "L_hand_CTLShape186",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22003,7 +22463,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape180",
+                "name": "L_hand_CTLShape187",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22264,7 +22724,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape181",
+                "name": "L_hand_CTLShape188",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -22525,7 +22985,7 @@
                 }
             },
             {
-                "name": "L_hand_CTLShape182",
+                "name": "L_hand_CTLShape189",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -24662,7 +25122,7 @@
                 }
             },
             {
-                "name": "L_lowerNeckSpikesAttributes_CTLShape7",
+                "name": "L_lowerNeckSpikesAttributes_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -24745,7 +25205,7 @@
                 }
             },
             {
-                "name": "L_lowerNeckSpikesAttributes_CTLShape8",
+                "name": "L_lowerNeckSpikesAttributes_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -26647,14 +27107,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            2882.6806341480765,
+                            2882.6806341480756,
                             2993.6194796021637,
-                            329.9170534993848
+                            329.917053499384
                         ],
                         [
-                            2882.6806312757144,
-                            1004.0141384650956,
-                            329.9170556029742
+                            2882.680631275712,
+                            1004.0141384650958,
+                            329.9170556029736
                         ]
                     ],
                     "form": "open",
@@ -28282,7 +28742,7 @@
                 }
             },
             {
-                "name": "L_tailSpikesAttributes_CTLShape7",
+                "name": "L_tailSpikesAttributes_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -28365,7 +28825,7 @@
                 }
             },
             {
-                "name": "L_tailSpikesAttributes_CTLShape8",
+                "name": "L_tailSpikesAttributes_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -29341,14 +29801,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            3090.7967885521166,
-                            2997.982800757238,
-                            857.4818717315593
+                            3090.7967885521157,
+                            2997.9828007572387,
+                            857.4818717315584
                         ],
                         [
-                            3090.7967849649567,
-                            995.8460839281946,
-                            857.4818721675134
+                            3090.7967849649544,
+                            995.8460839281935,
+                            857.4818721675126
                         ]
                     ],
                     "form": "open",
@@ -32150,7 +32610,7 @@
                 }
             },
             {
-                "name": "L_upperNeckSpikesAttributes_CTLShape7",
+                "name": "L_upperNeckSpikesAttributes_CTLShape9",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32233,7 +32693,7 @@
                 }
             },
             {
-                "name": "L_upperNeckSpikesAttributes_CTLShape8",
+                "name": "L_upperNeckSpikesAttributes_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32417,7 +32877,7 @@
         },
         "shapes": [
             {
-                "name": "R_InnerEyelidCorner_CTLShape01",
+                "name": "R_InnerEyelidCorner_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32509,7 +32969,7 @@
         },
         "shapes": [
             {
-                "name": "R_InnerPrimaryMembrane02_CTLShape01",
+                "name": "R_InnerPrimaryMembrane02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32619,7 +33079,7 @@
         },
         "shapes": [
             {
-                "name": "R_InnerPrimaryMembrane04_CTLShape01",
+                "name": "R_InnerPrimaryMembrane04_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32729,7 +33189,7 @@
         },
         "shapes": [
             {
-                "name": "R_InnerPrimaryMembrane05_CTLShape01",
+                "name": "R_InnerPrimaryMembrane05_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32839,7 +33299,7 @@
         },
         "shapes": [
             {
-                "name": "R_MainMembrane_CTLShape01",
+                "name": "R_MainMembrane_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -32949,7 +33409,7 @@
         },
         "shapes": [
             {
-                "name": "R_MiddlePrimaryMembrane02_CTLShape01",
+                "name": "R_MiddlePrimaryMembrane02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33059,7 +33519,7 @@
         },
         "shapes": [
             {
-                "name": "R_MiddlePrimaryMembrane04_CTLShape01",
+                "name": "R_MiddlePrimaryMembrane04_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33169,7 +33629,7 @@
         },
         "shapes": [
             {
-                "name": "R_MiddlePrimaryMembrane05_CTLShape01",
+                "name": "R_MiddlePrimaryMembrane05_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33279,7 +33739,7 @@
         },
         "shapes": [
             {
-                "name": "R_OuterEyelidCorner_CTLShape01",
+                "name": "R_OuterEyelidCorner_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33371,7 +33831,7 @@
         },
         "shapes": [
             {
-                "name": "R_OuterPrimaryMembrane02_CTLShape01",
+                "name": "R_OuterPrimaryMembrane02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33481,7 +33941,7 @@
         },
         "shapes": [
             {
-                "name": "R_OuterPrimaryMembrane04_CTLShape01",
+                "name": "R_OuterPrimaryMembrane04_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33591,7 +34051,7 @@
         },
         "shapes": [
             {
-                "name": "R_OuterPrimaryMembrane05_CTLShape01",
+                "name": "R_OuterPrimaryMembrane05_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33701,7 +34161,7 @@
         },
         "shapes": [
             {
-                "name": "R_armIk_CTLShape01",
+                "name": "R_armIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33839,7 +34299,7 @@
         },
         "shapes": [
             {
-                "name": "R_armLowerBendyEnd_CTLShape01",
+                "name": "R_armLowerBendyEnd_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -33931,7 +34391,7 @@
         },
         "shapes": [
             {
-                "name": "R_armLowerBendy_CTLShape01",
+                "name": "R_armLowerBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34023,7 +34483,7 @@
         },
         "shapes": [
             {
-                "name": "R_armPVLocator_CTLShape01",
+                "name": "R_armPVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34031,14 +34491,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -1047.1172262462253,
+                            -1047.117226246225,
                             995.7590994789971,
-                            -443.4967236196202
+                            -443.4967236196205
                         ],
                         [
-                            -996.2156824491581,
-                            1011.5561657680938,
-                            470.78756404785116
+                            -996.215682449158,
+                            1011.5561657680937,
+                            470.7875640478513
                         ]
                     ],
                     "form": "open",
@@ -34059,7 +34519,7 @@
         },
         "shapes": [
             {
-                "name": "R_armPV_CTLShape01",
+                "name": "R_armPV_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34197,7 +34657,7 @@
         },
         "shapes": [
             {
-                "name": "R_armRootIk_CTLShape01",
+                "name": "R_armRootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -34409,7 +34869,7 @@
         },
         "shapes": [
             {
-                "name": "R_armSwitch_CTLShape01",
+                "name": "R_armSwitch_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35006,7 +35466,7 @@
                 }
             },
             {
-                "name": "R_armSwitch_CTLShape02",
+                "name": "R_armSwitch_CTLShape1",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35242,7 +35702,7 @@
         },
         "shapes": [
             {
-                "name": "R_armUpperBendyEnd_CTLShape01",
+                "name": "R_armUpperBendyEnd_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35334,7 +35794,7 @@
         },
         "shapes": [
             {
-                "name": "R_armUpperBendy_CTLShape01",
+                "name": "R_armUpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35426,7 +35886,7 @@
         },
         "shapes": [
             {
-                "name": "R_backAnkleFk_CTLShape01",
+                "name": "R_backAnkleFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -35518,7 +35978,7 @@
         },
         "shapes": [
             {
-                "name": "R_backFootBankInIk_CTLShape01",
+                "name": "R_backFootBankInIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -36250,7 +36710,7 @@
         },
         "shapes": [
             {
-                "name": "R_backFootBankOutIk_CTLShape01",
+                "name": "R_backFootBankOutIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -36982,7 +37442,7 @@
         },
         "shapes": [
             {
-                "name": "R_backFootFk_CTLShape01",
+                "name": "R_backFootFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37074,7 +37534,7 @@
         },
         "shapes": [
             {
-                "name": "R_backFootHeelIk_CTLShape01",
+                "name": "R_backFootHeelIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37806,7 +38266,7 @@
         },
         "shapes": [
             {
-                "name": "R_backFootIk_CTLShape01",
+                "name": "R_backFootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -37878,7 +38338,7 @@
         },
         "shapes": [
             {
-                "name": "R_backFootRollIk_CTLShape01",
+                "name": "R_backFootRollIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38090,7 +38550,7 @@
         },
         "shapes": [
             {
-                "name": "R_backKneeFk_CTLShape01",
+                "name": "R_backKneeFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38182,7 +38642,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegFrontRoll_CTLShape01",
+                "name": "R_backLegFrontRoll_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38292,7 +38752,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegIk_CTLShape01",
+                "name": "R_backLegIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38384,7 +38844,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegLowerBendy_CTLShape01",
+                "name": "R_backLegLowerBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38476,7 +38936,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegMiddleBendy_CTLShape01",
+                "name": "R_backLegMiddleBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38568,7 +39028,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegPVLocator_CTLShape01",
+                "name": "R_backLegPVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38576,14 +39036,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -294.7534167001889,
+                            -294.75341670018895,
                             430.76416249548777,
                             468.7172760714343
                         ],
                         [
-                            -240.4929480159751,
+                            -240.49294801597506,
                             562.0764259745288,
-                            107.11779142170707
+                            107.11779142170744
                         ]
                     ],
                     "form": "open",
@@ -38604,7 +39064,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegPV_CTLShape01",
+                "name": "R_backLegPV_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38724,7 +39184,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegRootIk_CTLShape01",
+                "name": "R_backLegRootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -38936,7 +39396,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegSwitch_CTLShape01",
+                "name": "R_backLegSwitch_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39533,7 +39993,7 @@
                 }
             },
             {
-                "name": "R_backLegSwitch_CTLShape02",
+                "name": "R_backLegSwitch_CTLShape1",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39769,7 +40229,7 @@
         },
         "shapes": [
             {
-                "name": "R_backLegUpperBendy_CTLShape01",
+                "name": "R_backLegUpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -39861,7 +40321,7 @@
         },
         "shapes": [
             {
-                "name": "R_backToeIk_CTLShape01",
+                "name": "R_backToeIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -40593,7 +41053,7 @@
         },
         "shapes": [
             {
-                "name": "R_elbowFk_CTLShape01",
+                "name": "R_elbowFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -40685,7 +41145,7 @@
         },
         "shapes": [
             {
-                "name": "R_endLowerTailSpikesAttributes_CTLShape01",
+                "name": "R_endLowerTailSpikesAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -40768,7 +41228,7 @@
                 }
             },
             {
-                "name": "R_endLowerTailSpikesAttributes_CTLShape02",
+                "name": "R_endLowerTailSpikesAttributes_CTLShape04",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -40851,7 +41311,7 @@
                 }
             },
             {
-                "name": "R_endLowerTailSpikesAttributes_CTLShape03",
+                "name": "R_endLowerTailSpikesAttributes_CTLShape05",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -40943,7 +41403,7 @@
         },
         "shapes": [
             {
-                "name": "R_endUpperTailSpikesAttributes_CTLShape01",
+                "name": "R_endUpperTailSpikesAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41026,7 +41486,7 @@
                 }
             },
             {
-                "name": "R_endUpperTailSpikesAttributes_CTLShape02",
+                "name": "R_endUpperTailSpikesAttributes_CTLShape04",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41109,7 +41569,7 @@
                 }
             },
             {
-                "name": "R_endUpperTailSpikesAttributes_CTLShape03",
+                "name": "R_endUpperTailSpikesAttributes_CTLShape05",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41201,7 +41661,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyeDirect_CTLShape01",
+                "name": "R_eyeDirect_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41377,7 +41837,7 @@
         },
         "shapes": [
             {
-                "name": "R_eye_CTLShape01",
+                "name": "R_eye_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41469,7 +41929,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsLower01Tan02_CTLShape01",
+                "name": "R_eyelidsLower01Tan02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41561,7 +42021,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsLower02Tan01_CTLShape01",
+                "name": "R_eyelidsLower02Tan01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41653,7 +42113,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsLower02Tan02_CTLShape01",
+                "name": "R_eyelidsLower02Tan02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41745,7 +42205,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsLower02_CTLShape01",
+                "name": "R_eyelidsLower02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41837,7 +42297,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsLower03Tan01_CTLShape01",
+                "name": "R_eyelidsLower03Tan01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -41929,7 +42389,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsUpper01Tan02_CTLShape01",
+                "name": "R_eyelidsUpper01Tan02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42021,7 +42481,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsUpper02Tan01_CTLShape01",
+                "name": "R_eyelidsUpper02Tan01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42113,7 +42573,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsUpper02Tan02_CTLShape01",
+                "name": "R_eyelidsUpper02Tan02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42205,7 +42665,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsUpper02_CTLShape01",
+                "name": "R_eyelidsUpper02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42297,7 +42757,7 @@
         },
         "shapes": [
             {
-                "name": "R_eyelidsUpper03Tan01_CTLShape01",
+                "name": "R_eyelidsUpper03Tan01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42389,7 +42849,7 @@
         },
         "shapes": [
             {
-                "name": "R_fingersBackAttributes_CTLShape01",
+                "name": "R_fingersBackAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42472,7 +42932,7 @@
                 }
             },
             {
-                "name": "R_fingersBackAttributes_CTLShape02",
+                "name": "R_fingersBackAttributes_CTLShape1",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42508,7 +42968,7 @@
         },
         "shapes": [
             {
-                "name": "R_fingersBackPlaneIk_CTLShape01",
+                "name": "R_fingersBackPlaneIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42600,7 +43060,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger00Fk_CTLShape01",
+                "name": "R_firstFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42738,7 +43198,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger00IkAttachedFk_CTLShape01",
+                "name": "R_firstFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -42876,7 +43336,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger00RootIk_CTLShape01",
+                "name": "R_firstFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43016,7 +43476,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger00UpperBendy_CTLShape01",
+                "name": "R_firstFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43108,7 +43568,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger01Fk_CTLShape01",
+                "name": "R_firstFinger01Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43246,7 +43706,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger01IkAttachedFk_CTLShape01",
+                "name": "R_firstFinger01IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43384,7 +43844,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger01MiddleBendy_CTLShape01",
+                "name": "R_firstFinger01MiddleBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43476,7 +43936,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger01PVLocator_CTLShape01",
+                "name": "R_firstFinger01PVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43484,14 +43944,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -2107.18339175409,
-                            2228.010634297523,
-                            278.3450263560387
+                            -2107.1833917540885,
+                            2228.010634297524,
+                            278.3450263560385
                         ],
                         [
-                            -2107.183391435305,
-                            995.8136472460023,
-                            278.34502858055646
+                            -2107.1833914353047,
+                            995.8136472460033,
+                            278.3450285805552
                         ]
                     ],
                     "form": "open",
@@ -43512,7 +43972,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger01PV_CTLShape01",
+                "name": "R_firstFinger01PV_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43632,7 +44092,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger02Fk_CTLShape01",
+                "name": "R_firstFinger02Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43770,7 +44230,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger02IkAttachedFk_CTLShape01",
+                "name": "R_firstFinger02IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -43908,7 +44368,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger02LowerBendy_CTLShape01",
+                "name": "R_firstFinger02LowerBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44000,7 +44460,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger03Fk_CTLShape01",
+                "name": "R_firstFinger03Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44138,7 +44598,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger03IkAttachedFk_CTLShape01",
+                "name": "R_firstFinger03IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44276,7 +44736,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFinger03Ik_CTLShape01",
+                "name": "R_firstFinger03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44402,7 +44862,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstFingerMetacarpal_CTLShape01",
+                "name": "R_firstFingerMetacarpal_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44494,7 +44954,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstMembraneMainController01_CTLShape01",
+                "name": "R_firstMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44604,7 +45064,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstMembraneMainController02_CTLShape01",
+                "name": "R_firstMembraneMainController02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44714,7 +45174,7 @@
         },
         "shapes": [
             {
-                "name": "R_firstMembraneMainController03_CTLShape01",
+                "name": "R_firstMembraneMainController03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44824,7 +45284,7 @@
         },
         "shapes": [
             {
-                "name": "R_footFinger00_CTLShape01",
+                "name": "R_footFinger00_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -44916,7 +45376,7 @@
         },
         "shapes": [
             {
-                "name": "R_footFinger01_CTLShape01",
+                "name": "R_footFinger01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45008,7 +45468,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger00Fk_CTLShape01",
+                "name": "R_fourthFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45146,7 +45606,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger00IkAttachedFk_CTLShape01",
+                "name": "R_fourthFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45284,7 +45744,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger00RootIk_CTLShape01",
+                "name": "R_fourthFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45424,7 +45884,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger00UpperBendy_CTLShape01",
+                "name": "R_fourthFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45516,7 +45976,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger01Fk_CTLShape01",
+                "name": "R_fourthFinger01Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45654,7 +46114,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger01IkAttachedFk_CTLShape01",
+                "name": "R_fourthFinger01IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45792,7 +46252,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger01MiddleBendy_CTLShape01",
+                "name": "R_fourthFinger01MiddleBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45884,7 +46344,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger01PVLocator_CTLShape01",
+                "name": "R_fourthFinger01PVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -45892,14 +46352,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -2836.217048299126,
-                            2606.6786780417588,
-                            1250.270570263604
+                            -2836.217048298833,
+                            2606.6786780417533,
+                            1250.2705702646701
                         ],
                         [
-                            -2860.117388743598,
+                            -2860.117388743596,
                             1007.3721283040528,
-                            1250.3789760461295
+                            1250.3789760461298
                         ]
                     ],
                     "form": "open",
@@ -45920,7 +46380,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger01PV_CTLShape01",
+                "name": "R_fourthFinger01PV_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46040,7 +46500,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger02Fk_CTLShape01",
+                "name": "R_fourthFinger02Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46178,7 +46638,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger02IkAttachedFk_CTLShape01",
+                "name": "R_fourthFinger02IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46316,7 +46776,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger02LowerBendy_CTLShape01",
+                "name": "R_fourthFinger02LowerBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46408,7 +46868,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger03Fk_CTLShape01",
+                "name": "R_fourthFinger03Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46546,7 +47006,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger03IkAttachedFk_CTLShape01",
+                "name": "R_fourthFinger03IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46684,7 +47144,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFinger03Ik_CTLShape01",
+                "name": "R_fourthFinger03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46810,7 +47270,7 @@
         },
         "shapes": [
             {
-                "name": "R_fourthFingerMetacarpal_CTLShape01",
+                "name": "R_fourthFingerMetacarpal_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46902,7 +47362,7 @@
         },
         "shapes": [
             {
-                "name": "R_handThumb00_CTLShape01",
+                "name": "R_handThumb00_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -46994,7 +47454,7 @@
         },
         "shapes": [
             {
-                "name": "R_handThumb01_CTLShape01",
+                "name": "R_handThumb01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47086,7 +47546,7 @@
         },
         "shapes": [
             {
-                "name": "R_hand_CTLShape01",
+                "name": "R_hand_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47395,7 +47855,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape02",
+                "name": "R_hand_CTLShape09",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47656,7 +48116,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape03",
+                "name": "R_hand_CTLShape10",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -47965,7 +48425,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape04",
+                "name": "R_hand_CTLShape11",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -48322,7 +48782,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape05",
+                "name": "R_hand_CTLShape12",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -49207,7 +49667,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape06",
+                "name": "R_hand_CTLShape13",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -49468,7 +49928,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape07",
+                "name": "R_hand_CTLShape14",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -49729,7 +50189,7 @@
                 }
             },
             {
-                "name": "R_hand_CTLShape08",
+                "name": "R_hand_CTLShape15",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50047,7 +50507,7 @@
         },
         "shapes": [
             {
-                "name": "R_hipFk_CTLShape01",
+                "name": "R_hipFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50259,7 +50719,7 @@
         },
         "shapes": [
             {
-                "name": "R_index01_CTLShape01",
+                "name": "R_index01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50351,7 +50811,7 @@
         },
         "shapes": [
             {
-                "name": "R_index02_CTLShape01",
+                "name": "R_index02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50443,7 +50903,7 @@
         },
         "shapes": [
             {
-                "name": "R_index03EndAttachedFk_CTLShape01",
+                "name": "R_index03EndAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50535,7 +50995,7 @@
         },
         "shapes": [
             {
-                "name": "R_index03Ik_CTLShape01",
+                "name": "R_index03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50661,7 +51121,7 @@
         },
         "shapes": [
             {
-                "name": "R_index03Pv_CTLShape01",
+                "name": "R_index03Pv_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50781,7 +51241,7 @@
         },
         "shapes": [
             {
-                "name": "R_index03_CTLShape01",
+                "name": "R_index03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50873,7 +51333,7 @@
         },
         "shapes": [
             {
-                "name": "R_index0301AttachedFk_CTLShape01",
+                "name": "R_index0301AttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -50965,7 +51425,7 @@
         },
         "shapes": [
             {
-                "name": "R_index0302AttachedFk_CTLShape01",
+                "name": "R_index0302AttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51057,7 +51517,7 @@
         },
         "shapes": [
             {
-                "name": "R_indexPVLocator_CTLShape01",
+                "name": "R_indexPVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51065,14 +51525,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -292.30829595560147,
-                            101.04053136937314,
-                            68.41603336884583
+                            -292.1896498793608,
+                            101.0378185142763,
+                            68.44405806489512
                         ],
                         [
-                            -289.9393550566386,
-                            53.23211825129848,
-                            53.96809200173584
+                            -289.91289588186595,
+                            53.231513558139845,
+                            53.97434212141427
                         ]
                     ],
                     "form": "open",
@@ -51093,7 +51553,7 @@
         },
         "shapes": [
             {
-                "name": "R_lipCorner_CTLShape01",
+                "name": "R_lipCorner_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51323,7 +51783,7 @@
         },
         "shapes": [
             {
-                "name": "R_lowerLips01_CTLShape01",
+                "name": "R_lowerLips01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51415,7 +51875,7 @@
         },
         "shapes": [
             {
-                "name": "R_lowerLips02Tan01_CTLShape01",
+                "name": "R_lowerLips02Tan01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51507,7 +51967,7 @@
         },
         "shapes": [
             {
-                "name": "R_lowerLips02Tan02_CTLShape01",
+                "name": "R_lowerLips02Tan02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51599,7 +52059,7 @@
         },
         "shapes": [
             {
-                "name": "R_lowerLips02_CTLShape01",
+                "name": "R_lowerLips02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51783,7 +52243,7 @@
         },
         "shapes": [
             {
-                "name": "R_lowerNeckSpikesAttributes_CTLShape01",
+                "name": "R_lowerNeckSpikesAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51866,7 +52326,7 @@
                 }
             },
             {
-                "name": "R_lowerNeckSpikesAttributes_CTLShape02",
+                "name": "R_lowerNeckSpikesAttributes_CTLShape04",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -51949,7 +52409,7 @@
                 }
             },
             {
-                "name": "R_lowerNeckSpikesAttributes_CTLShape03",
+                "name": "R_lowerNeckSpikesAttributes_CTLShape05",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52041,7 +52501,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle01_CTLShape01",
+                "name": "R_middle01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52133,7 +52593,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle02_CTLShape01",
+                "name": "R_middle02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52225,7 +52685,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle03EndAttachedFk_CTLShape01",
+                "name": "R_middle03EndAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52317,7 +52777,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle03Ik_CTLShape01",
+                "name": "R_middle03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52443,7 +52903,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle03Pv_CTLShape01",
+                "name": "R_middle03Pv_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52563,7 +53023,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle03_CTLShape01",
+                "name": "R_middle03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52655,7 +53115,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle0301AttachedFk_CTLShape01",
+                "name": "R_middle0301AttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52747,7 +53207,7 @@
         },
         "shapes": [
             {
-                "name": "R_middle0302AttachedFk_CTLShape01",
+                "name": "R_middle0302AttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52839,7 +53299,7 @@
         },
         "shapes": [
             {
-                "name": "R_middlePVLocator_CTLShape01",
+                "name": "R_middlePVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52847,14 +53307,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -368.53927223530894,
-                            85.65851728830107,
-                            50.23979131355975
+                            -368.2474383581159,
+                            85.64010732378561,
+                            50.38768627190892
                         ],
                         [
-                            -365.34779994426015,
-                            37.229857736038014,
-                            38.21999628323206
+                            -365.2993687225929,
+                            37.22680368107248,
+                            38.244542394760394
                         ]
                     ],
                     "form": "open",
@@ -52875,7 +53335,7 @@
         },
         "shapes": [
             {
-                "name": "R_scapula_CTLShape01",
+                "name": "R_scapula_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -52967,7 +53427,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger00Fk_CTLShape01",
+                "name": "R_secondFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53105,7 +53565,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger00IkAttachedFk_CTLShape01",
+                "name": "R_secondFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53243,7 +53703,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger00RootIk_CTLShape01",
+                "name": "R_secondFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53383,7 +53843,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger00UpperBendy_CTLShape01",
+                "name": "R_secondFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53475,7 +53935,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger01Fk_CTLShape01",
+                "name": "R_secondFinger01Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53613,7 +54073,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger01IkAttachedFk_CTLShape01",
+                "name": "R_secondFinger01IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53751,7 +54211,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger01MiddleBendy_CTLShape01",
+                "name": "R_secondFinger01MiddleBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53843,7 +54303,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger01PVLocator_CTLShape01",
+                "name": "R_secondFinger01PVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53853,12 +54313,12 @@
                         [
                             -2882.6806341480765,
                             2993.6194796021637,
-                            329.9170534993848
+                            329.9170534993841
                         ],
                         [
-                            -2882.6806312757144,
-                            1004.0141384650956,
-                            329.9170556029742
+                            -2882.6806312757135,
+                            1004.0141384650943,
+                            329.91705560297373
                         ]
                     ],
                     "form": "open",
@@ -53879,7 +54339,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger01PV_CTLShape01",
+                "name": "R_secondFinger01PV_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -53999,7 +54459,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger02Fk_CTLShape01",
+                "name": "R_secondFinger02Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54137,7 +54597,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger02IkAttachedFk_CTLShape01",
+                "name": "R_secondFinger02IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54275,7 +54735,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger02LowerBendy_CTLShape01",
+                "name": "R_secondFinger02LowerBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54367,7 +54827,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger03Fk_CTLShape01",
+                "name": "R_secondFinger03Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54505,7 +54965,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger03IkAttachedFk_CTLShape01",
+                "name": "R_secondFinger03IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54643,7 +55103,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFinger03Ik_CTLShape01",
+                "name": "R_secondFinger03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54769,7 +55229,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondFingerMetacarpal_CTLShape01",
+                "name": "R_secondFingerMetacarpal_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54861,7 +55321,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondMembraneMainController01_CTLShape01",
+                "name": "R_secondMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -54971,7 +55431,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondMembraneMainController02_CTLShape01",
+                "name": "R_secondMembraneMainController02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55081,7 +55541,7 @@
         },
         "shapes": [
             {
-                "name": "R_secondMembraneMainController03_CTLShape01",
+                "name": "R_secondMembraneMainController03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55191,7 +55651,7 @@
         },
         "shapes": [
             {
-                "name": "R_shoulderFk_CTLShape01",
+                "name": "R_shoulderFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55403,7 +55863,7 @@
         },
         "shapes": [
             {
-                "name": "R_tailSpikesAttributes_CTLShape01",
+                "name": "R_tailSpikesAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55486,7 +55946,7 @@
                 }
             },
             {
-                "name": "R_tailSpikesAttributes_CTLShape02",
+                "name": "R_tailSpikesAttributes_CTLShape04",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55569,7 +56029,7 @@
                 }
             },
             {
-                "name": "R_tailSpikesAttributes_CTLShape03",
+                "name": "R_tailSpikesAttributes_CTLShape05",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55661,7 +56121,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger00Fk_CTLShape01",
+                "name": "R_thirdFinger00Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55799,7 +56259,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger00IkAttachedFk_CTLShape01",
+                "name": "R_thirdFinger00IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -55937,7 +56397,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger00RootIk_CTLShape01",
+                "name": "R_thirdFinger00RootIk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56077,7 +56537,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger00UpperBendy_CTLShape01",
+                "name": "R_thirdFinger00UpperBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56169,7 +56629,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger01Fk_CTLShape01",
+                "name": "R_thirdFinger01Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56307,7 +56767,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger01IkAttachedFk_CTLShape01",
+                "name": "R_thirdFinger01IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56445,7 +56905,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger01MiddleBendy_CTLShape01",
+                "name": "R_thirdFinger01MiddleBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56537,7 +56997,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger01PVLocator_CTLShape01",
+                "name": "R_thirdFinger01PVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56546,13 +57006,13 @@
                     "cvs": [
                         [
                             -3090.7967885521166,
-                            2997.982800757238,
-                            857.4818717315593
+                            2997.9828007572387,
+                            857.4818717315584
                         ],
                         [
                             -3090.7967849649567,
-                            995.8460839281946,
-                            857.4818721675134
+                            995.846083928196,
+                            857.4818721675124
                         ]
                     ],
                     "form": "open",
@@ -56573,7 +57033,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger01PV_CTLShape01",
+                "name": "R_thirdFinger01PV_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56693,7 +57153,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger02Fk_CTLShape01",
+                "name": "R_thirdFinger02Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56831,7 +57291,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger02IkAttachedFk_CTLShape01",
+                "name": "R_thirdFinger02IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -56969,7 +57429,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger02LowerBendy_CTLShape01",
+                "name": "R_thirdFinger02LowerBendy_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57061,7 +57521,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger03Fk_CTLShape01",
+                "name": "R_thirdFinger03Fk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57199,7 +57659,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger03IkAttachedFk_CTLShape01",
+                "name": "R_thirdFinger03IkAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57337,7 +57797,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFinger03Ik_CTLShape01",
+                "name": "R_thirdFinger03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57463,7 +57923,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdFingerMetacarpal_CTLShape01",
+                "name": "R_thirdFingerMetacarpal_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57555,7 +58015,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdMembraneMainController01_CTLShape01",
+                "name": "R_thirdMembraneMainController01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57665,7 +58125,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdMembraneMainController02_CTLShape01",
+                "name": "R_thirdMembraneMainController02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57775,7 +58235,7 @@
         },
         "shapes": [
             {
-                "name": "R_thirdMembraneMainController03_CTLShape01",
+                "name": "R_thirdMembraneMainController03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57885,7 +58345,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb01_CTLShape01",
+                "name": "R_thumb01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -57977,7 +58437,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb02_CTLShape01",
+                "name": "R_thumb02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58069,7 +58529,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb03EndAttachedFk_CTLShape01",
+                "name": "R_thumb03EndAttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58161,7 +58621,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb03Ik_CTLShape01",
+                "name": "R_thumb03Ik_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58287,7 +58747,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb03Pv_CTLShape01",
+                "name": "R_thumb03Pv_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58407,7 +58867,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb03_CTLShape01",
+                "name": "R_thumb03_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58499,7 +58959,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb0301AttachedFk_CTLShape01",
+                "name": "R_thumb0301AttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58591,7 +59051,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumb0302AttachedFk_CTLShape01",
+                "name": "R_thumb0302AttachedFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58683,7 +59143,7 @@
         },
         "shapes": [
             {
-                "name": "R_thumbPVLocator_CTLShape01",
+                "name": "R_thumbPVLocator_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58691,14 +59151,14 @@
                 "curve": {
                     "cvs": [
                         [
-                            -212.48534353064844,
-                            85.36408005949765,
-                            92.52499587385122
+                            -212.60159288709303,
+                            85.3621514694358,
+                            92.52073090207226
                         ],
                         [
-                            -211.2031319116234,
-                            37.603871875356006,
-                            77.7832844703961
+                            -211.2186216854703,
+                            37.6036150023441,
+                            77.78271638873679
                         ]
                     ],
                     "form": "open",
@@ -58811,7 +59271,7 @@
         },
         "shapes": [
             {
-                "name": "R_upperLips01_CTLShape01",
+                "name": "R_upperLips01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58903,7 +59363,7 @@
         },
         "shapes": [
             {
-                "name": "R_upperLips02Tan01_CTLShape01",
+                "name": "R_upperLips02Tan01_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -58995,7 +59455,7 @@
         },
         "shapes": [
             {
-                "name": "R_upperLips02Tan02_CTLShape01",
+                "name": "R_upperLips02Tan02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -59087,7 +59547,7 @@
         },
         "shapes": [
             {
-                "name": "R_upperLips02_CTLShape01",
+                "name": "R_upperLips02_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -59271,7 +59731,7 @@
         },
         "shapes": [
             {
-                "name": "R_upperNeckSpikesAttributes_CTLShape01",
+                "name": "R_upperNeckSpikesAttributes_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -59354,7 +59814,7 @@
                 }
             },
             {
-                "name": "R_upperNeckSpikesAttributes_CTLShape02",
+                "name": "R_upperNeckSpikesAttributes_CTLShape04",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -59437,7 +59897,7 @@
                 }
             },
             {
-                "name": "R_upperNeckSpikesAttributes_CTLShape03",
+                "name": "R_upperNeckSpikesAttributes_CTLShape05",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
@@ -59529,7 +59989,7 @@
         },
         "shapes": [
             {
-                "name": "R_wristFk_CTLShape01",
+                "name": "R_wristFk_CTLShape",
                 "overrideEnabled": false,
                 "overrideColor": null,
                 "alwaysDrawOnTop": false,
