@@ -915,6 +915,7 @@ class CheekBoneGuideCreation(GuideCreation):
     Guide creation for feet.
     """
     def __init__(self, side = "L", limb_name="cheekBone", input_name="cheekBone"):
+        print(input_name)
         self.sides = side
         self.reverse_foot_name = limb_name
         self.limb_name = "cheekBone"
@@ -931,17 +932,24 @@ class CheekBoneGuideCreation(GuideCreation):
             om.MGlobal.displayError(f"Error loading guides data: {e}")
 
         guide_set_name = next(iter(guides_data))
+        print(guide_set_name)
         parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
+        print(parent_map)
+
 
         def collect_descendants(parent, parent_map):
             descendants = []
             children = [joint for joint, p in parent_map.items() if p == parent]
+
             for child in children:
                 descendants.append(child)
                 descendants.extend(collect_descendants(child, parent_map))
             return descendants
 
-        all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+
+
+        all_child_guides = [f"{self.sides}_{input_name}_GUIDE"] + collect_descendants(f"{self.sides}_{input_name}_GUIDE", parent_map)
+        print(all_child_guides)
         self.position_data = {}
 
         try:
@@ -1197,7 +1205,8 @@ def load_guides(path = ""):
                     CheekGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
                 
                 if guide_info.get("moduleName") == "cheekBone":
-                    CheekBoneGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
+                    name = guide_name.split("_")[1]
+                    CheekBoneGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name, input_name=name).create_guides(guides_trn, buffers_trn)
 
                 if guide_info.get("moduleName") == "spikes":
                     SpikesGuideCreation(side=guide_name.split("_")[0],limb_name=guide_name).create_guides(guides_trn, buffers_trn)
@@ -1600,9 +1609,9 @@ def add_module_to_guide():
     buffers_trn = "buffers_GRP"
     # EyebrowGuideCreation(side="C", input_name="C_centerBrow").create_guides(guides_trn, buffers_trn)
     # NoseGuideCreation(side="C",).create_guides(guides_trn, buffers_trn)
-    # CheekBoneGuideCreation(side="L",).create_guides(guides_trn, buffers_trn)
-    # CheekBoneGuideCreation(side="R",).create_guides(guides_trn, buffers_trn)
-    TongueGuideCreation(side="C", twist_joints=10, type="tongue").create_guides(guides_trn, buffers_trn)
+    CheekBoneGuideCreation(side="L",input_name="eyeSocket").create_guides(guides_trn, buffers_trn)
+    CheekBoneGuideCreation(side="R",input_name="eyeSocket").create_guides(guides_trn, buffers_trn)
+    # TongueGuideCreation(side="C", twist_joints=10, type="tongue").create_guides(guides_trn, buffers_trn)
 
 
     # SpikesGuideCreation(side="L", limb_name="upperSpikes", prefix=False).create_guides(guides_trn, buffers_trn)
