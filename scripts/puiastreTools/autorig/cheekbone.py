@@ -57,13 +57,13 @@ class CheekBoneModule():
         self.def_name = re.sub(r'\d+', '', self.guide_name.replace('_GUIDE', ''))
 
 
-        self.module_trn = cmds.createNode("transform", name=f"{self.side}_{self.def_name}Module_GRP", ss=True, parent=self.modules_grp)
-        self.controllers_trn = cmds.createNode("transform", name=f"{self.side}_{self.def_name}Controllers_GRP", ss=True, parent=self.masterWalk_ctl)
+        self.module_trn = cmds.createNode("transform", name=f"{self.def_name}Module_GRP", ss=True, parent=self.modules_grp)
+        self.controllers_trn = cmds.createNode("transform", name=f"{self.def_name}Controllers_GRP", ss=True, parent=self.masterWalk_ctl)
         cmds.setAttr(f"{self.controllers_trn}.inheritsTransform", 0)
 
-        self.skinning_trn = cmds.createNode("transform", name=f"{self.side}_{self.def_name}FacialSkinning_GRP", ss=True, p=self.skel_grp)
+        self.skinning_trn = cmds.createNode("transform", name=f"{self.def_name}FacialSkinning_GRP", ss=True, p=self.skel_grp)
         try:
-            parentMatrix = cmds.createNode("parentMatrix", name=f"{self.side}_{self.def_name}Module_PM", ss=True)
+            parentMatrix = cmds.createNode("parentMatrix", name=f"{self.def_name}Module_PM", ss=True)
             cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix", force=True)
             offset = core.get_offset_matrix(f"{self.controllers_trn}.worldMatrix", f"{self.head_ctl}.worldMatrix")
             cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", offset, type="matrix")
@@ -73,7 +73,7 @@ class CheekBoneModule():
 
         self.create_chain()
 
-        self.data_exporter.append_data(f"{self.side}_{self.def_name}Module", 
+        self.data_exporter.append_data(f"{self.def_name}Module", 
                             {"skinning_transform": self.skinning_trn,
 
                             }
@@ -103,7 +103,7 @@ class CheekBoneModule():
 
 
         else:
-            multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{self.def_name}_MMX", ss=True)
+            multmatrix = cmds.createNode("multMatrix", name=f"{self.def_name}_MMX", ss=True)
             cmds.setAttr(f"{multmatrix}.matrixIn[0]", -1, 0, 0, 0,
                                             0, 1, 0, 0,
                                             0, 0, 1, 0,
@@ -127,7 +127,7 @@ class CheekBoneModule():
 
             # cmds.setAttr(f"{controller_grp[0]}.inheritsTransform", 0)
 
-            parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_{name}0{i+1}_PM", ss=True)
+            parent_matrix = cmds.createNode("parentMatrix", name=f"{name}0{i+1}_PM", ss=True)
 
 
             if self.side == "L":
@@ -135,7 +135,7 @@ class CheekBoneModule():
                 cmds.connectAttr(f"{guide}.worldMatrix[0]", f"{parent_matrix}.inputMatrix", force=True)
 
             else:
-                multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_{name}0{i+1}_MMX", ss=True)
+                multmatrix = cmds.createNode("multMatrix", name=f"{name}0{i+1}_MMX", ss=True)
                 cmds.setAttr(f"{multmatrix}.matrixIn[0]", -1, 0, 0, 0,
                                                 0, 1, 0, 0,
                                                 0, 0, 1, 0,
@@ -148,7 +148,7 @@ class CheekBoneModule():
             offset = core.get_offset_matrix(f"{controller_grp[0]}.worldMatrix[0]", f"{ctl_main}.worldMatrix[0]")
             cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", offset, type="matrix")
 
-            multmatrix_offset = cmds.createNode("multMatrix", name=f"{self.side}_{name}0{i+1}Offset_MMX", ss=True)
+            multmatrix_offset = cmds.createNode("multMatrix", name=f"{name}0{i+1}Offset_MMX", ss=True)
             cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{multmatrix_offset}.matrixIn[0]", force=True)
             cmds.connectAttr(f"{controller_grp[0]}.worldInverseMatrix[0]", f"{multmatrix_offset}.matrixIn[1]", force=True)
             cmds.connectAttr(f"{multmatrix_offset}.matrixSum", f"{controller_grp[1]}.offsetParentMatrix", force=True)
