@@ -525,10 +525,19 @@ class JawModule():
                                                     0, 0, 1, 0,
                                                     0, 0, 0, 1, type="matrix")
                 cmds.connectAttr(f"{mid_pos_4b4}.output", f"{multmatrix_corner}.matrixIn[1]")
-
-                cmds.connectAttr(f"{multmatrix_corner}.matrixSum", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
+                current_attr = f"{multmatrix_corner}.matrixSum"
+                # cmds.connectAttr(f"{multmatrix_corner}.matrixSum", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
             else:
-                cmds.connectAttr(f"{mid_pos_4b4}.output", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
+                current_attr = f"{mid_pos_4b4}.output"
+                # cmds.connectAttr(f"{mid_pos_4b4}.output", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix")
+
+            multmatrix = cmds.createNode("multMatrix", name=f"C_{main_mid_name}MidLipJaw_MMX", ss=True)
+            offset = core.get_offset_matrix(f"{current_attr}", f"{self.jaw_ctl}.worldMatrix")
+            cmds.setAttr(f"{multmatrix}.matrixIn[0]", offset, type="matrix")
+            cmds.connectAttr(f"{self.local_jaw if main_mid_name == 'lower' else self.local_upper_jaw}", f"{multmatrix}.matrixIn[1]")
+            cmds.connectAttr(f"{multmatrix}.matrixSum", f"{self.main_mid_ctl_grp[0]}.offsetParentMatrix", force=True)
+
+
 
             self.mid_local = self.local_setup(ctl = self.main_mid_ctl, grp = self.main_mid_ctl_grp[0])
             
