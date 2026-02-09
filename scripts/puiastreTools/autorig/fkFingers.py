@@ -220,7 +220,7 @@ class FingersModule(object):
             ctl, grp = controller_creator(
                 name=f"{self.side}_{finger_name}",
                 suffixes=["GRP", "SDK", "ANM"],
-                lock=["tx", "ty", "tz" ,"sx", "sy", "sz", "visibility"],
+                lock=["sx", "sy", "sz", "visibility"],
                 ro=False,
                 parent= controllers[-1] if controllers else self.finger_attributes_ctl
             )
