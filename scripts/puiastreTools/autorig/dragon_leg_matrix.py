@@ -1390,7 +1390,7 @@ class FrontLegModule(LimbModule):
                 "root_ctl": self.root_ik_ctl,
                 "end_ik": self.hand_ik_ctl,
                 "foot_rotation": self.foot_rotation_multmatrix,
-                "ikFkSwitch": self.switch_ctl,
+                "ikFkSwitch": self.scapula_master_ctl,
                 "scapula_ctl": self.scapula_ctl,
                 "first_bendy_joints": self.skinning_joints[0][0],
                 "scapula_end_ctl": self.scapulaEnd_ctl,

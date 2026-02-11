@@ -138,7 +138,7 @@ class FingersModule(object):
                 )
         
 
-        self.leg_ik_main_controller = self.data_exporter.get_data(f"{self.side}_backLegModule", "end_ik")
+        self.leg_ik_main_controller = self.data_exporter.get_data(f"{self.side}_{self.finger_front_name.lower()}LegModule", "end_ik")
 
 
         finger_plane_guide = cmds.createNode("transform", name = f"{self.side}_fingerPlaneIk_GUIDE", parent=self.guides_grp, ss=True)
@@ -412,10 +412,17 @@ class FingersModule(object):
 
         # distance02 = math.sqrt(sum([(a - b) ** 2 for a, b in zip(pos3, pos4)]))
 
-        if self.side == "R":
-            cmds.setAttr(f"{pv_pos_4b4}.in31", -50)#(distance01+distance02)*-1)
+        if core.DataManager.get_asset_name() == "cheetah":
+            if self.side == "R":
+                cmds.setAttr(f"{pv_pos_4b4}.in31", -5)#(distance01+distance02)*-1)
+            else:
+                cmds.setAttr(f"{pv_pos_4b4}.in31", 5)#(distance01+distance02))
+
         else:
-            cmds.setAttr(f"{pv_pos_4b4}.in31", 50)#(distance01+distance02))
+            if self.side == "R":
+                cmds.setAttr(f"{pv_pos_4b4}.in31", -50)#(distance01+distance02)*-1)
+            else:
+                cmds.setAttr(f"{pv_pos_4b4}.in31", 50)#(distance01+distance02))
         
 
         
