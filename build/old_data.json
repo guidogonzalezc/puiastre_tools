@@ -1,8 +1,8 @@
 {
-    "project_path": "D:\\git\\maya\\puiastre_tools\\assets\\marcelo",
-    "ctls_data": "D:\\git\\maya\\puiastre_tools\\assets\\marcelo\\curves\\CHAR_marcelo_001.json",
-    "guide_data": "D:\\git\\maya\\puiastre_tools\\assets\\marcelo\\guides\\CHAR_marcelo_001.guides",
-    "asset_name": "marcelo",
-    "skinning_data": "D:\\git\\maya\\puiastre_tools\\assets\\marcelo\\skinning\\CHAR_marcelo_001.skn",
-    "model_path": "D:\\git\\maya\\puiastre_tools\\assets\\marcelo\\models\\CHAR_marcelo_0001.ma"
+    "project_path": "P:\\VFX_Project_20\\EXTRAS\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\cheetah",
+    "ctls_data": "P:\\VFX_Project_20\\EXTRAS\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\cheetah\\curves\\CHAR_cheetah_001.json",
+    "guide_data": "P:\\VFX_Project_20\\EXTRAS\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\cheetah\\guides\\CHAR_cheetah_003.guides",
+    "asset_name": "cheetah",
+    "skinning_data": "P:\\VFX_Project_20\\EXTRAS\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\cheetah\\skinning\\CHAR_cheetah_001.skn",
+    "model_path": "P:\\VFX_Project_20\\EXTRAS\\DCC_CUSTOM\\MAYA\\modules\\puiastre_tools\\assets\\cheetah\\models\\CHAR_cheetah_0001.ma"
 }
