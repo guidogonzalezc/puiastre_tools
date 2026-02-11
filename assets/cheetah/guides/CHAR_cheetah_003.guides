@@ -1,5 +1,5 @@
 {
-    "Cheetah": {
+    "cheetah": {
         "L_frontToe_GUIDE": {
             "worldPosition": [
                 6.6092988453863635,
@@ -668,8 +668,8 @@
         "C_centerUpHeadDistance_GUIDE": {
             "worldPosition": [
                 0.0,
-                0.0,
-                0.0
+                91.87871551513672,
+                85.41400909423828
             ],
             "worldRotation": [
                 0.0,
@@ -725,8 +725,8 @@
         "C_centerDownHeadDistance_GUIDE": {
             "worldPosition": [
                 0.0,
-                0.0,
-                0.0
+                72.61388397216797,
+                85.41400909423828
             ],
             "worldRotation": [
                 0.0,
