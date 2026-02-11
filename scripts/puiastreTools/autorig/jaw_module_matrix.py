@@ -273,6 +273,12 @@ class JawModule():
         cmds.addAttr(self.transform_settings, longName="jawLowerWeight02", niceName="jawLowerWeight02", defaultValue=0.6, minValue=0,maxValue = 1, keyable=True)
         cmds.addAttr(self.transform_settings, longName="jawLowerWeight03", niceName="jawLowerWeight03", defaultValue=0.77, minValue=0,maxValue = 1, keyable=True)
 
+        cmds.addAttr(self.transform_settings, longName="poutSep", niceName="POUT WEIGHTS ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(f"{self.transform_settings}.poutSep", channelBox=True, lock=True)
+        cmds.addAttr(self.transform_settings, longName="poutLowerTranslate", niceName="poutLowerTranslate", defaultValue=-0.02, keyable=True)
+        cmds.addAttr(self.transform_settings, longName="poutLowerRotate", niceName="poutLowerRotate", defaultValue=-0.2, keyable=True)
+        cmds.addAttr(self.transform_settings, longName="poutUpperTranslate", niceName="poutUpperTranslate", defaultValue=-0.05, keyable=True)
+        cmds.addAttr(self.transform_settings, longName="poutUpperRotate", niceName="poutUpperRotate", defaultValue=2.0, keyable=True)
 
         self.average_curve_node = cmds.createNode("avgCurves", name=f"{self.side}_lipsAverage_ACV", ss=True)
         cmds.setAttr(f"{self.average_curve_node}.automaticWeight", 0)
@@ -830,46 +836,47 @@ class JawModule():
                 total_len = len(curve_original_cvs) 
                 mid_index = (total_len - 1) / 2.0
                 
-                # Calculate normalized distance from center (0.0 = Corner, 1.0 = Center)
                 dist_from_center = abs(count - mid_index)
                 t_val = 1.0 - (dist_from_center / mid_index)
-                t_val = max(0.0, min(1.0, t_val)) # Clamp to ensure 0-1 range
+                t_val = max(0.0, min(1.0, t_val)) 
 
-                # 2. Remap Node (The Bell Curve Control)
-                # This ensures Center moves 100% and Corners 0%, with a smooth curve in between.
+         
                 pout_remap = cmds.createNode("remapValue", n=f"{side}_{main_mid_name}LipPoutFalloff0{count}_RMV")
                 cmds.setAttr(f"{pout_remap}.inputValue", t_val)
 
-                # Set Curve Defaults: 0->0 (Corner), 1->1 (Center) using Smooth Interpolation (3)
                 cmds.setAttr(f"{pout_remap}.value[0].value_FloatValue", 0.0)
                 cmds.setAttr(f"{pout_remap}.value[0].value_Position", 0.0)
-                cmds.setAttr(f"{pout_remap}.value[0].value_Interp", 3) # Cubic/Spline
+                cmds.setAttr(f"{pout_remap}.value[0].value_Interp", 3)
                 
                 cmds.setAttr(f"{pout_remap}.value[1].value_FloatValue", 1.0)
                 cmds.setAttr(f"{pout_remap}.value[1].value_Position", 1.0)
                 cmds.setAttr(f"{pout_remap}.value[1].value_Interp", 3)
 
-                # 3. Driver Logic (Controller * Remapped Weight)
-                # Note: multDoubleLinear is cleaner than 'multiply' node for scalars
+
                 pout_driver = cmds.createNode("multiply", n=f"{side}_{main_mid_name}LipPoutDriver_{count}_MUL")
-                cmds.connectAttr(f"{self.main_mid_ctl}.rotateX", f"{pout_driver}.input[0]") # Or .rotateX if you prefer
+                cmds.connectAttr(f"{self.main_mid_ctl}.rotateX", f"{pout_driver}.input[0]")
                 cmds.connectAttr(f"{pout_remap}.outValue", f"{pout_driver}.input[1]")
 
-                # 4. Compose Pout Matrix
                 pout_compose = cmds.createNode("composeMatrix", n=f"{side}_{main_mid_name}LipPoutOffset_{count}_CM")
 
-                # -- Translate Z (Tiny movement) --
                 tz_mult = cmds.createNode("multiply", n=f"{side}_{main_mid_name}LipPoutTZ_{count}_MUL")
                 cmds.connectAttr(f"{pout_driver}.output", f"{tz_mult}.input[0]")
-                value = -0.05 if main_mid_name == "upper" else -0.02
-                cmds.setAttr(f"{tz_mult}.input[1]", value)
+                if main_mid_name == "upper":
+                    cmds.connectAttr(f"{self.transform_settings}.poutUpperTranslate", f"{tz_mult}.input[1]")
+                else:
+                    cmds.connectAttr(f"{self.transform_settings}.poutLowerTranslate", f"{tz_mult}.input[1]")
+
+
                 cmds.connectAttr(f"{tz_mult}.output", f"{pout_compose}.inputTranslateZ")
 
-                # -- Rotate X (Strong curling) --
                 rx_mult = cmds.createNode("multiply", n=f"{side}_{main_mid_name}LipPoutRX_{count}_MUL")
                 cmds.connectAttr(f"{pout_driver}.output", f"{rx_mult}.input[0]")
-                value_rotate = 2.0 if main_mid_name == "upper" else -0.2
-                cmds.setAttr(f"{rx_mult}.input[1]", value_rotate)
+                # value_rotate = 2.0 if main_mid_name == "upper" else -0.2
+                # cmds.setAttr(f"{rx_mult}.input[1]", value_rotate)
+                if main_mid_name == "upper":
+                    cmds.connectAttr(f"{self.transform_settings}.poutUpperRotate", f"{rx_mult}.input[1]")
+                else:
+                    cmds.connectAttr(f"{self.transform_settings}.poutLowerRotate", f"{rx_mult}.input[1]")
                 cmds.connectAttr(f"{rx_mult}.output", f"{pout_compose}.inputRotateX")
 
 
