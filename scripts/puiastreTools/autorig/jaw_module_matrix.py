@@ -146,7 +146,7 @@ class JawModule():
         head_matrix = cmds.getAttr(f"{self.head_ctl}.worldInverseMatrix[0]")
 
 
-        cmds.setAttr(f"{grp}.offsetParentMatrix", parent_matrix, type="matrix")
+        # cmds.setAttr(f"{grp}.offsetParentMatrix", parent_matrix, type="matrix")
 
         cmds.connectAttr(f"{parent}", f"{local_mult_matrix}.matrixIn[0]")
         cmds.connectAttr(f"{self.head_ctl}.worldMatrix[0]", f"{local_mult_matrix}.matrixIn[1]")
@@ -235,6 +235,42 @@ class JawModule():
             cmds.parent(self.center_locator, self.module_trn)
             cmds.move(cx, cy, cz, self.center_locator)
 
+        corner_joints = []
+        for obj in self.guides[1:]:
+            if "corner" in obj.lower():
+                corner_joints.append(obj)
+
+        if corner_joints:
+            for obj in corner_joints:
+                name = obj.replace("_GUIDE", "")
+                jaw_corner_ctl, jaw_corner_ctl_grp = controller_creator(
+                name=name,
+                suffixes=["GRP", "OFF","ANM"],
+                lock=["scaleX", "scaleY", "scaleZ", "visibility"],
+                ro=True,
+                parent=self.controllers_trn,
+                )
+
+                cmds.connectAttr(f"{obj}.worldMatrix[0]", f"{jaw_corner_ctl_grp[0]}.offsetParentMatrix")
+
+                parent_matrix = cmds.createNode("parentMatrix", name=f"{name}_PMX", ss=True)
+                cmds.connectAttr(f"{jaw_corner_ctl_grp[0]}.worldMatrix[0]", f"{parent_matrix}.inputMatrix", force=True)
+                cmds.connectAttr(f"{self.jaw_ctl}.worldMatrix[0]", f"{parent_matrix}.target[0].targetMatrix", force=True)
+                offset = core.get_offset_matrix(f"{jaw_corner_ctl_grp[0]}.worldMatrix", f"{self.jaw_ctl}.worldMatrix[0]")
+                cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", offset, type="matrix")
+
+                multMatrix = cmds.createNode("multMatrix", name=f"{name}Offset_MMX", ss=True)
+                cmds.connectAttr(f"{parent_matrix}.outputMatrix", f"{multMatrix}.matrixIn[0]")
+                cmds.connectAttr(f"{jaw_corner_ctl_grp[0]}.worldInverseMatrix[0]", f"{multMatrix}.matrixIn[1]")
+
+                cmds.connectAttr(f"{multMatrix}.matrixSum", f"{jaw_corner_ctl_grp[1]}.offsetParentMatrix", force=True)
+
+                local_corner = self.local_setup(ctl = jaw_corner_ctl, grp = jaw_corner_ctl_grp[0])
+
+                joint = cmds.createNode("joint", name=f"{name}_JNT", ss=True, parent=self.skinning_trn)
+                cmds.connectAttr(f"{local_corner}", f"{joint}.offsetParentMatrix", force=True)
+
+                self.guides.remove(obj)
 
         if len(self.guides) > 2:
 
@@ -947,7 +983,6 @@ class JawModule():
                 matrix_ends.insert(curve_index, temp_matrix_ends)
                 temp_matrix_ends = []
 
-        print(matrix_ends)
 
         
         lower_joints = matrix_ends[0]

@@ -224,7 +224,6 @@ class FingersModule(object):
                 ro=False,
                 parent= controllers[-1] if controllers else self.finger_attributes_ctl
             )
-            print(ctl, self.finger_attributes_ctl)
 
             if controllers:
                 offset_matrix = cmds.createNode("multMatrix", name=f"{self.side}_{finger_name}_MLT", ss=True)
