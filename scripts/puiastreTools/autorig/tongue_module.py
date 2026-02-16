@@ -90,7 +90,6 @@ class TongueModule():
         """
 
         self.guides = guide_import(self.guide_name, all_descendents=True, path=None)
-        print(self.guides)
 
         if cmds.attributeQuery("moduleName", node=self.guides[0], exists=True):
             self.enum_str = cmds.attributeQuery("moduleName", node=self.guides[0], listEnum=True)[0]
@@ -120,7 +119,6 @@ class TongueModule():
         clts_numbers = 5
 
         for i in range(clts_numbers):
-            print(i)
 
             ctl, ctl_grp = controller_creator(name=f"{self.side}_tongue0{i}",suffixes=["GRP", "ANM"],lock=["scaleX", "scaleY", "scaleZ", "visibility"], ro=True) # Create controller
 
@@ -144,7 +142,22 @@ class TongueModule():
             self.ctls.append(ctl)
             self.nodes.append(ctl_grp)
 
-        self.num_joints = len(self.ctls) * 3
+        blend_matrix = cmds.createNode("blendMatrix", name=self.guides[0].replace("_GUIDE", "End_BMX"), ss=True)
+        cmds.setAttr(f"{blend_matrix}.target[0].scaleWeight", 0)
+        cmds.setAttr(f"{blend_matrix}.target[0].rotateWeight", 0)
+        cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{blend_matrix}.inputMatrix")
+        cmds.connectAttr(f"{self.guides[-1]}.worldMatrix[0]", f"{blend_matrix}.target[0].targetMatrix")
+        cmds.setAttr(f"{blend_matrix}.target[0].translateWeight", 1) # Set weight based on controller index to place it along the guides
+
+        parent_matrix = cmds.createNode("parentMatrix", name=f"{self.side}_tongueEnd_PM", ss=True)
+        cmds.connectAttr(f"{blend_matrix}.outputMatrix", f"{parent_matrix}.inputMatrix", force=True)
+        cmds.connectAttr(f"{self.ctls[-1]}.worldMatrix[0]", f"{parent_matrix}.target[0].targetMatrix", force=True)
+        offset = core.get_offset_matrix(f"{blend_matrix}.outputMatrix", f"{self.ctls[-1]}.worldMatrix")
+        cmds.setAttr(f"{parent_matrix}.target[0].offsetMatrix", offset, type="matrix")
+
+        self.ctls.append(f"{parent_matrix}.outputMatrix")
+
+        self.num_joints = len(self.ctls) * 5
         self.old_joints = de_boor_core_002.de_boor_ribbon(aim_axis=self.primary_aim, up_axis=self.secondary_aim, cvs=self.ctls, num_joints=self.num_joints, name=f"{self.side}_tongue", parent=self.skinning_trn, negate_secundary=True)
 
 
