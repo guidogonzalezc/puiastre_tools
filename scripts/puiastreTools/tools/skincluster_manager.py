@@ -328,3 +328,4 @@ class SkinIO:
                 for skin in reversed(order):
                     try: cmds.reorderDeformers(skin, mesh_path.fullPathName(), back=True)
                     except: pass
+
