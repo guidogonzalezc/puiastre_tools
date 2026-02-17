@@ -915,7 +915,6 @@ class CheekBoneGuideCreation(GuideCreation):
     Guide creation for feet.
     """
     def __init__(self, side = "L", limb_name="cheekBone", input_name="cheekBone"):
-        print(input_name)
         self.sides = side
         self.reverse_foot_name = limb_name
         self.limb_name = "cheekBone"
@@ -932,9 +931,7 @@ class CheekBoneGuideCreation(GuideCreation):
             om.MGlobal.displayError(f"Error loading guides data: {e}")
 
         guide_set_name = next(iter(guides_data))
-        print(guide_set_name)
         parent_map = {joint: data.get("parent") for joint, data in guides_data[guide_set_name].items()}
-        print(parent_map)
 
 
         def collect_descendants(parent, parent_map):
@@ -949,7 +946,6 @@ class CheekBoneGuideCreation(GuideCreation):
 
 
         all_child_guides = [f"{self.sides}_{input_name}_GUIDE"] + collect_descendants(f"{self.sides}_{input_name}_GUIDE", parent_map)
-        print(all_child_guides)
         self.position_data = {}
 
         try:
@@ -960,7 +956,6 @@ class CheekBoneGuideCreation(GuideCreation):
         except:
             pass
 
-        print(self.position_data)
 
 class MouthGuideCreation(GuideCreation):
     """
@@ -993,15 +988,18 @@ class MouthGuideCreation(GuideCreation):
             return descendants
 
         all_child_guides = [input_name] + collect_descendants(input_name, parent_map)
+        print(all_child_guides)
         self.position_data = {
-                "jaw": get_data(f"{self.sides}_jaw"),
+               # "jaw": get_data(f"{self.sides}_jaw"),
         }
 
         try:
             for guide in all_child_guides:
                 self.position_data.update({
-                    guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+                    # guide.split("_")[1]: get_data(guide.replace("_GUIDE", "")),
+                    guide.replace("_GUIDE", ""): get_data(guide.replace("_GUIDE", "")),
                 })
+            print(self.position_data    )
         except:
             pass
 
@@ -1427,7 +1425,6 @@ def guides_export(mirror=False):
         guides_name = core.DataManager.get_asset_name() if core.DataManager.get_asset_name() else os.path.splitext(os.path.basename(TEMPLATE_FILE))[0]
         try:
             adonis = int(cmds.getAttr(f"{guides_folder[0]}.adonisSetup"))
-            print(adonis)
         except:
             adonis = 0
 
