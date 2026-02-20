@@ -433,11 +433,17 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
 
         if aim_matrices:
             cmds.connectAttr(position_plug, f'{aim_matrices[-1]}.primaryTargetMatrix')
-            if i == len(params) - 1:
+            cmds.setAttr(f'{aim}.primaryInputAxis', *aim_vector)
 
+            if i == len(params) - 1:
+                print(aim)
                 next_aim = positions_plugs[-1]
                 cmds.connectAttr(next_aim, f'{aim}.primaryTargetMatrix')
-                cmds.setAttr(f'{aim}.primaryInputAxis', *[-a for a in AXIS_VECTOR[aim_axis]], type='double3') #*AXIS_VECTOR[aim_axis]*-1
+                a= om.MVector(AXIS_VECTOR[aim_axis])
+                print(a)
+                b = [-a for a in AXIS_VECTOR[aim_axis]]
+                print(b)
+                cmds.setAttr(f'{aim}.primaryInputAxis', b[0],b[1],b[2], type='double3') #*AXIS_VECTOR[aim_axis]*-1
             
 
         aim_matrices.append(aim)
@@ -447,7 +453,6 @@ def de_boor_ribbon(cvs, aim_axis='x', up_axis='y', num_joints=5, tangent_offset=
         cmds.connectAttr(up_plug, f'{aim}.secondaryTargetMatrix')
 
         output_plug = f'{aim}.outputMatrix'
-        cmds.setAttr(f'{aim}.primaryInputAxis', *aim_vector)
 
         if negate_secundary:
             cmds.setAttr(f'{aim}.secondaryInputAxis', *[-a for a in AXIS_VECTOR[up_axis]], type='double3') # *AXIS_VECTOR[up_axis]*-1

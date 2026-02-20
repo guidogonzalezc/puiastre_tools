@@ -351,11 +351,11 @@ def build_complete_hierarchy():
             root_grp = root.replace("CTL", "GRP")
             root_connection = cmds.listConnections(root_grp + ".offsetParentMatrix", destination=True, source=True)
 
-            if root_connection:
-                pick_matrix = cmds.createNode("pickMatrix", n=root_grp.replace("GRP", "PM"))
-                cmds.setAttr(pick_matrix + ".useRotate", 0)
-                cmds.connectAttr(root_connection[0] + ".outputMatrix", pick_matrix + ".inputMatrix")
-                cmds.connectAttr(pick_matrix + ".outputMatrix", root_grp + ".offsetParentMatrix", force=True)
+            # if root_connection:
+            #     pick_matrix = cmds.createNode("pickMatrix", n=root_grp.replace("GRP", "PM"))
+            #     cmds.setAttr(pick_matrix + ".useRotate", 0)
+            #     cmds.connectAttr(root_connection[0] + ".outputMatrix", pick_matrix + ".inputMatrix")
+            #     cmds.connectAttr(pick_matrix + ".outputMatrix", root_grp + ".offsetParentMatrix", force=True)
             space_switch.fk_switch(target = scapula_master, sources= parents, sources_names=["LocalChest", "SpineEnd"])
             space_switch.fk_switch(target = ik, sources= parents, default_rotate=0, default_translate=0, sources_names=["LocalChest", "SpineEnd"])
             parents.insert(0, ik)

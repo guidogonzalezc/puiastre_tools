@@ -311,7 +311,14 @@ class LimbModule(object):
         cmds.setAttr(self.pv_ik_ctl+".poleVectorPinning", channelBox=True, lock=True)
         cmds.addAttr(self.pv_ik_ctl, shortName="pin", niceName="Pin",minValue=0,maxValue=1,defaultValue=0, keyable=True)
         
-        cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{self.root_ik_ctl_grp[0]}.offsetParentMatrix")      
+        if self.module_name == "frontLeg":
+            pick_matrix = cmds.createNode("pickMatrix", n=f"{self.side}_{self.module_name}RootIk_PM")
+            cmds.setAttr(pick_matrix + ".useRotate", 0)
+            cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", pick_matrix + ".inputMatrix")
+            cmds.connectAttr(pick_matrix + ".outputMatrix", f"{self.root_ik_ctl_grp[0]}.offsetParentMatrix", force=True)
+
+        else:
+            cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{self.root_ik_ctl_grp[0]}.offsetParentMatrix")      
 
         cmds.addAttr(self.hand_ik_ctl, shortName="softSettings", niceName="Soft Settings  ———", enumName="———",attributeType="enum", keyable=True)
         cmds.setAttr(self.hand_ik_ctl+".softSettings", channelBox=True, lock=True)
@@ -699,7 +706,23 @@ class LimbModule(object):
         nonRollSpace = cmds.createNode("blendMatrix", name=f"{name}NonRollSpace_BLM", ss=True)
 
 
-        cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollSpace}.inputMatrix")
+        if self.module_name == "frontLeg":
+            parentMatrix = cmds.createNode("parentMatrix", name=f"{name}RootRotation_PM", ss=True)
+            cmds.connectAttr(f"{self.guides_matrix[0]}.outputMatrix", f"{parentMatrix}.inputMatrix")
+            cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{parentMatrix}.target[0].targetMatrix")
+
+            pick_matrix_temp = cmds.createNode("pickMatrix", n="Temp", ss=True)
+            cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{pick_matrix_temp}.inputMatrix", f=True)
+            cmds.setAttr(f"{pick_matrix_temp}.useRotate", 0)
+
+            offset = core.get_offset_matrix(f"{self.guides_matrix[0]}.outputMatrix", f"{pick_matrix_temp}.outputMatrix")
+            cmds.delete(pick_matrix_temp)
+            cmds.setAttr(f"{parentMatrix}.target[0].offsetMatrix", offset, type="matrix")
+            cmds.connectAttr(f"{parentMatrix}.outputMatrix", f"{nonRollSpace}.inputMatrix", force=True)
+
+        else:
+            cmds.connectAttr(f"{self.root_ik_ctl_grp[0]}.worldMatrix[0]", f"{nonRollSpace}.inputMatrix")
+        
         cmds.connectAttr(f"{self.fk_grps[0][0]}.worldMatrix[0]", f"{nonRollSpace}.target[0].targetMatrix")
         cmds.connectAttr(f"{self.switch_ctl}.switchIkFk", f"{nonRollSpace}.target[0].weight")
 
