@@ -1083,8 +1083,8 @@ class LimbModule(object):
             cmds.setAttr(footBank_CLM + ".minG", -360)
             cmds.setAttr(footBank_CLM + ".maxR", 360)
         elif self.side == "R":
-            cmds.setAttr(footBank_CLM + ".minR", 360)
-            cmds.setAttr(footBank_CLM + ".maxG", -360)
+            cmds.setAttr(footBank_CLM + ".minR", -360)
+            cmds.setAttr(footBank_CLM + ".maxG", 360)
 
         cmds.connectAttr(rollLiftAnglePercentage_RMV + ".outValue", rollLiftAngleEnable_MDN + ".input2X")
         cmds.connectAttr(rollStraightAnglePercentage_REV + ".outputX", rollLiftAngleEnable_MDN + ".input1X")
