@@ -113,6 +113,10 @@ class MembraneModule(object):
             parent=self.individual_controllers_grp
         )
 
+        cmds.addAttr(main_controller, shortName="extraSep", niceName="EXTRA ATTRIBUTES ———", enumName="———",attributeType="enum", keyable=True)
+        cmds.setAttr(main_controller+".extraSep", channelBox=True, lock=True)
+        cmds.addAttr(main_controller, shortName="membranePush", niceName="Membrane Push", defaultValue=300, keyable=True)
+
         third_row_closest = []
         first_row_closest = []
 
@@ -151,7 +155,53 @@ class MembraneModule(object):
         cmds.setAttr(f"{aim_matrix}.secondaryTargetVector", *self.secondary_aim_vector, type="double3")
 
         skinning_joint = cmds.createNode("joint", name=f"{self.side}_MainMembrane_JNT", ss=True, parent=self.individual_module_grp)
-        cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{skinning_joint}.offsetParentMatrix", force=True)
+
+        dm_a = cmds.createNode("decomposeMatrix", name=f"{self.side}_MainMembranePush01_DCM", ss=True)
+        dm_b = cmds.createNode("decomposeMatrix", name=f"{self.side}_MainMembranePush02_DCM", ss=True)
+        dm_c = cmds.createNode("decomposeMatrix", name=f"{self.side}_MainMembranePush03_DCM", ss=True)
+
+        cmds.connectAttr(f"{arm_joints[0]}.worldMatrix[0]", dm_a + ".inputMatrix")
+        cmds.connectAttr(f"{arm_joints[6]}.worldMatrix[0]", dm_b + ".inputMatrix")
+        cmds.connectAttr(f"{arm_joints[-1]}.worldMatrix[0]", dm_c + ".inputMatrix")
+
+
+        vec_ba = cmds.createNode("plusMinusAverage", name=f"{self.side}_MainMembraneVector01_PMA", ss=True)
+        cmds.setAttr(vec_ba + ".operation", 2) 
+        cmds.connectAttr(dm_a + ".outputTranslate", vec_ba + ".input3D[0]")
+        cmds.connectAttr(dm_b + ".outputTranslate", vec_ba + ".input3D[1]")
+
+        vec_bc = cmds.createNode("plusMinusAverage", name=f"{self.side}_MainMembraneVector02_PMA", ss=True)
+        cmds.setAttr(vec_bc + ".operation", 2)
+        cmds.connectAttr(dm_c + ".outputTranslate", vec_bc + ".input3D[0]")
+        cmds.connectAttr(dm_b + ".outputTranslate", vec_bc + ".input3D[1]")
+
+        angle_node = cmds.createNode("angleBetween", name=f"{self.side}_MainMembraneAngle_AB", ss=True)
+        cmds.connectAttr(vec_ba + ".output3D", angle_node + ".vector1")
+        cmds.connectAttr(vec_bc + ".output3D", angle_node + ".vector2")
+
+        remap = cmds.createNode("remapValue", name=f"{self.side}_push_remap", ss=True)
+        cmds.connectAttr(angle_node + ".angle", remap + ".inputValue")
+
+        angle = cmds.getAttr(f"{angle_node}.axisAngle.angle")
+        cmds.setAttr(remap + ".inputMin", angle)
+        cmds.setAttr(remap + ".inputMax", 45.0)
+        
+        cmds.setAttr(remap + ".outputMin", 0.0)
+        cmds.connectAttr(main_controller + ".membranePush", remap + ".outputMax")   
+        
+        cmds.setAttr(remap + ".value[0].value_Interp", 2)
+
+        # cmds.connectAttr(remap + ".outValue", "{}.{}".format(push_jnt, push_axis))
+        
+        fourbyfour_matrix = cmds.createNode("fourByFourMatrix", name=f"{self.side}_MainMembranePush_FFMM", ss=True)
+        cmds.connectAttr(remap + ".outValue", f"{fourbyfour_matrix}.in30")
+
+        multmatrix = cmds.createNode("multMatrix", name=f"{self.side}_MainMembranePush_MMX", ss=True)
+        cmds.connectAttr(f"{fourbyfour_matrix}.output", f"{multmatrix}.matrixIn[0]")
+        cmds.connectAttr(f"{aim_matrix}.outputMatrix", f"{multmatrix}.matrixIn[1]")
+
+
+        cmds.connectAttr(f"{multmatrix}.matrixSum", f"{skinning_joint}.offsetParentMatrix", force=True)
 
         skinning_list = first_row_closest
         skinning_list.extend(third_row_closest)
