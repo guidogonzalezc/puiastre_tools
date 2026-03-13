@@ -142,7 +142,7 @@ def make():
         objects = []
         for item in file_objects:
             relative = cmds.listRelatives(item, shapes=True) or []
-            if not relative and not cmds.objectType(item, isAType="camera"):
+            if not cmds.objectType(item, isAType="camera"):
                 objects.append(item)
     else:
         cmds.file(new=True, force=True)
@@ -193,12 +193,26 @@ def make():
         model_grp = data_exporter.get_data("basic_structure", "model_GRP")
         skelmodel_grp = data_exporter.get_data("basic_structure", "skelModel_GRP")
         musclemodel_grp = data_exporter.get_data("basic_structure", "muscleModel_GRP")
+        fascia_grp = data_exporter.get_data("basic_structure", "FASCIA")
+        fat_grp = data_exporter.get_data("basic_structure", "FAT")
+        skin_grp = data_exporter.get_data("basic_structure", "SKIN")
+        mommy_grp = data_exporter.get_data("basic_structure", "MOMMY")
+
+
         if adonis:
             for item in objects:
                 if "muscle" in item.lower() and "adonis" in item.lower() and musclemodel_grp and cmds.objExists(musclemodel_grp):                
                     cmds.parent(item, musclemodel_grp)
-                elif "skel" in item.lower() and "adonis" in item.lower() and skelmodel_grp and cmds.objExists(skelmodel_grp):                
+                elif "adonismommy" in item.lower() and mommy_grp and cmds.objExists(mommy_grp):                
+                    cmds.parent(item, mommy_grp)
+                elif "skelhigh" in item.lower() and skelmodel_grp and cmds.objExists(skelmodel_grp):                
                     cmds.parent(item, skelmodel_grp)
+                elif "adonisfascia" in item.lower() and fascia_grp and cmds.objExists(fascia_grp):                
+                    cmds.parent(item, fascia_grp)
+                elif "adonisfat" in item.lower() and fat_grp and cmds.objExists(fat_grp):                
+                    cmds.parent(item, fat_grp)
+                elif "adonisskin" in item.lower() and skin_grp and cmds.objExists(skin_grp):                
+                    cmds.parent(item, skin_grp)
                 else:
                     cmds.parent(item, model_grp)
        
