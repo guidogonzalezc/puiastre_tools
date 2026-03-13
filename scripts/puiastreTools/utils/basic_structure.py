@@ -32,7 +32,8 @@ def get_structure_config(adonis_setup=0):
         hierarchy["muscleSystems_GRP"] = []
         hierarchy["adonis_GRP"] = []
         
-        hierarchy["model_GRP"] = ["SKELETON", "MUSCLES", "PROXY", "SKINNED_MODEL","MODEL"]
+        hierarchy["model_GRP"] = ["SKELETON", "MUSCLES", "FASCIA", "FAT", "SKIN", "MOMMY", "SKINNED_MODEL","MODEL"]
+        # hierarchy["ADONIS"] = []
     
     return hierarchy
 
@@ -95,6 +96,11 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         "model_GRP": nodes.get("SKINNED_MODEL") if nodes.get("SKINNED_MODEL") else nodes.get("model_GRP"),
         "skelModel_GRP": nodes.get("SKELETON") if adonis_setup and nodes.get("SKELETON") else None,
         "muscleModel_GRP": nodes.get("MUSCLES") if adonis_setup and nodes.get("MUSCLES") else None,
+        "FASCIA": nodes.get("FASCIA") if adonis_setup and nodes.get("FASCIA") else None,
+        "FAT": nodes.get("FAT") if adonis_setup and nodes.get("FAT") else None,
+        "SKIN": nodes.get("SKIN") if adonis_setup and nodes.get("SKIN") else None,
+        "MOMMY": nodes.get("MOMMY") if adonis_setup and nodes.get("MOMMY") else None,
+        "SKELETON": nodes.get("SKELETON") if adonis_setup and nodes.get("SKELETON") else None,                                                              
     }
     
     if adonis_setup:
@@ -126,6 +132,17 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         cmds.addAttr(pref_ctl, shortName="extraVisibility", niceName="Extra Visibility  ———", enumName="———", attributeType="enum", keyable=False)
         cmds.setAttr(f"{pref_ctl}.extraVisibility", channelBox=True)
 
+        if adonis_setup:
+            cmds.addAttr(pref_ctl, shortName="adonisSep", niceName="Adonis ———", enumName="———", attributeType="enum", keyable=False)
+            cmds.setAttr(f"{pref_ctl}.adonisSep", channelBox=True)
+
+            cmds.addAttr(walk_ctl, shortName="attenuation", niceName="Attenuation", minValue=0, defaultValue=1, maxValue=1, keyable=True)
+            cmds.addAttr(walk_ctl, shortName="preRollStartTime", niceName="Pre-Roll Start Time", defaultValue=950, keyable=True)
+            cmds.addAttr(walk_ctl, shortName="startTime", niceName="Start Time", defaultValue=1001, keyable=True)
+            cmds.addAttr(walk_ctl, shortName="massMultiplier", niceName="Mass Multiplier", minValue=0, defaultValue=1, maxValue=1, keyable=True)
+
+
+
 
         
         toggles = [
@@ -156,10 +173,31 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
             cmds.setAttr(display_layer + ".visibility", 0)
             cmds.setAttr(display_layer + ".displayType", 2)
 
-        if "PROXY" in nodes and nodes["PROXY"]:
-            cmds.select(nodes["PROXY"]) 
-            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_PROXY", empty=False, num=1)
+        if "FASCIA" in nodes and nodes["FASCIA"]:
+            cmds.select(nodes["FASCIA"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_FASCIA", empty=False, num=1)
             cmds.setAttr(display_layer + ".color", 14)
+            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
+        if "FAT" in nodes and nodes["FAT"]:
+            cmds.select(nodes["FAT"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_FAT", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 14)
+            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
+        if "SKIN" in nodes and nodes["SKIN"]:
+            cmds.select(nodes["SKIN"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_SKIN", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 17)
+            cmds.setAttr(display_layer + ".visibility", 0)
+            cmds.setAttr(display_layer + ".displayType", 2)
+
+        if "MOMMY" in nodes and nodes["MOMMY"]:
+            cmds.select(nodes["MOMMY"]) 
+            display_layer = cmds.createDisplayLayer(name=f"{asset_name.upper()}_MOMMY", empty=False, num=1)
+            cmds.setAttr(display_layer + ".color", 17)      
             cmds.setAttr(display_layer + ".visibility", 0)
             cmds.setAttr(display_layer + ".displayType", 2)
 
