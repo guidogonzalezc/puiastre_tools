@@ -91,13 +91,14 @@ def parented_chain(skinning_joints, parent, hand_value=False):
                 cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
                 cmds.connectAttr(parent + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
 
-                decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
-                cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+                # decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
+                # cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+                cmds.connectAttr(f"{mult_matrix}.matrixSum", joint + ".offsetParentMatrix", force=True)
 
-                cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
-                cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
-                cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
-                cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+                # cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
+                # cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
+                # cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
+                # cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
 
 
               
@@ -106,26 +107,28 @@ def parented_chain(skinning_joints, parent, hand_value=False):
                 cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
                 cmds.connectAttr(joints[0] + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
 
-                decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
-                cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+                # decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
+                # cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+                cmds.connectAttr(f"{mult_matrix}.matrixSum", joint + ".offsetParentMatrix", force=True)
 
-                cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
-                cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
-                cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
-                cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+                # cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
+                # cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
+                # cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
+                # cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
 
             elif i != 0:
                 mult_matrix = cmds.createNode("multMatrix", n=joint.replace("_ENV", "Envelop_MMX"), ss=True)
                 cmds.connectAttr(complete_chain[index][i] + ".worldMatrix[0]", mult_matrix + ".matrixIn[0]", force=True)
                 cmds.connectAttr(joints[i-1] + ".worldInverseMatrix[0]", mult_matrix + ".matrixIn[1]", force=True)
 
-                decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
-                cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+                # decompose = cmds.createNode("decomposeMatrix", n=joint.replace("_ENV", "Envelop_DCM"))
+                # cmds.connectAttr(f"{mult_matrix}.matrixSum", decompose + ".inputMatrix", force=True)
+                cmds.connectAttr(f"{mult_matrix}.matrixSum", joint + ".offsetParentMatrix", force=True)
 
-                cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
-                cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
-                cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
-                cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
+                # cmds.connectAttr(decompose + ".outputTranslate", joint + ".translate", force=True)
+                # cmds.connectAttr(decompose + ".outputRotate", joint + ".rotate", force=True)
+                # cmds.connectAttr(decompose + ".outputScale", joint + ".scale", force=True)
+                # cmds.connectAttr(decompose + ".outputShear", joint + ".shear", force=True)
 
             cmds.setAttr(joint + ".jointOrient", 0, 0, 0, type="double3")
 
