@@ -243,7 +243,10 @@ class FingersModule(object):
             # Add setDrivenKeyframe for Curl and Spread
             if controllers:
                 for attr in ["Curl", "Fan"]:
-                    self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])
+                    if self.side == "L":
+                        self.fingers_attributes_callback(grp[1], finger_values=[-90, 20, -25, 15, 20, -20, 30, -30], thumb_values=[0,0,0,0,0,0, 0,0])
+                    elif self.side == "R":
+                        self.fingers_attributes_callback(grp[1], finger_values=[90, -20, 25, -15, -20, 20, -30, 30], thumb_values=[0,0,0,0,0,0, 0,0])
 
             joint = cmds.createNode("joint", name=f"{self.side}_{finger_name}_JNT", ss=True, parent=self.skinning_grp)
             cmds.connectAttr(ctl + ".worldMatrix[0]", joint + ".offsetParentMatrix")
