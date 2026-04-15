@@ -84,6 +84,7 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
                 nodes[child] = child_node
 
 
+    char_node = nodes.get("C_characterNode")
     pref_ctl = nodes.get("C_preferences") 
     walk_ctl = nodes.get("C_masterWalk")
 
@@ -132,14 +133,14 @@ def create_basic_structure(asset_name="assetName", adonis_setup=0):
         cmds.addAttr(pref_ctl, shortName="extraVisibility", niceName="Extra Visibility  ———", enumName="———", attributeType="enum", keyable=False)
         cmds.setAttr(f"{pref_ctl}.extraVisibility", channelBox=True)
 
-        if adonis_setup:
-            cmds.addAttr(pref_ctl, shortName="adonisSep", niceName="Adonis ———", enumName="———", attributeType="enum", keyable=False)
-            cmds.setAttr(f"{pref_ctl}.adonisSep", channelBox=True)
+    if adonis_setup and char_node:
+        cmds.addAttr(char_node, shortName="adonisSep", niceName="Adonis ———", enumName="———", attributeType="enum", keyable=False)
+        cmds.setAttr(f"{char_node}.adonisSep", channelBox=True)
 
-            cmds.addAttr(walk_ctl, shortName="attenuation", niceName="Attenuation", minValue=0, defaultValue=1, maxValue=1, keyable=True)
-            cmds.addAttr(walk_ctl, shortName="preRollStartTime", niceName="Pre-Roll Start Time", defaultValue=950, keyable=True)
-            cmds.addAttr(walk_ctl, shortName="startTime", niceName="Start Time", defaultValue=1001, keyable=True)
-            cmds.addAttr(walk_ctl, shortName="massMultiplier", niceName="Mass Multiplier", minValue=0, defaultValue=1, maxValue=1, keyable=True)
+        cmds.addAttr(char_node, shortName="attenuation", niceName="Attenuation", minValue=0, defaultValue=1, maxValue=1, keyable=True)
+        cmds.addAttr(char_node, shortName="preRollStartTime", niceName="Pre-Roll Start Time", defaultValue=950, keyable=True)
+        cmds.addAttr(char_node, shortName="startTime", niceName="Start Time", defaultValue=1001, keyable=True)
+        cmds.addAttr(char_node, shortName="massMultiplier", niceName="Mass Multiplier", minValue=0, defaultValue=1, maxValue=1, keyable=True)
 
 
 
