@@ -201,7 +201,12 @@ def make():
 
         if adonis:
             for item in objects:
-                if "muscle" in item.lower() and "adonis" in item.lower() and musclemodel_grp and cmds.objExists(musclemodel_grp):                
+                shapes = cmds.listRelatives(item, shapes=True)
+                print(shapes)
+                if shapes and cmds.objectType(shapes[0]) == "camera":
+                    continue
+
+                elif "muscle" in item.lower() and "adonis" in item.lower() and musclemodel_grp and cmds.objExists(musclemodel_grp):                
                     cmds.parent(item, musclemodel_grp)
                 elif "adonismommy" in item.lower() and mommy_grp and cmds.objExists(mommy_grp):                
                     cmds.parent(item, mommy_grp)
